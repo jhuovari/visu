@@ -4,8 +4,8 @@ Title: StatFin Datan Haku ja Visualisointi
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Juhani", "Huovari",
-      email = "juhani@example.com",
+      "Janne", "Huovari",
+      email = "janne.huovari@gov.fi",
       role = c("aut", "cre")
     )
   )
