@@ -1,16 +1,28 @@
 Package: visu
 Type: Package
-Title: What the Package Does (Title Case)
+Title: StatFin Datan Haku ja Visualisointi
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Janne", "Huovari",
+      email = "janne.huovari@gov.fi",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: Paketti tarjoaa rungon StatFin-datan hakuun pxwebtools-paketilla,
+    datan visualisointiin ggplot2:lla ggcustom-teemalla sekä Shiny-kayttoliittyman.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports:
+    ggplot2,
+    rlang,
+    shiny
+Remotes:
+    jhuovari/pxwebtools,
+    jhuovari/ggcustom
+Suggests:
+    pxwebtools,
+    ggcustom
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
