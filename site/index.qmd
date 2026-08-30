@@ -1,0 +1,29 @@
+---
+title: "Kuviot"
+execute:
+  freeze: false
+  echo: false
+---
+
+Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla näkyy täsmälleen se
+koodi, joka kuvion tuottaa, joten sen voi kopioida sellaisenaan omaan
+R-istuntoon.
+
+Sivusto tarkistaa joka aamu klo 8:01, onko kuvion lähdetaulu päivittynyt, ja
+rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.
+
+```{r}
+#| output: asis
+registry <- visu::visu_chart_registry(".")
+state <- visu::visu_state_read(".")
+
+built <- vapply(registry$id, function(id) {
+  stamp <- state[[id]]$built_at
+  if (is.null(stamp)) "ei vielä rakennettu" else as.character(stamp)
+}, character(1))
+
+cat(paste0(
+  "- [", registry$title, "](kuviot/", registry$id, ".html) ",
+  "<small>päivitetty ", built, "</small>"
+), sep = "\n")
+```

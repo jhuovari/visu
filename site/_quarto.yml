@@ -1,0 +1,36 @@
+project:
+  type: website
+  output-dir: ../docs
+  render:
+    - "index.qmd"
+    - "kuviot/*.qmd"
+
+website:
+  title: "visu"
+  site-url: "https://jhuovari.github.io/visu/"
+  repo-url: "https://github.com/jhuovari/visu"
+  navbar:
+    left:
+      - href: index.qmd
+        text: "Kuviot"
+  page-footer:
+    left: "Lähde: Tilastokeskus, StatFin"
+    right: "Rakennettu [visu](https://github.com/jhuovari/visu)-paketilla"
+
+format:
+  html:
+    theme: cosmo
+    toc: false
+    code-copy: true
+    code-tools: false
+    code-line-numbers: false
+    fig-width: 8
+    fig-height: 4.5
+
+execute:
+  freeze: auto
+  echo: true
+  warning: false
+  message: false
+
+lang: fi

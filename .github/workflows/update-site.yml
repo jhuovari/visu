@@ -1,0 +1,91 @@
+name: Päivitä sivusto
+
+# GitHub Actionsin cron on UTC:ssä, joten Suomen kellonaika 8:01 osuu eri
+# UTC-tuntiin kesä- ja talviaikana. Molemmat ajetaan, ja vahtityö päästää
+# läpi vain sen, joka osuu Suomen aikaan kello 8.
+on:
+  schedule:
+    - cron: "1 5 * * *"   # 08:01 EEST (kesäaika)
+    - cron: "1 6 * * *"   # 08:01 EET  (talviaika)
+  workflow_dispatch:
+    inputs:
+      full_render:
+        description: "Renderöi koko sivusto (tarvitaan kun _quarto.yml muuttuu)"
+        type: boolean
+        default: false
+      force:
+        description: "Pakota kaikki kuviot uudelleen"
+        type: boolean
+        default: false
+
+concurrency:
+  group: update-site
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  vahti:
+    runs-on: ubuntu-latest
+    outputs:
+      aja: ${{ steps.kello.outputs.aja }}
+    steps:
+      - id: kello
+        run: |
+          tunti=$(TZ=Europe/Helsinki date +%H)
+          echo "Suomen aika: $(TZ=Europe/Helsinki date)"
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "$tunti" = "08" ]; then
+            echo "aja=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "aja=false" >> "$GITHUB_OUTPUT"
+            echo "Ohitetaan: kello ei ole 8 Suomen aikaa."
+          fi
+
+  paivita:
+    needs: vahti
+    if: needs.vahti.outputs.aja == 'true'
+    runs-on: ubuntu-latest
+    env:
+      # Kuvioiden otsikot ovat suomeksi; ilman UTF-8-localea R kirjoittaisi
+      # aakkoset sivulle koodattuina.
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # pxwebtools ja ggcustom asentuvat DESCRIPTIONin Remotes-kentästä.
+          extra-packages: local::.
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Päivitä muuttuneet kuviot
+        run: |
+          Rscript -e 'visu::visu_update_site(
+            full = ${{ inputs.full_render && 'TRUE' || 'FALSE' }},
+            force = ${{ inputs.force && 'TRUE' || 'NULL' }}
+          )'
+
+      - name: Commitoi muutokset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p docs && touch docs/.nojekyll
+          git add -A docs site
+          if git diff --cached --quiet; then
+            echo "Ei muutoksia, ei committia."
+            exit 0
+          fi
+          git commit -m "Päivitä sivuston kuviot"
+          for yritys in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "Push epäonnistui, yritys $yritys"
+            sleep $((2 ** yritys))
+          done
+          exit 1

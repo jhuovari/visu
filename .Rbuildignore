@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^site$
+^docs$
+^\.github$
+^\.quarto$
+^README\.md$
