@@ -1,7 +1,7 @@
 Package: visu
 Type: Package
 Title: StatFin Datan Haku ja Visualisointi
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person(
       "Janne", "Huovari",
@@ -9,20 +9,34 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Paketti tarjoaa rungon StatFin-datan hakuun pxwebtools-paketilla,
-    datan visualisointiin ggplot2:lla ggcustom-teemalla sekä Shiny-kayttoliittyman.
+Description: Rakentaa StatFin-datasta interaktiivisia kuvioita ggplot2:lla
+    ggcustom-teemalla ja plotlylla, ja julkaisee ne Quarto-sivustona. Sivusto
+    paivittyy inkrementaalisesti: paketti tarkistaa kunkin kuvion lahdetaulun
+    paivitysajan PxWeb-rajapinnasta ja renderoi uudelleen vain ne kuviot,
+    joiden data on muuttunut.
 License: MIT + file LICENSE
+URL: https://jhuovari.github.io/visu/, https://github.com/jhuovari/visu
+BugReports: https://github.com/jhuovari/visu/issues
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 4.1)
 Imports:
+    digest,
+    ggcustom,
     ggplot2,
+    jsonlite,
+    plotly,
     rlang,
-    shiny
+    stats,
+    utils,
+    yaml
+Suggests:
+    pxwebtools,
+    testthat (>= 3.0.0)
 Remotes:
     jhuovari/pxwebtools,
     jhuovari/ggcustom
-Suggests:
-    pxwebtools,
-    ggcustom
+Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
