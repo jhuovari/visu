@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "kuviot/palkansaajat_sukupuolittain.html",
+    "href": "kuviot/palkansaajat_sukupuolittain.html",
+    "title": "Palkansaajat sukupuolittain",
+    "section": "",
+    "text": "Sama tilasto sukupuolen mukaan eriteltynä. Luokittelusarakkeen nimi tulee suoraan pxw_get_data():n paluuarvosta; tarkista se tarvittaessa komennolla names(dat).\n\nlibrary(visu)\n\ndat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/\",\n  query = list(\n    \"timeperiod_y\" = \"*\",\n    \"sukupuoli_9_20180101\" = c(\"1\", \"2\"),\n    \"contentscode\" = \"Palkansaajat_yht\"\n  )\n)\n\ndat |&gt;\n  visu_plot(\n    colour = \"sukupuoli_9_20180101\",\n    title = \"Palkansaajat sukupuolen mukaan, 1 000 henkeä\"\n  ) |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus."
+  },
+  {
+    "objectID": "kuviot/palkansaajat.html",
+    "href": "kuviot/palkansaajat.html",
+    "title": "Palkansaajat",
+    "section": "",
+    "text": "Palkansaajien määrä työvoimatutkimuksen mukaan, molemmat sukupuolet yhteensä.\n\nlibrary(visu)\n\ndat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/\",\n  query = list(\n    \"timeperiod_y\" = \"*\",\n    \"sukupuoli_9_20180101\" = \"SSS\",\n    \"contentscode\" = \"Palkansaajat_yht\"\n  )\n)\n\ndat |&gt;\n  visu_plot(title = \"Palkansaajat, 1 000 henkeä\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Kuviot",
+    "section": "",
+    "text": "Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla näkyy täsmälleen se koodi, joka kuvion tuottaa, joten sen voi kopioida sellaisenaan omaan R-istuntoon.\nSivusto tarkistaa joka aamu klo 8:01, onko kuvion lähdetaulu päivittynyt, ja rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.\n\nPalkansaajat sukupuolittain päivitetty 2026-08-31T05:46:48Z\nPalkansaajat päivitetty 2026-08-31T05:46:48Z"
+  }
+]

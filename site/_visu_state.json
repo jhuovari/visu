@@ -1,1 +1,16 @@
-{}
+{
+  "palkansaajat": {
+    "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
+    "title": "Palkansaajat",
+    "source_updated": "2026-07-01T18:34:06",
+    "code_hash": "9e873bf2ccfd6bb00524c804603c53fb33f76edcfe3da06d385437fbfeb3a8a5",
+    "built_at": "2026-08-31T05:46:48Z"
+  },
+  "palkansaajat_sukupuolittain": {
+    "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
+    "title": "Palkansaajat sukupuolittain",
+    "source_updated": "2026-07-01T18:34:06",
+    "code_hash": "1d11ce64b35f4b3879e70cd8d3e3c33532a9343479aad7d35db681a18adc049f",
+    "built_at": "2026-08-31T05:46:48Z"
+  }
+}
