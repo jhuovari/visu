@@ -11,8 +11,10 @@ visu_stale_charts(registry, state, updated, force = NULL)
 
 \item{state}{\code{\link[=visu_state_read]{visu_state_read()}}:n tulos.}
 
-\item{updated}{Nimetty merkkijonovektori, kuvion tunnus -> lähdetaulun
-aikaleima, tai \code{NA_character_} jos aikaleimaa ei saatu.}
+\item{updated}{Kuvion tunnuksella nimetty lista tai vektori, jonka alkiona
+ovat kuvion taulujen aikaleimat. Usean taulun kuviossa alkio on taulun
+osoitteella nimetty vektori, yhden taulun kuviossa riittää pelkkä
+aikaleima. \code{NA_character_} tarkoittaa, ettei aikaleimaa saatu.}
 
 \item{force}{\code{TRUE} (kaikki), tunnisteiden vektori, tai \code{NULL}.}
 }

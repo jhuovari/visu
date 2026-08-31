@@ -1,23 +1,142 @@
 [
   {
-    "objectID": "kuviot/palkansaajat_sukupuolittain.html",
-    "href": "kuviot/palkansaajat_sukupuolittain.html",
-    "title": "Palkansaajat sukupuolittain",
+    "objectID": "kuviot/tyomarkkinat.html",
+    "href": "kuviot/tyomarkkinat.html",
+    "title": "Työmarkkinat",
     "section": "",
-    "text": "Sama tilasto sukupuolen mukaan eriteltynä. Luokittelusarakkeen nimi tulee suoraan pxw_get_data():n paluuarvosta; tarkista se tarvittaessa komennolla names(dat).\n\nlibrary(visu)\n\ndat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/\",\n  query = list(\n    \"timeperiod_y\" = \"*\",\n    \"sukupuoli_9_20180101\" = c(\"1\", \"2\"),\n    \"contentscode\" = \"Palkansaajat_yht\"\n  )\n)\n\ndat |&gt;\n  visu_plot(\n    colour = \"sukupuoli_9_20180101\",\n    title = \"Palkansaajat sukupuolen mukaan, 1 000 henkeä\"\n  ) |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus."
+    "text": "Työvoimatutkimuksen tärkeimmät tunnusluvut kuukausitasolla. Alkuperäinen sarja kertoo, mitä kuukaudessa mitattiin, ja trendisarja sen, mihin suuntaan työmarkkinat ovat menossa. Tasot ovat suoraan tilastosta. Tilasto ei julkaise vuosimuutoksia, joten ne lasketaan tällä sivulla alkuperäisestä sarjasta 12 kuukauden takaiseen verrattuna — määristä henkinä ja asteista prosenttiyksikköinä."
+  },
+  {
+    "objectID": "kuviot/tyomarkkinat.html#työttömyysaste",
+    "href": "kuviot/tyomarkkinat.html#työttömyysaste",
+    "title": "Työmarkkinat",
+    "section": "Työttömyysaste",
+    "text": "Työttömyysaste\n\n\nNäytä koodi\nlibrary(visu)\n\ntyottomyys &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"contentscode\" = c(\"tyti-Tyottomyysaste\", \"tyottaste_trendi\")\n  )\n)\n\ntyottomyys$sarja &lt;- factor(\n  tyottomyys$contentscode,\n  levels = c(\"tyti-Tyottomyysaste\", \"tyottaste_trendi\"),\n  labels = c(\"Alkuperäinen\", \"Trendi\")\n)\n\ntyottomyys |&gt;\n  visu_plot(colour = \"sarja\", title = \"Työttömyysaste, 15-74-vuotiaat, %\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")"
+  },
+  {
+    "objectID": "kuviot/tyomarkkinat.html#työllisyysaste",
+    "href": "kuviot/tyomarkkinat.html#työllisyysaste",
+    "title": "Työmarkkinat",
+    "section": "Työllisyysaste",
+    "text": "Työllisyysaste\n\n\nNäytä koodi\nlibrary(visu)\n\ntyollisyysaste &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"contentscode\" = c(\"tyollaste_15_64_trendi\", \"Tyollaste_20_64_trendi\")\n  )\n)\n\ntyollisyysaste$ikaryhma &lt;- factor(\n  tyollisyysaste$contentscode,\n  levels = c(\"tyollaste_15_64_trendi\", \"Tyollaste_20_64_trendi\"),\n  labels = c(\"15-64-vuotiaat\", \"20-64-vuotiaat\")\n)\n\ntyollisyysaste |&gt;\n  visu_plot(colour = \"ikaryhma\", title = \"Työllisyysaste, trendi, %\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")"
+  },
+  {
+    "objectID": "kuviot/tyomarkkinat.html#työlliset",
+    "href": "kuviot/tyomarkkinat.html#työlliset",
+    "title": "Työmarkkinat",
+    "section": "Työlliset",
+    "text": "Työlliset\n\n\nNäytä koodi\nlibrary(visu)\n\ntyolliset &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"contentscode\" = c(\"tyti-Tyolliset\", \"tyolliset_trendi\")\n  )\n)\n\ntyolliset$sarja &lt;- factor(\n  tyolliset$contentscode,\n  levels = c(\"tyti-Tyolliset\", \"tyolliset_trendi\"),\n  labels = c(\"Alkuperäinen\", \"Trendi\")\n)\n\ntyolliset |&gt;\n  visu_plot(colour = \"sarja\", title = \"Työlliset, 1 000 henkeä\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")"
+  },
+  {
+    "objectID": "kuviot/tyomarkkinat.html#työllisten-ja-työttömien-määrän-muutos",
+    "href": "kuviot/tyomarkkinat.html#työllisten-ja-työttömien-määrän-muutos",
+    "title": "Työmarkkinat",
+    "section": "Työllisten ja työttömien määrän muutos",
+    "text": "Työllisten ja työttömien määrän muutos\n\n\nNäytä koodi\nlibrary(visu)\n\nmaarat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"contentscode\" = c(\"tyti-Tyolliset\", \"tyti-Tyottomat\")\n  )\n)\n\n# Tilastossa ei ole valmista vuosimuutosta, joten se lasketaan sarjoittain\n# 12 kuukauden takaiseen. Kuukausiaineiston vuosimuutos on samalla\n# kausivaihtelusta riippumaton. Muutos henkina eika prosentteina, koska\n# tyottomien kanta on kymmenesosa tyollisten kannasta: samassa kuviossa\n# prosenttimuutokset eivat olisi vertailukelpoisia.\nvuosimuutos &lt;- function(x) x - c(rep(NA, 12), head(x, -12))\n\nmaarat &lt;- maarat[order(maarat$contentscode, maarat$time), ]\nmaarat$vuosimuutos &lt;- ave(maarat$values, maarat$contentscode, FUN = vuosimuutos)\n\nmaarat$sarja &lt;- factor(\n  maarat$contentscode,\n  levels = c(\"tyti-Tyolliset\", \"tyti-Tyottomat\"),\n  labels = c(\"Työlliset\", \"Työttömät\")\n)\n\nmaarat |&gt;\n  visu_plot(\n    y = \"vuosimuutos\",\n    colour = \"sarja\",\n    title = \"Työllisten ja työttömien määrän muutos vuodentakaisesta, 1 000 henkeä\"\n  ) |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")"
+  },
+  {
+    "objectID": "kuviot/tyomarkkinat.html#työttömyysasteen-vuosimuutos",
+    "href": "kuviot/tyomarkkinat.html#työttömyysasteen-vuosimuutos",
+    "title": "Työmarkkinat",
+    "section": "Työttömyysasteen vuosimuutos",
+    "text": "Työttömyysasteen vuosimuutos\n\n\nNäytä koodi\nlibrary(visu)\n\ntyottomyysaste &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"contentscode\" = \"tyti-Tyottomyysaste\"\n  )\n)\n\n# Aste on jo prosentti, joten muutos on prosenttiyksikoita eli erotus.\ntyottomyysaste &lt;- tyottomyysaste[order(tyottomyysaste$time), ]\ntyottomyysaste$muutos &lt;- with(\n  tyottomyysaste,\n  values - c(rep(NA, 12), head(values, -12))\n)\n\ntyottomyysaste |&gt;\n  visu_plot(\n    y = \"muutos\",\n    type = \"col\",\n    title = \"Työttömyysasteen muutos vuodentakaisesta, %-yksikköä\"\n  ) |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus, taulu 135z."
   },
   {
     "objectID": "kuviot/palkansaajat.html",
     "href": "kuviot/palkansaajat.html",
     "title": "Palkansaajat",
     "section": "",
-    "text": "Palkansaajien määrä työvoimatutkimuksen mukaan, molemmat sukupuolet yhteensä.\n\nlibrary(visu)\n\ndat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/\",\n  query = list(\n    \"timeperiod_y\" = \"*\",\n    \"sukupuoli_9_20180101\" = \"SSS\",\n    \"contentscode\" = \"Palkansaajat_yht\"\n  )\n)\n\ndat |&gt;\n  visu_plot(title = \"Palkansaajat, 1 000 henkeä\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus."
+    "text": "Palkansaajien määrä työvoimatutkimuksen mukaan, molemmat sukupuolet yhteensä.\n\n\nNäytä koodi\nlibrary(visu)\n\ndat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/\",\n  query = list(\n    \"timeperiod_y\" = \"*\",\n    \"sukupuoli_9_20180101\" = \"SSS\",\n    \"contentscode\" = \"Palkansaajat_yht\"\n  )\n)\n\ndat |&gt;\n  visu_plot(title = \"Palkansaajat, 1 000 henkeä\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus."
+  },
+  {
+    "objectID": "kuviot/inflaatio.html",
+    "href": "kuviot/inflaatio.html",
+    "title": "Inflaatio",
+    "section": "",
+    "text": "Kolme mittaria samasta ilmiöstä. Kuluttajahintaindeksi (KHI) on kansallinen inflaatiomittari, yhdenmukaistettu kuluttajahintaindeksi (YKHI) EU-maiden vertailukelpoinen indeksi, ja YKHI:n ennakko on kuukauden lopussa julkaistava pikaestimaatti, joka tulee saataville noin kaksi viikkoa ennen varsinaista julkistusta. YKHI kiintein veroin (YKHI-KIVE) kertoo, paljonko inflaatiota jäisi jäljelle ilman välillisten verojen muutoksia.\nSivu lukee kolmea taulua, ja mikä tahansa niistä päivittyy, kuvio rakennetaan uudelleen. Ennakkotaulu päivittyy kuukauden vaihteessa, KHI ja YKHI kuukauden puolivälissä."
+  },
+  {
+    "objectID": "kuviot/inflaatio.html#vuosimuutos",
+    "href": "kuviot/inflaatio.html#vuosimuutos",
+    "title": "Inflaatio",
+    "section": "Vuosimuutos",
+    "text": "Vuosimuutos\n\n\nNäytä koodi\nlibrary(visu)\n\nkhi &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = \"SSS\",\n    \"contentscode\" = \"vm_khi\"\n  )\n)\n\nykhi &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = \"SSS\",\n    \"contentscode\" = \"vm_ykhi\"\n  )\n)\n\nennakko &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = \"SSS\",\n    \"contentscode\" = \"vm_ykhi_ennakko\"\n  )\n)\n\nmuutos &lt;- rbind(\n  data.frame(time = khi$time, sarja = \"Kuluttajahintaindeksi (KHI)\", values = khi$values),\n  data.frame(time = ykhi$time, sarja = \"Yhdenmukaistettu (YKHI)\", values = ykhi$values),\n  data.frame(time = ennakko$time, sarja = \"YKHI, ennakko\", values = ennakko$values)\n)\n\nmuutos$sarja &lt;- factor(muutos$sarja, levels = c(\n  \"Kuluttajahintaindeksi (KHI)\", \"Yhdenmukaistettu (YKHI)\", \"YKHI, ennakko\"\n))\n\n# Ennakkotaulu kattaa vain kulumassa olevan vuoden, joten koko historia\n# hukuttaisi sen. Kaikkia sarjoja rajataan samalta kohdalta.\nalku &lt;- seq(max(muutos$time), by = \"-8 years\", length.out = 2)[2]\nmuutos &lt;- muutos[muutos$time &gt;= alku, ]\n\nmuutos |&gt;\n  visu_plot(colour = \"sarja\", title = \"Kuluttajahintojen vuosimuutos, %\") |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, kuluttajahintaindeksi\")"
+  },
+  {
+    "objectID": "kuviot/inflaatio.html#indeksipisteluku",
+    "href": "kuviot/inflaatio.html#indeksipisteluku",
+    "title": "Inflaatio",
+    "section": "Indeksipisteluku",
+    "text": "Indeksipisteluku\n\n\nNäytä koodi\nlibrary(visu)\n\nkhi_taso &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = \"SSS\",\n    \"contentscode\" = \"ip_khi\"\n  )\n)\n\nykhi_taso &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = \"SSS\",\n    \"contentscode\" = \"ip_ykhi\"\n  )\n)\n\ntaso &lt;- rbind(\n  data.frame(time = khi_taso$time, sarja = \"Kuluttajahintaindeksi (KHI)\",\n             values = khi_taso$values),\n  data.frame(time = ykhi_taso$time, sarja = \"Yhdenmukaistettu (YKHI)\",\n             values = ykhi_taso$values)\n)\n\ntaso |&gt;\n  visu_plot(\n    colour = \"sarja\",\n    title = \"Kuluttajahintojen indeksipisteluku, 2025 = 100\"\n  ) |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, kuluttajahintaindeksi\")"
+  },
+  {
+    "objectID": "kuviot/inflaatio.html#välillisten-verojen-vaikutus",
+    "href": "kuviot/inflaatio.html#välillisten-verojen-vaikutus",
+    "title": "Inflaatio",
+    "section": "Välillisten verojen vaikutus",
+    "text": "Välillisten verojen vaikutus\n\n\nNäytä koodi\nlibrary(visu)\n\nkive &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = \"SSS\",\n    \"contentscode\" = c(\"vm_ykhi\", \"vm_ykhi_kive\")\n  )\n)\n\nkive$sarja &lt;- factor(\n  kive$contentscode,\n  levels = c(\"vm_ykhi\", \"vm_ykhi_kive\"),\n  labels = c(\"YKHI\", \"YKHI kiintein veroin\")\n)\n\nalku &lt;- seq(max(kive$time), by = \"-8 years\", length.out = 2)[2]\nkive &lt;- kive[kive$time &gt;= alku, ]\n\nkive |&gt;\n  visu_plot(\n    colour = \"sarja\",\n    title = \"YKHI:n vuosimuutos alkuperäisin ja kiintein veroin, %\"\n  ) |&gt;\n  visu_interactive(\n    subtitle = \"Sarjojen ero on välillisten verojen muutosten vaikutus\",\n    caption = \"Lähde: Tilastokeskus, kuluttajahintaindeksi\"\n  )"
+  },
+  {
+    "objectID": "kuviot/inflaatio.html#hyödykeryhmien-vuosimuutos",
+    "href": "kuviot/inflaatio.html#hyödykeryhmien-vuosimuutos",
+    "title": "Inflaatio",
+    "section": "Hyödykeryhmien vuosimuutos",
+    "text": "Hyödykeryhmien vuosimuutos\n\n\nNäytä koodi\nlibrary(visu)\n\nryhmat &lt;- c(\n  \"01\" = \"Elintarvikkeet\",\n  \"04\" = \"Asuminen ja energia\",\n  \"07\" = \"Liikenne\",\n  \"11\" = \"Ravintolat ja hotellit\"\n)\n\nryhma_muutos &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = names(ryhmat),\n    \"contentscode\" = \"vm_khi\"\n  )\n)\n\nryhma_muutos$ryhma &lt;- factor(\n  ryhma_muutos$coicop_46_20231201,\n  levels = names(ryhmat),\n  labels = ryhmat\n)\n\nalku &lt;- seq(max(ryhma_muutos$time), by = \"-8 years\", length.out = 2)[2]\nryhma_muutos &lt;- ryhma_muutos[ryhma_muutos$time &gt;= alku, ]\n\nryhma_muutos |&gt;\n  visu_plot(\n    colour = \"ryhma\",\n    title = \"Hyödykeryhmien vuosimuutos, %\"\n  ) |&gt;\n  visu_interactive(\n    subtitle = \"Neljä painavinta pääryhmää kuluttajahintaindeksin korista\",\n    caption = \"Lähde: Tilastokeskus, kuluttajahintaindeksi\"\n  )"
+  },
+  {
+    "objectID": "kuviot/inflaatio.html#mistä-vuosimuutos-syntyi",
+    "href": "kuviot/inflaatio.html#mistä-vuosimuutos-syntyi",
+    "title": "Inflaatio",
+    "section": "Mistä vuosimuutos syntyi",
+    "text": "Mistä vuosimuutos syntyi\n\n\nNäytä koodi\nlibrary(visu)\n\npaaryhmat &lt;- c(\n  \"01\" = \"Elintarvikkeet\",\n  \"02\" = \"Alkoholi ja tupakka\",\n  \"03\" = \"Vaatetus ja jalkineet\",\n  \"04\" = \"Asuminen ja energia\",\n  \"05\" = \"Kalusteet ja kodinhoito\",\n  \"06\" = \"Terveys\",\n  \"07\" = \"Liikenne\",\n  \"08\" = \"Informaatio ja viestintä\",\n  \"09\" = \"Kulttuuri ja vapaa-aika\",\n  \"10\" = \"Koulutus\",\n  \"11\" = \"Ravintolat ja hotellit\",\n  \"12\" = \"Vakuutus- ja rahoituspalvelut\",\n  \"13\" = \"Muut tavarat ja palvelut\"\n)\n\nvaikutus &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/\",\n  query = list(\n    \"timeperiod_m\" = \"*\",\n    \"coicop_46_20231201\" = names(paaryhmat),\n    \"contentscode\" = \"vv_khi\"\n  )\n)\n\n# Vaikutukset lasketaan vain nykyisella perusvuodella, joten sarja on lyhyt ja\n# poikkileikkaus viimeisimmasta kuukaudesta kertoo siita enemman kuin aikasarja.\n# Pylvaat suuruusjarjestykseen: taso muodostaa tekijajarjestyksen.\nviimeisin &lt;- vaikutus[!is.na(vaikutus$values) & vaikutus$time == max(vaikutus$time[!is.na(vaikutus$values)]), ]\nviimeisin &lt;- viimeisin[order(viimeisin$values), ]\nviimeisin$ryhma &lt;- factor(\n  paaryhmat[as.character(viimeisin$coicop_46_20231201)],\n  levels = paaryhmat[as.character(viimeisin$coicop_46_20231201)]\n)\n\nkuvio &lt;- visu_plot(\n  viimeisin,\n  x = \"ryhma\",\n  type = \"col\",\n  title = paste0(\n    \"Hyödykeryhmien vaikutus vuosimuutokseen \",\n    format(max(viimeisin$time), \"%m/%Y\"), \", %-yksikköä\"\n  )\n)\n\nvisu_interactive(\n  kuvio + ggplot2::coord_flip(),\n  subtitle = \"Pääryhmien vaikutukset summautuvat kokonaisindeksin vuosimuutokseen\",\n  caption = \"Lähde: Tilastokeskus, kuluttajahintaindeksi\"\n)\n\n\n\n\n\n\nLähde: Tilastokeskus, kuluttajahintaindeksi, taulut 15b5, 15b7 ja 15b9."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Kuviot",
     "section": "",
-    "text": "Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla näkyy täsmälleen se koodi, joka kuvion tuottaa, joten sen voi kopioida sellaisenaan omaan R-istuntoon.\nSivusto tarkistaa joka aamu klo 8:01, onko kuvion lähdetaulu päivittynyt, ja rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.\n\nPalkansaajat sukupuolittain päivitetty 2026-08-31T05:46:48Z\nPalkansaajat päivitetty 2026-08-31T05:46:48Z"
+    "text": "Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla on Näytä koodi -taitoksen takana täsmälleen se koodi, joka kuvion tuottaa, joten sen voi kopioida sellaisenaan omaan R-istuntoon.\nSivusto tarkistaa joka aamu klo 8:01, onko kuvion lähdetaulu päivittynyt, ja rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.\n\nInflaatio päivitetty 2026-08-31T17:26:57Z\nNeljännesvuositilinpito päivitetty 2026-08-31T17:28:39Z\nPalkansaajat sukupuolittain päivitetty 2026-08-31T05:46:48Z\nPalkansaajat päivitetty 2026-08-31T05:46:48Z\nTyömarkkinat päivitetty 2026-08-31T17:30:00Z"
+  },
+  {
+    "objectID": "kuviot/neljannesvuositilinpito.html",
+    "href": "kuviot/neljannesvuositilinpito.html",
+    "title": "Neljännesvuositilinpito",
+    "section": "",
+    "text": "Kansantalouden neljännesvuositilinpidon keskeiset erät. Tasot ovat kausitasoitettuja ja työpäiväkorjattuja volyymisarjoja viitevuoden 2015 hinnoin, ja muutokset saman sarjan volyymin muutoksia vuodentakaisesta. Kausitasoitettu sarja kertoo suhdannekäänteen aikaisimmin, trendisarja luotettavimmin. Neljännesvuosisarjojen tasokuvat on rajattu kymmeneen vuoteen; koko historia näkyy bruttokansantuotteen vuosimuutoksesta ja kysynnän pääerien tasoista."
+  },
+  {
+    "objectID": "kuviot/neljannesvuositilinpito.html#bruttokansantuote",
+    "href": "kuviot/neljannesvuositilinpito.html#bruttokansantuote",
+    "title": "Neljännesvuositilinpito",
+    "section": "Bruttokansantuote",
+    "text": "Bruttokansantuote\n\n\nNäytä koodi\nlibrary(visu)\n\nbkt &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/\",\n  query = list(\n    \"timeperiod_q\" = \"*\",\n    \"taloustoimi_1_20180101\" = \"B1GMH\",\n    \"contentscode\" = c(\"kausitvv2015\", \"trendivv2015\")\n  )\n)\n\n# Tiedot-muuttujan selitteet ovat kuvion selitteeksi liian pitkia.\nbkt$sarja &lt;- factor(\n  bkt$contentscode,\n  levels = c(\"kausitvv2015\", \"trendivv2015\"),\n  labels = c(\"Kausitasoitettu\", \"Trendi\")\n)\n\n# Koko historiassa sarjat kulkevat paallekkain, joten taso rajataan\n# viimeiseen kymmeneen vuoteen. Pitka kuva on kuvioissa 2 ja 3.\nalku &lt;- seq(max(bkt$time), by = \"-10 years\", length.out = 2)[2]\nbkt &lt;- bkt[bkt$time &gt;= alku, ]\n\nbkt |&gt;\n  visu_plot(\n    colour = \"sarja\",\n    title = \"Bruttokansantuotteen volyymi, miljoonaa euroa\"\n  ) |&gt;\n  visu_interactive(\n    subtitle = \"Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015\",\n    caption = \"Lähde: Tilastokeskus, neljännesvuositilinpito\"\n  )"
+  },
+  {
+    "objectID": "kuviot/neljannesvuositilinpito.html#bruttokansantuotteen-vuosimuutos",
+    "href": "kuviot/neljannesvuositilinpito.html#bruttokansantuotteen-vuosimuutos",
+    "title": "Neljännesvuositilinpito",
+    "section": "Bruttokansantuotteen vuosimuutos",
+    "text": "Bruttokansantuotteen vuosimuutos\n\n\nNäytä koodi\nlibrary(visu)\n\nbkt_muutos &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/\",\n  query = list(\n    \"timeperiod_q\" = \"*\",\n    \"taloustoimi_1_20180101\" = \"B1GMH\",\n    \"contentscode\" = \"vol_vv_kausitvv2015\"\n  )\n)\n\nbkt_muutos |&gt;\n  visu_plot(\n    type = \"col\",\n    title = \"Bruttokansantuotteen volyymin muutos vuodentakaisesta, %\"\n  ) |&gt;\n  visu_interactive(\n    subtitle = \"Kausitasoitettu ja työpäiväkorjattu sarja\",\n    caption = \"Lähde: Tilastokeskus, neljännesvuositilinpito\"\n  )"
+  },
+  {
+    "objectID": "kuviot/neljannesvuositilinpito.html#kysynnän-pääerät",
+    "href": "kuviot/neljannesvuositilinpito.html#kysynnän-pääerät",
+    "title": "Neljännesvuositilinpito",
+    "section": "Kysynnän pääerät",
+    "text": "Kysynnän pääerät\n\n\nNäytä koodi\nlibrary(visu)\n\nerat &lt;- c(\n  \"P3KS14_S15\" = \"Yksityinen kulutus\",\n  \"P3KS13\" = \"Julkinen kulutus\",\n  \"P51K\" = \"Investoinnit\",\n  \"P6K\" = \"Vienti\"\n)\n\nkysynta &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/\",\n  query = list(\n    \"timeperiod_q\" = \"*\",\n    \"taloustoimi_1_20180101\" = names(erat),\n    \"contentscode\" = \"kausitvv2015\"\n  )\n)\n\nkysynta$era &lt;- factor(\n  kysynta$taloustoimi_1_20180101,\n  levels = names(erat),\n  labels = erat\n)\n\nkysynta |&gt;\n  visu_plot(\n    colour = \"era\",\n    title = \"Kysynnän pääerien volyymi, miljoonaa euroa\"\n  ) |&gt;\n  visu_interactive(\n    subtitle = \"Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015\",\n    caption = \"Lähde: Tilastokeskus, neljännesvuositilinpito\"\n  )"
+  },
+  {
+    "objectID": "kuviot/neljannesvuositilinpito.html#kysynnän-pääerien-vuosimuutos",
+    "href": "kuviot/neljannesvuositilinpito.html#kysynnän-pääerien-vuosimuutos",
+    "title": "Neljännesvuositilinpito",
+    "section": "Kysynnän pääerien vuosimuutos",
+    "text": "Kysynnän pääerien vuosimuutos\n\n\nNäytä koodi\nlibrary(visu)\n\nerat &lt;- c(\n  \"P3KS14_S15\" = \"Yksityinen kulutus\",\n  \"P3KS13\" = \"Julkinen kulutus\",\n  \"P51K\" = \"Investoinnit\",\n  \"P6K\" = \"Vienti\"\n)\n\nkysynta_muutos &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/\",\n  query = list(\n    \"timeperiod_q\" = \"*\",\n    \"taloustoimi_1_20180101\" = names(erat),\n    \"contentscode\" = \"vol_vv_kausitvv2015\"\n  )\n)\n\nkysynta_muutos$era &lt;- factor(\n  kysynta_muutos$taloustoimi_1_20180101,\n  levels = names(erat),\n  labels = erat\n)\n\n# Nelja neljannesvuosisarjaa koko historiassa on lukukelvoton ryteikko.\nalku &lt;- seq(max(kysynta_muutos$time), by = \"-10 years\", length.out = 2)[2]\nkysynta_muutos &lt;- kysynta_muutos[kysynta_muutos$time &gt;= alku, ]\n\nkysynta_muutos |&gt;\n  visu_plot(\n    colour = \"era\",\n    title = \"Kysynnän pääerien volyymin muutos vuodentakaisesta, %\"\n  ) |&gt;\n  visu_interactive(\n    subtitle = \"Kausitasoitettu ja työpäiväkorjattu sarja\",\n    caption = \"Lähde: Tilastokeskus, neljännesvuositilinpito\"\n  )\n\n\n\n\n\n\nLähde: Tilastokeskus, neljännesvuositilinpito, taulu 132h."
+  },
+  {
+    "objectID": "kuviot/palkansaajat_sukupuolittain.html",
+    "href": "kuviot/palkansaajat_sukupuolittain.html",
+    "title": "Palkansaajat sukupuolittain",
+    "section": "",
+    "text": "Sama tilasto sukupuolen mukaan eriteltynä. Luokittelusarakkeen nimi tulee suoraan pxw_get_data():n paluuarvosta; tarkista se tarvittaessa komennolla names(dat).\n\n\nNäytä koodi\nlibrary(visu)\n\ndat &lt;- pxwebtools::pxw_get_data(\n  url = \"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/\",\n  query = list(\n    \"timeperiod_y\" = \"*\",\n    \"sukupuoli_9_20180101\" = c(\"1\", \"2\"),\n    \"contentscode\" = \"Palkansaajat_yht\"\n  )\n)\n\ndat |&gt;\n  visu_plot(\n    colour = \"sukupuoli_9_20180101\",\n    title = \"Palkansaajat sukupuolen mukaan, 1 000 henkeä\"\n  ) |&gt;\n  visu_interactive(caption = \"Lähde: Tilastokeskus, työvoimatutkimus\")\n\n\n\n\n\n\nLähde: Tilastokeskus, työvoimatutkimus."
   }
 ]

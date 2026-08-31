@@ -10,7 +10,8 @@ visu_chart_registry(site_dir = NULL)
 \item{site_dir}{Sivuston hakemisto.}
 }
 \value{
-Data frame sarakkeilla \code{id}, \code{title}, \code{table_url}, \code{path}, \code{code_hash}.
+Data frame sarakkeilla \code{id}, \code{title}, \code{path}, \code{code_hash} ja
+listasarake \code{table_url}, jonka alkiona on kuvion taulujen osoitteet.
 }
 \description{
 Lukee jokaisen \verb{site/kuviot/*.qmd}-tiedoston etulehden ja muodostaa niistä
@@ -22,5 +23,14 @@ title: "Palkansaajat"
 visu:
   table_url: "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"
 ---
+}\if{html}{\out{</div>}}
+
+Kuvio voi lukea useaa taulua. Silloin \code{table_url} on lista, ja kuvio on
+vanhentunut heti kun mikä tahansa sen tauluista on päivittynyt:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/"
 }\if{html}{\out{</div>}}
 }

@@ -1,0 +1,157 @@
+---
+title: "Neljännesvuositilinpito"
+visu:
+  table_url: "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"
+---
+
+Kansantalouden neljännesvuositilinpidon keskeiset erät. Tasot ovat
+kausitasoitettuja ja työpäiväkorjattuja volyymisarjoja viitevuoden 2015
+hinnoin, ja muutokset saman sarjan volyymin muutoksia vuodentakaisesta.
+Kausitasoitettu sarja kertoo suhdannekäänteen aikaisimmin, trendisarja
+luotettavimmin. Neljännesvuosisarjojen tasokuvat on rajattu kymmeneen
+vuoteen; koko historia näkyy bruttokansantuotteen vuosimuutoksesta ja
+kysynnän pääerien tasoista.
+
+## Bruttokansantuote
+
+```{r}
+library(visu)
+
+bkt <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = "B1GMH",
+    "contentscode" = c("kausitvv2015", "trendivv2015")
+  )
+)
+
+# Tiedot-muuttujan selitteet ovat kuvion selitteeksi liian pitkia.
+bkt$sarja <- factor(
+  bkt$contentscode,
+  levels = c("kausitvv2015", "trendivv2015"),
+  labels = c("Kausitasoitettu", "Trendi")
+)
+
+# Koko historiassa sarjat kulkevat paallekkain, joten taso rajataan
+# viimeiseen kymmeneen vuoteen. Pitka kuva on kuvioissa 2 ja 3.
+alku <- seq(max(bkt$time), by = "-10 years", length.out = 2)[2]
+bkt <- bkt[bkt$time >= alku, ]
+
+bkt |>
+  visu_plot(
+    colour = "sarja",
+    title = "Bruttokansantuotteen volyymi, miljoonaa euroa"
+  ) |>
+  visu_interactive(
+    subtitle = "Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015",
+    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+  )
+```
+
+## Bruttokansantuotteen vuosimuutos
+
+```{r}
+library(visu)
+
+bkt_muutos <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = "B1GMH",
+    "contentscode" = "vol_vv_kausitvv2015"
+  )
+)
+
+bkt_muutos |>
+  visu_plot(
+    type = "col",
+    title = "Bruttokansantuotteen volyymin muutos vuodentakaisesta, %"
+  ) |>
+  visu_interactive(
+    subtitle = "Kausitasoitettu ja työpäiväkorjattu sarja",
+    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+  )
+```
+
+## Kysynnän pääerät
+
+```{r}
+library(visu)
+
+erat <- c(
+  "P3KS14_S15" = "Yksityinen kulutus",
+  "P3KS13" = "Julkinen kulutus",
+  "P51K" = "Investoinnit",
+  "P6K" = "Vienti"
+)
+
+kysynta <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = names(erat),
+    "contentscode" = "kausitvv2015"
+  )
+)
+
+kysynta$era <- factor(
+  kysynta$taloustoimi_1_20180101,
+  levels = names(erat),
+  labels = erat
+)
+
+kysynta |>
+  visu_plot(
+    colour = "era",
+    title = "Kysynnän pääerien volyymi, miljoonaa euroa"
+  ) |>
+  visu_interactive(
+    subtitle = "Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015",
+    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+  )
+```
+
+## Kysynnän pääerien vuosimuutos
+
+```{r}
+library(visu)
+
+erat <- c(
+  "P3KS14_S15" = "Yksityinen kulutus",
+  "P3KS13" = "Julkinen kulutus",
+  "P51K" = "Investoinnit",
+  "P6K" = "Vienti"
+)
+
+kysynta_muutos <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = names(erat),
+    "contentscode" = "vol_vv_kausitvv2015"
+  )
+)
+
+kysynta_muutos$era <- factor(
+  kysynta_muutos$taloustoimi_1_20180101,
+  levels = names(erat),
+  labels = erat
+)
+
+# Nelja neljannesvuosisarjaa koko historiassa on lukukelvoton ryteikko.
+alku <- seq(max(kysynta_muutos$time), by = "-10 years", length.out = 2)[2]
+kysynta_muutos <- kysynta_muutos[kysynta_muutos$time >= alku, ]
+
+kysynta_muutos |>
+  visu_plot(
+    colour = "era",
+    title = "Kysynnän pääerien volyymin muutos vuodentakaisesta, %"
+  ) |>
+  visu_interactive(
+    subtitle = "Kausitasoitettu ja työpäiväkorjattu sarja",
+    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+  )
+```
+
+Lähde: [Tilastokeskus, neljännesvuositilinpito](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/), taulu 132h.

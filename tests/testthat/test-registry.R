@@ -8,7 +8,7 @@ test_that("rekisteri lukee etulehdet ja tunnisteet tiedostonimista", {
 
   expect_equal(reg$id, c("palkansaajat", "tyottomat"))
   expect_equal(reg$title, c("Palkansaajat", "Ty\u00f6tt\u00f6m\u00e4t"))
-  expect_equal(reg$table_url[1], "https://example.org/db/tbl.px/")
+  expect_equal(reg$table_url[[1]], "https://example.org/db/tbl.px/")
   expect_false(reg$code_hash[1] == reg$code_hash[2])
 })
 
@@ -24,7 +24,32 @@ test_that("kuvioton sivusto antaa tyhjan rekisterin ilman virhetta", {
   reg <- visu_chart_registry(dir)
 
   expect_equal(nrow(reg), 0L)
-  expect_equal(names(reg), c("id", "title", "table_url", "path", "code_hash"))
+  expect_equal(names(reg), c("id", "title", "path", "code_hash", "table_url"))
+})
+
+test_that("rekisteri lukee etulehden listan usean taulun kuviosta", {
+  dir <- make_site(list(
+    inflaatio = c(
+      "---",
+      "title: \"Inflaatio\"",
+      "visu:",
+      "  table_url:",
+      "    - \"https://example.org/db/a.px/\"",
+      "    - \"https://example.org/db/b.px/\"",
+      "---",
+      "",
+      "```{r}",
+      "a <- pxwebtools::pxw_get_data(url = \"https://example.org/db/a.px/\")",
+      "b <- pxwebtools::pxw_get_data(url = \"https://example.org/db/b.px/\")",
+      "```"
+    )
+  ))
+
+  reg <- visu_chart_registry(dir)
+
+  expect_equal(reg$table_url[[1]],
+               c("https://example.org/db/a.px/", "https://example.org/db/b.px/"))
+  expect_length(visu_check_charts(dir), 0L)
 })
 
 test_that("eheystarkistus huomaa etulehden ja koodilohkon eron", {
@@ -38,6 +63,66 @@ test_that("eheystarkistus huomaa etulehden ja koodilohkon eron", {
 
   expect_length(problems, 1L)
   expect_match(problems, "'rikki'")
+})
+
+test_that("eheystarkistus huomaa koodilohkon ilmoittamattoman taulun", {
+  dir <- make_site(list(
+    rikki = c(
+      "---",
+      "title: \"Rikki\"",
+      "visu:",
+      "  table_url: \"https://example.org/db/a.px/\"",
+      "---",
+      "",
+      "```{r}",
+      "a <- pxwebtools::pxw_get_data(url = \"https://example.org/db/a.px/\")",
+      "b <- pxwebtools::pxw_get_data(url = \"https://example.org/db/b.px/\")",
+      "```"
+    )
+  ))
+
+  problems <- visu_check_charts(dir)
+
+  expect_length(problems, 1L)
+  expect_match(problems, "b\\.px")
+})
+
+test_that("tilaston selauslinkki ei ole taulu eika kaada tarkistusta", {
+  dir <- make_site(list(
+    ok = c(
+      "---",
+      "title: \"OK\"",
+      "visu:",
+      "  table_url: \"https://example.org/db/a.px/\"",
+      "---",
+      "",
+      "```{r}",
+      "a <- pxwebtools::pxw_get_data(url = \"https://example.org/db/a.px/\")",
+      "```",
+      "",
+      "L\u00e4hde: [StatFin](https://example.org/pxweb/fi/StatFin/StatFin__khi/)."
+    )
+  ))
+
+  expect_length(visu_check_charts(dir), 0L)
+})
+
+test_that("paattava kenoviiva ei tee tauluista eri tauluja", {
+  dir <- make_site(list(
+    ok = c(
+      "---",
+      "title: \"OK\"",
+      "visu:",
+      "  table_url: \"https://example.org/db/a.px/\"",
+      "---",
+      "",
+      "```{r}",
+      "a <- pxwebtools::pxw_get_data(url = \"https://example.org/db/a.px\")",
+      "```"
+    )
+  ))
+
+  expect_length(visu_check_charts(dir), 0L)
 })
 
 test_that("tila kirjoitetaan ja luetaan samana, avaimet jarjestyksessa", {

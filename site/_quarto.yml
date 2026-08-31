@@ -21,6 +21,9 @@ format:
   html:
     theme: cosmo
     toc: false
+    # Kuvio on sivun sisalto ja koodi sen resepti: lohkot avataan pyydettaessa.
+    code-fold: true
+    code-summary: "Näytä koodi"
     code-copy: true
     code-tools: false
     code-line-numbers: false

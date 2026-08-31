@@ -1,0 +1,243 @@
+---
+title: "Inflaatio"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/"
+---
+
+Kolme mittaria samasta ilmiöstä. Kuluttajahintaindeksi (KHI) on kansallinen
+inflaatiomittari, yhdenmukaistettu kuluttajahintaindeksi (YKHI) EU-maiden
+vertailukelpoinen indeksi, ja YKHI:n ennakko on kuukauden lopussa julkaistava
+pikaestimaatti, joka tulee saataville noin kaksi viikkoa ennen varsinaista
+julkistusta. YKHI kiintein veroin (YKHI-KIVE) kertoo, paljonko inflaatiota
+jäisi jäljelle ilman välillisten verojen muutoksia.
+
+Sivu lukee kolmea taulua, ja mikä tahansa niistä päivittyy, kuvio rakennetaan
+uudelleen. Ennakkotaulu päivittyy kuukauden vaihteessa, KHI ja YKHI
+kuukauden puolivälissä.
+
+## Vuosimuutos
+
+```{r}
+library(visu)
+
+khi <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = "SSS",
+    "contentscode" = "vm_khi"
+  )
+)
+
+ykhi <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = "SSS",
+    "contentscode" = "vm_ykhi"
+  )
+)
+
+ennakko <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = "SSS",
+    "contentscode" = "vm_ykhi_ennakko"
+  )
+)
+
+muutos <- rbind(
+  data.frame(time = khi$time, sarja = "Kuluttajahintaindeksi (KHI)", values = khi$values),
+  data.frame(time = ykhi$time, sarja = "Yhdenmukaistettu (YKHI)", values = ykhi$values),
+  data.frame(time = ennakko$time, sarja = "YKHI, ennakko", values = ennakko$values)
+)
+
+muutos$sarja <- factor(muutos$sarja, levels = c(
+  "Kuluttajahintaindeksi (KHI)", "Yhdenmukaistettu (YKHI)", "YKHI, ennakko"
+))
+
+# Ennakkotaulu kattaa vain kulumassa olevan vuoden, joten koko historia
+# hukuttaisi sen. Kaikkia sarjoja rajataan samalta kohdalta.
+alku <- seq(max(muutos$time), by = "-8 years", length.out = 2)[2]
+muutos <- muutos[muutos$time >= alku, ]
+
+muutos |>
+  visu_plot(colour = "sarja", title = "Kuluttajahintojen vuosimuutos, %") |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi")
+```
+
+## Indeksipisteluku
+
+```{r}
+library(visu)
+
+khi_taso <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = "SSS",
+    "contentscode" = "ip_khi"
+  )
+)
+
+ykhi_taso <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = "SSS",
+    "contentscode" = "ip_ykhi"
+  )
+)
+
+taso <- rbind(
+  data.frame(time = khi_taso$time, sarja = "Kuluttajahintaindeksi (KHI)",
+             values = khi_taso$values),
+  data.frame(time = ykhi_taso$time, sarja = "Yhdenmukaistettu (YKHI)",
+             values = ykhi_taso$values)
+)
+
+taso |>
+  visu_plot(
+    colour = "sarja",
+    title = "Kuluttajahintojen indeksipisteluku, 2025 = 100"
+  ) |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi")
+```
+
+## Välillisten verojen vaikutus
+
+```{r}
+library(visu)
+
+kive <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = "SSS",
+    "contentscode" = c("vm_ykhi", "vm_ykhi_kive")
+  )
+)
+
+kive$sarja <- factor(
+  kive$contentscode,
+  levels = c("vm_ykhi", "vm_ykhi_kive"),
+  labels = c("YKHI", "YKHI kiintein veroin")
+)
+
+alku <- seq(max(kive$time), by = "-8 years", length.out = 2)[2]
+kive <- kive[kive$time >= alku, ]
+
+kive |>
+  visu_plot(
+    colour = "sarja",
+    title = "YKHI:n vuosimuutos alkuperäisin ja kiintein veroin, %"
+  ) |>
+  visu_interactive(
+    subtitle = "Sarjojen ero on välillisten verojen muutosten vaikutus",
+    caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
+  )
+```
+
+## Hyödykeryhmien vuosimuutos
+
+```{r}
+library(visu)
+
+ryhmat <- c(
+  "01" = "Elintarvikkeet",
+  "04" = "Asuminen ja energia",
+  "07" = "Liikenne",
+  "11" = "Ravintolat ja hotellit"
+)
+
+ryhma_muutos <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = names(ryhmat),
+    "contentscode" = "vm_khi"
+  )
+)
+
+ryhma_muutos$ryhma <- factor(
+  ryhma_muutos$coicop_46_20231201,
+  levels = names(ryhmat),
+  labels = ryhmat
+)
+
+alku <- seq(max(ryhma_muutos$time), by = "-8 years", length.out = 2)[2]
+ryhma_muutos <- ryhma_muutos[ryhma_muutos$time >= alku, ]
+
+ryhma_muutos |>
+  visu_plot(
+    colour = "ryhma",
+    title = "Hyödykeryhmien vuosimuutos, %"
+  ) |>
+  visu_interactive(
+    subtitle = "Neljä painavinta pääryhmää kuluttajahintaindeksin korista",
+    caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
+  )
+```
+
+## Mistä vuosimuutos syntyi
+
+```{r}
+library(visu)
+
+paaryhmat <- c(
+  "01" = "Elintarvikkeet",
+  "02" = "Alkoholi ja tupakka",
+  "03" = "Vaatetus ja jalkineet",
+  "04" = "Asuminen ja energia",
+  "05" = "Kalusteet ja kodinhoito",
+  "06" = "Terveys",
+  "07" = "Liikenne",
+  "08" = "Informaatio ja viestintä",
+  "09" = "Kulttuuri ja vapaa-aika",
+  "10" = "Koulutus",
+  "11" = "Ravintolat ja hotellit",
+  "12" = "Vakuutus- ja rahoituspalvelut",
+  "13" = "Muut tavarat ja palvelut"
+)
+
+vaikutus <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "coicop_46_20231201" = names(paaryhmat),
+    "contentscode" = "vv_khi"
+  )
+)
+
+# Vaikutukset lasketaan vain nykyisella perusvuodella, joten sarja on lyhyt ja
+# poikkileikkaus viimeisimmasta kuukaudesta kertoo siita enemman kuin aikasarja.
+# Pylvaat suuruusjarjestykseen: taso muodostaa tekijajarjestyksen.
+viimeisin <- vaikutus[!is.na(vaikutus$values) & vaikutus$time == max(vaikutus$time[!is.na(vaikutus$values)]), ]
+viimeisin <- viimeisin[order(viimeisin$values), ]
+viimeisin$ryhma <- factor(
+  paaryhmat[as.character(viimeisin$coicop_46_20231201)],
+  levels = paaryhmat[as.character(viimeisin$coicop_46_20231201)]
+)
+
+kuvio <- visu_plot(
+  viimeisin,
+  x = "ryhma",
+  type = "col",
+  title = paste0(
+    "Hyödykeryhmien vaikutus vuosimuutokseen ",
+    format(max(viimeisin$time), "%m/%Y"), ", %-yksikköä"
+  )
+)
+
+visu_interactive(
+  kuvio + ggplot2::coord_flip(),
+  subtitle = "Pääryhmien vaikutukset summautuvat kokonaisindeksin vuosimuutokseen",
+  caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
+)
+```
+
+Lähde: [Tilastokeskus, kuluttajahintaindeksi](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__khi/), taulut 15b5, 15b7 ja 15b9.

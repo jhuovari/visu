@@ -40,9 +40,10 @@ dat |>
 ```
 ````
 
-Jokaisella kuviolla on oma datahakunsa, ja koodilohko näkyy sivulla
-kopiointinapin kanssa. Kopioidun pätkän saa ajettua sellaisenaan omassa
-R-istunnossa.
+Jokaisella kuviolla on oma datahakunsa. Koodilohko on sivulla piilossa
+`Näytä koodi` -taitoksen takana ja avautuu kopiointinapin kanssa; kopioidun
+pätkän saa ajettua sellaisenaan omassa R-istunnossa. Sivulla voi olla useampi
+koodilohko, jolloin jokainen niistä on oma kuvionsa oman otsikkonsa alla.
 
 Sarakkeiden nimet tulevat suoraan `pxwebtools::pxw_get_data()`:n paluuarvosta.
 `visu_plot()` käyttää oletuksena ensimmäistä saraketta x-akselina ja saraketta
@@ -50,9 +51,31 @@ Sarakkeiden nimet tulevat suoraan `pxwebtools::pxw_get_data()`:n paluuarvosta.
 argumentilla `colour = "<sarakkeen nimi>"`; jos nimi on väärin, virheilmoitus
 luettelee datan sarakkeet.
 
-Etulehden ja koodilohkon URL:n pitää olla sama. `visu_check_charts()` tarkistaa
-tämän, ja `visu_update_site()` keskeytyy jos ne ovat päässeet eroamaan — muuten
-kuvio voisi jäädä päivittymättä huomaamatta.
+Etulehden ja koodilohkon taulujen pitää olla samat. `visu_check_charts()`
+tarkistaa tämän molempiin suuntiin — etulehdessä luetellun taulun pitää
+esiintyä koodissa, ja koodissa haetun taulun pitää olla lueteltu etulehdessä —
+ja `visu_update_site()` keskeytyy jos ne ovat päässeet eroamaan. Muuten kuvio
+voisi jäädä päivittymättä huomaamatta.
+
+## Useaa taulua lukeva kuvio
+
+Kun sivu tarvitsee useampaa taulua, etulehden `table_url` on lista. Kuvio on
+vanhentunut heti kun mikä tahansa sen tauluista on päivittynyt, ja tila
+kirjaa jokaisen taulun aikaleiman erikseen:
+
+````
+---
+title: "Inflaatio"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/"
+---
+````
+
+Saman kansion taulut maksavat silti yhden HTTP-pyynnön, koska tuoreus luetaan
+kansiolistauksesta.
 
 ## Sivuston päivittäminen käsin
 

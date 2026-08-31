@@ -1,0 +1,152 @@
+---
+title: "Työmarkkinat"
+visu:
+  table_url: "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/"
+---
+
+Työvoimatutkimuksen tärkeimmät tunnusluvut kuukausitasolla. Alkuperäinen sarja
+kertoo, mitä kuukaudessa mitattiin, ja trendisarja sen, mihin suuntaan
+työmarkkinat ovat menossa. Tasot ovat suoraan tilastosta. Tilasto ei julkaise vuosimuutoksia, joten
+ne lasketaan tällä sivulla alkuperäisestä sarjasta 12 kuukauden takaiseen
+verrattuna — määristä henkinä ja asteista prosenttiyksikköinä.
+
+## Työttömyysaste
+
+```{r}
+library(visu)
+
+tyottomyys <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = c("tyti-Tyottomyysaste", "tyottaste_trendi")
+  )
+)
+
+tyottomyys$sarja <- factor(
+  tyottomyys$contentscode,
+  levels = c("tyti-Tyottomyysaste", "tyottaste_trendi"),
+  labels = c("Alkuperäinen", "Trendi")
+)
+
+tyottomyys |>
+  visu_plot(colour = "sarja", title = "Työttömyysaste, 15-74-vuotiaat, %") |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, työvoimatutkimus")
+```
+
+## Työllisyysaste
+
+```{r}
+library(visu)
+
+tyollisyysaste <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = c("tyollaste_15_64_trendi", "Tyollaste_20_64_trendi")
+  )
+)
+
+tyollisyysaste$ikaryhma <- factor(
+  tyollisyysaste$contentscode,
+  levels = c("tyollaste_15_64_trendi", "Tyollaste_20_64_trendi"),
+  labels = c("15-64-vuotiaat", "20-64-vuotiaat")
+)
+
+tyollisyysaste |>
+  visu_plot(colour = "ikaryhma", title = "Työllisyysaste, trendi, %") |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, työvoimatutkimus")
+```
+
+## Työlliset
+
+```{r}
+library(visu)
+
+tyolliset <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = c("tyti-Tyolliset", "tyolliset_trendi")
+  )
+)
+
+tyolliset$sarja <- factor(
+  tyolliset$contentscode,
+  levels = c("tyti-Tyolliset", "tyolliset_trendi"),
+  labels = c("Alkuperäinen", "Trendi")
+)
+
+tyolliset |>
+  visu_plot(colour = "sarja", title = "Työlliset, 1 000 henkeä") |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, työvoimatutkimus")
+```
+
+## Työllisten ja työttömien määrän muutos
+
+```{r}
+library(visu)
+
+maarat <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = c("tyti-Tyolliset", "tyti-Tyottomat")
+  )
+)
+
+# Tilastossa ei ole valmista vuosimuutosta, joten se lasketaan sarjoittain
+# 12 kuukauden takaiseen. Kuukausiaineiston vuosimuutos on samalla
+# kausivaihtelusta riippumaton. Muutos henkina eika prosentteina, koska
+# tyottomien kanta on kymmenesosa tyollisten kannasta: samassa kuviossa
+# prosenttimuutokset eivat olisi vertailukelpoisia.
+vuosimuutos <- function(x) x - c(rep(NA, 12), head(x, -12))
+
+maarat <- maarat[order(maarat$contentscode, maarat$time), ]
+maarat$vuosimuutos <- ave(maarat$values, maarat$contentscode, FUN = vuosimuutos)
+
+maarat$sarja <- factor(
+  maarat$contentscode,
+  levels = c("tyti-Tyolliset", "tyti-Tyottomat"),
+  labels = c("Työlliset", "Työttömät")
+)
+
+maarat |>
+  visu_plot(
+    y = "vuosimuutos",
+    colour = "sarja",
+    title = "Työllisten ja työttömien määrän muutos vuodentakaisesta, 1 000 henkeä"
+  ) |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, työvoimatutkimus")
+```
+
+## Työttömyysasteen vuosimuutos
+
+```{r}
+library(visu)
+
+tyottomyysaste <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = "tyti-Tyottomyysaste"
+  )
+)
+
+# Aste on jo prosentti, joten muutos on prosenttiyksikoita eli erotus.
+tyottomyysaste <- tyottomyysaste[order(tyottomyysaste$time), ]
+tyottomyysaste$muutos <- with(
+  tyottomyysaste,
+  values - c(rep(NA, 12), head(values, -12))
+)
+
+tyottomyysaste |>
+  visu_plot(
+    y = "muutos",
+    type = "col",
+    title = "Työttömyysasteen muutos vuodentakaisesta, %-yksikköä"
+  ) |>
+  visu_interactive(caption = "Lähde: Tilastokeskus, työvoimatutkimus")
+```
+
+Lähde: [Tilastokeskus, työvoimatutkimus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tyti/), taulu 135z.
