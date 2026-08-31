@@ -86,6 +86,11 @@ Ajot tehdään repositorion juuresta. Ne tarvitsevat
 5. Etusivu renderöidään, tila kirjoitetaan ja poistuneiden kuvioiden sivut
    siivotaan.
 
+Jos yhden kuvion renderöinti kaatuu, muut rakennetaan silti loppuun ja
+julkaistaan. Kaatunut kuvio jää ilman tilamerkintää, joten se yritetään
+uudelleen seuraavalla ajolla, ja ajo päättyy virheeseen — Actionsissa näkyy
+punainen ajo, mutta sivusto pysyy muilta osin ajan tasalla.
+
 Jos aikaleimaa ei saada rajapinnasta, kuvio rakennetaan varmuuden vuoksi
 uudelleen ja ajo varoittaa. Silloin sivusto pysyy oikeana, mutta päivitys ei
 ole enää kevyt — tarkista PxWeb-kansiolistauksen `updated`-kenttä.
