@@ -58,7 +58,8 @@ visu_stale_charts <- function(registry, state, updated, force = NULL) {
 #'   tai sivupohja muuttuu, koska yksittäisen sivun renderöinti ei päivitä
 #'   muiden sivujen navigaatiota.
 #' @param quiet Vaimentaa Quarton tulosteen.
-#' @return Data frame `id` / `stale` / `reason` näkymättömänä.
+#' @return Data frame `id` / `stale` / `reason` / `status` näkymättömänä.
+#'   `status` on `"rakennettu"`, `"ajan tasalla"` tai `"virhe"`.
 #' @export
 visu_update_site <- function(site_dir = NULL,
                              force = NULL,
@@ -77,7 +78,9 @@ visu_update_site <- function(site_dir = NULL,
   registry <- visu_chart_registry(site_dir)
   if (nrow(registry) == 0L) {
     message("Hakemistossa ", visu_charts_dir(site_dir), " ei ole kuvioita.")
-    return(invisible(visu_stale_charts(registry, list(), character())))
+    empty <- visu_stale_charts(registry, list(), character())
+    empty$status <- character()
+    return(invisible(empty))
   }
 
   state <- visu_state_read(site_dir)
@@ -92,6 +95,7 @@ visu_update_site <- function(site_dir = NULL,
   }
 
   decisions <- visu_stale_charts(registry, state, updated, force)
+  decisions$status <- ifelse(decisions$stale, "rakennetaan", "ajan tasalla")
   visu_report(decisions)
 
   if (dry_run) return(invisible(decisions))
@@ -108,15 +112,26 @@ visu_update_site <- function(site_dir = NULL,
   # nimenomaan niilta kuvioilta, joiden data halutaan hakea uudelleen.
   unlink(file.path(site_dir, "_freeze", "kuviot", stale), recursive = TRUE)
 
+  # Yksi hajonnut kuvio ei saa pysayttaa koko paivittaista ajoa, joten virheet
+  # kerataan talteen ja silmukkaa jatketaan.
+  failed <- character()
   if (!full) {
     for (id in stale) {
-      visu_quarto_render(quarto, registry$path[match(id, registry$id)], quiet)
+      ok <- tryCatch({
+        visu_quarto_render(quarto, registry$path[match(id, registry$id)], quiet)
+        TRUE
+      }, error = function(e) {
+        message("Kuvion '", id, "' render\u00f6inti ep\u00e4onnistui: ", conditionMessage(e))
+        FALSE
+      })
+      if (!ok) failed <- c(failed, id)
     }
   }
 
-  # Etusivu lukee paivitysajat tilatiedostosta, joten tila kirjoitetaan ennen
-  # etusivun renderointia.
-  visu_state_write(visu_new_state(registry, updated, state, decisions), site_dir)
+  # Epaonnistuneet kuviot eivat saa tilamerkintaa, jotta ne yritetaan
+  # uudelleen seuraavalla ajolla. Tila kirjoitetaan ennen etusivua, koska
+  # etusivu lukee paivitysajat siita.
+  visu_state_write(visu_new_state(registry, updated, state, decisions, failed), site_dir)
 
   if (full) {
     visu_quarto_render(quarto, site_dir, quiet)
@@ -126,19 +141,35 @@ visu_update_site <- function(site_dir = NULL,
 
   visu_prune_output(registry, site_dir)
 
+  decisions$status <- ifelse(
+    decisions$id %in% failed, "virhe",
+    ifelse(decisions$stale, "rakennettu", "ajan tasalla")
+  )
+
+  if (length(failed) > 0L) {
+    stop(length(failed), "/", length(stale), " kuvion render\u00f6inti ep\u00e4onnistui: ",
+         paste(failed, collapse = ", "),
+         ". Muut kuviot rakennettiin ja ovat committoitavissa.", call. = FALSE)
+  }
+
   invisible(decisions)
 }
 
 # Uusi tila: rakennetuille kuvioille tuore leima, muille entinen säilytetään.
 # Rekisteristä poistuneet kuviot putoavat tilasta pois.
-visu_new_state <- function(registry, updated, state, decisions) {
+visu_new_state <- function(registry, updated, state, decisions, failed = character()) {
   built_at <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 
   new <- lapply(seq_len(nrow(registry)), function(i) {
     id <- registry$id[i]
-    if (!decisions$stale[match(id, decisions$id)] && !is.null(state[[id]])) {
+    unchanged <- !decisions$stale[match(id, decisions$id)]
+    # Epaonnistunut kuvio pitaa entisen tilansa, ja epaonnistunut uusi kuvio
+    # jaa kokonaan ilman merkintaa -- kummassakin tapauksessa se on seuraavalla
+    # ajolla taas vanhentunut.
+    if ((unchanged || id %in% failed) && !is.null(state[[id]])) {
       return(state[[id]])
     }
+    if (id %in% failed) return(NULL)
     list(
       table_url = registry$table_url[i],
       title = registry$title[i],
@@ -148,7 +179,8 @@ visu_new_state <- function(registry, updated, state, decisions) {
     )
   })
 
-  stats::setNames(new, registry$id)
+  names(new) <- registry$id
+  new[!vapply(new, is.null, logical(1))]
 }
 
 # Poistaa poistuneiden kuvioiden jaljet: sivun, sen resurssihakemiston ja

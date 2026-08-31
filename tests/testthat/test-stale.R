@@ -122,3 +122,36 @@ test_that("poistuneet kuviot putoavat tilasta", {
 
   expect_equal(names(out), "a")
 })
+
+test_that("epaonnistunut kuvio pitaa entisen tilansa", {
+  reg <- registry_row("a", code = "koodi2")
+  state <- list(a = state_row())
+  decisions <- visu_stale_charts(reg, state, c(a = "2026-08-01T06:00:00Z"))
+
+  out <- visu:::visu_new_state(reg, c(a = "2026-08-01T06:00:00Z"), state,
+                               decisions, failed = "a")
+
+  expect_identical(out$a, state$a)
+})
+
+test_that("epaonnistunut uusi kuvio jaa kokonaan ilman merkintaa", {
+  reg <- rbind(registry_row("a"), registry_row("b"))
+  updated <- c(a = "2026-08-01T06:00:00Z", b = "2026-08-01T06:00:00Z")
+  decisions <- visu_stale_charts(reg, list(), updated)
+
+  out <- visu:::visu_new_state(reg, updated, list(), decisions, failed = "a")
+
+  expect_equal(names(out), "b")
+})
+
+test_that("epaonnistunut uusi kuvio on seuraavalla ajolla taas vanhentunut", {
+  reg <- rbind(registry_row("a"), registry_row("b"))
+  updated <- c(a = "2026-08-01T06:00:00Z", b = "2026-08-01T06:00:00Z")
+  state <- visu:::visu_new_state(reg, updated, list(),
+                                 visu_stale_charts(reg, list(), updated),
+                                 failed = "a")
+
+  out <- visu_stale_charts(reg, state, updated)
+
+  expect_equal(out$reason, c("uusi kuvio", "ajan tasalla"))
+})

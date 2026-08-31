@@ -26,7 +26,8 @@ muiden sivujen navigaatiota.}
 \item{quiet}{Vaimentaa Quarton tulosteen.}
 }
 \value{
-Data frame \code{id} / \code{stale} / \code{reason} näkymättömänä.
+Data frame \code{id} / \code{stale} / \code{reason} / \code{status} näkymättömänä.
+\code{status} on \code{"rakennettu"}, \code{"ajan tasalla"} tai \code{"virhe"}.
 }
 \description{
 Tarkistaa jokaisen kuvion lähdetaulun päivitysajan ja renderöi uudelleen

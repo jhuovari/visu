@@ -22,7 +22,7 @@ dat <- pxwebtools::pxw_get_data(
 
 dat |>
   visu_plot(
-    colour = "sukupuoli",
+    colour = "sukupuoli_9_20180101",
     title = "Palkansaajat sukupuolen mukaan, 1 000 henkeä"
   ) |>
   visu_interactive(caption = "Lähde: Tilastokeskus, työvoimatutkimus")
