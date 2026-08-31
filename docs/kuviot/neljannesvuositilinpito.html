@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Neljännesvuositilinpito – visu</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2872a7511705894b565d6ebf33be87ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ei tuloksia",
+    "search-matching-documents-text": "tulokset",
+    "search-copy-link-title": "Kopioi linkki hakuun",
+    "search-hide-matches-text": "Piilota loput tulokset",
+    "search-more-match-text": "tulos tässä dokumentissa",
+    "search-more-matches-text": "tulosta tässä dokumentissa",
+    "search-clear-button-title": "Tyhjennä",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Peruuta",
+    "search-submit-button-title": "Lähetä",
+    "search-label": "Hae"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+<script src="../site_libs/plotly-locale-fi-2.25.2/fi.js"></script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">visu</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Hae"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Vaihda navigointi" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Kuviot</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Neljännesvuositilinpito</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Kansantalouden neljännesvuositilinpidon keskeiset erät. Tasot ovat kausitasoitettuja ja työpäiväkorjattuja volyymisarjoja viitevuoden 2015 hinnoin, ja muutokset saman sarjan volyymin muutoksia vuodentakaisesta. Kausitasoitettu sarja kertoo suhdannekäänteen aikaisimmin, trendisarja luotettavimmin. Neljännesvuosisarjojen tasokuvat on rajattu kymmeneen vuoteen; koko historia näkyy bruttokansantuotteen vuosimuutoksesta ja kysynnän pääerien tasoista.</p>
+<section id="bruttokansantuote" class="level2">
+<h2 class="anchored" data-anchor-id="bruttokansantuote">Bruttokansantuote</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>bkt <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="st">"B1GMH"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"kausitvv2015"</span>, <span class="st">"trendivv2015"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Tiedot-muuttujan selitteet ovat kuvion selitteeksi liian pitkia.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>bkt<span class="sc">$</span>sarja <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  bkt<span class="sc">$</span>contentscode,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"kausitvv2015"</span>, <span class="st">"trendivv2015"</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Kausitasoitettu"</span>, <span class="st">"Trendi"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Koko historiassa sarjat kulkevat paallekkain, joten taso rajataan</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># viimeiseen kymmeneen vuoteen. Pitka kuva on kuvioissa 2 ja 3.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>alku <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">max</span>(bkt<span class="sc">$</span>time), <span class="at">by =</span> <span class="st">"-10 years"</span>, <span class="at">length.out =</span> <span class="dv">2</span>)[<span class="dv">2</span>]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>bkt <span class="ot">&lt;-</span> bkt[bkt<span class="sc">$</span>time <span class="sc">&gt;=</span> alku, ]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>bkt <span class="sc">|&gt;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"sarja"</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Bruttokansantuotteen volyymi, miljoonaa euroa"</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015"</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Lähde: Tilastokeskus, neljännesvuositilinpito"</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-befa9f3e7a046fd8249c" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-befa9f3e7a046fd8249c">{"x":{"data":[{"x":[16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[53544,54128,54371,54899,55621,55881,56321,56443,56332,56277,56327,56816,57217,57250,57138,57017,53299,55933,56484,56105,56970,57598,58022,57655,57824,57762,57199,57256,57302,56483,56427,57048,57199,57631,57604,57760,57795,57778,57992,58477,58697],"text":["time: 2016-04-01<br />values: 53544<br />sarja: Kausitasoitettu","time: 2016-07-01<br />values: 54128<br />sarja: Kausitasoitettu","time: 2016-10-01<br />values: 54371<br />sarja: Kausitasoitettu","time: 2017-01-01<br />values: 54899<br />sarja: Kausitasoitettu","time: 2017-04-01<br />values: 55621<br />sarja: Kausitasoitettu","time: 2017-07-01<br />values: 55881<br />sarja: Kausitasoitettu","time: 2017-10-01<br />values: 56321<br />sarja: Kausitasoitettu","time: 2018-01-01<br />values: 56443<br />sarja: Kausitasoitettu","time: 2018-04-01<br />values: 56332<br />sarja: Kausitasoitettu","time: 2018-07-01<br />values: 56277<br />sarja: Kausitasoitettu","time: 2018-10-01<br />values: 56327<br />sarja: Kausitasoitettu","time: 2019-01-01<br />values: 56816<br />sarja: Kausitasoitettu","time: 2019-04-01<br />values: 57217<br />sarja: Kausitasoitettu","time: 2019-07-01<br />values: 57250<br />sarja: Kausitasoitettu","time: 2019-10-01<br />values: 57138<br />sarja: Kausitasoitettu","time: 2020-01-01<br />values: 57017<br />sarja: Kausitasoitettu","time: 2020-04-01<br />values: 53299<br />sarja: Kausitasoitettu","time: 2020-07-01<br />values: 55933<br />sarja: Kausitasoitettu","time: 2020-10-01<br />values: 56484<br />sarja: Kausitasoitettu","time: 2021-01-01<br />values: 56105<br />sarja: Kausitasoitettu","time: 2021-04-01<br />values: 56970<br />sarja: Kausitasoitettu","time: 2021-07-01<br />values: 57598<br />sarja: Kausitasoitettu","time: 2021-10-01<br />values: 58022<br />sarja: Kausitasoitettu","time: 2022-01-01<br />values: 57655<br />sarja: Kausitasoitettu","time: 2022-04-01<br />values: 57824<br />sarja: Kausitasoitettu","time: 2022-07-01<br />values: 57762<br />sarja: Kausitasoitettu","time: 2022-10-01<br />values: 57199<br />sarja: Kausitasoitettu","time: 2023-01-01<br />values: 57256<br />sarja: Kausitasoitettu","time: 2023-04-01<br />values: 57302<br />sarja: Kausitasoitettu","time: 2023-07-01<br />values: 56483<br />sarja: Kausitasoitettu","time: 2023-10-01<br />values: 56427<br />sarja: Kausitasoitettu","time: 2024-01-01<br />values: 57048<br />sarja: Kausitasoitettu","time: 2024-04-01<br />values: 57199<br />sarja: Kausitasoitettu","time: 2024-07-01<br />values: 57631<br />sarja: Kausitasoitettu","time: 2024-10-01<br />values: 57604<br />sarja: Kausitasoitettu","time: 2025-01-01<br />values: 57760<br />sarja: Kausitasoitettu","time: 2025-04-01<br />values: 57795<br />sarja: Kausitasoitettu","time: 2025-07-01<br />values: 57778<br />sarja: Kausitasoitettu","time: 2025-10-01<br />values: 57992<br />sarja: Kausitasoitettu","time: 2026-01-01<br />values: 58477<br />sarja: Kausitasoitettu","time: 2026-04-01<br />values: 58697<br />sarja: Kausitasoitettu"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Kausitasoitettu","legendgroup":"Kausitasoitettu","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[53687,54091,54414,54991,55558,55929,56244,56326,56325,56285,56443,56852,57211,57231,57127,56496,54867,55384,55986,56251,56915,57608,57921,57949,57757,57518,57216,57129,57040,56666,56632,56913,57224,57607,57738,57718,57759,57852,57996,58316,58683],"text":["time: 2016-04-01<br />values: 53687<br />sarja: Trendi","time: 2016-07-01<br />values: 54091<br />sarja: Trendi","time: 2016-10-01<br />values: 54414<br />sarja: Trendi","time: 2017-01-01<br />values: 54991<br />sarja: Trendi","time: 2017-04-01<br />values: 55558<br />sarja: Trendi","time: 2017-07-01<br />values: 55929<br />sarja: Trendi","time: 2017-10-01<br />values: 56244<br />sarja: Trendi","time: 2018-01-01<br />values: 56326<br />sarja: Trendi","time: 2018-04-01<br />values: 56325<br />sarja: Trendi","time: 2018-07-01<br />values: 56285<br />sarja: Trendi","time: 2018-10-01<br />values: 56443<br />sarja: Trendi","time: 2019-01-01<br />values: 56852<br />sarja: Trendi","time: 2019-04-01<br />values: 57211<br />sarja: Trendi","time: 2019-07-01<br />values: 57231<br />sarja: Trendi","time: 2019-10-01<br />values: 57127<br />sarja: Trendi","time: 2020-01-01<br />values: 56496<br />sarja: Trendi","time: 2020-04-01<br />values: 54867<br />sarja: Trendi","time: 2020-07-01<br />values: 55384<br />sarja: Trendi","time: 2020-10-01<br />values: 55986<br />sarja: Trendi","time: 2021-01-01<br />values: 56251<br />sarja: Trendi","time: 2021-04-01<br />values: 56915<br />sarja: Trendi","time: 2021-07-01<br />values: 57608<br />sarja: Trendi","time: 2021-10-01<br />values: 57921<br />sarja: Trendi","time: 2022-01-01<br />values: 57949<br />sarja: Trendi","time: 2022-04-01<br />values: 57757<br />sarja: Trendi","time: 2022-07-01<br />values: 57518<br />sarja: Trendi","time: 2022-10-01<br />values: 57216<br />sarja: Trendi","time: 2023-01-01<br />values: 57129<br />sarja: Trendi","time: 2023-04-01<br />values: 57040<br />sarja: Trendi","time: 2023-07-01<br />values: 56666<br />sarja: Trendi","time: 2023-10-01<br />values: 56632<br />sarja: Trendi","time: 2024-01-01<br />values: 56913<br />sarja: Trendi","time: 2024-04-01<br />values: 57224<br />sarja: Trendi","time: 2024-07-01<br />values: 57607<br />sarja: Trendi","time: 2024-10-01<br />values: 57738<br />sarja: Trendi","time: 2025-01-01<br />values: 57718<br />sarja: Trendi","time: 2025-04-01<br />values: 57759<br />sarja: Trendi","time: 2025-07-01<br />values: 57852<br />sarja: Trendi","time: 2025-10-01<br />values: 57996<br />sarja: Trendi","time: 2026-01-01<br />values: 58316<br />sarja: Trendi","time: 2026-04-01<br />values: 58683<br />sarja: Trendi"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Trendi","legendgroup":"Trendi","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Bruttokansantuotteen volyymi, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[16709.400000000001,20726.599999999999],"tickmode":"array","ticktext":["2016","2018","2020","2022","2024","2026"],"tickvals":[16801,17532,18262,18993,19723,20454],"categoryorder":"array","categoryarray":["2016","2018","2020","2022","2024","2026"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[53029.099999999999,58966.900000000001],"tickmode":"array","ticktext":["54000","55000","56000","57000","58000"],"tickvals":[54000,55000,56000,57000,58000],"categoryorder":"array","categoryarray":["54000","55000","56000","57000","58000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, neljännesvuositilinpito","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"1cc513b7fb7e":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"1cc513b7fb7e","visdat":{"1cc513b7fb7e":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="bruttokansantuotteen-vuosimuutos" class="level2">
+<h2 class="anchored" data-anchor-id="bruttokansantuotteen-vuosimuutos">Bruttokansantuotteen vuosimuutos</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bkt_muutos <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="st">"B1GMH"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"vol_vv_kausitvv2015"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>bkt_muutos <span class="sc">|&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"col"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Bruttokansantuotteen volyymin muutos vuodentakaisesta, %"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Kausitasoitettu ja työpäiväkorjattu sarja"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Lähde: Tilastokeskus, neljännesvuositilinpito"</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-001890cef92db59d9047" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-001890cef92db59d9047">{"x":{"data":[{"orientation":"v","width":[81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81],"base":[null,null,null,null,-5.9000000000000004,-5.7999999999999998,-5.5999999999999996,-6.2000000000000002,-4.0999999999999996,-4,-2.7999999999999998,-2.3999999999999999,-2.5,-1.6000000000000001,-0.20000000000000001,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-2.7000000000000002,-8.9000000000000004,-8.5999999999999996,-8.0999999999999996,-6.7000000000000002,0,0,0,0,0,0,0,0,-0.59999999999999998,-1.3999999999999999,-1.8999999999999999,-2.1000000000000001,-2.3999999999999999,-0.90000000000000002,-0.29999999999999999,-0.29999999999999999,-0.29999999999999999,-0.59999999999999998,-0.5,-0.5,-0.40000000000000002,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-6.7999999999999998,-2.2999999999999998,-1.1000000000000001,-1.6000000000000001,0,0,0,0,0,0,-1.3999999999999999,-0.69999999999999996,-0.90000000000000002,-2.2000000000000002,-1.3,-0.40000000000000002,-0.20000000000000001,0,0,0,0,0,0,0,0],"x":[7305,7395,7486,7578,7670,7760,7851,7943,8035,8126,8217,8309,8401,8491,8582,8674,8766,8856,8947,9039,9131,9221,9312,9404,9496,9587,9678,9770,9862,9952,10043,10135,10227,10317,10408,10500,10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[null,null,null,null,5.9000000000000004,5.7999999999999998,5.5999999999999996,6.2000000000000002,4.0999999999999996,4,2.7999999999999998,2.3999999999999999,2.5,1.6000000000000001,0.20000000000000001,1.3,1.8,2.8999999999999999,4.5999999999999996,6.5,4.9000000000000004,6.7999999999999998,3.8999999999999999,1.3999999999999999,4.0999999999999996,2.2000000000000002,3.2000000000000002,5.2000000000000002,4.5,5.4000000000000004,7.2999999999999998,8.3000000000000007,6.2000000000000002,6.5999999999999996,5.5999999999999996,3.5,6,4.5,3.6000000000000001,3.5,4.9000000000000004,5.2000000000000002,6.2999999999999998,6.5999999999999996,4,3.2999999999999998,2.3999999999999999,0.90000000000000002,1.1000000000000001,2,1.1000000000000001,2.6000000000000001,1.1000000000000001,1.7,3.1000000000000001,2.1000000000000001,4.2000000000000002,3.5,3.5,4.7999999999999998,4.5,2.3999999999999999,2.7000000000000002,1.5,3,4.5,4,4.5,4,5.5999999999999996,5.5999999999999996,6.0999999999999996,3.8999999999999999,1.3999999999999999,0.69999999999999996,2.7000000000000002,8.9000000000000004,8.5999999999999996,8.0999999999999996,6.7000000000000002,0.69999999999999996,4,2.5,5.5,5,1.8,2.5,0.40000000000000002,0.59999999999999998,1.3999999999999999,1.8999999999999999,2.1000000000000001,2.3999999999999999,0.90000000000000002,0.29999999999999999,0.29999999999999999,0.29999999999999999,0.59999999999999998,0.5,0.5,0.40000000000000002,0.80000000000000004,0.40000000000000002,1.1000000000000001,3.1000000000000001,1.6000000000000001,2.7999999999999998,2.7000000000000002,2.5,3.8999999999999999,3.2000000000000002,3.6000000000000001,2.7999999999999998,1.3,0.69999999999999996,0,0.69999999999999996,1.6000000000000001,1.7,1.3999999999999999,0.40000000000000002,6.7999999999999998,2.2999999999999998,1.1000000000000001,1.6000000000000001,6.9000000000000004,3,2.7000000000000002,2.7999999999999998,1.5,0.29999999999999999,1.3999999999999999,0.69999999999999996,0.90000000000000002,2.2000000000000002,1.3,0.40000000000000002,0.20000000000000001,2,2.1000000000000001,1.2,1,0.29999999999999999,0.69999999999999996,1.2,1.6000000000000001],"text":["time: 1990-01-01<br />values:   NA","time: 1990-04-01<br />values:   NA","time: 1990-07-01<br />values:   NA","time: 1990-10-01<br />values:   NA","time: 1991-01-01<br />values: -5.9","time: 1991-04-01<br />values: -5.8","time: 1991-07-01<br />values: -5.6","time: 1991-10-01<br />values: -6.2","time: 1992-01-01<br />values: -4.1","time: 1992-04-01<br />values: -4.0","time: 1992-07-01<br />values: -2.8","time: 1992-10-01<br />values: -2.4","time: 1993-01-01<br />values: -2.5","time: 1993-04-01<br />values: -1.6","time: 1993-07-01<br />values: -0.2","time: 1993-10-01<br />values:  1.3","time: 1994-01-01<br />values:  1.8","time: 1994-04-01<br />values:  2.9","time: 1994-07-01<br />values:  4.6","time: 1994-10-01<br />values:  6.5","time: 1995-01-01<br />values:  4.9","time: 1995-04-01<br />values:  6.8","time: 1995-07-01<br />values:  3.9","time: 1995-10-01<br />values:  1.4","time: 1996-01-01<br />values:  4.1","time: 1996-04-01<br />values:  2.2","time: 1996-07-01<br />values:  3.2","time: 1996-10-01<br />values:  5.2","time: 1997-01-01<br />values:  4.5","time: 1997-04-01<br />values:  5.4","time: 1997-07-01<br />values:  7.3","time: 1997-10-01<br />values:  8.3","time: 1998-01-01<br />values:  6.2","time: 1998-04-01<br />values:  6.6","time: 1998-07-01<br />values:  5.6","time: 1998-10-01<br />values:  3.5","time: 1999-01-01<br />values:  6.0","time: 1999-04-01<br />values:  4.5","time: 1999-07-01<br />values:  3.6","time: 1999-10-01<br />values:  3.5","time: 2000-01-01<br />values:  4.9","time: 2000-04-01<br />values:  5.2","time: 2000-07-01<br />values:  6.3","time: 2000-10-01<br />values:  6.6","time: 2001-01-01<br />values:  4.0","time: 2001-04-01<br />values:  3.3","time: 2001-07-01<br />values:  2.4","time: 2001-10-01<br />values:  0.9","time: 2002-01-01<br />values:  1.1","time: 2002-04-01<br />values:  2.0","time: 2002-07-01<br />values:  1.1","time: 2002-10-01<br />values:  2.6","time: 2003-01-01<br />values:  1.1","time: 2003-04-01<br />values:  1.7","time: 2003-07-01<br />values:  3.1","time: 2003-10-01<br />values:  2.1","time: 2004-01-01<br />values:  4.2","time: 2004-04-01<br />values:  3.5","time: 2004-07-01<br />values:  3.5","time: 2004-10-01<br />values:  4.8","time: 2005-01-01<br />values:  4.5","time: 2005-04-01<br />values:  2.4","time: 2005-07-01<br />values:  2.7","time: 2005-10-01<br />values:  1.5","time: 2006-01-01<br />values:  3.0","time: 2006-04-01<br />values:  4.5","time: 2006-07-01<br />values:  4.0","time: 2006-10-01<br />values:  4.5","time: 2007-01-01<br />values:  4.0","time: 2007-04-01<br />values:  5.6","time: 2007-07-01<br />values:  5.6","time: 2007-10-01<br />values:  6.1","time: 2008-01-01<br />values:  3.9","time: 2008-04-01<br />values:  1.4","time: 2008-07-01<br />values:  0.7","time: 2008-10-01<br />values: -2.7","time: 2009-01-01<br />values: -8.9","time: 2009-04-01<br />values: -8.6","time: 2009-07-01<br />values: -8.1","time: 2009-10-01<br />values: -6.7","time: 2010-01-01<br />values:  0.7","time: 2010-04-01<br />values:  4.0","time: 2010-07-01<br />values:  2.5","time: 2010-10-01<br />values:  5.5","time: 2011-01-01<br />values:  5.0","time: 2011-04-01<br />values:  1.8","time: 2011-07-01<br />values:  2.5","time: 2011-10-01<br />values:  0.4","time: 2012-01-01<br />values: -0.6","time: 2012-04-01<br />values: -1.4","time: 2012-07-01<br />values: -1.9","time: 2012-10-01<br />values: -2.1","time: 2013-01-01<br />values: -2.4","time: 2013-04-01<br />values: -0.9","time: 2013-07-01<br />values: -0.3","time: 2013-10-01<br />values: -0.3","time: 2014-01-01<br />values: -0.3","time: 2014-04-01<br />values: -0.6","time: 2014-07-01<br />values: -0.5","time: 2014-10-01<br />values: -0.5","time: 2015-01-01<br />values: -0.4","time: 2015-04-01<br />values:  0.8","time: 2015-07-01<br />values:  0.4","time: 2015-10-01<br />values:  1.1","time: 2016-01-01<br />values:  3.1","time: 2016-04-01<br />values:  1.6","time: 2016-07-01<br />values:  2.8","time: 2016-10-01<br />values:  2.7","time: 2017-01-01<br />values:  2.5","time: 2017-04-01<br />values:  3.9","time: 2017-07-01<br />values:  3.2","time: 2017-10-01<br />values:  3.6","time: 2018-01-01<br />values:  2.8","time: 2018-04-01<br />values:  1.3","time: 2018-07-01<br />values:  0.7","time: 2018-10-01<br />values:  0.0","time: 2019-01-01<br />values:  0.7","time: 2019-04-01<br />values:  1.6","time: 2019-07-01<br />values:  1.7","time: 2019-10-01<br />values:  1.4","time: 2020-01-01<br />values:  0.4","time: 2020-04-01<br />values: -6.8","time: 2020-07-01<br />values: -2.3","time: 2020-10-01<br />values: -1.1","time: 2021-01-01<br />values: -1.6","time: 2021-04-01<br />values:  6.9","time: 2021-07-01<br />values:  3.0","time: 2021-10-01<br />values:  2.7","time: 2022-01-01<br />values:  2.8","time: 2022-04-01<br />values:  1.5","time: 2022-07-01<br />values:  0.3","time: 2022-10-01<br />values: -1.4","time: 2023-01-01<br />values: -0.7","time: 2023-04-01<br />values: -0.9","time: 2023-07-01<br />values: -2.2","time: 2023-10-01<br />values: -1.3","time: 2024-01-01<br />values: -0.4","time: 2024-04-01<br />values: -0.2","time: 2024-07-01<br />values:  2.0","time: 2024-10-01<br />values:  2.1","time: 2025-01-01<br />values:  1.2","time: 2025-04-01<br />values:  1.0","time: 2025-07-01<br />values:  0.3","time: 2025-10-01<br />values:  0.7","time: 2026-01-01<br />values:  1.2","time: 2026-04-01<br />values:  1.6"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,100,117,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Bruttokansantuotteen volyymin muutos vuodentakaisesta, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6598.5,21250.5],"tickmode":"array","ticktext":["1990","2000","2010","2020"],"tickvals":[7305,10957,14610,18262],"categoryorder":"array","categoryarray":["1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-9.7599999999999998,9.1600000000000001],"tickmode":"array","ticktext":["-5","0","5"],"tickvals":[-5,0,5],"categoryorder":"array","categoryarray":["-5","0","5"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kausitasoitettu ja työpäiväkorjattu sarja","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, neljännesvuositilinpito","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"1cc5683d8d39":{"x":{},"y":{},"type":"bar"}},"cur_data":"1cc5683d8d39","visdat":{"1cc5683d8d39":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="kysynnän-pääerät" class="level2">
+<h2 class="anchored" data-anchor-id="kysynnän-pääerät">Kysynnän pääerät</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>erat <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P3KS14_S15"</span> <span class="ot">=</span> <span class="st">"Yksityinen kulutus"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P3KS13"</span> <span class="ot">=</span> <span class="st">"Julkinen kulutus"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P51K"</span> <span class="ot">=</span> <span class="st">"Investoinnit"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P6K"</span> <span class="ot">=</span> <span class="st">"Vienti"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>kysynta <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="fu">names</span>(erat),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"kausitvv2015"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>kysynta<span class="sc">$</span>era <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  kysynta<span class="sc">$</span>taloustoimi_1_20180101,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">names</span>(erat),</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> erat</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>kysynta <span class="sc">|&gt;</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"era"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Kysynnän pääerien volyymi, miljoonaa euroa"</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015"</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Lähde: Tilastokeskus, neljännesvuositilinpito"</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d67c2abb69b7af78918b" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-d67c2abb69b7af78918b">{"x":{"data":[{"x":[7305,7395,7486,7578,7670,7760,7851,7943,8035,8126,8217,8309,8401,8491,8582,8674,8766,8856,8947,9039,9131,9221,9312,9404,9496,9587,9678,9770,9862,9952,10043,10135,10227,10317,10408,10500,10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[18417,18600,18431,18221,17929,17804,17933,17772,17242,17092,17108,16997,16904,16689,16548,16473,16555,16384,17073,18335,18090,17965,17782,17879,18164,18436,18719,19097,19014,19291,19180,19524,19870,20063,20272,20516,20697,20763,21010,20943,21263,21253,21236,21411,21597,21820,21935,22098,22084,22358,22528,22669,22910,23222,23592,23618,23984,24192,24196,24474,24683,24839,25101,25299,25535,25960,26104,26244,26596,26744,27106,27032,27680,27461,27369,27085,26587,26494,26574,26740,26753,27018,27308,27658,27548,28152,28123,28059,28626,27611,27932,28153,27960,27914,27957,27944,28071,28063,28158,28079,28388,28453,28587,28470,28949,28945,29075,29034,29081,29008,29073,29357,29511,29631,29297,29412,29476,29567,29610,29683,29587,26849,29041,28806,29070,29354,29816,29702,29490,30099,29885,29481,29593,29810,29462,29784,29922,29648,29813,29536,29550,29290,29363,29419,29734,29751],"text":["time: 1990-01-01<br />values: 18417<br />era: Yksityinen kulutus","time: 1990-04-01<br />values: 18600<br />era: Yksityinen kulutus","time: 1990-07-01<br />values: 18431<br />era: Yksityinen kulutus","time: 1990-10-01<br />values: 18221<br />era: Yksityinen kulutus","time: 1991-01-01<br />values: 17929<br />era: Yksityinen kulutus","time: 1991-04-01<br />values: 17804<br />era: Yksityinen kulutus","time: 1991-07-01<br />values: 17933<br />era: Yksityinen kulutus","time: 1991-10-01<br />values: 17772<br />era: Yksityinen kulutus","time: 1992-01-01<br />values: 17242<br />era: Yksityinen kulutus","time: 1992-04-01<br />values: 17092<br />era: Yksityinen kulutus","time: 1992-07-01<br />values: 17108<br />era: Yksityinen kulutus","time: 1992-10-01<br />values: 16997<br />era: Yksityinen kulutus","time: 1993-01-01<br />values: 16904<br />era: Yksityinen kulutus","time: 1993-04-01<br />values: 16689<br />era: Yksityinen kulutus","time: 1993-07-01<br />values: 16548<br />era: Yksityinen kulutus","time: 1993-10-01<br />values: 16473<br />era: Yksityinen kulutus","time: 1994-01-01<br />values: 16555<br />era: Yksityinen kulutus","time: 1994-04-01<br />values: 16384<br />era: Yksityinen kulutus","time: 1994-07-01<br />values: 17073<br />era: Yksityinen kulutus","time: 1994-10-01<br />values: 18335<br />era: Yksityinen kulutus","time: 1995-01-01<br />values: 18090<br />era: Yksityinen kulutus","time: 1995-04-01<br />values: 17965<br />era: Yksityinen kulutus","time: 1995-07-01<br />values: 17782<br />era: Yksityinen kulutus","time: 1995-10-01<br />values: 17879<br />era: Yksityinen kulutus","time: 1996-01-01<br />values: 18164<br />era: Yksityinen kulutus","time: 1996-04-01<br />values: 18436<br />era: Yksityinen kulutus","time: 1996-07-01<br />values: 18719<br />era: Yksityinen kulutus","time: 1996-10-01<br />values: 19097<br />era: Yksityinen kulutus","time: 1997-01-01<br />values: 19014<br />era: Yksityinen kulutus","time: 1997-04-01<br />values: 19291<br />era: Yksityinen kulutus","time: 1997-07-01<br />values: 19180<br />era: Yksityinen kulutus","time: 1997-10-01<br />values: 19524<br />era: Yksityinen kulutus","time: 1998-01-01<br />values: 19870<br />era: Yksityinen kulutus","time: 1998-04-01<br />values: 20063<br />era: Yksityinen kulutus","time: 1998-07-01<br />values: 20272<br />era: Yksityinen kulutus","time: 1998-10-01<br />values: 20516<br />era: Yksityinen kulutus","time: 1999-01-01<br />values: 20697<br />era: Yksityinen kulutus","time: 1999-04-01<br />values: 20763<br />era: Yksityinen kulutus","time: 1999-07-01<br />values: 21010<br />era: Yksityinen kulutus","time: 1999-10-01<br />values: 20943<br />era: Yksityinen kulutus","time: 2000-01-01<br />values: 21263<br />era: Yksityinen kulutus","time: 2000-04-01<br />values: 21253<br />era: Yksityinen kulutus","time: 2000-07-01<br />values: 21236<br />era: Yksityinen kulutus","time: 2000-10-01<br />values: 21411<br />era: Yksityinen kulutus","time: 2001-01-01<br />values: 21597<br />era: Yksityinen kulutus","time: 2001-04-01<br />values: 21820<br />era: Yksityinen kulutus","time: 2001-07-01<br />values: 21935<br />era: Yksityinen kulutus","time: 2001-10-01<br />values: 22098<br />era: Yksityinen kulutus","time: 2002-01-01<br />values: 22084<br />era: Yksityinen kulutus","time: 2002-04-01<br />values: 22358<br />era: Yksityinen kulutus","time: 2002-07-01<br />values: 22528<br />era: Yksityinen kulutus","time: 2002-10-01<br />values: 22669<br />era: Yksityinen kulutus","time: 2003-01-01<br />values: 22910<br />era: Yksityinen kulutus","time: 2003-04-01<br />values: 23222<br />era: Yksityinen kulutus","time: 2003-07-01<br />values: 23592<br />era: Yksityinen kulutus","time: 2003-10-01<br />values: 23618<br />era: Yksityinen kulutus","time: 2004-01-01<br />values: 23984<br />era: Yksityinen kulutus","time: 2004-04-01<br />values: 24192<br />era: Yksityinen kulutus","time: 2004-07-01<br />values: 24196<br />era: Yksityinen kulutus","time: 2004-10-01<br />values: 24474<br />era: Yksityinen kulutus","time: 2005-01-01<br />values: 24683<br />era: Yksityinen kulutus","time: 2005-04-01<br />values: 24839<br />era: Yksityinen kulutus","time: 2005-07-01<br />values: 25101<br />era: Yksityinen kulutus","time: 2005-10-01<br />values: 25299<br />era: Yksityinen kulutus","time: 2006-01-01<br />values: 25535<br />era: Yksityinen kulutus","time: 2006-04-01<br />values: 25960<br />era: Yksityinen kulutus","time: 2006-07-01<br />values: 26104<br />era: Yksityinen kulutus","time: 2006-10-01<br />values: 26244<br />era: Yksityinen kulutus","time: 2007-01-01<br />values: 26596<br />era: Yksityinen kulutus","time: 2007-04-01<br />values: 26744<br />era: Yksityinen kulutus","time: 2007-07-01<br />values: 27106<br />era: Yksityinen kulutus","time: 2007-10-01<br />values: 27032<br />era: Yksityinen kulutus","time: 2008-01-01<br />values: 27680<br />era: Yksityinen kulutus","time: 2008-04-01<br />values: 27461<br />era: Yksityinen kulutus","time: 2008-07-01<br />values: 27369<br />era: Yksityinen kulutus","time: 2008-10-01<br />values: 27085<br />era: Yksityinen kulutus","time: 2009-01-01<br />values: 26587<br />era: Yksityinen kulutus","time: 2009-04-01<br />values: 26494<br />era: Yksityinen kulutus","time: 2009-07-01<br />values: 26574<br />era: Yksityinen kulutus","time: 2009-10-01<br />values: 26740<br />era: Yksityinen kulutus","time: 2010-01-01<br />values: 26753<br />era: Yksityinen kulutus","time: 2010-04-01<br />values: 27018<br />era: Yksityinen kulutus","time: 2010-07-01<br />values: 27308<br />era: Yksityinen kulutus","time: 2010-10-01<br />values: 27658<br />era: Yksityinen kulutus","time: 2011-01-01<br />values: 27548<br />era: Yksityinen kulutus","time: 2011-04-01<br />values: 28152<br />era: Yksityinen kulutus","time: 2011-07-01<br />values: 28123<br />era: Yksityinen kulutus","time: 2011-10-01<br />values: 28059<br />era: Yksityinen kulutus","time: 2012-01-01<br />values: 28626<br />era: Yksityinen kulutus","time: 2012-04-01<br />values: 27611<br />era: Yksityinen kulutus","time: 2012-07-01<br />values: 27932<br />era: Yksityinen kulutus","time: 2012-10-01<br />values: 28153<br />era: Yksityinen kulutus","time: 2013-01-01<br />values: 27960<br />era: Yksityinen kulutus","time: 2013-04-01<br />values: 27914<br />era: Yksityinen kulutus","time: 2013-07-01<br />values: 27957<br />era: Yksityinen kulutus","time: 2013-10-01<br />values: 27944<br />era: Yksityinen kulutus","time: 2014-01-01<br />values: 28071<br />era: Yksityinen kulutus","time: 2014-04-01<br />values: 28063<br />era: Yksityinen kulutus","time: 2014-07-01<br />values: 28158<br />era: Yksityinen kulutus","time: 2014-10-01<br />values: 28079<br />era: Yksityinen kulutus","time: 2015-01-01<br />values: 28388<br />era: Yksityinen kulutus","time: 2015-04-01<br />values: 28453<br />era: Yksityinen kulutus","time: 2015-07-01<br />values: 28587<br />era: Yksityinen kulutus","time: 2015-10-01<br />values: 28470<br />era: Yksityinen kulutus","time: 2016-01-01<br />values: 28949<br />era: Yksityinen kulutus","time: 2016-04-01<br />values: 28945<br />era: Yksityinen kulutus","time: 2016-07-01<br />values: 29075<br />era: Yksityinen kulutus","time: 2016-10-01<br />values: 29034<br />era: Yksityinen kulutus","time: 2017-01-01<br />values: 29081<br />era: Yksityinen kulutus","time: 2017-04-01<br />values: 29008<br />era: Yksityinen kulutus","time: 2017-07-01<br />values: 29073<br />era: Yksityinen kulutus","time: 2017-10-01<br />values: 29357<br />era: Yksityinen kulutus","time: 2018-01-01<br />values: 29511<br />era: Yksityinen kulutus","time: 2018-04-01<br />values: 29631<br />era: Yksityinen kulutus","time: 2018-07-01<br />values: 29297<br />era: Yksityinen kulutus","time: 2018-10-01<br />values: 29412<br />era: Yksityinen kulutus","time: 2019-01-01<br />values: 29476<br />era: Yksityinen kulutus","time: 2019-04-01<br />values: 29567<br />era: Yksityinen kulutus","time: 2019-07-01<br />values: 29610<br />era: Yksityinen kulutus","time: 2019-10-01<br />values: 29683<br />era: Yksityinen kulutus","time: 2020-01-01<br />values: 29587<br />era: Yksityinen kulutus","time: 2020-04-01<br />values: 26849<br />era: Yksityinen kulutus","time: 2020-07-01<br />values: 29041<br />era: Yksityinen kulutus","time: 2020-10-01<br />values: 28806<br />era: Yksityinen kulutus","time: 2021-01-01<br />values: 29070<br />era: Yksityinen kulutus","time: 2021-04-01<br />values: 29354<br />era: Yksityinen kulutus","time: 2021-07-01<br />values: 29816<br />era: Yksityinen kulutus","time: 2021-10-01<br />values: 29702<br />era: Yksityinen kulutus","time: 2022-01-01<br />values: 29490<br />era: Yksityinen kulutus","time: 2022-04-01<br />values: 30099<br />era: Yksityinen kulutus","time: 2022-07-01<br />values: 29885<br />era: Yksityinen kulutus","time: 2022-10-01<br />values: 29481<br />era: Yksityinen kulutus","time: 2023-01-01<br />values: 29593<br />era: Yksityinen kulutus","time: 2023-04-01<br />values: 29810<br />era: Yksityinen kulutus","time: 2023-07-01<br />values: 29462<br />era: Yksityinen kulutus","time: 2023-10-01<br />values: 29784<br />era: Yksityinen kulutus","time: 2024-01-01<br />values: 29922<br />era: Yksityinen kulutus","time: 2024-04-01<br />values: 29648<br />era: Yksityinen kulutus","time: 2024-07-01<br />values: 29813<br />era: Yksityinen kulutus","time: 2024-10-01<br />values: 29536<br />era: Yksityinen kulutus","time: 2025-01-01<br />values: 29550<br />era: Yksityinen kulutus","time: 2025-04-01<br />values: 29290<br />era: Yksityinen kulutus","time: 2025-07-01<br />values: 29363<br />era: Yksityinen kulutus","time: 2025-10-01<br />values: 29419<br />era: Yksityinen kulutus","time: 2026-01-01<br />values: 29734<br />era: Yksityinen kulutus","time: 2026-04-01<br />values: 29751<br />era: Yksityinen kulutus"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Yksityinen kulutus","legendgroup":"Yksityinen kulutus","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7305,7395,7486,7578,7670,7760,7851,7943,8035,8126,8217,8309,8401,8491,8582,8674,8766,8856,8947,9039,9131,9221,9312,9404,9496,9587,9678,9770,9862,9952,10043,10135,10227,10317,10408,10500,10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[9967,9966,10068,10184,10202,10255,10243,10183,10086,9970,9803,9670,9584,9506,9456,9429,9393,9466,9545,9629,9780,9771,9826,9790,9923,9999,10085,9966,10184,10253,10404,10454,10410,10479,10674,10565,10607,10597,10498,11120,10787,10748,10765,11069,10928,11054,11132,11285,11519,11341,11226,11344,11422,11418,11561,11617,11655,11685,11666,11704,11763,11916,11949,12006,11987,12038,12031,12108,12182,12106,12216,12296,12294,12423,12414,12536,12551,12670,12650,12505,12603,12450,12531,12688,12483,12608,12536,12618,12758,12540,12659,12581,12726,12842,12747,12828,12716,12765,12804,12746,12853,12939,12886,12966,13029,12954,12830,13255,12793,13004,13179,13178,13145,13276,13356,13407,13730,13637,13641,13551,13650,13386,13549,14213,14134,14257,14421,14327,14183,13823,14543,14236,14750,15324,14182,14896,14906,15181,14936,15179,15073,14955,15143,15116,15118,15067],"text":["time: 1990-01-01<br />values:  9967<br />era: Julkinen kulutus","time: 1990-04-01<br />values:  9966<br />era: Julkinen kulutus","time: 1990-07-01<br />values: 10068<br />era: Julkinen kulutus","time: 1990-10-01<br />values: 10184<br />era: Julkinen kulutus","time: 1991-01-01<br />values: 10202<br />era: Julkinen kulutus","time: 1991-04-01<br />values: 10255<br />era: Julkinen kulutus","time: 1991-07-01<br />values: 10243<br />era: Julkinen kulutus","time: 1991-10-01<br />values: 10183<br />era: Julkinen kulutus","time: 1992-01-01<br />values: 10086<br />era: Julkinen kulutus","time: 1992-04-01<br />values:  9970<br />era: Julkinen kulutus","time: 1992-07-01<br />values:  9803<br />era: Julkinen kulutus","time: 1992-10-01<br />values:  9670<br />era: Julkinen kulutus","time: 1993-01-01<br />values:  9584<br />era: Julkinen kulutus","time: 1993-04-01<br />values:  9506<br />era: Julkinen kulutus","time: 1993-07-01<br />values:  9456<br />era: Julkinen kulutus","time: 1993-10-01<br />values:  9429<br />era: Julkinen kulutus","time: 1994-01-01<br />values:  9393<br />era: Julkinen kulutus","time: 1994-04-01<br />values:  9466<br />era: Julkinen kulutus","time: 1994-07-01<br />values:  9545<br />era: Julkinen kulutus","time: 1994-10-01<br />values:  9629<br />era: Julkinen kulutus","time: 1995-01-01<br />values:  9780<br />era: Julkinen kulutus","time: 1995-04-01<br />values:  9771<br />era: Julkinen kulutus","time: 1995-07-01<br />values:  9826<br />era: Julkinen kulutus","time: 1995-10-01<br />values:  9790<br />era: Julkinen kulutus","time: 1996-01-01<br />values:  9923<br />era: Julkinen kulutus","time: 1996-04-01<br />values:  9999<br />era: Julkinen kulutus","time: 1996-07-01<br />values: 10085<br />era: Julkinen kulutus","time: 1996-10-01<br />values:  9966<br />era: Julkinen kulutus","time: 1997-01-01<br />values: 10184<br />era: Julkinen kulutus","time: 1997-04-01<br />values: 10253<br />era: Julkinen kulutus","time: 1997-07-01<br />values: 10404<br />era: Julkinen kulutus","time: 1997-10-01<br />values: 10454<br />era: Julkinen kulutus","time: 1998-01-01<br />values: 10410<br />era: Julkinen kulutus","time: 1998-04-01<br />values: 10479<br />era: Julkinen kulutus","time: 1998-07-01<br />values: 10674<br />era: Julkinen kulutus","time: 1998-10-01<br />values: 10565<br />era: Julkinen kulutus","time: 1999-01-01<br />values: 10607<br />era: Julkinen kulutus","time: 1999-04-01<br />values: 10597<br />era: Julkinen kulutus","time: 1999-07-01<br />values: 10498<br />era: Julkinen kulutus","time: 1999-10-01<br />values: 11120<br />era: Julkinen kulutus","time: 2000-01-01<br />values: 10787<br />era: Julkinen kulutus","time: 2000-04-01<br />values: 10748<br />era: Julkinen kulutus","time: 2000-07-01<br />values: 10765<br />era: Julkinen kulutus","time: 2000-10-01<br />values: 11069<br />era: Julkinen kulutus","time: 2001-01-01<br />values: 10928<br />era: Julkinen kulutus","time: 2001-04-01<br />values: 11054<br />era: Julkinen kulutus","time: 2001-07-01<br />values: 11132<br />era: Julkinen kulutus","time: 2001-10-01<br />values: 11285<br />era: Julkinen kulutus","time: 2002-01-01<br />values: 11519<br />era: Julkinen kulutus","time: 2002-04-01<br />values: 11341<br />era: Julkinen kulutus","time: 2002-07-01<br />values: 11226<br />era: Julkinen kulutus","time: 2002-10-01<br />values: 11344<br />era: Julkinen kulutus","time: 2003-01-01<br />values: 11422<br />era: Julkinen kulutus","time: 2003-04-01<br />values: 11418<br />era: Julkinen kulutus","time: 2003-07-01<br />values: 11561<br />era: Julkinen kulutus","time: 2003-10-01<br />values: 11617<br />era: Julkinen kulutus","time: 2004-01-01<br />values: 11655<br />era: Julkinen kulutus","time: 2004-04-01<br />values: 11685<br />era: Julkinen kulutus","time: 2004-07-01<br />values: 11666<br />era: Julkinen kulutus","time: 2004-10-01<br />values: 11704<br />era: Julkinen kulutus","time: 2005-01-01<br />values: 11763<br />era: Julkinen kulutus","time: 2005-04-01<br />values: 11916<br />era: Julkinen kulutus","time: 2005-07-01<br />values: 11949<br />era: Julkinen kulutus","time: 2005-10-01<br />values: 12006<br />era: Julkinen kulutus","time: 2006-01-01<br />values: 11987<br />era: Julkinen kulutus","time: 2006-04-01<br />values: 12038<br />era: Julkinen kulutus","time: 2006-07-01<br />values: 12031<br />era: Julkinen kulutus","time: 2006-10-01<br />values: 12108<br />era: Julkinen kulutus","time: 2007-01-01<br />values: 12182<br />era: Julkinen kulutus","time: 2007-04-01<br />values: 12106<br />era: Julkinen kulutus","time: 2007-07-01<br />values: 12216<br />era: Julkinen kulutus","time: 2007-10-01<br />values: 12296<br />era: Julkinen kulutus","time: 2008-01-01<br />values: 12294<br />era: Julkinen kulutus","time: 2008-04-01<br />values: 12423<br />era: Julkinen kulutus","time: 2008-07-01<br />values: 12414<br />era: Julkinen kulutus","time: 2008-10-01<br />values: 12536<br />era: Julkinen kulutus","time: 2009-01-01<br />values: 12551<br />era: Julkinen kulutus","time: 2009-04-01<br />values: 12670<br />era: Julkinen kulutus","time: 2009-07-01<br />values: 12650<br />era: Julkinen kulutus","time: 2009-10-01<br />values: 12505<br />era: Julkinen kulutus","time: 2010-01-01<br />values: 12603<br />era: Julkinen kulutus","time: 2010-04-01<br />values: 12450<br />era: Julkinen kulutus","time: 2010-07-01<br />values: 12531<br />era: Julkinen kulutus","time: 2010-10-01<br />values: 12688<br />era: Julkinen kulutus","time: 2011-01-01<br />values: 12483<br />era: Julkinen kulutus","time: 2011-04-01<br />values: 12608<br />era: Julkinen kulutus","time: 2011-07-01<br />values: 12536<br />era: Julkinen kulutus","time: 2011-10-01<br />values: 12618<br />era: Julkinen kulutus","time: 2012-01-01<br />values: 12758<br />era: Julkinen kulutus","time: 2012-04-01<br />values: 12540<br />era: Julkinen kulutus","time: 2012-07-01<br />values: 12659<br />era: Julkinen kulutus","time: 2012-10-01<br />values: 12581<br />era: Julkinen kulutus","time: 2013-01-01<br />values: 12726<br />era: Julkinen kulutus","time: 2013-04-01<br />values: 12842<br />era: Julkinen kulutus","time: 2013-07-01<br />values: 12747<br />era: Julkinen kulutus","time: 2013-10-01<br />values: 12828<br />era: Julkinen kulutus","time: 2014-01-01<br />values: 12716<br />era: Julkinen kulutus","time: 2014-04-01<br />values: 12765<br />era: Julkinen kulutus","time: 2014-07-01<br />values: 12804<br />era: Julkinen kulutus","time: 2014-10-01<br />values: 12746<br />era: Julkinen kulutus","time: 2015-01-01<br />values: 12853<br />era: Julkinen kulutus","time: 2015-04-01<br />values: 12939<br />era: Julkinen kulutus","time: 2015-07-01<br />values: 12886<br />era: Julkinen kulutus","time: 2015-10-01<br />values: 12966<br />era: Julkinen kulutus","time: 2016-01-01<br />values: 13029<br />era: Julkinen kulutus","time: 2016-04-01<br />values: 12954<br />era: Julkinen kulutus","time: 2016-07-01<br />values: 12830<br />era: Julkinen kulutus","time: 2016-10-01<br />values: 13255<br />era: Julkinen kulutus","time: 2017-01-01<br />values: 12793<br />era: Julkinen kulutus","time: 2017-04-01<br />values: 13004<br />era: Julkinen kulutus","time: 2017-07-01<br />values: 13179<br />era: Julkinen kulutus","time: 2017-10-01<br />values: 13178<br />era: Julkinen kulutus","time: 2018-01-01<br />values: 13145<br />era: Julkinen kulutus","time: 2018-04-01<br />values: 13276<br />era: Julkinen kulutus","time: 2018-07-01<br />values: 13356<br />era: Julkinen kulutus","time: 2018-10-01<br />values: 13407<br />era: Julkinen kulutus","time: 2019-01-01<br />values: 13730<br />era: Julkinen kulutus","time: 2019-04-01<br />values: 13637<br />era: Julkinen kulutus","time: 2019-07-01<br />values: 13641<br />era: Julkinen kulutus","time: 2019-10-01<br />values: 13551<br />era: Julkinen kulutus","time: 2020-01-01<br />values: 13650<br />era: Julkinen kulutus","time: 2020-04-01<br />values: 13386<br />era: Julkinen kulutus","time: 2020-07-01<br />values: 13549<br />era: Julkinen kulutus","time: 2020-10-01<br />values: 14213<br />era: Julkinen kulutus","time: 2021-01-01<br />values: 14134<br />era: Julkinen kulutus","time: 2021-04-01<br />values: 14257<br />era: Julkinen kulutus","time: 2021-07-01<br />values: 14421<br />era: Julkinen kulutus","time: 2021-10-01<br />values: 14327<br />era: Julkinen kulutus","time: 2022-01-01<br />values: 14183<br />era: Julkinen kulutus","time: 2022-04-01<br />values: 13823<br />era: Julkinen kulutus","time: 2022-07-01<br />values: 14543<br />era: Julkinen kulutus","time: 2022-10-01<br />values: 14236<br />era: Julkinen kulutus","time: 2023-01-01<br />values: 14750<br />era: Julkinen kulutus","time: 2023-04-01<br />values: 15324<br />era: Julkinen kulutus","time: 2023-07-01<br />values: 14182<br />era: Julkinen kulutus","time: 2023-10-01<br />values: 14896<br />era: Julkinen kulutus","time: 2024-01-01<br />values: 14906<br />era: Julkinen kulutus","time: 2024-04-01<br />values: 15181<br />era: Julkinen kulutus","time: 2024-07-01<br />values: 14936<br />era: Julkinen kulutus","time: 2024-10-01<br />values: 15179<br />era: Julkinen kulutus","time: 2025-01-01<br />values: 15073<br />era: Julkinen kulutus","time: 2025-04-01<br />values: 14955<br />era: Julkinen kulutus","time: 2025-07-01<br />values: 15143<br />era: Julkinen kulutus","time: 2025-10-01<br />values: 15116<br />era: Julkinen kulutus","time: 2026-01-01<br />values: 15118<br />era: Julkinen kulutus","time: 2026-04-01<br />values: 15067<br />era: Julkinen kulutus"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Julkinen kulutus","legendgroup":"Julkinen kulutus","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7305,7395,7486,7578,7670,7760,7851,7943,8035,8126,8217,8309,8401,8491,8582,8674,8766,8856,8947,9039,9131,9221,9312,9404,9496,9587,9678,9770,9862,9952,10043,10135,10227,10317,10408,10500,10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[10393,9794,9449,9288,8716,8343,7866,7416,7285,7003,6909,6696,6095,6193,6071,6042,5999,6115,6227,6267,6830,6844,6844,7175,7491,7444,7680,7849,8048,8372,8449,8911,9133,8951,9620,9681,9781,9728,9796,9775,10072,10268,10475,10694,10780,10539,10573,10350,10172,10360,10295,10166,10361,10394,10716,10670,10853,11012,10995,11244,10993,11463,11538,11545,11568,11476,11660,11453,12394,12914,12841,12761,13003,12961,13057,12212,11513,11091,11082,11384,11003,11839,11998,12312,11958,11997,12143,12277,12290,12033,12013,11694,11808,11503,11241,11430,11170,11337,11322,11117,11223,11184,11113,11503,11904,12458,12442,12359,12569,12802,13175,13071,13429,13394,13401,13660,13305,13372,13335,13312,13463,13161,13044,13052,13518,13577,13164,13419,13821,13605,13541,13539,13168,12867,12702,11883,12633,11797,11709,11832,11807,12262,12209,12373,13218,12094],"text":["time: 1990-01-01<br />values: 10393<br />era: Investoinnit","time: 1990-04-01<br />values:  9794<br />era: Investoinnit","time: 1990-07-01<br />values:  9449<br />era: Investoinnit","time: 1990-10-01<br />values:  9288<br />era: Investoinnit","time: 1991-01-01<br />values:  8716<br />era: Investoinnit","time: 1991-04-01<br />values:  8343<br />era: Investoinnit","time: 1991-07-01<br />values:  7866<br />era: Investoinnit","time: 1991-10-01<br />values:  7416<br />era: Investoinnit","time: 1992-01-01<br />values:  7285<br />era: Investoinnit","time: 1992-04-01<br />values:  7003<br />era: Investoinnit","time: 1992-07-01<br />values:  6909<br />era: Investoinnit","time: 1992-10-01<br />values:  6696<br />era: Investoinnit","time: 1993-01-01<br />values:  6095<br />era: Investoinnit","time: 1993-04-01<br />values:  6193<br />era: Investoinnit","time: 1993-07-01<br />values:  6071<br />era: Investoinnit","time: 1993-10-01<br />values:  6042<br />era: Investoinnit","time: 1994-01-01<br />values:  5999<br />era: Investoinnit","time: 1994-04-01<br />values:  6115<br />era: Investoinnit","time: 1994-07-01<br />values:  6227<br />era: Investoinnit","time: 1994-10-01<br />values:  6267<br />era: Investoinnit","time: 1995-01-01<br />values:  6830<br />era: Investoinnit","time: 1995-04-01<br />values:  6844<br />era: Investoinnit","time: 1995-07-01<br />values:  6844<br />era: Investoinnit","time: 1995-10-01<br />values:  7175<br />era: Investoinnit","time: 1996-01-01<br />values:  7491<br />era: Investoinnit","time: 1996-04-01<br />values:  7444<br />era: Investoinnit","time: 1996-07-01<br />values:  7680<br />era: Investoinnit","time: 1996-10-01<br />values:  7849<br />era: Investoinnit","time: 1997-01-01<br />values:  8048<br />era: Investoinnit","time: 1997-04-01<br />values:  8372<br />era: Investoinnit","time: 1997-07-01<br />values:  8449<br />era: Investoinnit","time: 1997-10-01<br />values:  8911<br />era: Investoinnit","time: 1998-01-01<br />values:  9133<br />era: Investoinnit","time: 1998-04-01<br />values:  8951<br />era: Investoinnit","time: 1998-07-01<br />values:  9620<br />era: Investoinnit","time: 1998-10-01<br />values:  9681<br />era: Investoinnit","time: 1999-01-01<br />values:  9781<br />era: Investoinnit","time: 1999-04-01<br />values:  9728<br />era: Investoinnit","time: 1999-07-01<br />values:  9796<br />era: Investoinnit","time: 1999-10-01<br />values:  9775<br />era: Investoinnit","time: 2000-01-01<br />values: 10072<br />era: Investoinnit","time: 2000-04-01<br />values: 10268<br />era: Investoinnit","time: 2000-07-01<br />values: 10475<br />era: Investoinnit","time: 2000-10-01<br />values: 10694<br />era: Investoinnit","time: 2001-01-01<br />values: 10780<br />era: Investoinnit","time: 2001-04-01<br />values: 10539<br />era: Investoinnit","time: 2001-07-01<br />values: 10573<br />era: Investoinnit","time: 2001-10-01<br />values: 10350<br />era: Investoinnit","time: 2002-01-01<br />values: 10172<br />era: Investoinnit","time: 2002-04-01<br />values: 10360<br />era: Investoinnit","time: 2002-07-01<br />values: 10295<br />era: Investoinnit","time: 2002-10-01<br />values: 10166<br />era: Investoinnit","time: 2003-01-01<br />values: 10361<br />era: Investoinnit","time: 2003-04-01<br />values: 10394<br />era: Investoinnit","time: 2003-07-01<br />values: 10716<br />era: Investoinnit","time: 2003-10-01<br />values: 10670<br />era: Investoinnit","time: 2004-01-01<br />values: 10853<br />era: Investoinnit","time: 2004-04-01<br />values: 11012<br />era: Investoinnit","time: 2004-07-01<br />values: 10995<br />era: Investoinnit","time: 2004-10-01<br />values: 11244<br />era: Investoinnit","time: 2005-01-01<br />values: 10993<br />era: Investoinnit","time: 2005-04-01<br />values: 11463<br />era: Investoinnit","time: 2005-07-01<br />values: 11538<br />era: Investoinnit","time: 2005-10-01<br />values: 11545<br />era: Investoinnit","time: 2006-01-01<br />values: 11568<br />era: Investoinnit","time: 2006-04-01<br />values: 11476<br />era: Investoinnit","time: 2006-07-01<br />values: 11660<br />era: Investoinnit","time: 2006-10-01<br />values: 11453<br />era: Investoinnit","time: 2007-01-01<br />values: 12394<br />era: Investoinnit","time: 2007-04-01<br />values: 12914<br />era: Investoinnit","time: 2007-07-01<br />values: 12841<br />era: Investoinnit","time: 2007-10-01<br />values: 12761<br />era: Investoinnit","time: 2008-01-01<br />values: 13003<br />era: Investoinnit","time: 2008-04-01<br />values: 12961<br />era: Investoinnit","time: 2008-07-01<br />values: 13057<br />era: Investoinnit","time: 2008-10-01<br />values: 12212<br />era: Investoinnit","time: 2009-01-01<br />values: 11513<br />era: Investoinnit","time: 2009-04-01<br />values: 11091<br />era: Investoinnit","time: 2009-07-01<br />values: 11082<br />era: Investoinnit","time: 2009-10-01<br />values: 11384<br />era: Investoinnit","time: 2010-01-01<br />values: 11003<br />era: Investoinnit","time: 2010-04-01<br />values: 11839<br />era: Investoinnit","time: 2010-07-01<br />values: 11998<br />era: Investoinnit","time: 2010-10-01<br />values: 12312<br />era: Investoinnit","time: 2011-01-01<br />values: 11958<br />era: Investoinnit","time: 2011-04-01<br />values: 11997<br />era: Investoinnit","time: 2011-07-01<br />values: 12143<br />era: Investoinnit","time: 2011-10-01<br />values: 12277<br />era: Investoinnit","time: 2012-01-01<br />values: 12290<br />era: Investoinnit","time: 2012-04-01<br />values: 12033<br />era: Investoinnit","time: 2012-07-01<br />values: 12013<br />era: Investoinnit","time: 2012-10-01<br />values: 11694<br />era: Investoinnit","time: 2013-01-01<br />values: 11808<br />era: Investoinnit","time: 2013-04-01<br />values: 11503<br />era: Investoinnit","time: 2013-07-01<br />values: 11241<br />era: Investoinnit","time: 2013-10-01<br />values: 11430<br />era: Investoinnit","time: 2014-01-01<br />values: 11170<br />era: Investoinnit","time: 2014-04-01<br />values: 11337<br />era: Investoinnit","time: 2014-07-01<br />values: 11322<br />era: Investoinnit","time: 2014-10-01<br />values: 11117<br />era: Investoinnit","time: 2015-01-01<br />values: 11223<br />era: Investoinnit","time: 2015-04-01<br />values: 11184<br />era: Investoinnit","time: 2015-07-01<br />values: 11113<br />era: Investoinnit","time: 2015-10-01<br />values: 11503<br />era: Investoinnit","time: 2016-01-01<br />values: 11904<br />era: Investoinnit","time: 2016-04-01<br />values: 12458<br />era: Investoinnit","time: 2016-07-01<br />values: 12442<br />era: Investoinnit","time: 2016-10-01<br />values: 12359<br />era: Investoinnit","time: 2017-01-01<br />values: 12569<br />era: Investoinnit","time: 2017-04-01<br />values: 12802<br />era: Investoinnit","time: 2017-07-01<br />values: 13175<br />era: Investoinnit","time: 2017-10-01<br />values: 13071<br />era: Investoinnit","time: 2018-01-01<br />values: 13429<br />era: Investoinnit","time: 2018-04-01<br />values: 13394<br />era: Investoinnit","time: 2018-07-01<br />values: 13401<br />era: Investoinnit","time: 2018-10-01<br />values: 13660<br />era: Investoinnit","time: 2019-01-01<br />values: 13305<br />era: Investoinnit","time: 2019-04-01<br />values: 13372<br />era: Investoinnit","time: 2019-07-01<br />values: 13335<br />era: Investoinnit","time: 2019-10-01<br />values: 13312<br />era: Investoinnit","time: 2020-01-01<br />values: 13463<br />era: Investoinnit","time: 2020-04-01<br />values: 13161<br />era: Investoinnit","time: 2020-07-01<br />values: 13044<br />era: Investoinnit","time: 2020-10-01<br />values: 13052<br />era: Investoinnit","time: 2021-01-01<br />values: 13518<br />era: Investoinnit","time: 2021-04-01<br />values: 13577<br />era: Investoinnit","time: 2021-07-01<br />values: 13164<br />era: Investoinnit","time: 2021-10-01<br />values: 13419<br />era: Investoinnit","time: 2022-01-01<br />values: 13821<br />era: Investoinnit","time: 2022-04-01<br />values: 13605<br />era: Investoinnit","time: 2022-07-01<br />values: 13541<br />era: Investoinnit","time: 2022-10-01<br />values: 13539<br />era: Investoinnit","time: 2023-01-01<br />values: 13168<br />era: Investoinnit","time: 2023-04-01<br />values: 12867<br />era: Investoinnit","time: 2023-07-01<br />values: 12702<br />era: Investoinnit","time: 2023-10-01<br />values: 11883<br />era: Investoinnit","time: 2024-01-01<br />values: 12633<br />era: Investoinnit","time: 2024-04-01<br />values: 11797<br />era: Investoinnit","time: 2024-07-01<br />values: 11709<br />era: Investoinnit","time: 2024-10-01<br />values: 11832<br />era: Investoinnit","time: 2025-01-01<br />values: 11807<br />era: Investoinnit","time: 2025-04-01<br />values: 12262<br />era: Investoinnit","time: 2025-07-01<br />values: 12209<br />era: Investoinnit","time: 2025-10-01<br />values: 12373<br />era: Investoinnit","time: 2026-01-01<br />values: 13218<br />era: Investoinnit","time: 2026-04-01<br />values: 12094<br />era: Investoinnit"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(54,90,189,1)","dash":"solid"},"hoveron":"points","name":"Investoinnit","legendgroup":"Investoinnit","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7305,7395,7486,7578,7670,7760,7851,7943,8035,8126,8217,8309,8401,8491,8582,8674,8766,8856,8947,9039,9131,9221,9312,9404,9496,9587,9678,9770,9862,9952,10043,10135,10227,10317,10408,10500,10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[5507,5835,5524,5705,5106,4825,5454,5404,5624,5686,5670,5966,6518,6464,6782,7007,7046,7483,7777,8023,8309,8599,7902,8173,8304,8887,8564,9128,9217,10003,10397,10160,11121,10777,10795,10613,11358,11749,12327,12781,13532,13656,14367,14424,14361,13988,13909,14742,14202,14898,14790,15380,14248,14839,14744,14842,15711,15147,16058,16886,16632,16152,17523,17929,18262,18936,19609,18125,19390,20313,21461,20502,21788,23277,22264,19728,17037,16426,16921,19162,16258,18963,18777,19845,19269,18444,19182,18444,19280,19073,19025,18139,19694,18952,19376,18373,18311,18907,19195,18614,18462,19188,18693,18867,19043,20049,19898,19369,21098,21631,21687,21018,22036,21758,21547,21557,23596,23099,23150,23001,22433,19720,20389,22412,21588,21862,22850,23737,22987,23367,23827,23847,23786,23306,22695,22961,22566,23861,24065,23488,24300,24406,25332,24634,25208,26638],"text":["time: 1990-01-01<br />values:  5507<br />era: Vienti","time: 1990-04-01<br />values:  5835<br />era: Vienti","time: 1990-07-01<br />values:  5524<br />era: Vienti","time: 1990-10-01<br />values:  5705<br />era: Vienti","time: 1991-01-01<br />values:  5106<br />era: Vienti","time: 1991-04-01<br />values:  4825<br />era: Vienti","time: 1991-07-01<br />values:  5454<br />era: Vienti","time: 1991-10-01<br />values:  5404<br />era: Vienti","time: 1992-01-01<br />values:  5624<br />era: Vienti","time: 1992-04-01<br />values:  5686<br />era: Vienti","time: 1992-07-01<br />values:  5670<br />era: Vienti","time: 1992-10-01<br />values:  5966<br />era: Vienti","time: 1993-01-01<br />values:  6518<br />era: Vienti","time: 1993-04-01<br />values:  6464<br />era: Vienti","time: 1993-07-01<br />values:  6782<br />era: Vienti","time: 1993-10-01<br />values:  7007<br />era: Vienti","time: 1994-01-01<br />values:  7046<br />era: Vienti","time: 1994-04-01<br />values:  7483<br />era: Vienti","time: 1994-07-01<br />values:  7777<br />era: Vienti","time: 1994-10-01<br />values:  8023<br />era: Vienti","time: 1995-01-01<br />values:  8309<br />era: Vienti","time: 1995-04-01<br />values:  8599<br />era: Vienti","time: 1995-07-01<br />values:  7902<br />era: Vienti","time: 1995-10-01<br />values:  8173<br />era: Vienti","time: 1996-01-01<br />values:  8304<br />era: Vienti","time: 1996-04-01<br />values:  8887<br />era: Vienti","time: 1996-07-01<br />values:  8564<br />era: Vienti","time: 1996-10-01<br />values:  9128<br />era: Vienti","time: 1997-01-01<br />values:  9217<br />era: Vienti","time: 1997-04-01<br />values: 10003<br />era: Vienti","time: 1997-07-01<br />values: 10397<br />era: Vienti","time: 1997-10-01<br />values: 10160<br />era: Vienti","time: 1998-01-01<br />values: 11121<br />era: Vienti","time: 1998-04-01<br />values: 10777<br />era: Vienti","time: 1998-07-01<br />values: 10795<br />era: Vienti","time: 1998-10-01<br />values: 10613<br />era: Vienti","time: 1999-01-01<br />values: 11358<br />era: Vienti","time: 1999-04-01<br />values: 11749<br />era: Vienti","time: 1999-07-01<br />values: 12327<br />era: Vienti","time: 1999-10-01<br />values: 12781<br />era: Vienti","time: 2000-01-01<br />values: 13532<br />era: Vienti","time: 2000-04-01<br />values: 13656<br />era: Vienti","time: 2000-07-01<br />values: 14367<br />era: Vienti","time: 2000-10-01<br />values: 14424<br />era: Vienti","time: 2001-01-01<br />values: 14361<br />era: Vienti","time: 2001-04-01<br />values: 13988<br />era: Vienti","time: 2001-07-01<br />values: 13909<br />era: Vienti","time: 2001-10-01<br />values: 14742<br />era: Vienti","time: 2002-01-01<br />values: 14202<br />era: Vienti","time: 2002-04-01<br />values: 14898<br />era: Vienti","time: 2002-07-01<br />values: 14790<br />era: Vienti","time: 2002-10-01<br />values: 15380<br />era: Vienti","time: 2003-01-01<br />values: 14248<br />era: Vienti","time: 2003-04-01<br />values: 14839<br />era: Vienti","time: 2003-07-01<br />values: 14744<br />era: Vienti","time: 2003-10-01<br />values: 14842<br />era: Vienti","time: 2004-01-01<br />values: 15711<br />era: Vienti","time: 2004-04-01<br />values: 15147<br />era: Vienti","time: 2004-07-01<br />values: 16058<br />era: Vienti","time: 2004-10-01<br />values: 16886<br />era: Vienti","time: 2005-01-01<br />values: 16632<br />era: Vienti","time: 2005-04-01<br />values: 16152<br />era: Vienti","time: 2005-07-01<br />values: 17523<br />era: Vienti","time: 2005-10-01<br />values: 17929<br />era: Vienti","time: 2006-01-01<br />values: 18262<br />era: Vienti","time: 2006-04-01<br />values: 18936<br />era: Vienti","time: 2006-07-01<br />values: 19609<br />era: Vienti","time: 2006-10-01<br />values: 18125<br />era: Vienti","time: 2007-01-01<br />values: 19390<br />era: Vienti","time: 2007-04-01<br />values: 20313<br />era: Vienti","time: 2007-07-01<br />values: 21461<br />era: Vienti","time: 2007-10-01<br />values: 20502<br />era: Vienti","time: 2008-01-01<br />values: 21788<br />era: Vienti","time: 2008-04-01<br />values: 23277<br />era: Vienti","time: 2008-07-01<br />values: 22264<br />era: Vienti","time: 2008-10-01<br />values: 19728<br />era: Vienti","time: 2009-01-01<br />values: 17037<br />era: Vienti","time: 2009-04-01<br />values: 16426<br />era: Vienti","time: 2009-07-01<br />values: 16921<br />era: Vienti","time: 2009-10-01<br />values: 19162<br />era: Vienti","time: 2010-01-01<br />values: 16258<br />era: Vienti","time: 2010-04-01<br />values: 18963<br />era: Vienti","time: 2010-07-01<br />values: 18777<br />era: Vienti","time: 2010-10-01<br />values: 19845<br />era: Vienti","time: 2011-01-01<br />values: 19269<br />era: Vienti","time: 2011-04-01<br />values: 18444<br />era: Vienti","time: 2011-07-01<br />values: 19182<br />era: Vienti","time: 2011-10-01<br />values: 18444<br />era: Vienti","time: 2012-01-01<br />values: 19280<br />era: Vienti","time: 2012-04-01<br />values: 19073<br />era: Vienti","time: 2012-07-01<br />values: 19025<br />era: Vienti","time: 2012-10-01<br />values: 18139<br />era: Vienti","time: 2013-01-01<br />values: 19694<br />era: Vienti","time: 2013-04-01<br />values: 18952<br />era: Vienti","time: 2013-07-01<br />values: 19376<br />era: Vienti","time: 2013-10-01<br />values: 18373<br />era: Vienti","time: 2014-01-01<br />values: 18311<br />era: Vienti","time: 2014-04-01<br />values: 18907<br />era: Vienti","time: 2014-07-01<br />values: 19195<br />era: Vienti","time: 2014-10-01<br />values: 18614<br />era: Vienti","time: 2015-01-01<br />values: 18462<br />era: Vienti","time: 2015-04-01<br />values: 19188<br />era: Vienti","time: 2015-07-01<br />values: 18693<br />era: Vienti","time: 2015-10-01<br />values: 18867<br />era: Vienti","time: 2016-01-01<br />values: 19043<br />era: Vienti","time: 2016-04-01<br />values: 20049<br />era: Vienti","time: 2016-07-01<br />values: 19898<br />era: Vienti","time: 2016-10-01<br />values: 19369<br />era: Vienti","time: 2017-01-01<br />values: 21098<br />era: Vienti","time: 2017-04-01<br />values: 21631<br />era: Vienti","time: 2017-07-01<br />values: 21687<br />era: Vienti","time: 2017-10-01<br />values: 21018<br />era: Vienti","time: 2018-01-01<br />values: 22036<br />era: Vienti","time: 2018-04-01<br />values: 21758<br />era: Vienti","time: 2018-07-01<br />values: 21547<br />era: Vienti","time: 2018-10-01<br />values: 21557<br />era: Vienti","time: 2019-01-01<br />values: 23596<br />era: Vienti","time: 2019-04-01<br />values: 23099<br />era: Vienti","time: 2019-07-01<br />values: 23150<br />era: Vienti","time: 2019-10-01<br />values: 23001<br />era: Vienti","time: 2020-01-01<br />values: 22433<br />era: Vienti","time: 2020-04-01<br />values: 19720<br />era: Vienti","time: 2020-07-01<br />values: 20389<br />era: Vienti","time: 2020-10-01<br />values: 22412<br />era: Vienti","time: 2021-01-01<br />values: 21588<br />era: Vienti","time: 2021-04-01<br />values: 21862<br />era: Vienti","time: 2021-07-01<br />values: 22850<br />era: Vienti","time: 2021-10-01<br />values: 23737<br />era: Vienti","time: 2022-01-01<br />values: 22987<br />era: Vienti","time: 2022-04-01<br />values: 23367<br />era: Vienti","time: 2022-07-01<br />values: 23827<br />era: Vienti","time: 2022-10-01<br />values: 23847<br />era: Vienti","time: 2023-01-01<br />values: 23786<br />era: Vienti","time: 2023-04-01<br />values: 23306<br />era: Vienti","time: 2023-07-01<br />values: 22695<br />era: Vienti","time: 2023-10-01<br />values: 22961<br />era: Vienti","time: 2024-01-01<br />values: 22566<br />era: Vienti","time: 2024-04-01<br />values: 23861<br />era: Vienti","time: 2024-07-01<br />values: 24065<br />era: Vienti","time: 2024-10-01<br />values: 23488<br />era: Vienti","time: 2025-01-01<br />values: 24300<br />era: Vienti","time: 2025-04-01<br />values: 24406<br />era: Vienti","time: 2025-07-01<br />values: 25332<br />era: Vienti","time: 2025-10-01<br />values: 24634<br />era: Vienti","time: 2026-01-01<br />values: 25208<br />era: Vienti","time: 2026-04-01<br />values: 26638<br />era: Vienti"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,152,232,1)","dash":"solid"},"hoveron":"points","name":"Vienti","legendgroup":"Vienti","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Kysynnän pääerien volyymi, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6643.0500000000002,21205.950000000001],"tickmode":"array","ticktext":["1990","2000","2010","2020"],"tickvals":[7305,10957,14610,18262],"categoryorder":"array","categoryarray":["1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[3561.3000000000002,31362.700000000001],"tickmode":"array","ticktext":["10000","20000","30000"],"tickvals":[10000,20000,30000],"categoryorder":"array","categoryarray":["10000","20000","30000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, neljännesvuositilinpito","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"1cc565ba6139":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"1cc565ba6139","visdat":{"1cc565ba6139":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="kysynnän-pääerien-vuosimuutos" class="level2">
+<h2 class="anchored" data-anchor-id="kysynnän-pääerien-vuosimuutos">Kysynnän pääerien vuosimuutos</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>erat <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P3KS14_S15"</span> <span class="ot">=</span> <span class="st">"Yksityinen kulutus"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P3KS13"</span> <span class="ot">=</span> <span class="st">"Julkinen kulutus"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P51K"</span> <span class="ot">=</span> <span class="st">"Investoinnit"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P6K"</span> <span class="ot">=</span> <span class="st">"Vienti"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>kysynta_muutos <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="fu">names</span>(erat),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"vol_vv_kausitvv2015"</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>kysynta_muutos<span class="sc">$</span>era <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  kysynta_muutos<span class="sc">$</span>taloustoimi_1_20180101,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">names</span>(erat),</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> erat</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Nelja neljannesvuosisarjaa koko historiassa on lukukelvoton ryteikko.</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>alku <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">max</span>(kysynta_muutos<span class="sc">$</span>time), <span class="at">by =</span> <span class="st">"-10 years"</span>, <span class="at">length.out =</span> <span class="dv">2</span>)[<span class="dv">2</span>]</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>kysynta_muutos <span class="ot">&lt;-</span> kysynta_muutos[kysynta_muutos<span class="sc">$</span>time <span class="sc">&gt;=</span> alku, ]</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>kysynta_muutos <span class="sc">|&gt;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"era"</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Kysynnän pääerien volyymin muutos vuodentakaisesta, %"</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Kausitasoitettu ja työpäiväkorjattu sarja"</span>,</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Lähde: Tilastokeskus, neljännesvuositilinpito"</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-f6817c8e0730b502ad74" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-f6817c8e0730b502ad74">{"x":{"data":[{"x":[16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[1.7,1.7,2,0.5,0.20000000000000001,0,1.1000000000000001,1.5,2.1000000000000001,0.80000000000000004,0.20000000000000001,-0.10000000000000001,-0.20000000000000001,1.1000000000000001,0.90000000000000002,0.40000000000000002,-9.1999999999999993,-1.8999999999999999,-3,-1.7,9.3000000000000007,2.7000000000000002,3.1000000000000001,1.3999999999999999,2.5,0.20000000000000001,-0.69999999999999996,0.29999999999999999,-1,-1.3999999999999999,1,1.1000000000000001,-0.5,1.2,-0.80000000000000004,-1.2,-1.2,-1.5,-0.40000000000000002,0.59999999999999998,1.6000000000000001],"text":["time: 2016-04-01<br />values:   1.7<br />era: Yksityinen kulutus","time: 2016-07-01<br />values:   1.7<br />era: Yksityinen kulutus","time: 2016-10-01<br />values:   2.0<br />era: Yksityinen kulutus","time: 2017-01-01<br />values:   0.5<br />era: Yksityinen kulutus","time: 2017-04-01<br />values:   0.2<br />era: Yksityinen kulutus","time: 2017-07-01<br />values:   0.0<br />era: Yksityinen kulutus","time: 2017-10-01<br />values:   1.1<br />era: Yksityinen kulutus","time: 2018-01-01<br />values:   1.5<br />era: Yksityinen kulutus","time: 2018-04-01<br />values:   2.1<br />era: Yksityinen kulutus","time: 2018-07-01<br />values:   0.8<br />era: Yksityinen kulutus","time: 2018-10-01<br />values:   0.2<br />era: Yksityinen kulutus","time: 2019-01-01<br />values:  -0.1<br />era: Yksityinen kulutus","time: 2019-04-01<br />values:  -0.2<br />era: Yksityinen kulutus","time: 2019-07-01<br />values:   1.1<br />era: Yksityinen kulutus","time: 2019-10-01<br />values:   0.9<br />era: Yksityinen kulutus","time: 2020-01-01<br />values:   0.4<br />era: Yksityinen kulutus","time: 2020-04-01<br />values:  -9.2<br />era: Yksityinen kulutus","time: 2020-07-01<br />values:  -1.9<br />era: Yksityinen kulutus","time: 2020-10-01<br />values:  -3.0<br />era: Yksityinen kulutus","time: 2021-01-01<br />values:  -1.7<br />era: Yksityinen kulutus","time: 2021-04-01<br />values:   9.3<br />era: Yksityinen kulutus","time: 2021-07-01<br />values:   2.7<br />era: Yksityinen kulutus","time: 2021-10-01<br />values:   3.1<br />era: Yksityinen kulutus","time: 2022-01-01<br />values:   1.4<br />era: Yksityinen kulutus","time: 2022-04-01<br />values:   2.5<br />era: Yksityinen kulutus","time: 2022-07-01<br />values:   0.2<br />era: Yksityinen kulutus","time: 2022-10-01<br />values:  -0.7<br />era: Yksityinen kulutus","time: 2023-01-01<br />values:   0.3<br />era: Yksityinen kulutus","time: 2023-04-01<br />values:  -1.0<br />era: Yksityinen kulutus","time: 2023-07-01<br />values:  -1.4<br />era: Yksityinen kulutus","time: 2023-10-01<br />values:   1.0<br />era: Yksityinen kulutus","time: 2024-01-01<br />values:   1.1<br />era: Yksityinen kulutus","time: 2024-04-01<br />values:  -0.5<br />era: Yksityinen kulutus","time: 2024-07-01<br />values:   1.2<br />era: Yksityinen kulutus","time: 2024-10-01<br />values:  -0.8<br />era: Yksityinen kulutus","time: 2025-01-01<br />values:  -1.2<br />era: Yksityinen kulutus","time: 2025-04-01<br />values:  -1.2<br />era: Yksityinen kulutus","time: 2025-07-01<br />values:  -1.5<br />era: Yksityinen kulutus","time: 2025-10-01<br />values:  -0.4<br />era: Yksityinen kulutus","time: 2026-01-01<br />values:   0.6<br />era: Yksityinen kulutus","time: 2026-04-01<br />values:   1.6<br />era: Yksityinen kulutus"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Yksityinen kulutus","legendgroup":"Yksityinen kulutus","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[0.10000000000000001,-0.40000000000000002,2.2000000000000002,-1.8,0.40000000000000002,2.7000000000000002,-0.59999999999999998,2.7999999999999998,2.1000000000000001,1.3,1.7,4.5,2.7000000000000002,2.1000000000000001,1.1000000000000001,-0.59999999999999998,-1.8,-0.69999999999999996,4.9000000000000004,3.5,6.5,6.4000000000000004,0.80000000000000004,0.29999999999999999,-3,0.80000000000000004,-0.59999999999999998,4,10.9,-2.5,4.5999999999999996,1.1000000000000001,-0.90000000000000002,5.2999999999999998,1.8999999999999999,1.1000000000000001,-1.5,1.3999999999999999,-0.40000000000000002,0.29999999999999999,0.69999999999999996],"text":["time: 2016-04-01<br />values:   0.1<br />era: Julkinen kulutus","time: 2016-07-01<br />values:  -0.4<br />era: Julkinen kulutus","time: 2016-10-01<br />values:   2.2<br />era: Julkinen kulutus","time: 2017-01-01<br />values:  -1.8<br />era: Julkinen kulutus","time: 2017-04-01<br />values:   0.4<br />era: Julkinen kulutus","time: 2017-07-01<br />values:   2.7<br />era: Julkinen kulutus","time: 2017-10-01<br />values:  -0.6<br />era: Julkinen kulutus","time: 2018-01-01<br />values:   2.8<br />era: Julkinen kulutus","time: 2018-04-01<br />values:   2.1<br />era: Julkinen kulutus","time: 2018-07-01<br />values:   1.3<br />era: Julkinen kulutus","time: 2018-10-01<br />values:   1.7<br />era: Julkinen kulutus","time: 2019-01-01<br />values:   4.5<br />era: Julkinen kulutus","time: 2019-04-01<br />values:   2.7<br />era: Julkinen kulutus","time: 2019-07-01<br />values:   2.1<br />era: Julkinen kulutus","time: 2019-10-01<br />values:   1.1<br />era: Julkinen kulutus","time: 2020-01-01<br />values:  -0.6<br />era: Julkinen kulutus","time: 2020-04-01<br />values:  -1.8<br />era: Julkinen kulutus","time: 2020-07-01<br />values:  -0.7<br />era: Julkinen kulutus","time: 2020-10-01<br />values:   4.9<br />era: Julkinen kulutus","time: 2021-01-01<br />values:   3.5<br />era: Julkinen kulutus","time: 2021-04-01<br />values:   6.5<br />era: Julkinen kulutus","time: 2021-07-01<br />values:   6.4<br />era: Julkinen kulutus","time: 2021-10-01<br />values:   0.8<br />era: Julkinen kulutus","time: 2022-01-01<br />values:   0.3<br />era: Julkinen kulutus","time: 2022-04-01<br />values:  -3.0<br />era: Julkinen kulutus","time: 2022-07-01<br />values:   0.8<br />era: Julkinen kulutus","time: 2022-10-01<br />values:  -0.6<br />era: Julkinen kulutus","time: 2023-01-01<br />values:   4.0<br />era: Julkinen kulutus","time: 2023-04-01<br />values:  10.9<br />era: Julkinen kulutus","time: 2023-07-01<br />values:  -2.5<br />era: Julkinen kulutus","time: 2023-10-01<br />values:   4.6<br />era: Julkinen kulutus","time: 2024-01-01<br />values:   1.1<br />era: Julkinen kulutus","time: 2024-04-01<br />values:  -0.9<br />era: Julkinen kulutus","time: 2024-07-01<br />values:   5.3<br />era: Julkinen kulutus","time: 2024-10-01<br />values:   1.9<br />era: Julkinen kulutus","time: 2025-01-01<br />values:   1.1<br />era: Julkinen kulutus","time: 2025-04-01<br />values:  -1.5<br />era: Julkinen kulutus","time: 2025-07-01<br />values:   1.4<br />era: Julkinen kulutus","time: 2025-10-01<br />values:  -0.4<br />era: Julkinen kulutus","time: 2026-01-01<br />values:   0.3<br />era: Julkinen kulutus","time: 2026-04-01<br />values:   0.7<br />era: Julkinen kulutus"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Julkinen kulutus","legendgroup":"Julkinen kulutus","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[11.4,12,7.4000000000000004,5.5999999999999996,2.7999999999999998,5.9000000000000004,5.7999999999999998,6.7999999999999998,4.5999999999999996,1.7,4.5,-0.90000000000000002,-0.20000000000000001,-0.5,-2.5,1.2,-1.6000000000000001,-2.2000000000000002,-2,0.40000000000000002,3.2000000000000002,0.90000000000000002,2.7999999999999998,2.2000000000000002,0.20000000000000001,2.8999999999999999,0.90000000000000002,-4.7000000000000002,-5.4000000000000004,-6.2000000000000002,-12.199999999999999,-4.0999999999999996,-8.3000000000000007,-7.7999999999999998,-0.40000000000000002,-6.5,3.8999999999999999,4.2999999999999998,4.5999999999999996,12,-1.3999999999999999],"text":["time: 2016-04-01<br />values:  11.4<br />era: Investoinnit","time: 2016-07-01<br />values:  12.0<br />era: Investoinnit","time: 2016-10-01<br />values:   7.4<br />era: Investoinnit","time: 2017-01-01<br />values:   5.6<br />era: Investoinnit","time: 2017-04-01<br />values:   2.8<br />era: Investoinnit","time: 2017-07-01<br />values:   5.9<br />era: Investoinnit","time: 2017-10-01<br />values:   5.8<br />era: Investoinnit","time: 2018-01-01<br />values:   6.8<br />era: Investoinnit","time: 2018-04-01<br />values:   4.6<br />era: Investoinnit","time: 2018-07-01<br />values:   1.7<br />era: Investoinnit","time: 2018-10-01<br />values:   4.5<br />era: Investoinnit","time: 2019-01-01<br />values:  -0.9<br />era: Investoinnit","time: 2019-04-01<br />values:  -0.2<br />era: Investoinnit","time: 2019-07-01<br />values:  -0.5<br />era: Investoinnit","time: 2019-10-01<br />values:  -2.5<br />era: Investoinnit","time: 2020-01-01<br />values:   1.2<br />era: Investoinnit","time: 2020-04-01<br />values:  -1.6<br />era: Investoinnit","time: 2020-07-01<br />values:  -2.2<br />era: Investoinnit","time: 2020-10-01<br />values:  -2.0<br />era: Investoinnit","time: 2021-01-01<br />values:   0.4<br />era: Investoinnit","time: 2021-04-01<br />values:   3.2<br />era: Investoinnit","time: 2021-07-01<br />values:   0.9<br />era: Investoinnit","time: 2021-10-01<br />values:   2.8<br />era: Investoinnit","time: 2022-01-01<br />values:   2.2<br />era: Investoinnit","time: 2022-04-01<br />values:   0.2<br />era: Investoinnit","time: 2022-07-01<br />values:   2.9<br />era: Investoinnit","time: 2022-10-01<br />values:   0.9<br />era: Investoinnit","time: 2023-01-01<br />values:  -4.7<br />era: Investoinnit","time: 2023-04-01<br />values:  -5.4<br />era: Investoinnit","time: 2023-07-01<br />values:  -6.2<br />era: Investoinnit","time: 2023-10-01<br />values: -12.2<br />era: Investoinnit","time: 2024-01-01<br />values:  -4.1<br />era: Investoinnit","time: 2024-04-01<br />values:  -8.3<br />era: Investoinnit","time: 2024-07-01<br />values:  -7.8<br />era: Investoinnit","time: 2024-10-01<br />values:  -0.4<br />era: Investoinnit","time: 2025-01-01<br />values:  -6.5<br />era: Investoinnit","time: 2025-04-01<br />values:   3.9<br />era: Investoinnit","time: 2025-07-01<br />values:   4.3<br />era: Investoinnit","time: 2025-10-01<br />values:   4.6<br />era: Investoinnit","time: 2026-01-01<br />values:  12.0<br />era: Investoinnit","time: 2026-04-01<br />values:  -1.4<br />era: Investoinnit"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(54,90,189,1)","dash":"solid"},"hoveron":"points","name":"Investoinnit","legendgroup":"Investoinnit","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[4.5,6.4000000000000004,2.7000000000000002,10.800000000000001,7.9000000000000004,9,8.5,4.4000000000000004,0.59999999999999998,-0.59999999999999998,2.6000000000000001,7.0999999999999996,6.2000000000000002,7.4000000000000004,6.7000000000000002,-4.9000000000000004,-14.6,-11.9,-2.6000000000000001,-3.7999999999999998,10.9,12.1,5.9000000000000004,6.5,6.9000000000000004,4.2999999999999998,0.5,3.5,-0.29999999999999999,-4.7999999999999998,-3.7000000000000002,-5.0999999999999996,2.3999999999999999,6,2.2999999999999998,7.7000000000000002,2.2999999999999998,5.2999999999999998,4.9000000000000004,3.7000000000000002,9.0999999999999996],"text":["time: 2016-04-01<br />values:   4.5<br />era: Vienti","time: 2016-07-01<br />values:   6.4<br />era: Vienti","time: 2016-10-01<br />values:   2.7<br />era: Vienti","time: 2017-01-01<br />values:  10.8<br />era: Vienti","time: 2017-04-01<br />values:   7.9<br />era: Vienti","time: 2017-07-01<br />values:   9.0<br />era: Vienti","time: 2017-10-01<br />values:   8.5<br />era: Vienti","time: 2018-01-01<br />values:   4.4<br />era: Vienti","time: 2018-04-01<br />values:   0.6<br />era: Vienti","time: 2018-07-01<br />values:  -0.6<br />era: Vienti","time: 2018-10-01<br />values:   2.6<br />era: Vienti","time: 2019-01-01<br />values:   7.1<br />era: Vienti","time: 2019-04-01<br />values:   6.2<br />era: Vienti","time: 2019-07-01<br />values:   7.4<br />era: Vienti","time: 2019-10-01<br />values:   6.7<br />era: Vienti","time: 2020-01-01<br />values:  -4.9<br />era: Vienti","time: 2020-04-01<br />values: -14.6<br />era: Vienti","time: 2020-07-01<br />values: -11.9<br />era: Vienti","time: 2020-10-01<br />values:  -2.6<br />era: Vienti","time: 2021-01-01<br />values:  -3.8<br />era: Vienti","time: 2021-04-01<br />values:  10.9<br />era: Vienti","time: 2021-07-01<br />values:  12.1<br />era: Vienti","time: 2021-10-01<br />values:   5.9<br />era: Vienti","time: 2022-01-01<br />values:   6.5<br />era: Vienti","time: 2022-04-01<br />values:   6.9<br />era: Vienti","time: 2022-07-01<br />values:   4.3<br />era: Vienti","time: 2022-10-01<br />values:   0.5<br />era: Vienti","time: 2023-01-01<br />values:   3.5<br />era: Vienti","time: 2023-04-01<br />values:  -0.3<br />era: Vienti","time: 2023-07-01<br />values:  -4.8<br />era: Vienti","time: 2023-10-01<br />values:  -3.7<br />era: Vienti","time: 2024-01-01<br />values:  -5.1<br />era: Vienti","time: 2024-04-01<br />values:   2.4<br />era: Vienti","time: 2024-07-01<br />values:   6.0<br />era: Vienti","time: 2024-10-01<br />values:   2.3<br />era: Vienti","time: 2025-01-01<br />values:   7.7<br />era: Vienti","time: 2025-04-01<br />values:   2.3<br />era: Vienti","time: 2025-07-01<br />values:   5.3<br />era: Vienti","time: 2025-10-01<br />values:   4.9<br />era: Vienti","time: 2026-01-01<br />values:   3.7<br />era: Vienti","time: 2026-04-01<br />values:   9.1<br />era: Vienti"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,152,232,1)","dash":"solid"},"hoveron":"points","name":"Vienti","legendgroup":"Vienti","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":45.790490385463976},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Kysynnän pääerien volyymin muutos vuodentakaisesta, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[16709.400000000001,20726.599999999999],"tickmode":"array","ticktext":["2016","2018","2020","2022","2024","2026"],"tickvals":[16801,17532,18262,18993,19723,20454],"categoryorder":"array","categoryarray":["2016","2018","2020","2022","2024","2026"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-15.934999999999999,13.434999999999999],"tickmode":"array","ticktext":["-15","-10","-5","0","5","10"],"tickvals":[-15,-10,-5,0,5,10],"categoryorder":"array","categoryarray":["-15","-10","-5","0","5","10"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kausitasoitettu ja työpäiväkorjattu sarja","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, neljännesvuositilinpito","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"1cc58bca59":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"1cc58bca59","visdat":{"1cc58bca59":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lähde: <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/">Tilastokeskus, neljännesvuositilinpito</a>, taulu 132h.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopioitu!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopioitu!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jhuovari\.github\.io\/visu\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Lähde: Tilastokeskus, StatFin</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Rakennettu <a href="https://github.com/jhuovari/visu">visu</a>-paketilla</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

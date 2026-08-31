@@ -10,10 +10,13 @@ visu_check_charts(site_dir = NULL)
 \item{site_dir}{Sivuston hakemisto.}
 }
 \value{
-Merkkijonovektori ongelmista; tyhjä vektori kun kaikki on kunnossa.
+Merkkijonovektori ongelmista, korkeintaan yksi kuviota kohti; tyhjä
+vektori kun kaikki on kunnossa.
 }
 \description{
 Etulehden \code{table_url} ohjaa tuoreustarkistusta ja koodilohkon URL hakee
 varsinaisen datan. Jos ne eroavat, sivu voi jäädä päivittymättä
-huomaamatta. Tämä tarkistus estää sellaisen ajautumisen.
+huomaamatta. Tarkistus kulkee molempiin suuntiin: jokaisen etulehdessä
+luetellun taulun pitää esiintyä koodissa, ja jokaisen koodissa haetun taulun
+pitää olla lueteltu etulehdessä. Päättävä kenoviiva ei erota tauluja.
 }

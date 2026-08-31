@@ -1,8 +1,12 @@
 registry_row <- function(id, url = "https://example.org/db/tbl.px/", code = "koodi1") {
-  data.frame(id = id, title = id, table_url = url, path = paste0(id, ".qmd"),
-             code_hash = code, stringsAsFactors = FALSE)
+  reg <- data.frame(id = id, title = id, path = paste0(id, ".qmd"),
+                    code_hash = code, stringsAsFactors = FALSE)
+  # table_url on listasarake, koska kuvio voi lukea useaa taulua.
+  reg$table_url <- list(url)
+  reg
 }
 
+# Vanhan tilatiedoston muoto: yksi taulu ja aikaleima ilman osoitetta.
 state_row <- function(url = "https://example.org/db/tbl.px/", code = "koodi1",
                       updated = "2026-08-01T06:00:00Z") {
   list(table_url = url, code_hash = code, source_updated = updated,
@@ -100,7 +104,8 @@ test_that("muuttumattomien kuvioiden tila sailyy ennallaan", {
   out <- visu:::visu_new_state(reg, updated, state, decisions)
 
   expect_identical(out$a, state$a)
-  expect_equal(out$b$source_updated, "2026-08-30T06:00:00Z")
+  expect_equal(out$b$source_updated,
+               list("https://example.org/db/tbl.px" = "2026-08-30T06:00:00Z"))
   expect_false(identical(out$b$built_at, state$b$built_at))
 })
 
@@ -154,4 +159,105 @@ test_that("epaonnistunut uusi kuvio on seuraavalla ajolla taas vanhentunut", {
   out <- visu_stale_charts(reg, state, updated)
 
   expect_equal(out$reason, c("uusi kuvio", "ajan tasalla"))
+})
+
+# Usean taulun kuviot ----------------------------------------------------------
+
+multi_registry_row <- function(id, urls = c("https://example.org/db/a.px/",
+                                            "https://example.org/db/b.px/"),
+                               code = "koodi1") {
+  reg <- data.frame(id = id, title = id, path = paste0(id, ".qmd"),
+                    code_hash = code, stringsAsFactors = FALSE)
+  reg$table_url <- list(urls)
+  reg
+}
+
+multi_state_row <- function(urls = c("https://example.org/db/a.px/",
+                                     "https://example.org/db/b.px/"),
+                            code = "koodi1",
+                            updated = c("2026-08-01T06:00:00Z", "2026-08-01T06:00:00Z")) {
+  list(table_url = urls, code_hash = code,
+       source_updated = as.list(stats::setNames(updated, sub("/+$", "", urls))),
+       built_at = "2026-08-01T05:01:00Z")
+}
+
+multi_updated <- function(id, updated = c("2026-08-01T06:00:00Z", "2026-08-01T06:00:00Z"),
+                          urls = c("https://example.org/db/a.px/",
+                                   "https://example.org/db/b.px/")) {
+  stats::setNames(list(stats::setNames(updated, urls)), id)
+}
+
+test_that("usean taulun kuvio on ajan tasalla kun kaikki taulut ovat", {
+  reg <- multi_registry_row("a")
+
+  out <- visu_stale_charts(reg, list(a = multi_state_row()), multi_updated("a"))
+
+  expect_false(out$stale)
+  expect_equal(out$reason, "ajan tasalla")
+})
+
+test_that("yhden taulun paivittyminen vanhentaa usean taulun kuvion", {
+  reg <- multi_registry_row("a")
+  updated <- multi_updated("a", c("2026-08-01T06:00:00Z", "2026-08-30T06:00:00Z"))
+
+  out <- visu_stale_charts(reg, list(a = multi_state_row()), updated)
+
+  expect_true(out$stale)
+  expect_equal(out$reason, "data p\u00e4ivittynyt")
+})
+
+test_that("yhden taulun tuntematon aikaleima riittaa uudelleenrakennukseen", {
+  reg <- multi_registry_row("a")
+  updated <- multi_updated("a", c("2026-08-01T06:00:00Z", NA_character_))
+
+  out <- visu_stale_charts(reg, list(a = multi_state_row()), updated)
+
+  expect_true(out$stale)
+  expect_equal(out$reason, "aikaleima tuntematon")
+})
+
+test_that("taulun lisaaminen kuvioon vanhentaa sen", {
+  reg <- multi_registry_row("a")
+  state <- list(a = multi_state_row(urls = "https://example.org/db/a.px/",
+                                    updated = "2026-08-01T06:00:00Z"))
+
+  out <- visu_stale_charts(reg, state, multi_updated("a"))
+
+  expect_true(out$stale)
+  expect_equal(out$reason, "l\u00e4hdetaulu vaihtunut")
+})
+
+test_that("taulujen jarjestys ei vaikuta paatokseen", {
+  urls <- c("https://example.org/db/b.px/", "https://example.org/db/a.px/")
+  reg <- multi_registry_row("a", urls = urls)
+  updated <- multi_updated("a", urls = urls)
+
+  out <- visu_stale_charts(reg, list(a = multi_state_row()), updated)
+
+  expect_false(out$stale)
+})
+
+test_that("usean taulun leimat kirjataan tilaan taulukohtaisesti", {
+  reg <- multi_registry_row("a")
+  updated <- multi_updated("a", c("2026-08-01T06:00:00Z", "2026-08-30T06:00:00Z"))
+  decisions <- visu_stale_charts(reg, list(), updated)
+
+  out <- visu:::visu_new_state(reg, updated, list(), decisions)
+
+  expect_equal(out$a$table_url, c("https://example.org/db/a.px/",
+                                  "https://example.org/db/b.px/"))
+  expect_equal(out$a$source_updated,
+               list("https://example.org/db/a.px" = "2026-08-01T06:00:00Z",
+                    "https://example.org/db/b.px" = "2026-08-30T06:00:00Z"))
+})
+
+test_that("kirjattu tila kelpaa sellaisenaan seuraavan ajon vertailuun", {
+  reg <- multi_registry_row("a")
+  updated <- multi_updated("a")
+  state <- visu:::visu_new_state(reg, updated, list(),
+                                 visu_stale_charts(reg, list(), updated))
+
+  out <- visu_stale_charts(reg, state, updated)
+
+  expect_equal(out$reason, "ajan tasalla")
 })

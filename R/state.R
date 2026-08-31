@@ -64,46 +64,73 @@ visu_state_write <- function(state, site_dir = NULL) {
 #' ---
 #' ```
 #'
+#' Kuvio voi lukea useaa taulua. Silloin `table_url` on lista, ja kuvio on
+#' vanhentunut heti kun mikä tahansa sen tauluista on päivittynyt:
+#'
+#' ```
+#' visu:
+#'   table_url:
+#'     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/"
+#'     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/"
+#' ```
+#'
 #' @param site_dir Sivuston hakemisto.
-#' @return Data frame sarakkeilla `id`, `title`, `table_url`, `path`, `code_hash`.
+#' @return Data frame sarakkeilla `id`, `title`, `path`, `code_hash` ja
+#'   listasarake `table_url`, jonka alkiona on kuvion taulujen osoitteet.
 #' @export
 visu_chart_registry <- function(site_dir = NULL) {
   dir <- visu_charts_dir(site_dir)
   files <- sort(list.files(dir, pattern = "\\.qmd$", full.names = TRUE))
 
-  rows <- lapply(files, function(path) {
+  charts <- lapply(files, function(path) {
     id <- sub("\\.qmd$", "", basename(path))
     fm <- visu_front_matter(path)
-    url <- fm$visu$table_url
-    if (is.null(url) || !is.character(url) || length(url) != 1L) {
-      stop("Kuviosta '", id, "' puuttuu etulehden kentt\u00e4 visu.table_url.", call. = FALSE)
-    }
-    data.frame(
+    list(
       id = id,
       title = enc2utf8(as.character(fm$title %||% id)),
-      table_url = url,
+      table_url = visu_table_urls(fm$visu$table_url, id),
       path = path,
-      code_hash = visu_file_hash(path),
-      stringsAsFactors = FALSE
+      code_hash = visu_file_hash(path)
     )
   })
 
-  if (length(rows) == 0L) {
-    return(data.frame(id = character(), title = character(), table_url = character(),
-                      path = character(), code_hash = character(),
-                      stringsAsFactors = FALSE))
+  field <- function(name) vapply(charts, function(x) x[[name]], character(1))
+
+  registry <- data.frame(
+    id = field("id"),
+    title = field("title"),
+    path = field("path"),
+    code_hash = field("code_hash"),
+    stringsAsFactors = FALSE
+  )
+  # Yhdella kuviolla voi olla useita tauluja, joten osoitteet eivat mahdu
+  # tavalliseen sarakkeeseen. Lue alkio aina muodossa table_url[[i]].
+  registry$table_url <- lapply(charts, function(x) x$table_url)
+  registry
+}
+
+# Etulehden table_url yhtena tai useampana osoitteena. Jarjestys sailyy, jotta
+# etulehden ja koodilohkon voi lukea rinnakkain.
+visu_table_urls <- function(x, id) {
+  urls <- unlist(x, use.names = FALSE)
+  if (length(urls) == 0L || !is.character(urls) || anyNA(urls) || !all(nzchar(urls))) {
+    stop("Kuviosta '", id, "' puuttuu etulehden kentt\u00e4 visu.table_url, tai ",
+         "se ei ole osoite eik\u00e4 lista osoitteita.", call. = FALSE)
   }
-  do.call(rbind, rows)
+  unique(urls)
 }
 
 #' Tarkista kuvioiden eheys
 #'
 #' Etulehden `table_url` ohjaa tuoreustarkistusta ja koodilohkon URL hakee
 #' varsinaisen datan. Jos ne eroavat, sivu voi jäädä päivittymättä
-#' huomaamatta. Tämä tarkistus estää sellaisen ajautumisen.
+#' huomaamatta. Tarkistus kulkee molempiin suuntiin: jokaisen etulehdessä
+#' luetellun taulun pitää esiintyä koodissa, ja jokaisen koodissa haetun taulun
+#' pitää olla lueteltu etulehdessä. Päättävä kenoviiva ei erota tauluja.
 #'
 #' @param site_dir Sivuston hakemisto.
-#' @return Merkkijonovektori ongelmista; tyhjä vektori kun kaikki on kunnossa.
+#' @return Merkkijonovektori ongelmista, korkeintaan yksi kuviota kohti; tyhjä
+#'   vektori kun kaikki on kunnossa.
 #' @export
 visu_check_charts <- function(site_dir = NULL) {
   registry <- visu_chart_registry(site_dir)
@@ -111,15 +138,46 @@ visu_check_charts <- function(site_dir = NULL) {
 
   for (i in seq_len(nrow(registry))) {
     body <- visu_body(registry$path[i])
-    if (!grepl(registry$table_url[i], body, fixed = TRUE)) {
+    declared <- registry$table_url[[i]]
+    used <- visu_body_table_urls(body)
+
+    missing <- declared[!visu_url_key(declared) %in% visu_url_key(used)]
+    extra <- used[!visu_url_key(used) %in% visu_url_key(declared)]
+
+    details <- character()
+    if (length(missing) > 0L) {
+      details <- c(details, paste0(
+        "etulehden taulua ei haeta koodissa: ", paste(missing, collapse = ", ")
+      ))
+    }
+    if (length(extra) > 0L) {
+      details <- c(details, paste0(
+        "koodi hakee taulun, jota ei ole etulehdess\u00e4: ",
+        paste(extra, collapse = ", ")
+      ))
+    }
+    if (length(details) > 0L) {
       problems <- c(problems, paste0(
-        "Kuvion '", registry$id[i], "' etulehden table_url ei esiinny sen ",
-        "koodilohkossa. Tuoreustarkistus ja datahaku osoittavat eri tauluun."
+        "Kuvion '", registry$id[i], "' etulehti ja koodilohko osoittavat eri ",
+        "tauluihin, joten tuoreustarkistus ja datahaku voivat erkaantua: ",
+        paste(details, collapse = "; "), "."
       ))
     }
   }
 
   problems
+}
+
+# Koodilohkoissa esiintyvat PxWeb-taulujen osoitteet. Taulun tunnistaa
+# .px-paatteesta, joten tilaston selauslinkit eivat osu tarkistukseen.
+visu_body_table_urls <- function(body) {
+  hits <- regmatches(body, gregexpr("https?://[^\"'[:space:])]+\\.px/?", body))[[1]]
+  unique(hits)
+}
+
+# Vertailukelpoinen muoto: paattava kenoviiva ei vaihda taulua.
+visu_url_key <- function(urls) {
+  sub("/+$", "", as.character(urls))
 }
 
 # Etulehden rajat: ensimmäinen '---'-rivi ja sitä seuraava '---' tai '...'.

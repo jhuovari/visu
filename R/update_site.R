@@ -5,8 +5,10 @@
 #'
 #' @param registry [visu_chart_registry()]:n tulos.
 #' @param state [visu_state_read()]:n tulos.
-#' @param updated Nimetty merkkijonovektori, kuvion tunnus -> lähdetaulun
-#'   aikaleima, tai `NA_character_` jos aikaleimaa ei saatu.
+#' @param updated Kuvion tunnuksella nimetty lista tai vektori, jonka alkiona
+#'   ovat kuvion taulujen aikaleimat. Usean taulun kuviossa alkio on taulun
+#'   osoitteella nimetty vektori, yhden taulun kuviossa riittää pelkkä
+#'   aikaleima. `NA_character_` tarkoittaa, ettei aikaleimaa saatu.
 #' @param force `TRUE` (kaikki), tunnisteiden vektori, tai `NULL`.
 #' @return Data frame sarakkeilla `id`, `stale`, `reason`.
 #' @export
@@ -17,7 +19,10 @@ visu_stale_charts <- function(registry, state, updated, force = NULL) {
   reason <- vapply(seq_along(ids), function(i) {
     id <- ids[i]
     prev <- state[[id]]
-    upd <- if (id %in% names(updated)) as.character(updated[[id]]) else NA_character_
+    urls <- visu_url_key(registry$table_url[[i]])
+    prev_urls <- visu_url_key(unlist(prev$table_url) %||% character())
+    stamps <- visu_source_stamps(if (id %in% names(updated)) updated[[id]] else NULL, urls)
+    prev_stamps <- visu_source_stamps(prev$source_updated, prev_urls)
 
     if (id %in% forced) {
       "pakotettu"
@@ -25,11 +30,11 @@ visu_stale_charts <- function(registry, state, updated, force = NULL) {
       "uusi kuvio"
     } else if (!identical(as.character(prev$code_hash %||% NA_character_), registry$code_hash[i])) {
       "koodi muuttunut"
-    } else if (!identical(as.character(prev$table_url %||% NA_character_), registry$table_url[i])) {
+    } else if (!identical(sort(prev_urls), sort(urls))) {
       "l\u00e4hdetaulu vaihtunut"
-    } else if (is.na(upd)) {
+    } else if (length(stamps) != length(urls) || anyNA(stamps)) {
       "aikaleima tuntematon"
-    } else if (!identical(as.character(prev$source_updated %||% NA_character_), upd)) {
+    } else if (!identical(stamps, prev_stamps)) {
       "data p\u00e4ivittynyt"
     } else {
       "ajan tasalla"
@@ -42,6 +47,22 @@ visu_stale_charts <- function(registry, state, updated, force = NULL) {
     reason = reason,
     stringsAsFactors = FALSE
   )
+}
+
+# Kuvion taulujen aikaleimat vertailukelpoisessa muodossa: osoitteella nimetty
+# ja nimen mukaan jarjestetty vektori, tai NULL kun leimoja ei ole. Vanha
+# tilatiedosto kirjasi yhden taulun leiman ilman osoitetta, joten nimeton leima
+# nimetaan kuvion osoitteilla.
+visu_source_stamps <- function(stamps, urls) {
+  stamps <- unlist(stamps, use.names = TRUE)
+  if (length(stamps) == 0L) return(NULL)
+  keys <- names(stamps)
+  if (is.null(keys) || !all(nzchar(keys))) {
+    if (length(stamps) != length(urls)) return(NULL)
+    keys <- urls
+  }
+  stamps <- stats::setNames(as.character(stamps), visu_url_key(keys))
+  stamps[order(names(stamps))]
 }
 
 #' Päivitä sivusto inkrementaalisesti
@@ -78,17 +99,21 @@ visu_update_site <- function(site_dir = NULL,
   registry <- visu_chart_registry(site_dir)
   if (nrow(registry) == 0L) {
     message("Hakemistossa ", visu_charts_dir(site_dir), " ei ole kuvioita.")
-    empty <- visu_stale_charts(registry, list(), character())
+    empty <- visu_stale_charts(registry, list(), list())
     empty$status <- character()
     return(invisible(empty))
   }
 
   state <- visu_state_read(site_dir)
+  # Yksi kuvio voi lukea useaa taulua, joten aikaleimat kerataan taulukohtaisesti.
+  # Saman kansion taulut maksavat silti vain yhden pyynnon, ks. visu_table_updated().
   updated <- stats::setNames(
-    vapply(registry$table_url, visu_table_updated, character(1), USE.NAMES = FALSE),
+    lapply(registry$table_url, function(urls) {
+      stats::setNames(vapply(urls, visu_table_updated, character(1), USE.NAMES = FALSE), urls)
+    }),
     registry$id
   )
-  if (all(is.na(updated))) {
+  if (all(is.na(unlist(updated)))) {
     warning("Yhdenk\u00e4\u00e4n taulun p\u00e4ivitysaikaa ei saatu selville, joten kaikki ",
             "kuviot rakennetaan uudelleen. Tarkista PxWeb-rajapinnan ",
             "kansiolistaus ja sen updated-kentt\u00e4.", call. = FALSE)
@@ -170,10 +195,15 @@ visu_new_state <- function(registry, updated, state, decisions, failed = charact
       return(state[[id]])
     }
     if (id %in% failed) return(NULL)
+    # Tuntemattomat leimat jaavat pois, jotta ne haetaan uudelleen seuraavalla
+    # ajolla. Leimat kirjataan taulun osoitteella, jotta usean taulun kuviossa
+    # tiedetaan mika taulu paivittyi.
+    stamps <- visu_source_stamps(updated[[id]], visu_url_key(registry$table_url[[i]]))
+    stamps <- stamps[!is.na(stamps)]
     list(
-      table_url = registry$table_url[i],
+      table_url = registry$table_url[[i]],
       title = registry$title[i],
-      source_updated = if (is.na(updated[[id]])) NULL else unname(updated[[id]]),
+      source_updated = if (length(stamps) == 0L) NULL else as.list(stamps),
       code_hash = registry$code_hash[i],
       built_at = built_at
     )
