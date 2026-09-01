@@ -9,8 +9,8 @@ name: Päivitä sivusto
 # myöhässä.
 on:
   schedule:
-    - cron: "12 5 * * *"   # 08:12 EEST (kesäaika)
-    - cron: "12 6 * * *"   # 08:12 EET  (talviaika)
+    - cron: '3 8 * * 1-5'   # 08:03
+      timezone: "Europe/Helsinki"
   workflow_dispatch:
     inputs:
       full_render:
