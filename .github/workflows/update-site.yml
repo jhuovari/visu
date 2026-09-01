@@ -1,12 +1,16 @@
 name: Päivitä sivusto
 
-# GitHub Actionsin cron on UTC:ssä, joten Suomen kellonaika 8:01 osuu eri
-# UTC-tuntiin kesä- ja talviaikana. Molemmat ajetaan, ja vahtityö päästää
-# läpi vain sen, joka osuu Suomen aikaan kello 8.
+# GitHub Actionsin cron on UTC:ssä, joten Suomen kellonaika 8 osuu eri
+# UTC-tuntiin kesä- ja talviaikana. Molemmat ajetaan, ja vahtityö päästää läpi
+# vain kello 8:n jälkeen käynnistyneen ajon.
+#
+# Minuutti on tarkoituksella tunnin alun ulkopuolella: GitHubin jaettu cron
+# ruuhkautuu tasatunnein, ja ajastettu ajo voi silloin käynnistyä tunteja
+# myöhässä.
 on:
   schedule:
-    - cron: "1 5 * * *"   # 08:01 EEST (kesäaika)
-    - cron: "1 6 * * *"   # 08:01 EET  (talviaika)
+    - cron: "12 5 * * *"   # 08:12 EEST (kesäaika)
+    - cron: "12 6 * * *"   # 08:12 EET  (talviaika)
   workflow_dispatch:
     inputs:
       full_render:
@@ -33,13 +37,19 @@ jobs:
     steps:
       - id: kello
         run: |
-          tunti=$(TZ=Europe/Helsinki date +%H)
+          tunti=$(TZ=Europe/Helsinki date +%-H)
           echo "Suomen aika: $(TZ=Europe/Helsinki date)"
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "$tunti" = "08" ]; then
+          # StatFin julkaisee kello 8 Suomen aikaa, joten sitä ennen ei ole
+          # mitään uutta haettavaa. Sen jälkeen ajetaan aina, myös myöhässä
+          # käynnistynyt ajo: tarkkaan kellonaikaan sidottu vahti ohittaisi
+          # koko päivän päivityksen aina kun GitHubin cron ruuhkautuu.
+          # Kesäaikaan molemmat ajastukset pääsevät läpi, mutta jälkimmäinen
+          # ei löydä enää rakennettavaa eikä tee committia.
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "$tunti" -ge 8 ]; then
             echo "aja=true" >> "$GITHUB_OUTPUT"
           else
             echo "aja=false" >> "$GITHUB_OUTPUT"
-            echo "Ohitetaan: kello ei ole 8 Suomen aikaa."
+            echo "Ohitetaan: kello on vasta $tunti, StatFin julkaisee kello 8."
           fi
 
   paivita:

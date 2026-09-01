@@ -5,10 +5,10 @@
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px": "2026-08-13T08:52:21",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px": "2026-08-13T08:52:22",
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-07-29T13:05:48"
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-08-28T11:57:42"
     },
     "code_hash": "94ee93d08845282bc7533039d5482f80550f5362a512115c399f52dffc4f138b",
-    "built_at": "2026-08-31T17:26:57Z"
+    "built_at": "2026-09-01T05:22:11Z"
   },
   "neljannesvuositilinpito": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",

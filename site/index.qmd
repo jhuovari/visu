@@ -9,8 +9,9 @@ Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla on `Näytä koodi`
 -taitoksen takana täsmälleen se koodi, joka kuvion tuottaa, joten sen voi
 kopioida sellaisenaan omaan R-istuntoon.
 
-Sivusto tarkistaa joka aamu klo 8:01, onko kuvion lähdetaulu päivittynyt, ja
-rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.
+Sivusto tarkistaa aamuisin StatFinin kello 8 julkaisujen jälkeen, onko kuvion
+lähdetaulu päivittynyt, ja rakentaa uudelleen vain ne kuviot, joiden data on
+muuttunut.
 
 ```{r}
 #| output: asis
