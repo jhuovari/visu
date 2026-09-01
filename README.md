@@ -3,11 +3,11 @@
 Rakentaa StatFin-datasta interaktiivisia kuvioita ja julkaisee ne
 Quarto-sivustona osoitteessa <https://jhuovari.github.io/visu/>.
 
-Sivusto päivittyy joka aamu klo 8:01 Suomen aikaa, mutta vain siltä osin kuin
-on tarpeen: ajo tarkistaa PxWeb-rajapinnasta kunkin kuvion lähdetaulun
-päivitysajan ja renderöi uudelleen ainoastaan ne kuviot, joiden data on
-muuttunut. Kun mikään taulu ei ole päivittynyt, ajo ei renderöi mitään eikä
-tee committia.
+Sivusto päivittyy aamuisin StatFinin kello 8 julkaisujen jälkeen, mutta vain
+siltä osin kuin on tarpeen: ajo tarkistaa PxWeb-rajapinnasta kunkin kuvion
+lähdetaulun päivitysajan ja renderöi uudelleen ainoastaan ne kuviot, joiden
+data on muuttunut. Kun mikään taulu ei ole päivittynyt, ajo ei renderöi mitään
+eikä tee committia.
 
 ## Uuden kuvion lisääminen
 
@@ -125,8 +125,16 @@ Deploy from a branch → `main` / `docs`). Sivusto rakentuu paikalleen, joten
 git-diffistä näkee täsmälleen mitkä kuviot muuttuivat.
 
 Ajastus on tiedostossa `.github/workflows/update-site.yml`. GitHub Actionsin
-cron on UTC:ssä, joten työ ajastetaan sekä kello 5:01 että 6:01 UTC ja
-vahtityö päästää läpi vain sen ajon, joka osuu Suomen aikaan kello 8.
+cron on UTC:ssä, joten työ ajastetaan sekä kello 5:12 että 6:12 UTC — edellinen
+osuu kesäaikaan ja jälkimmäinen talviaikaan Suomen aikaan kello 8:12.
+
+Cron on GitHubilla jaettu resurssi, eikä ajastettu ajo käynnisty täsmällisesti:
+ruuhkassa se voi myöhästyä tunteja, ja tasatunnit ovat pahimpia. Siksi
+minuutiksi on valittu 12 ja vahtityö päästää läpi kaikki ajot, jotka
+käynnistyvät kello 8 jälkeen Suomen aikaa. Kellonaikaan tarkasti sidottu vahti
+ohittaisi myöhästyneen ajon kokonaan, jolloin sivusto jäisi päivittymättä koko
+päiväksi. Kesäaikaan molemmat ajastukset pääsevät läpi; jälkimmäinen ei enää
+löydä rakennettavaa eikä tee committia.
 
 ## Asennus
 
