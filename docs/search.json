@@ -95,7 +95,7 @@
     "href": "index.html",
     "title": "Kuviot",
     "section": "",
-    "text": "Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla on Näytä koodi -taitoksen takana täsmälleen se koodi, joka kuvion tuottaa, joten sen voi kopioida sellaisenaan omaan R-istuntoon.\nSivusto tarkistaa aamuisin StatFinin kello 8 julkaisujen jälkeen, onko kuvion lähdetaulu päivittynyt, ja rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.\n\nInflaatio päivitetty 2026-09-01T05:22:11Z\nNeljännesvuositilinpito päivitetty 2026-08-31T17:28:39Z\nPalkansaajat sukupuolittain päivitetty 2026-08-31T05:46:48Z\nPalkansaajat päivitetty 2026-08-31T05:46:48Z\nTyömarkkinat päivitetty 2026-08-31T17:30:00Z"
+    "text": "Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla on Näytä koodi -taitoksen takana täsmälleen se koodi, joka kuvion tuottaa, joten sen voi kopioida sellaisenaan omaan R-istuntoon.\nSivusto tarkistaa arkipäivinä tunnin välein, onko kuvion lähdetaulu päivittynyt, ja rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.\n\nInflaatio päivitetty 2026-09-01T05:22:11Z\nNeljännesvuositilinpito päivitetty 2026-08-31T17:28:39Z\nPalkansaajat sukupuolittain päivitetty 2026-08-31T05:46:48Z\nPalkansaajat päivitetty 2026-08-31T05:46:48Z\nTyömarkkinat päivitetty 2026-08-31T17:30:00Z"
   },
   {
     "objectID": "kuviot/neljannesvuositilinpito.html",

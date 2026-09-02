@@ -3,7 +3,7 @@
 Rakentaa StatFin-datasta interaktiivisia kuvioita ja julkaisee ne
 Quarto-sivustona osoitteessa <https://jhuovari.github.io/visu/>.
 
-Sivusto päivittyy aamuisin StatFinin kello 8 julkaisujen jälkeen, mutta vain
+Sivusto päivittyy arkiaamuina StatFinin kello 8 julkaisujen jälkeen, mutta vain
 siltä osin kuin on tarpeen: ajo tarkistaa PxWeb-rajapinnasta kunkin kuvion
 lähdetaulun päivitysajan ja renderöi uudelleen ainoastaan ne kuviot, joiden
 data on muuttunut. Kun mikään taulu ei ole päivittynyt, ajo ei renderöi mitään
@@ -124,17 +124,26 @@ GitHub Pages tarjoillaan päähaaran `docs/`-hakemistosta (Settings → Pages �
 Deploy from a branch → `main` / `docs`). Sivusto rakentuu paikalleen, joten
 git-diffistä näkee täsmälleen mitkä kuviot muuttuivat.
 
-Ajastus on tiedostossa `.github/workflows/update-site.yml`. GitHub Actionsin
-cron on UTC:ssä, joten työ ajastetaan sekä kello 5:12 että 6:12 UTC — edellinen
-osuu kesäaikaan ja jälkimmäinen talviaikaan Suomen aikaan kello 8:12.
+Ajastus on tiedostossa `.github/workflows/update-site.yml`: arkisin tunnin
+välein kello 6:17–12:17 Suomen aikaa. Aikavyöhyke annetaan cronille suoraan,
+joten kesä- ja talviaikaa ei tarvitse käsitellä erikseen.
 
-Cron on GitHubilla jaettu resurssi, eikä ajastettu ajo käynnisty täsmällisesti:
-ruuhkassa se voi myöhästyä tunteja, ja tasatunnit ovat pahimpia. Siksi
-minuutiksi on valittu 12 ja vahtityö päästää läpi kaikki ajot, jotka
-käynnistyvät kello 8 jälkeen Suomen aikaa. Kellonaikaan tarkasti sidottu vahti
-ohittaisi myöhästyneen ajon kokonaan, jolloin sivusto jäisi päivittymättä koko
-päiväksi. Kesäaikaan molemmat ajastukset pääsevät läpi; jälkimmäinen ei enää
-löydä rakennettavaa eikä tee committia.
+Yksi ajastus päivässä ei riitä. Cron on GitHubilla jaettu resurssi, eikä
+ajastettu ajo käynnisty täsmällisesti: tässä repossa ajot ovat käynnistyneet
+toistuvasti 6–7 tuntia myöhässä, ja GitHubin dokumentaatio varoittaa että
+ruuhkassa ajo voi jäädä kokonaan ajamatta. Tunnin välein yrittäminen tekee
+myöhästymisestä ja väliin jäämisestä harmittoman: ensimmäinen tuoreen datan
+tavoittava ajo tekee työn, ja loput toteavat parissa minuutissa ettei mitään
+ole rakennettavaa.
+
+Ikkuna alkaa ennen kello 8:aa tarkoituksella. Ajallaan lauetessaan siihen
+mahtuu viisi yritystä julkaisun jälkeen, ja jos ajot myöhästyvät tuntikausia,
+ne osuvat saman työpäivän puolelle eivätkä valu iltaan. Minuutti on tunnin alun
+ulkopuolella, koska ruuhka on pahin tasatunnein.
+
+Kellonaikaa valvovaa erillistä työtä ei tarvita: ennen julkaisua käynnistyvä
+ajo ei löydä uutta dataa eikä tee committia, ja kellonaikaan sidottu vahti
+vaarantaisi juuri sen myöhästyneen ajon, jonka varaan ajastus laskee.
 
 ## Asennus
 
