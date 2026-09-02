@@ -1,15 +1,24 @@
 name: Päivitä sivusto
 
-# GitHub Actionsin cron on UTC:ssä, joten Suomen kellonaika 8 osuu eri
-# UTC-tuntiin kesä- ja talviaikana. Molemmat ajetaan, ja vahtityö päästää läpi
-# vain kello 8:n jälkeen käynnistyneen ajon.
+# StatFin julkaisee kello 8 Suomen aikaa. Cron on GitHubilla jaettu resurssi
+# eikä käynnisty täsmällisesti: tässä repossa ajastetut ajot ovat käynnistyneet
+# toistuvasti 6-7 tuntia myöhässä, ja GitHub varoittaa että ruuhkassa ajo voi
+# jäädä kokonaan ajamatta. Yksi ajastus päivässä on siis yksi arpalippu.
 #
-# Minuutti on tarkoituksella tunnin alun ulkopuolella: GitHubin jaettu cron
-# ruuhkautuu tasatunnein, ja ajastettu ajo voi silloin käynnistyä tunteja
-# myöhässä.
+# Siksi yritetään tunnin välein aamusta puolelle päivälle. Ikkuna kattaa
+# molemmat tapaukset: ajallaan lauetessaan siihen mahtuu viisi yritystä kello
+# 8:n julkaisun jälkeen, ja jos ajot myöhästyvät tuntikausia, ne osuvat saman
+# työpäivän puolelle eivätkä valu iltaan. Ensimmäinen tuoreen datan tavoittava
+# ajo tekee työn, ja loput eivät löydä rakennettavaa eivätkä tee committia --
+# tyhjä ajo kestää puolitoista minuuttia. Minuutti on tunnin alun ulkopuolella,
+# koska ruuhka on pahin tasatunnein.
+#
+# Erillistä kellovahtia ei tarvita. Ennen kello 8:aa käynnistyvä ajo ei löydä
+# uutta dataa eikä tee committia, ja kellonaikaan sidottu vahti vaarantaisi
+# juuri sen myöhästyneen ajon, jonka varaan tämä ajastus laskee.
 on:
   schedule:
-    - cron: '3 8 * * 1-5'   # 08:03
+    - cron: "17 6-12 * * 1-5"
       timezone: "Europe/Helsinki"
   workflow_dispatch:
     inputs:
@@ -30,31 +39,7 @@ permissions:
   contents: write
 
 jobs:
-  vahti:
-    runs-on: ubuntu-latest
-    outputs:
-      aja: ${{ steps.kello.outputs.aja }}
-    steps:
-      - id: kello
-        run: |
-          tunti=$(TZ=Europe/Helsinki date +%-H)
-          echo "Suomen aika: $(TZ=Europe/Helsinki date)"
-          # StatFin julkaisee kello 8 Suomen aikaa, joten sitä ennen ei ole
-          # mitään uutta haettavaa. Sen jälkeen ajetaan aina, myös myöhässä
-          # käynnistynyt ajo: tarkkaan kellonaikaan sidottu vahti ohittaisi
-          # koko päivän päivityksen aina kun GitHubin cron ruuhkautuu.
-          # Kesäaikaan molemmat ajastukset pääsevät läpi, mutta jälkimmäinen
-          # ei löydä enää rakennettavaa eikä tee committia.
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "$tunti" -ge 8 ]; then
-            echo "aja=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "aja=false" >> "$GITHUB_OUTPUT"
-            echo "Ohitetaan: kello on vasta $tunti, StatFin julkaisee kello 8."
-          fi
-
   paivita:
-    needs: vahti
-    if: needs.vahti.outputs.aja == 'true'
     runs-on: ubuntu-latest
     env:
       # Kuvioiden otsikot ovat suomeksi; ilman UTF-8-localea R kirjoittaisi
@@ -62,6 +47,9 @@ jobs:
       LANG: C.UTF-8
       LC_ALL: C.UTF-8
     steps:
+      - name: Kellonaika lokiin
+        run: echo "Suomen aika $(TZ=Europe/Helsinki date), ajastus '${{ github.event.schedule }}'"
+
       - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
