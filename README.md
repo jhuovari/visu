@@ -124,26 +124,27 @@ GitHub Pages tarjoillaan päähaaran `docs/`-hakemistosta (Settings → Pages �
 Deploy from a branch → `main` / `docs`). Sivusto rakentuu paikalleen, joten
 git-diffistä näkee täsmälleen mitkä kuviot muuttuivat.
 
-Ajastus on tiedostossa `.github/workflows/update-site.yml`: arkisin tunnin
-välein kello 6:17–12:17 Suomen aikaa. Aikavyöhyke annetaan cronille suoraan,
-joten kesä- ja talviaikaa ei tarvitse käsitellä erikseen.
+Työ on tiedostossa `.github/workflows/update-site.yml`, ja sen ainoa liipaisin
+on `workflow_dispatch`. Repo ei siis ajasta päivitystä itse: laukaisu tulee
+ulkopuolelta, Claude-rutiinista, joka kutsuu dispatch-rajapintaa arkiaamuina
+StatFinin kello 8 julkaisujen jälkeen.
 
-Yksi ajastus päivässä ei riitä. Cron on GitHubilla jaettu resurssi, eikä
-ajastettu ajo käynnisty täsmällisesti: tässä repossa ajot ovat käynnistyneet
-toistuvasti 6–7 tuntia myöhässä, ja GitHubin dokumentaatio varoittaa että
-ruuhkassa ajo voi jäädä kokonaan ajamatta. Tunnin välein yrittäminen tekee
-myöhästymisestä ja väliin jäämisestä harmittoman: ensimmäinen tuoreen datan
-tavoittava ajo tekee työn, ja loput toteavat parissa minuutissa ettei mitään
-ole rakennettavaa.
+Kierros GitHubin cronin kanssa kannattaa tietää, jottei sitä yritetä uudelleen.
+Ajastetut ajot käynnistyivät tässä repossa 6–7 tuntia myöhässä (31.8. kello
+11:28 ja 13:30 UTC, 1.9. kello 11:33 UTC). Kun ajastus vaihdettiin tunnin
+välein yritettäväksi, useampi laukaisu ei tuonut useampaa yritystä: 3.9.
+seitsemästä erääntyneestä toteutui kaksi, kello 11:02 ja 15:49 Suomen aikaa.
+GitHub varoittaa itse, että ruuhkassa ajo voi jäädä kokonaan ajamatta. Käsin ja
+rajapinnasta laukaistut ajot sen sijaan lähtevät heti.
 
-Ikkuna alkaa ennen kello 8:aa tarkoituksella. Ajallaan lauetessaan siihen
-mahtuu viisi yritystä julkaisun jälkeen, ja jos ajot myöhästyvät tuntikausia,
-ne osuvat saman työpäivän puolelle eivätkä valu iltaan. Minuutti on tunnin alun
-ulkopuolella, koska ruuhka on pahin tasatunnein.
+Hinta tästä on se, että laukaisija on sivuston ulkopuolella. Jos rutiini
+poistetaan tai lakkaa toimimasta, sivusto lakkaa päivittymästä hiljaisesti.
+Silloin työn voi ajaa käsin Actions-välilehdeltä, tai laukaista rajapinnasta:
 
-Kellonaikaa valvovaa erillistä työtä ei tarvita: ennen julkaisua käynnistyvä
-ajo ei löydä uutta dataa eikä tee committia, ja kellonaikaan sidottu vahti
-vaarantaisi juuri sen myöhästyneen ajon, jonka varaan ajastus laskee.
+```
+POST https://api.github.com/repos/jhuovari/visu/actions/workflows/update-site.yml/dispatches
+{"ref": "main"}
+```
 
 ## Asennus
 

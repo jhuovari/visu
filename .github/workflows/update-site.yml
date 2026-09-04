@@ -1,25 +1,20 @@
 name: Päivitä sivusto
 
-# StatFin julkaisee kello 8 Suomen aikaa. Cron on GitHubilla jaettu resurssi
-# eikä käynnisty täsmällisesti: tässä repossa ajastetut ajot ovat käynnistyneet
-# toistuvasti 6-7 tuntia myöhässä, ja GitHub varoittaa että ruuhkassa ajo voi
-# jäädä kokonaan ajamatta. Yksi ajastus päivässä on siis yksi arpalippu.
+# Tämä workflow ei ajastu itse. Laukaisu tulee ulkopuolelta: Claude-rutiini
+# kutsuu workflow_dispatchia arkiaamuina StatFinin kello 8 julkaisujen jälkeen.
 #
-# Siksi yritetään tunnin välein aamusta puolelle päivälle. Ikkuna kattaa
-# molemmat tapaukset: ajallaan lauetessaan siihen mahtuu viisi yritystä kello
-# 8:n julkaisun jälkeen, ja jos ajot myöhästyvät tuntikausia, ne osuvat saman
-# työpäivän puolelle eivätkä valu iltaan. Ensimmäinen tuoreen datan tavoittava
-# ajo tekee työn, ja loput eivät löydä rakennettavaa eivätkä tee committia --
-# tyhjä ajo kestää puolitoista minuuttia. Minuutti on tunnin alun ulkopuolella,
-# koska ruuhka on pahin tasatunnein.
+# Syy on mitattu. GitHubin cron ei käynnisty tässä repossa lähellekään
+# ajallaan: ajot lähtivät 31.8. kello 11:28 ja 13:30 UTC ja 1.9. kello 11:33
+# UTC eli 6-7 tuntia myöhässä. Kun ajastus vaihdettiin tunnin välein
+# yritettäväksi, useampi laukaisu ei tuonut useampaa yritystä: 3.9. seitsemästä
+# erääntyneestä toteutui kaksi, kello 11:02 ja 15:49 Suomen aikaa. GitHub
+# varoittaa itse, että ruuhkassa ajo voi jäädä kokonaan ajamatta. Rajapinnasta
+# laukaistut ajot sen sijaan lähtevät heti, joten workflow_dispatch on ainoa
+# tapa saada päivitys aamulla.
 #
-# Erillistä kellovahtia ei tarvita. Ennen kello 8:aa käynnistyvä ajo ei löydä
-# uutta dataa eikä tee committia, ja kellonaikaan sidottu vahti vaarantaisi
-# juuri sen myöhästyneen ajon, jonka varaan tämä ajastus laskee.
+# Jos laukaisija on poissa, sivusto ei päivity. Silloin tämän workflow'n voi
+# ajaa käsin Actions-välilehdeltä.
 on:
-  schedule:
-    - cron: "17 6-12 * * 1-5"
-      timezone: "Europe/Helsinki"
   workflow_dispatch:
     inputs:
       full_render:
@@ -48,7 +43,7 @@ jobs:
       LC_ALL: C.UTF-8
     steps:
       - name: Kellonaika lokiin
-        run: echo "Suomen aika $(TZ=Europe/Helsinki date), ajastus '${{ github.event.schedule }}'"
+        run: echo "Suomen aika $(TZ=Europe/Helsinki date)"
 
       - uses: actions/checkout@v4
 
