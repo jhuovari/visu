@@ -10,6 +10,8 @@
 #' @param p ggplot-objekti, tyypillisesti `visu_plot()`:n tulos.
 #' @param tooltip Vihjelaatikossa näytettävät aestetiikat.
 #' @param subtitle,caption Valinnaiset tekstit, jotka ggplotly muuten pudottaisi.
+#' @param locale Plotlyn työkalupalkin ja lukumuotoilun kieli. Plotlyn mukana
+#'   tulevat muun muassa `"fi"` ja `"sv"`; englanti on sen oletus.
 #' @param ... Lisäargumentit funktiolle `plotly::ggplotly()`.
 #' @return plotly-objekti (htmlwidget).
 #' @export
@@ -17,6 +19,7 @@ visu_interactive <- function(p,
                              tooltip = c("x", "y", "colour", "fill"),
                              subtitle = NULL,
                              caption = NULL,
+                             locale = "fi",
                              ...) {
   if (!inherits(p, "ggplot")) {
     stop("`p` pit\u00e4\u00e4 olla ggplot-objekti, ei ", class(p)[1], ".", call. = FALSE)
@@ -42,7 +45,7 @@ visu_interactive <- function(p,
   plotly::config(
     w,
     displaylogo = FALSE,
-    locale = "fi",
+    locale = locale,
     modeBarButtonsToRemove = c("select2d", "lasso2d", "autoScale2d")
   )
 }

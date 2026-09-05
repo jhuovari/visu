@@ -45,6 +45,94 @@ Jokaisella kuviolla on oma datahakunsa. Koodilohko on sivulla piilossa
 pätkän saa ajettua sellaisenaan omassa R-istunnossa. Sivulla voi olla useampi
 koodilohko, jolloin jokainen niistä on oma kuvionsa oman otsikkonsa alla.
 
+## Saman sarjan taso ja muutos
+
+Samasta sarjasta tarvitaan usein sekä taso että muutos. Ne ovat saman kuvion
+välilehtiä, jolloin data haetaan kerran, sivulla on yksi tilamerkintä ja
+lukija vertaa näkymiä vierekkäin:
+
+````
+::: {.panel-tabset}
+
+### Taso
+
+```{r}
+...
+```
+
+### Muutos
+
+```{r}
+...
+```
+
+:::
+````
+
+Jos tilasto ei julkaise muutosta valmiina, `visu_change()` laskee sen: `lag`
+on havaintojen määrä vuodessa (12 kuukausi-, 4 neljännesvuosisarjalle),
+`type = "diff"` antaa erotuksen prosenttimuutoksen sijaan, ja `by` laskee
+muutoksen sarjoittain niin ettei se vuoda sarjarajan yli.
+
+## Kieliversiot ladattavina kuvina
+
+Sivusto on suomenkielinen. Ruotsi ja englanti tulevat ladattavina PNG-kuvina
+kuvion alla, eikä sivuja siis monisteta kolmeksi.
+
+Koodilohko määrittelee funktion, joka rakentaa kuvion annetulla kielellä.
+Sama funktio piirtää sekä sivulla näkyvän suomenkielisen kuvion että
+ladattavat käännökset, joten käännös on kuvion koodin vieressä eikä
+erillisessä käännöstiedostossa:
+
+````
+```{r}
+tekstit <- list(
+  fi = list(otsikko = "Työttömyysaste, %", sarjat = c(a = "Alkuperäinen")),
+  sv = list(otsikko = "Relativt arbetslöshetstal, %", sarjat = c(a = "Ursprunglig")),
+  en = list(otsikko = "Unemployment rate, %", sarjat = c(a = "Original"))
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  ...
+  visu_plot(d, colour = "sarja", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio("fi") |> visu_interactive(caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "tyottomyysaste-taso")
+```
+````
+
+`visu_downloads()` kirjoittaa kuvat hakemistoon `site/kuviot/kuvat/`, josta
+Quarto kopioi ne sivuston mukana. Kuvat ovat versionhallinnassa molemmissa
+paikoissa, koska freeze-välimuistista palautettu sivu ei aja koodilohkoa
+uudelleen eikä siis kirjoittaisi kuvia.
+
+Sarjojen selitteet kannattaa kääntää StatFinin omilla termeillä: sama taulu
+löytyy rajapinnasta myös ruotsiksi ja englanniksi vaihtamalla URL:n
+kielisegmentti (`/fi/` → `/sv/`), ja muuttuja- ja arvokoodit ovat kaikilla
+kielillä samat.
+
+## Kuvion tiedot
+
+`visu_metadata()` tulostaa kuvion alle taitoksen, josta näkee mistä taulusta
+luvut ovat, milloin taulu on päivittynyt, mitkä sarjat kuviossa ovat ja miten
+aineisto on rajattu. Usean taulun kuviossa sille annetaan lista data frameja
+ja vastaava lista osoitteita:
+
+````
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(dat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/")
+```
+````
+
 Sarakkeiden nimet tulevat suoraan `pxwebtools::pxw_get_data()`:n paluuarvosta.
 `visu_plot()` käyttää oletuksena ensimmäistä saraketta x-akselina ja saraketta
 `values` y-akselina. Useamman sarjan kuviossa anna luokittelusarake

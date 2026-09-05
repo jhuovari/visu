@@ -2,6 +2,7 @@
 # tietokannan kansiosta maksaa yhden HTTP-pyynnön eikä N:ää.
 the <- new.env(parent = emptyenv())
 the$folder_listing <- list()
+the$table_meta <- list()
 
 #' Tyhjennä kansiolistausten välimuisti
 #'
@@ -9,6 +10,7 @@ the$folder_listing <- list()
 #' @export
 visu_clear_cache <- function() {
   the$folder_listing <- list()
+  the$table_meta <- list()
   invisible(NULL)
 }
 
