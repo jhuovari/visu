@@ -51,7 +51,8 @@ tekstit <- list(
 
 kuvio <- function(kieli) {
   t <- tekstit[[kieli]]
-  visu_plot(vaihtotase, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+  visu_plot(vaihtotase, title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli, zeroline = TRUE)
 }
 
 kuvio("fi") |>
@@ -100,7 +101,8 @@ tekstit_kk <- list(
 
 kuvio_kk <- function(kieli) {
   t <- tekstit_kk[[kieli]]
-  visu_plot(vaihtotase_kk, type = "col", title = t$otsikko, caption = t$lahde)
+  visu_plot(vaihtotase_kk, type = "col", title = t$otsikko, caption = t$lahde,
+            lang = kieli, zeroline = TRUE)
 }
 
 kuvio_kk("fi") |>
@@ -166,7 +168,7 @@ kuvio_kauppa <- function(kieli) {
   d <- kauppa
   d$virta <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, colour = "virta", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_kauppa("fi") |>
@@ -217,7 +219,7 @@ kuvio_erat <- function(kieli) {
   t <- tekstit_erat[[kieli]]
   d <- vienti_erat
   d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "era", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "era", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_erat("fi") |>

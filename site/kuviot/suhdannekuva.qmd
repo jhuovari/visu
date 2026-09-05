@@ -61,7 +61,7 @@ kuvio <- function(kieli) {
   d <- tuotanto
   # Karkeimmasta siloitetuimpaan, jolloin viiva paksunee jarjestyksessa.
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio("fi") |>
@@ -109,7 +109,7 @@ tekstit_muutos <- list(
 kuvio_muutos <- function(kieli) {
   t <- tekstit_muutos[[kieli]]
   visu_plot(tuotanto_muutos, type = "col", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_muutos("fi") |>
@@ -163,7 +163,7 @@ kuvio_toimiala <- function(kieli) {
   # Eri toimialat ovat eri joukkoja, joten ne erotetaan varilla.
   d$toimiala <- factor(d$toimiala_79_20180101, levels = names(t$sarjat),
                        labels = t$sarjat)
-  visu_plot(d, colour = "toimiala", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "toimiala", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_toimiala("fi") |>
@@ -221,7 +221,8 @@ tekstit_luottamus <- list(
 
 kuvio_luottamus <- function(kieli) {
   t <- tekstit_luottamus[[kieli]]
-  visu_plot(luottamus, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+  visu_plot(luottamus, title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli, zeroline = TRUE)
 }
 
 kuvio_luottamus("fi") |>
@@ -281,7 +282,8 @@ kuvio_osat <- function(kieli) {
   t <- tekstit_osat[[kieli]]
   d <- luottamus_osat
   d$osa <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "osa", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "osa", title = t$otsikko, caption = t$lahde, lang = kieli,
+            zeroline = TRUE)
 }
 
 kuvio_osat("fi") |>

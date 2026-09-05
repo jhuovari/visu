@@ -95,7 +95,7 @@ tekstit <- list(
 kuvio <- function(kieli) {
   t <- tekstit[[kieli]]
   ...
-  visu_plot(d, colour = "sarja", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "sarja", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio("fi") |> visu_interactive(caption = tekstit$fi$lahde)
@@ -152,6 +152,21 @@ alkuperäinen sarja katoaa. Yksin piirretty sarja on aina normaalin paksuinen.
 
 Eri joukkoja vertailevat kuviot — miehet ja naiset, ikäryhmät, kysynnän erät
 — käyttävät edelleen `colour`-argumenttia.
+
+## Nollaviiva ja desimaalipilkku
+
+Muutoskuviossa ja rahoitusaseman kaltaisessa sarjassa nolla on se raja, jonka
+kohdalla luvun merkitys kääntyy, joten sen kohdalle piirretään ohut viiva.
+`visu_plot()` tekee sen itse, kun sarjassa on arvoja sekä nollan ala- että
+yläpuolella. Muutoskuvioissa kannattaa silti antaa `zeroline = TRUE`, jotta
+viiva pysyy paikallaan silloinkin kun kaikki näkyvät arvot sattuvat olemaan
+samalla puolella nollaa. `zeroline = FALSE` jättää viivan pois.
+
+Akselien desimaalierotin tulee `lang`-argumentista: suomessa ja ruotsissa
+pilkku, englannissa piste. Anna kuvion rakentavalle funktiolle tulleen kielen
+koodi — `visu_plot(..., lang = kieli)` — jolloin `visu_downloads()`:n
+kirjoittamat ruotsin- ja englanninkieliset kuvat saavat kumpikin oman
+muotoilunsa.
 
 Etulehden ja koodilohkon taulujen pitää olla samat. `visu_check_charts()`
 tarkistaa tämän molempiin suuntiin — etulehdessä luetellun taulun pitää

@@ -42,3 +42,51 @@ test_that("tuntematon sarake kaataa selvalla viestilla", {
 
   expect_error(visu_plot(d, linewidth = "puuttuu"), "linewidth")
 })
+
+test_that("nollaviiva tulee kun sarja ylittaa nollan kumpaankin suuntaan", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-02-01")), values = c(-1, 2))
+
+  expect_true(visu:::visu_needs_zeroline(d, "values", NULL))
+})
+
+test_that("kokonaan nollan yhdella puolella oleva sarja jaa ilman nollaviivaa", {
+  ylla <- data.frame(values = c(1, 2))
+  alla <- data.frame(values = c(-2, -1))
+
+  expect_false(visu:::visu_needs_zeroline(ylla, "values", NULL))
+  expect_false(visu:::visu_needs_zeroline(alla, "values", NULL))
+})
+
+test_that("zeroline ohittaa automatiikan kumpaankin suuntaan", {
+  ylla <- data.frame(values = c(1, 2))
+  ylitse <- data.frame(values = c(-1, 2))
+
+  expect_true(visu:::visu_needs_zeroline(ylla, "values", TRUE))
+  expect_false(visu:::visu_needs_zeroline(ylitse, "values", FALSE))
+})
+
+test_that("pelkat puuttuvat arvot eivat kaada nollaviivan paattelya", {
+  d <- data.frame(values = c(NA_real_, NA_real_))
+
+  expect_false(visu:::visu_needs_zeroline(d, "values", NULL))
+})
+
+test_that("nollaviiva piirtyy datan alle", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-02-01")), values = c(-1, 2))
+
+  kerrokset <- vapply(visu_plot(d)$layers, function(l) class(l$geom)[1], character(1))
+
+  expect_equal(unname(kerrokset), c("GeomHline", "GeomLine"))
+})
+
+test_that("suomi ja ruotsi saavat desimaalipilkun, englanti pisteen", {
+  arvot <- c(-0.5, 0, 1.25)
+
+  expect_equal(visu:::visu_axis_labels("fi")(arvot), c("-0,50", "0,00", "1,25"))
+  expect_equal(visu:::visu_axis_labels("sv")(arvot), c("-0,50", "0,00", "1,25"))
+  expect_equal(visu:::visu_axis_labels("en")(arvot), c("-0.50", "0.00", "1.25"))
+})
+
+test_that("akselin puuttuva arvo muotoillaan tyhjaksi", {
+  expect_equal(visu:::visu_axis_labels("fi")(c(1, NA)), c("1", ""))
+})

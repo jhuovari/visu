@@ -58,7 +58,7 @@ kuvio <- function(kieli) {
   d <- tyottomyys
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
   # Sama ilmio eri tavalla siloitettuna: sama vari, trendi paksummalla.
-  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio("fi") |>
@@ -110,7 +110,7 @@ tekstit_muutos <- list(
 kuvio_muutos <- function(kieli) {
   t <- tekstit_muutos[[kieli]]
   visu_plot(tyottomyys_muutos, y = "muutos", type = "col",
-            title = t$otsikko, caption = t$lahde)
+            title = t$otsikko, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_muutos("fi") |>
@@ -169,7 +169,7 @@ kuvio_tyollisyys <- function(kieli) {
   t <- tekstit_tyollisyys[[kieli]]
   d <- tyollisyysaste
   d$ikaryhma <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "ikaryhma", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "ikaryhma", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_tyollisyys("fi") |>
@@ -223,7 +223,7 @@ kuvio_tyolliset <- function(kieli) {
   d <- tyolliset
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
   # Sama ilmio eri tavalla siloitettuna: sama vari, trendi paksummalla.
-  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_tyolliset("fi") |>
@@ -278,7 +278,8 @@ kuvio_maarat <- function(kieli) {
   t <- tekstit_maarat[[kieli]]
   d <- maarat
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, y = "muutos", colour = "sarja", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, y = "muutos", colour = "sarja", title = t$otsikko, caption = t$lahde,
+            lang = kieli, zeroline = TRUE)
 }
 
 kuvio_maarat("fi") |>
@@ -334,7 +335,7 @@ tekstit_palkansaajat <- list(
 
 kuvio_palkansaajat <- function(kieli) {
   t <- tekstit_palkansaajat[[kieli]]
-  visu_plot(palkansaajat, title = t$otsikko, caption = t$lahde)
+  visu_plot(palkansaajat, title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_palkansaajat("fi") |>
@@ -385,7 +386,7 @@ kuvio_palkansaajat_sp <- function(kieli) {
   # Miehet ja naiset ovat eri joukkoja, joten ne erotetaan varilla.
   d$sukupuoli <- factor(d$sukupuoli_9_20180101, levels = names(t$sarjat),
                         labels = t$sarjat)
-  visu_plot(d, colour = "sukupuoli", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "sukupuoli", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_palkansaajat_sp("fi") |>

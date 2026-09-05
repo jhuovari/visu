@@ -55,7 +55,7 @@ kuvio <- function(kieli) {
   # Sama ilmio eri tavalla siloitettuna: sama vari, kausitasoitettu paksummalla.
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, linewidth = "sarja", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio("fi") |>
@@ -109,7 +109,7 @@ kuvio_inv <- function(kieli) {
   d$sektori <- factor(d$sektoriluokitus_7_20230101, levels = names(t$sarjat),
                       labels = t$sarjat)
   visu_plot(d, colour = "sektori", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_inv("fi") |>
@@ -168,7 +168,8 @@ tekstit_velka <- list(
 
 kuvio_velka <- function(kieli) {
   t <- tekstit_velka[[kieli]]
-  visu_plot(velkaantuminen, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+  visu_plot(velkaantuminen, title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
 }
 
 kuvio_velka("fi") |>
@@ -218,7 +219,7 @@ kuvio_lainat <- function(kieli) {
   t <- tekstit_lainat[[kieli]]
   d <- lainat
   d$laji <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "laji", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "laji", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_lainat("fi") |>

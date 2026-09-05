@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/tyomarkkinat.html</loc>
-    <lastmod>2026-09-05T09:08:52.318Z</lastmod>
+    <loc>https://jhuovari.github.io/visu/kuviot/ulkomaantalous.html</loc>
+    <lastmod>2026-09-05T10:16:11.465Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/suhdannekuva.html</loc>
+    <lastmod>2026-09-05T10:16:11.465Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/kotitaloudet.html</loc>
+    <lastmod>2026-09-05T10:16:11.464Z</lastmod>
   </url>
   <url>
     <loc>https://jhuovari.github.io/visu/kuviot/inflaatio.html</loc>
-    <lastmod>2026-09-05T08:27:33.632Z</lastmod>
+    <lastmod>2026-09-05T10:16:11.464Z</lastmod>
   </url>
   <url>
     <loc>https://jhuovari.github.io/visu/index.html</loc>
     <lastmod>2026-09-05T09:11:49.883Z</lastmod>
   </url>
   <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/neljannesvuositilinpito.html</loc>
-    <lastmod>2026-09-05T09:08:52.333Z</lastmod>
-  </url>
-  <url>
     <loc>https://jhuovari.github.io/visu/kuviot/julkinen-talous.html</loc>
-    <lastmod>2026-09-05T09:36:40.405Z</lastmod>
+    <lastmod>2026-09-05T10:16:11.464Z</lastmod>
   </url>
   <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/kotitaloudet.html</loc>
-    <lastmod>2026-09-05T09:37:52.877Z</lastmod>
+    <loc>https://jhuovari.github.io/visu/kuviot/neljannesvuositilinpito.html</loc>
+    <lastmod>2026-09-05T10:16:11.465Z</lastmod>
   </url>
   <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/suhdannekuva.html</loc>
-    <lastmod>2026-09-05T09:35:37.611Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/ulkomaantalous.html</loc>
-    <lastmod>2026-09-05T09:37:52.877Z</lastmod>
+    <loc>https://jhuovari.github.io/visu/kuviot/tyomarkkinat.html</loc>
+    <lastmod>2026-09-05T10:16:11.465Z</lastmod>
   </url>
 </urlset>
