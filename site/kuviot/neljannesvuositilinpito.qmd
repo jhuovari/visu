@@ -8,7 +8,8 @@ Kansantalouden neljännesvuositilinpidon keskeiset erät. Tasot ovat
 kausitasoitettuja ja työpäiväkorjattuja volyymisarjoja viitevuoden 2015
 hinnoin, ja muutokset saman sarjan volyymin muutoksia vuodentakaisesta.
 Kausitasoitettu sarja kertoo suhdannekäänteen aikaisimmin, trendisarja
-luotettavimmin.
+luotettavimmin. Ne ovat samassa kuviossa samalla värillä eri paksuisin
+viivoin, koska kyse on samasta ilmiöstä eri tavalla siloitettuna.
 
 Saman sarjan taso ja muutos ovat kuvion välilehdillä, ja kuvion alta saa
 ruotsin- ja englanninkielisen version ladattavana kuvana.
@@ -61,7 +62,8 @@ kuvio <- function(kieli) {
   t <- tekstit[[kieli]]
   d <- bkt
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "sarja", title = t$otsikko,
+  # Sama ilmio eri tavalla siloitettuna: sama vari, trendi paksummalla.
+  visu_plot(d, linewidth = "sarja", title = t$otsikko,
             subtitle = t$selite, caption = t$lahde)
 }
 

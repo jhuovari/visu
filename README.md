@@ -139,6 +139,20 @@ Sarakkeiden nimet tulevat suoraan `pxwebtools::pxw_get_data()`:n paluuarvosta.
 argumentilla `colour = "<sarakkeen nimi>"`; jos nimi on väärin, virheilmoitus
 luettelee datan sarakkeet.
 
+## Saman sarjan versiot samalla värillä
+
+Alkuperäinen, kausitasoitettu ja trendi ovat sama ilmiö eri tavalla
+siloitettuna, eivät eri sarjoja. Siksi ne piirretään samalla värillä ja
+erotetaan viivan paksuudella: `linewidth = "<sarakkeen nimi>"` värin sijaan.
+
+Järjestä luokat karkeimmasta siloitetuimpaan — alkuperäinen ensin, trendi
+viimeisenä — niin viiva paksunee järjestyksessä. Siloitetuin saa normaalin
+paksuuden ja karkeammat ohenevat, jolloin trendi erottuu ilman että
+alkuperäinen sarja katoaa. Yksin piirretty sarja on aina normaalin paksuinen.
+
+Eri joukkoja vertailevat kuviot — miehet ja naiset, ikäryhmät, kysynnän erät
+— käyttävät edelleen `colour`-argumenttia.
+
 Etulehden ja koodilohkon taulujen pitää olla samat. `visu_check_charts()`
 tarkistaa tämän molempiin suuntiin — etulehdessä luetellun taulun pitää
 esiintyä koodissa, ja koodissa haetun taulun pitää olla lueteltu etulehdessä —

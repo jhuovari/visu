@@ -16,30 +16,17 @@
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-08-28T15:14:03"
     },
-    "code_hash": "a13c885a32f41f7381c98e38579102302f70c9852edcdf3ba04cc94b28b71c02",
-    "built_at": "2026-09-05T08:34:44Z"
-  },
-  "palkansaajat": {
-    "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
-    "title": "Palkansaajat",
-    "source_updated": "2026-07-01T18:34:06",
-    "code_hash": "9e873bf2ccfd6bb00524c804603c53fb33f76edcfe3da06d385437fbfeb3a8a5",
-    "built_at": "2026-08-31T05:46:48Z"
-  },
-  "palkansaajat_sukupuolittain": {
-    "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
-    "title": "Palkansaajat sukupuolittain",
-    "source_updated": "2026-07-01T18:34:06",
-    "code_hash": "1d11ce64b35f4b3879e70cd8d3e3c33532a9343479aad7d35db681a18adc049f",
-    "built_at": "2026-08-31T05:46:48Z"
+    "code_hash": "2a212aed2e8bc11ea22b0137fd23289dbebd89b79e159fb565f346cf271c1f91",
+    "built_at": "2026-09-05T09:09:03Z"
   },
   "tyomarkkinat": {
-    "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+    "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"],
     "title": "Työmarkkinat",
     "source_updated": {
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px": "2026-07-01T18:34:06",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px": "2026-08-24T10:49:35"
     },
-    "code_hash": "efab4b3ce3ffe4f1a216a725bbfd33dd63193c780455e8c6b1a2c5750589db60",
-    "built_at": "2026-09-05T08:34:44Z"
+    "code_hash": "0a8da5f4d7d1f605b30a6db7b6cf35ab1649beeadfaf33a530dc3f327a23dd32",
+    "built_at": "2026-09-05T09:09:03Z"
   }
 }
