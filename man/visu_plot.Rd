@@ -11,6 +11,8 @@ visu_plot(
   colour = NULL,
   linewidth = NULL,
   type = c("line", "col", "area"),
+  lang = "fi",
+  zeroline = NULL,
   title = NULL,
   subtitle = NULL,
   caption = NULL,
@@ -38,6 +40,16 @@ alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
 Vain piirtotyypille \code{"line"}.}
 
 \item{type}{Piirtotyyppi: \code{"line"} (oletus), \code{"col"} tai \code{"area"}.}
+
+\item{lang}{Akselien lukumuotoilun kieli. Suomessa ja ruotsissa desimaalit
+erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan
+funktion kielikoodi, jolloin ladattavat käännökset saavat oman
+muotoilunsa.}
+
+\item{zeroline}{Nollaviiva. Oletuksena \code{NULL}, jolloin viiva piirretään kun
+arvot ovat sekä nollan ala- että yläpuolella — muutoskuvioissa ja
+rahoitusaseman kaltaisissa sarjoissa nolla on se raja, jonka kohdalla
+luvun merkitys kääntyy. \code{TRUE} pakottaa viivan, \code{FALSE} jättää sen pois.}
 
 \item{title, subtitle, caption}{Valinnaiset otsikkotekstit.}
 

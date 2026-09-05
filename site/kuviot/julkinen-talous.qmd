@@ -50,7 +50,8 @@ tekstit_velka <- list(
 
 kuvio_velka <- function(kieli) {
   t <- tekstit_velka[[kieli]]
-  visu_plot(velka_suhde, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+  visu_plot(velka_suhde, title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
 }
 
 kuvio_velka("fi") |>
@@ -99,7 +100,7 @@ tekstit_alijaama <- list(
 kuvio_alijaama <- function(kieli) {
   t <- tekstit_alijaama[[kieli]]
   visu_plot(alijaama, type = "col", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_alijaama("fi") |>
@@ -155,7 +156,8 @@ kuvio_sektori <- function(kieli) {
   d <- alijaama_sektori
   d$sektori <- factor(d$sektoriluokitus_7_20230101, levels = names(t$sarjat),
                       labels = t$sarjat)
-  visu_plot(d, colour = "sektori", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "sektori", title = t$otsikko, caption = t$lahde, lang = kieli,
+            zeroline = TRUE)
 }
 
 kuvio_sektori("fi") |>
@@ -215,7 +217,8 @@ tekstit_velka_q <- list(
 
 kuvio_velka_q <- function(kieli) {
   t <- tekstit_velka_q[[kieli]]
-  visu_plot(velka_q, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+  visu_plot(velka_q, title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
 }
 
 kuvio_velka_q("fi") |>
@@ -267,7 +270,7 @@ tekstit_velka_muutos <- list(
 kuvio_velka_muutos <- function(kieli) {
   t <- tekstit_velka_muutos[[kieli]]
   visu_plot(velka_q_muutos, y = "muutos", type = "col",
-            title = t$otsikko, caption = t$lahde)
+            title = t$otsikko, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_velka_muutos("fi") |>
@@ -335,7 +338,7 @@ kuvio_suhde <- function(kieli) {
   d <- tulot_menot_suhde
   d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, colour = "era", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_suhde("fi") |>
@@ -385,7 +388,7 @@ tekstit_rahoitusasema <- list(
 kuvio_rahoitusasema <- function(kieli) {
   t <- tekstit_rahoitusasema[[kieli]]
   visu_plot(rahoitusasema, type = "col", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_rahoitusasema("fi") |>

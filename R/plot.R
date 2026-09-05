@@ -18,6 +18,14 @@
 #'   alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
 #'   Vain piirtotyypille `"line"`.
 #' @param type Piirtotyyppi: `"line"` (oletus), `"col"` tai `"area"`.
+#' @param lang Akselien lukumuotoilun kieli. Suomessa ja ruotsissa desimaalit
+#'   erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan
+#'   funktion kielikoodi, jolloin ladattavat käännökset saavat oman
+#'   muotoilunsa.
+#' @param zeroline Nollaviiva. Oletuksena `NULL`, jolloin viiva piirretään kun
+#'   arvot ovat sekä nollan ala- että yläpuolella — muutoskuvioissa ja
+#'   rahoitusaseman kaltaisissa sarjoissa nolla on se raja, jonka kohdalla
+#'   luvun merkitys kääntyy. `TRUE` pakottaa viivan, `FALSE` jättää sen pois.
 #' @param title,subtitle,caption Valinnaiset otsikkotekstit.
 #' @param y_lab,x_lab Valinnaiset akselien otsikot. Oletuksena akselit ovat
 #'   nimeämättömiä, koska yksikkö kuuluu tyypillisesti otsikkoon.
@@ -32,6 +40,8 @@ visu_plot <- function(data,
                       colour = NULL,
                       linewidth = NULL,
                       type = c("line", "col", "area"),
+                      lang = "fi",
+                      zeroline = NULL,
                       title = NULL,
                       subtitle = NULL,
                       caption = NULL,
@@ -79,8 +89,14 @@ visu_plot <- function(data,
     p <- p + ggplot2::aes(linewidth = .data[[linewidth]])
   }
 
+  # Nollaviiva geomin alle, jotta se ei peita dataa.
+  if (visu_needs_zeroline(data, y, zeroline)) {
+    p <- p + ggplot2::geom_hline(yintercept = 0, colour = "grey35", linewidth = 0.3)
+  }
+
   p <- p +
     geom +
+    ggplot2::scale_y_continuous(labels = visu_axis_labels(lang)) +
     ggplot2::labs(
       title = title, subtitle = subtitle, caption = caption,
       x = x_lab, y = y_lab, colour = NULL, fill = NULL, linewidth = NULL
@@ -97,6 +113,28 @@ visu_plot <- function(data,
   }
 
   p
+}
+
+# Nollaviiva piirretaan kun arvot ylittavat nollan kumpaankin suuntaan. Jos
+# sarja on kokonaan nollan yhdella puolella, nolla on akselin reunassa eika
+# erillinen viiva kerro mitaan.
+visu_needs_zeroline <- function(data, y, zeroline) {
+  if (isTRUE(zeroline)) return(TRUE)
+  if (isFALSE(zeroline)) return(FALSE)
+  arvot <- suppressWarnings(as.numeric(data[[y]]))
+  arvot <- arvot[is.finite(arvot)]
+  length(arvot) > 0L && min(arvot) < 0 && max(arvot) > 0
+}
+
+# Akselin lukumuotoilu kielen mukaan. Vain desimaalierotin vaihtuu;
+# tuhaterotinta ei lisata, jotta akseli pysyy entisen nakoisena.
+visu_axis_labels <- function(lang = "fi") {
+  desimaali <- if (lang %in% c("fi", "sv")) "," else "."
+  function(x) {
+    ifelse(is.na(x), "",
+           format(x, decimal.mark = desimaali, big.mark = "",
+                  trim = TRUE, scientific = FALSE))
+  }
 }
 
 # Saman sarjan versioiden viivanpaksuudet karkeimmasta siloitetuimpaan.

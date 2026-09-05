@@ -64,7 +64,7 @@ kuvio <- function(kieli) {
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
   # Sama ilmio eri tavalla siloitettuna: sama vari, trendi paksummalla.
   visu_plot(d, linewidth = "sarja", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio("fi") |>
@@ -112,7 +112,7 @@ tekstit_muutos <- list(
 kuvio_muutos <- function(kieli) {
   t <- tekstit_muutos[[kieli]]
   visu_plot(bkt_muutos, type = "col", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_muutos("fi") |>
@@ -183,7 +183,7 @@ kuvio_kysynta <- function(kieli) {
   d <- kysynta
   d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, colour = "era", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_kysynta("fi") |>
@@ -246,7 +246,7 @@ kuvio_kysynta_muutos <- function(kieli) {
   d <- kysynta_muutos
   d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, colour = "era", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_kysynta_muutos("fi") |>

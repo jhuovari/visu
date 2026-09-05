@@ -94,7 +94,8 @@ kuvio <- function(kieli) {
   t <- tekstit[[kieli]]
   d <- muutos
   d$mittari <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "mittari", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "mittari", title = t$otsikko, caption = t$lahde, lang = kieli,
+            zeroline = TRUE)
 }
 
 kuvio("fi") |>
@@ -160,7 +161,7 @@ kuvio_taso <- function(kieli) {
   t <- tekstit_taso[[kieli]]
   d <- taso
   d$mittari <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "mittari", title = t$otsikko, caption = t$lahde)
+  visu_plot(d, colour = "mittari", title = t$otsikko, caption = t$lahde, lang = kieli)
 }
 
 kuvio_taso("fi") |>
@@ -229,7 +230,7 @@ kuvio_kive <- function(kieli) {
   d <- kive
   d$mittari <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, colour = "mittari", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_kive("fi") |>
@@ -298,7 +299,7 @@ kuvio_ryhmat <- function(kieli) {
   d <- ryhma_muutos
   d$ryhma <- factor(d$coicop_46_20231201, levels = names(t$sarjat), labels = t$sarjat)
   visu_plot(d, colour = "ryhma", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde)
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
 kuvio_ryhmat("fi") |>
@@ -390,7 +391,7 @@ kuvio_vaikutus <- function(kieli) {
   # jarjestys seuraa arvoja.
   d$ryhma <- factor(nimet[[kieli]][koodit], levels = nimet[[kieli]][koodit])
   visu_plot(d, x = "ryhma", type = "col", title = t$otsikko,
-            subtitle = t$selite, caption = t$lahde) +
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE) +
     ggplot2::coord_flip()
 }
 
