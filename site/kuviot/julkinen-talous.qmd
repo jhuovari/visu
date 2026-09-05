@@ -1,0 +1,410 @@
+---
+title: "Julkinen talous"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"
+---
+
+Julkisyhteisöjen rahoitusasema kolmesta suunnasta: EU:n alijäämä- ja
+velkakriteerien mukaiset vuosiluvut, velan neljännesvuosikehitys ja tulojen
+ja menojen erotus. EDP-luvut ovat samat, joilla Suomen julkista taloutta
+arvioidaan EU:n vakaus- ja kasvusopimuksessa.
+
+## Alijäämä ja velka suhteessa bruttokansantuotteeseen
+
+::: {.panel-tabset}
+
+### Velka
+
+```{r}
+library(visu)
+
+velka_suhde <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/",
+  query = list(
+    "timeperiod_y" = "*",
+    "sektoriluokitus_7_20230101" = "S13",
+    "contentscode" = "Ratio_D"
+  )
+)
+
+tekstit_velka <- list(
+  fi = list(
+    otsikko = "Julkisyhteisöjen EDP-velka suhteessa BKT:hen, %",
+    selite = "EU:n velkakriteerin raja on 60 %",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka"
+  ),
+  sv = list(
+    otsikko = "Den offentliga sektorns EDP-skuld i förhållande till BNP, %",
+    selite = "Gränsen för EU:s skuldkriterium är 60 %",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns underskott och skuld"
+  ),
+  en = list(
+    otsikko = "General government EDP debt relative to GDP, %",
+    selite = "The EU debt criterion threshold is 60%",
+    lahde = "Source: Statistics Finland, general government deficit and debt"
+  )
+)
+
+kuvio_velka <- function(kieli) {
+  t <- tekstit_velka[[kieli]]
+  visu_plot(velka_suhde, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_velka("fi") |>
+  visu_interactive(subtitle = tekstit_velka$fi$selite,
+                   caption = tekstit_velka$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_velka, "julkinen-velka-suhde")
+```
+
+### Alijäämä
+
+```{r}
+library(visu)
+
+alijaama <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/",
+  query = list(
+    "timeperiod_y" = "*",
+    "sektoriluokitus_7_20230101" = "S13",
+    "contentscode" = "Ratio_B"
+  )
+)
+
+tekstit_alijaama <- list(
+  fi = list(
+    otsikko = "Julkisyhteisöjen EDP-alijäämä suhteessa BKT:hen, %",
+    selite = "Miinusmerkkinen luku on alijäämä; EU:n kriteerin raja on -3 %",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka"
+  ),
+  sv = list(
+    otsikko = "Den offentliga sektorns EDP-underskott i förhållande till BNP, %",
+    selite = "Ett negativt tal är underskott; gränsen för EU:s kriterium är -3 %",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns underskott och skuld"
+  ),
+  en = list(
+    otsikko = "General government EDP deficit relative to GDP, %",
+    selite = "A negative figure is a deficit; the EU criterion threshold is -3%",
+    lahde = "Source: Statistics Finland, general government deficit and debt"
+  )
+)
+
+kuvio_alijaama <- function(kieli) {
+  t <- tekstit_alijaama[[kieli]]
+  visu_plot(alijaama, type = "col", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_alijaama("fi") |>
+  visu_interactive(subtitle = tekstit_alijaama$fi$selite,
+                   caption = tekstit_alijaama$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_alijaama, "julkinen-alijaama-suhde")
+```
+
+### Sektoreittain
+
+```{r}
+library(visu)
+
+sektorit <- c("S1311", "S1313", "S1314")
+
+alijaama_sektori <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/",
+  query = list(
+    "timeperiod_y" = "*",
+    "sektoriluokitus_7_20230101" = sektorit,
+    "contentscode" = "Ratio_B"
+  )
+)
+
+tekstit_sektori <- list(
+  fi = list(
+    otsikko = "EDP-alijäämä sektoreittain, suhteessa BKT:hen, %",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka",
+    sarjat = c(S1311 = "Valtionhallinto", S1313 = "Paikallishallinto",
+               S1314 = "Sosiaaliturvarahastot")
+  ),
+  sv = list(
+    otsikko = "EDP-underskott efter sektor, i förhållande till BNP, %",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns underskott och skuld",
+    sarjat = c(S1311 = "Statsförvaltningen", S1313 = "Lokalförvaltningen",
+               S1314 = "Socialskyddsfonderna")
+  ),
+  en = list(
+    otsikko = "EDP deficit by sector, relative to GDP, %",
+    lahde = "Source: Statistics Finland, general government deficit and debt",
+    sarjat = c(S1311 = "Central government", S1313 = "Local government",
+               S1314 = "Social security funds")
+  )
+)
+
+kuvio_sektori <- function(kieli) {
+  t <- tekstit_sektori[[kieli]]
+  d <- alijaama_sektori
+  d$sektori <- factor(d$sektoriluokitus_7_20230101, levels = names(t$sarjat),
+                      labels = t$sarjat)
+  visu_plot(d, colour = "sektori", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_sektori("fi") |>
+  visu_interactive(caption = tekstit_sektori$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_sektori, "julkinen-alijaama-sektoreittain")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(velka_suhde, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/")
+```
+
+## Velka neljännesvuosittain
+
+::: {.panel-tabset}
+
+### Taso
+
+```{r}
+library(visu)
+
+velka_q <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S13_C",
+    "varojenluokitus_5_20180101" = "F2TF4",
+    "contentscode" = "jyev-K"
+  )
+)
+
+tekstit_velka_q <- list(
+  fi = list(
+    otsikko = "Julkisyhteisöjen EDP-velka, miljoonaa euroa",
+    selite = "Sulautettu velka",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen velka neljännesvuosittain"
+  ),
+  sv = list(
+    otsikko = "Den offentliga sektorns EDP-skuld, miljoner euro",
+    selite = "Konsoliderad skuld",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns skuld kvartalsvis"
+  ),
+  en = list(
+    otsikko = "General government EDP debt, EUR million",
+    selite = "Consolidated debt",
+    lahde = "Source: Statistics Finland, general government debt by quarter"
+  )
+)
+
+kuvio_velka_q <- function(kieli) {
+  t <- tekstit_velka_q[[kieli]]
+  visu_plot(velka_q, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_velka_q("fi") |>
+  visu_interactive(subtitle = tekstit_velka_q$fi$selite,
+                   caption = tekstit_velka_q$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_velka_q, "julkinen-velka-taso")
+```
+
+### Vuosimuutos
+
+```{r}
+library(visu)
+
+velka_q_muutos <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S13_C",
+    "varojenluokitus_5_20180101" = "F2TF4",
+    "contentscode" = "jyev-K"
+  )
+)
+
+# Tilasto julkaisee vain tason, joten vuosimuutos lasketaan nelja neljannesta
+# taaksepain.
+velka_q_muutos <- velka_q_muutos[order(velka_q_muutos$time), ]
+velka_q_muutos$muutos <- visu_change(velka_q_muutos$values, lag = 4)
+
+tekstit_velka_muutos <- list(
+  fi = list(
+    otsikko = "Julkisyhteisöjen velan muutos vuodentakaisesta, %",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen velka neljännesvuosittain"
+  ),
+  sv = list(
+    otsikko = "Förändring i den offentliga sektorns skuld från året innan, %",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns skuld kvartalsvis"
+  ),
+  en = list(
+    otsikko = "Change in general government debt from a year earlier, %",
+    lahde = "Source: Statistics Finland, general government debt by quarter"
+  )
+)
+
+kuvio_velka_muutos <- function(kieli) {
+  t <- tekstit_velka_muutos[[kieli]]
+  visu_plot(velka_q_muutos, y = "muutos", type = "col",
+            title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_velka_muutos("fi") |>
+  visu_interactive(caption = tekstit_velka_muutos$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_velka_muutos, "julkinen-velka-muutos")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(velka_q, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/")
+```
+
+## Tulot ja menot
+
+::: {.panel-tabset}
+
+### Suhde BKT:hen
+
+```{r}
+library(visu)
+
+erat <- c("OTRS", "OTES")
+
+tulot_menot_suhde <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = erat,
+    "sektoriluokitus_7_20230101" = "S13",
+    "contentscode" = "ratio_kausit"
+  )
+)
+
+tekstit_suhde <- list(
+  fi = list(
+    otsikko = "Julkisyhteisöjen tulot ja menot suhteessa BKT:hen, %",
+    selite = "Kausitasoitettu ja työpäiväkorjattu sarja; erotus on rahoitusasema",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen tulot ja menot",
+    sarjat = c(OTRS = "Tulot", OTES = "Menot")
+  ),
+  sv = list(
+    otsikko = "Den offentliga sektorns inkomster och utgifter i förhållande till BNP, %",
+    selite = "Säsongrensad och arbetsdagskorrigerad serie; skillnaden är finansieringsställningen",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns inkomster och utgifter",
+    sarjat = c(OTRS = "Inkomster", OTES = "Utgifter")
+  ),
+  en = list(
+    otsikko = "General government revenue and expenditure relative to GDP, %",
+    selite = "Seasonally and working day adjusted; the gap is net lending",
+    lahde = "Source: Statistics Finland, general government revenue and expenditure",
+    sarjat = c(OTRS = "Revenue", OTES = "Expenditure")
+  )
+)
+
+kuvio_suhde <- function(kieli) {
+  t <- tekstit_suhde[[kieli]]
+  d <- tulot_menot_suhde
+  d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "era", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_suhde("fi") |>
+  visu_interactive(subtitle = tekstit_suhde$fi$selite,
+                   caption = tekstit_suhde$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_suhde, "julkinen-tulot-menot-suhde")
+```
+
+### Rahoitusasema
+
+```{r}
+library(visu)
+
+rahoitusasema <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = "B9",
+    "sektoriluokitus_7_20230101" = "S13",
+    "contentscode" = "jtume-KAUSIT"
+  )
+)
+
+tekstit_rahoitusasema <- list(
+  fi = list(
+    otsikko = "Julkisyhteisöjen nettoluotonanto, miljoonaa euroa",
+    selite = "Kausitasoitettu ja työpäiväkorjattu; miinusmerkkinen on alijäämä",
+    lahde = "Lähde: Tilastokeskus, julkisyhteisöjen tulot ja menot"
+  ),
+  sv = list(
+    otsikko = "Den offentliga sektorns nettoutlåning, miljoner euro",
+    selite = "Säsongrensad och arbetsdagskorrigerad; ett negativt tal är underskott",
+    lahde = "Källa: Statistikcentralen, offentliga sektorns inkomster och utgifter"
+  ),
+  en = list(
+    otsikko = "General government net lending, EUR million",
+    selite = "Seasonally and working day adjusted; a negative figure is a deficit",
+    lahde = "Source: Statistics Finland, general government revenue and expenditure"
+  )
+)
+
+kuvio_rahoitusasema <- function(kieli) {
+  t <- tekstit_rahoitusasema[[kieli]]
+  visu_plot(rahoitusasema, type = "col", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_rahoitusasema("fi") |>
+  visu_interactive(subtitle = tekstit_rahoitusasema$fi$selite,
+                   caption = tekstit_rahoitusasema$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_rahoitusasema, "julkinen-rahoitusasema")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(tulot_menot_suhde, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/")
+```
+
+Lähteet: [Julkisyhteisöjen alijäämä ja velka](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__jali/) (122g), [Julkisyhteisöjen velka neljännesvuosittain](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__jyev/) (11yv) ja [Julkisyhteisöjen tulot ja menot](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__jtume/) (11zf).

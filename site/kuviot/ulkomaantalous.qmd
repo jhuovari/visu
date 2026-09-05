@@ -1,0 +1,241 @@
+---
+title: "Ulkomaantalous"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"
+---
+
+Suomen talouden suhde ulkomaihin. Vaihtotase kertoo, ansaitseeko Suomi
+ulkomailta enemmän kuin maksaa sinne, ja tavaroiden ja palveluiden
+ulkomaankauppa erittelee, mistä virta syntyy.
+
+Vaihtotase on kuukausisarjana hyvin heiluva, joten oletusnäkymä on 12
+kuukauden liukuva summa. Yksittäiset kuukaudet ovat omalla välilehdellään.
+
+## Vaihtotase
+
+::: {.panel-tabset}
+
+### 12 kuukauden summa
+
+```{r}
+library(visu)
+
+vaihtotase <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "taloustoimi_1_20180101" = "CA",
+    "contentscode" = "NB12"
+  )
+)
+
+tekstit <- list(
+  fi = list(
+    otsikko = "Vaihtotase, 12 kuukauden liukuva summa, miljoonaa euroa",
+    selite = "Positiivinen luku on ylijäämä",
+    lahde = "Lähde: Tilastokeskus, maksutase ja ulkomainen varallisuusasema"
+  ),
+  sv = list(
+    otsikko = "Bytesbalansen, glidande summa för 12 månader, miljoner euro",
+    selite = "Ett positivt tal är överskott",
+    lahde = "Källa: Statistikcentralen, betalningsbalans och utlandsställning"
+  ),
+  en = list(
+    otsikko = "Current account, 12-month rolling sum, EUR million",
+    selite = "A positive figure is a surplus",
+    lahde = "Source: Statistics Finland, balance of payments and international investment position"
+  )
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  visu_plot(vaihtotase, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio("fi") |>
+  visu_interactive(subtitle = tekstit$fi$selite, caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "vaihtotase-12kk")
+```
+
+### Kuukausittain
+
+```{r}
+library(visu)
+
+vaihtotase_kk <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "taloustoimi_1_20180101" = "CA",
+    "contentscode" = "NB"
+  )
+)
+
+# Kuukausisarja on hyvin heiluva, joten nakyma rajataan viimeiseen
+# kymmeneen vuoteen. Pitka kuva on liukuvassa summassa.
+alku <- seq(max(vaihtotase_kk$time), by = "-10 years", length.out = 2)[2]
+vaihtotase_kk <- vaihtotase_kk[vaihtotase_kk$time >= alku, ]
+
+tekstit_kk <- list(
+  fi = list(
+    otsikko = "Vaihtotase kuukausittain, miljoonaa euroa",
+    lahde = "Lähde: Tilastokeskus, maksutase ja ulkomainen varallisuusasema"
+  ),
+  sv = list(
+    otsikko = "Bytesbalansen månadsvis, miljoner euro",
+    lahde = "Källa: Statistikcentralen, betalningsbalans och utlandsställning"
+  ),
+  en = list(
+    otsikko = "Current account by month, EUR million",
+    lahde = "Source: Statistics Finland, balance of payments and international investment position"
+  )
+)
+
+kuvio_kk <- function(kieli) {
+  t <- tekstit_kk[[kieli]]
+  visu_plot(vaihtotase_kk, type = "col", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_kk("fi") |>
+  visu_interactive(caption = tekstit_kk$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kk, "vaihtotase-kuukausittain")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(vaihtotase, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/")
+```
+
+## Tavaroiden ja palveluiden ulkomaankauppa
+
+::: {.panel-tabset}
+
+### Vienti ja tuonti
+
+```{r}
+library(visu)
+
+kauppa <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "valtio_27_20180101" = "ULK",
+    "taloustoimi_1_20180101" = "GS",
+    "contentscode" = c("tpulk_C", "tpulk_D")
+  )
+)
+
+tekstit_kauppa <- list(
+  fi = list(
+    otsikko = "Tavaroiden ja palveluiden vienti ja tuonti, miljoonaa euroa",
+    selite = "Ulkomaat yhteensä, neljännesvuosittain",
+    lahde = "Lähde: Tilastokeskus, tavaroiden ja palveluiden ulkomaankauppa",
+    sarjat = c(tpulk_C = "Vienti", tpulk_D = "Tuonti")
+  ),
+  sv = list(
+    otsikko = "Export och import av varor och tjänster, miljoner euro",
+    selite = "Utlandet totalt, kvartalsvis",
+    lahde = "Källa: Statistikcentralen, utrikeshandel med varor och tjänster",
+    sarjat = c(tpulk_C = "Export", tpulk_D = "Import")
+  ),
+  en = list(
+    otsikko = "Exports and imports of goods and services, EUR million",
+    selite = "Total foreign countries, by quarter",
+    lahde = "Source: Statistics Finland, international trade in goods and services",
+    sarjat = c(tpulk_C = "Exports", tpulk_D = "Imports")
+  )
+)
+
+kuvio_kauppa <- function(kieli) {
+  t <- tekstit_kauppa[[kieli]]
+  d <- kauppa
+  d$virta <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "virta", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_kauppa("fi") |>
+  visu_interactive(subtitle = tekstit_kauppa$fi$selite,
+                   caption = tekstit_kauppa$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kauppa, "ulkomaankauppa-vienti-tuonti")
+```
+
+### Tavarat ja palvelut
+
+```{r}
+library(visu)
+
+vienti_erat <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "valtio_27_20180101" = "ULK",
+    "taloustoimi_1_20180101" = c("G", "S"),
+    "contentscode" = "tpulk_C"
+  )
+)
+
+tekstit_erat <- list(
+  fi = list(
+    otsikko = "Vienti tavaroihin ja palveluihin jaettuna, miljoonaa euroa",
+    lahde = "Lähde: Tilastokeskus, tavaroiden ja palveluiden ulkomaankauppa",
+    sarjat = c(G = "Tavarat", S = "Palvelut")
+  ),
+  sv = list(
+    otsikko = "Export fördelad på varor och tjänster, miljoner euro",
+    lahde = "Källa: Statistikcentralen, utrikeshandel med varor och tjänster",
+    sarjat = c(G = "Varor", S = "Tjänster")
+  ),
+  en = list(
+    otsikko = "Exports split into goods and services, EUR million",
+    lahde = "Source: Statistics Finland, international trade in goods and services",
+    sarjat = c(G = "Goods", S = "Services")
+  )
+)
+
+kuvio_erat <- function(kieli) {
+  t <- tekstit_erat[[kieli]]
+  d <- vienti_erat
+  d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "era", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_erat("fi") |>
+  visu_interactive(caption = tekstit_erat$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_erat, "ulkomaankauppa-tavarat-palvelut")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(kauppa, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/")
+```
+
+Lähteet: [Maksutase ja ulkomainen varallisuusasema](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__mata/) (114s) ja [Tavaroiden ja palveluiden ulkomaankauppa](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tpulk/) (12gq).

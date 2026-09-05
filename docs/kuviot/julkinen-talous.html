@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Julkinen talous – visu</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2872a7511705894b565d6ebf33be87ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ei tuloksia",
+    "search-matching-documents-text": "tulokset",
+    "search-copy-link-title": "Kopioi linkki hakuun",
+    "search-hide-matches-text": "Piilota loput tulokset",
+    "search-more-match-text": "tulos tässä dokumentissa",
+    "search-more-matches-text": "tulosta tässä dokumentissa",
+    "search-clear-button-title": "Tyhjennä",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Peruuta",
+    "search-submit-button-title": "Lähetä",
+    "search-label": "Hae"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+<script src="../site_libs/plotly-locale-fi-2.25.2/fi.js"></script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">visu</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Hae"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Vaihda navigointi" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Kuviot</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Julkinen talous</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Julkisyhteisöjen rahoitusasema kolmesta suunnasta: EU:n alijäämä- ja velkakriteerien mukaiset vuosiluvut, velan neljännesvuosikehitys ja tulojen ja menojen erotus. EDP-luvut ovat samat, joilla Suomen julkista taloutta arvioidaan EU:n vakaus- ja kasvusopimuksessa.</p>
+<section id="alijäämä-ja-velka-suhteessa-bruttokansantuotteeseen" class="level2">
+<h2 class="anchored" data-anchor-id="alijäämä-ja-velka-suhteessa-bruttokansantuotteeseen">Alijäämä ja velka suhteessa bruttokansantuotteeseen</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Velka</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Alijäämä</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Sektoreittain</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>velka_suhde <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_y"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S13"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"Ratio_D"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>tekstit_velka <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Julkisyhteisöjen EDP-velka suhteessa BKT:hen, %"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"EU:n velkakriteerin raja on 60 %"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka"</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Den offentliga sektorns EDP-skuld i förhållande till BNP, %"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Gränsen för EU:s skuldkriterium är 60 %"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns underskott och skuld"</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"General government EDP debt relative to GDP, %"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"The EU debt criterion threshold is 60%"</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government deficit and debt"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>kuvio_velka <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_velka[[kieli]]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(velka_suhde, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_velka</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_velka<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_velka<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-784443a23225d957c83c" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-784443a23225d957c83c">{"x":{"data":[{"x":[1826,2191,2557,2922,3287,3652,4018,4383,4748,5113,5479,5844,6209,6574,6940,7305,7670,8035,8401,8766,9131,9496,9862,10227,10592,10957,11323,11688,12053,12418,12784,13149,13514,13879,14245,14610,14975,15340,15706,16071,16436,16801,17167,17532,17897,18262,18628,18993,19358,19723,20089],"y":[6.5,6.0999999999999996,7.7999999999999998,11,11.1,11.199999999999999,11.5,13.800000000000001,15.300000000000001,15.1,15.800000000000001,16.399999999999999,17.600000000000001,16.5,14.199999999999999,13.800000000000001,21.899999999999999,39.200000000000003,54.200000000000003,56.200000000000003,55.200000000000003,55.399999999999999,52.200000000000003,46.799999999999997,44.100000000000001,45.100000000000001,43.399999999999999,42.600000000000001,45.200000000000003,44.899999999999999,42.100000000000001,40.200000000000003,36,34.700000000000003,44.100000000000001,50.100000000000001,52,57.899999999999999,60.799999999999997,64.799999999999997,68.799999999999997,68.599999999999994,66.599999999999994,65.400000000000006,65.299999999999997,75.299999999999997,73.099999999999994,74,77,82.400000000000006,88.5],"text":["time: 1975-01-01<br />values:  6.5","time: 1976-01-01<br />values:  6.1","time: 1977-01-01<br />values:  7.8","time: 1978-01-01<br />values: 11.0","time: 1979-01-01<br />values: 11.1","time: 1980-01-01<br />values: 11.2","time: 1981-01-01<br />values: 11.5","time: 1982-01-01<br />values: 13.8","time: 1983-01-01<br />values: 15.3","time: 1984-01-01<br />values: 15.1","time: 1985-01-01<br />values: 15.8","time: 1986-01-01<br />values: 16.4","time: 1987-01-01<br />values: 17.6","time: 1988-01-01<br />values: 16.5","time: 1989-01-01<br />values: 14.2","time: 1990-01-01<br />values: 13.8","time: 1991-01-01<br />values: 21.9","time: 1992-01-01<br />values: 39.2","time: 1993-01-01<br />values: 54.2","time: 1994-01-01<br />values: 56.2","time: 1995-01-01<br />values: 55.2","time: 1996-01-01<br />values: 55.4","time: 1997-01-01<br />values: 52.2","time: 1998-01-01<br />values: 46.8","time: 1999-01-01<br />values: 44.1","time: 2000-01-01<br />values: 45.1","time: 2001-01-01<br />values: 43.4","time: 2002-01-01<br />values: 42.6","time: 2003-01-01<br />values: 45.2","time: 2004-01-01<br />values: 44.9","time: 2005-01-01<br />values: 42.1","time: 2006-01-01<br />values: 40.2","time: 2007-01-01<br />values: 36.0","time: 2008-01-01<br />values: 34.7","time: 2009-01-01<br />values: 44.1","time: 2010-01-01<br />values: 50.1","time: 2011-01-01<br />values: 52.0","time: 2012-01-01<br />values: 57.9","time: 2013-01-01<br />values: 60.8","time: 2014-01-01<br />values: 64.8","time: 2015-01-01<br />values: 68.8","time: 2016-01-01<br />values: 68.6","time: 2017-01-01<br />values: 66.6","time: 2018-01-01<br />values: 65.4","time: 2019-01-01<br />values: 65.3","time: 2020-01-01<br />values: 75.3","time: 2021-01-01<br />values: 73.1","time: 2022-01-01<br />values: 74.0","time: 2023-01-01<br />values: 77.0","time: 2024-01-01<br />values: 82.4","time: 2025-01-01<br />values: 88.5"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Julkisyhteisöjen EDP-velka suhteessa BKT:hen, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[912.84999999999991,21002.150000000001],"tickmode":"array","ticktext":["1980","1990","2000","2010","2020"],"tickvals":[3651.9999999999995,7305,10957,14610,18262],"categoryorder":"array","categoryarray":["1980","1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1.9799999999999995,92.620000000000005],"tickmode":"array","ticktext":["25","50","75"],"tickvals":[25,50,75],"categoryorder":"array","categoryarray":["25","50","75"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"EU:n velkakriteerin raja on 60 %","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae5163b6aca":{"x":{},"y":{},"type":"scatter"}},"cur_data":"ae5163b6aca","visdat":{"ae5163b6aca":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-velka-suhde-sv.png">På svenska</a> · <a href="kuvat/julkinen-velka-suhde-en.png">In English</a></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>alijaama <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_y"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S13"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"Ratio_B"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>tekstit_alijaama <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Julkisyhteisöjen EDP-alijäämä suhteessa BKT:hen, %"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Miinusmerkkinen luku on alijäämä; EU:n kriteerin raja on -3 %"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka"</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Den offentliga sektorns EDP-underskott i förhållande till BNP, %"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Ett negativt tal är underskott; gränsen för EU:s kriterium är -3 %"</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns underskott och skuld"</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"General government EDP deficit relative to GDP, %"</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"A negative figure is a deficit; the EU criterion threshold is -3%"</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government deficit and debt"</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>kuvio_alijaama <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_alijaama[[kieli]]</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(alijaama, <span class="at">type =</span> <span class="st">"col"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_alijaama</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_alijaama<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_alijaama<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-38ba19b8a84e42cb561f" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-38ba19b8a84e42cb561f">{"x":{"data":[{"orientation":"v","width":[328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5,328.5],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.90000000000000002,-5.2999999999999998,-8,-6.4000000000000004,-5.7999999999999998,-3.1000000000000001,-1.2,0,0,0,0,0,0,0,0,0,0,0,-2.5,-2.6000000000000001,-1,-2.2000000000000002,-2.5,-3,-2.3999999999999999,-1.7,-0.59999999999999998,-0.90000000000000002,-0.90000000000000002,-5.5,-2.7000000000000002,-0.20000000000000001,-2.8999999999999999,-4.4000000000000004,-3.3999999999999999],"x":[1826,2191,2557,2922,3287,3652,4018,4383,4748,5113,5479,5844,6209,6574,6940,7305,7670,8035,8401,8766,9131,9496,9862,10227,10592,10957,11323,11688,12053,12418,12784,13149,13514,13879,14245,14610,14975,15340,15706,16071,16436,16801,17167,17532,17897,18262,18628,18993,19358,19723,20089],"y":[5,7.5999999999999996,6.2999999999999998,3.7999999999999998,3.3999999999999999,3.7000000000000002,5.0999999999999996,3.1000000000000001,1.5,3.2000000000000002,3.2999999999999998,3.7999999999999998,1.6000000000000001,5.0999999999999996,6.7000000000000002,5.2999999999999998,0.90000000000000002,5.2999999999999998,8,6.4000000000000004,5.7999999999999998,3.1000000000000001,1.2,1.7,1.7,6.9000000000000004,5,4.0999999999999996,2.3999999999999999,2.2000000000000002,2.7000000000000002,4,5.0999999999999996,4.2000000000000002,2.5,2.6000000000000001,1,2.2000000000000002,2.5,3,2.3999999999999999,1.7,0.59999999999999998,0.90000000000000002,0.90000000000000002,5.5,2.7000000000000002,0.20000000000000001,2.8999999999999999,4.4000000000000004,3.3999999999999999],"text":["time: 1975-01-01<br />values:  5.0","time: 1976-01-01<br />values:  7.6","time: 1977-01-01<br />values:  6.3","time: 1978-01-01<br />values:  3.8","time: 1979-01-01<br />values:  3.4","time: 1980-01-01<br />values:  3.7","time: 1981-01-01<br />values:  5.1","time: 1982-01-01<br />values:  3.1","time: 1983-01-01<br />values:  1.5","time: 1984-01-01<br />values:  3.2","time: 1985-01-01<br />values:  3.3","time: 1986-01-01<br />values:  3.8","time: 1987-01-01<br />values:  1.6","time: 1988-01-01<br />values:  5.1","time: 1989-01-01<br />values:  6.7","time: 1990-01-01<br />values:  5.3","time: 1991-01-01<br />values: -0.9","time: 1992-01-01<br />values: -5.3","time: 1993-01-01<br />values: -8.0","time: 1994-01-01<br />values: -6.4","time: 1995-01-01<br />values: -5.8","time: 1996-01-01<br />values: -3.1","time: 1997-01-01<br />values: -1.2","time: 1998-01-01<br />values:  1.7","time: 1999-01-01<br />values:  1.7","time: 2000-01-01<br />values:  6.9","time: 2001-01-01<br />values:  5.0","time: 2002-01-01<br />values:  4.1","time: 2003-01-01<br />values:  2.4","time: 2004-01-01<br />values:  2.2","time: 2005-01-01<br />values:  2.7","time: 2006-01-01<br />values:  4.0","time: 2007-01-01<br />values:  5.1","time: 2008-01-01<br />values:  4.2","time: 2009-01-01<br />values: -2.5","time: 2010-01-01<br />values: -2.6","time: 2011-01-01<br />values: -1.0","time: 2012-01-01<br />values: -2.2","time: 2013-01-01<br />values: -2.5","time: 2014-01-01<br />values: -3.0","time: 2015-01-01<br />values: -2.4","time: 2016-01-01<br />values: -1.7","time: 2017-01-01<br />values: -0.6","time: 2018-01-01<br />values: -0.9","time: 2019-01-01<br />values: -0.9","time: 2020-01-01<br />values: -5.5","time: 2021-01-01<br />values: -2.7","time: 2022-01-01<br />values: -0.2","time: 2023-01-01<br />values: -2.9","time: 2024-01-01<br />values: -4.4","time: 2025-01-01<br />values: -3.4"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,100,117,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Julkisyhteisöjen EDP-alijäämä suhteessa BKT:hen, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[732.17499999999995,21182.825000000001],"tickmode":"array","ticktext":["1980","1990","2000","2010","2020"],"tickvals":[3652,7305,10957,14610,18262],"categoryorder":"array","categoryarray":["1980","1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-8.7799999999999994,8.379999999999999],"tickmode":"array","ticktext":["-5","0","5"],"tickvals":[-5,0,5.0000000000000018],"categoryorder":"array","categoryarray":["-5","0","5"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Miinusmerkkinen luku on alijäämä; EU:n kriteerin raja on -3 %","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae553125511":{"x":{},"y":{},"type":"bar"}},"cur_data":"ae553125511","visdat":{"ae553125511":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-alijaama-suhde-sv.png">På svenska</a> · <a href="kuvat/julkinen-alijaama-suhde-en.png">In English</a></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sektorit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"S1311"</span>, <span class="st">"S1313"</span>, <span class="st">"S1314"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>alijaama_sektori <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_y"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> sektorit,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"Ratio_B"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>tekstit_sektori <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"EDP-alijäämä sektoreittain, suhteessa BKT:hen, %"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">S1311 =</span> <span class="st">"Valtionhallinto"</span>, <span class="at">S1313 =</span> <span class="st">"Paikallishallinto"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">S1314 =</span> <span class="st">"Sosiaaliturvarahastot"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"EDP-underskott efter sektor, i förhållande till BNP, %"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns underskott och skuld"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">S1311 =</span> <span class="st">"Statsförvaltningen"</span>, <span class="at">S1313 =</span> <span class="st">"Lokalförvaltningen"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">S1314 =</span> <span class="st">"Socialskyddsfonderna"</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"EDP deficit by sector, relative to GDP, %"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government deficit and debt"</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">S1311 =</span> <span class="st">"Central government"</span>, <span class="at">S1313 =</span> <span class="st">"Local government"</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>               <span class="at">S1314 =</span> <span class="st">"Social security funds"</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>kuvio_sektori <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_sektori[[kieli]]</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> alijaama_sektori</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>sektori <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>sektoriluokitus_7_20230101, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat),</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">colour =</span> <span class="st">"sektori"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_sektori</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">caption =</span> tekstit_sektori<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-2865ac96ce0636b9b71d" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-2865ac96ce0636b9b71d">{"x":{"data":[{"x":[1826,2191,2557,2922,3287,3652,4018,4383,4748,5113,5479,5844,6209,6574,6940,7305,7670,8035,8401,8766,9131,9496,9862,10227,10592,10957,11323,11688,12053,12418,12784,13149,13514,13879,14245,14610,14975,15340,15706,16071,16436,16801,17167,17532,17897,18262,18628,18993,19358,19723,20089],"y":[0.80000000000000004,3.6000000000000001,2.1000000000000001,0.90000000000000002,-0.29999999999999999,-0.10000000000000001,0.90000000000000002,-0.29999999999999999,-1.5,0.10000000000000001,0.20000000000000001,0.90000000000000002,-0.90000000000000002,1.8999999999999999,2.7000000000000002,0.69999999999999996,-4.7000000000000002,-8,-11.5,-11.5,-11,-7.5,-3.6000000000000001,-1.3999999999999999,-1.1000000000000001,2.6000000000000001,1.3999999999999999,0.90000000000000002,0.10000000000000001,-0.10000000000000001,0,-0.20000000000000001,0.90000000000000002,0.5,-4.5,-5.2999999999999998,-3.2000000000000002,-3.7000000000000002,-3.7000000000000002,-3.7999999999999998,-3,-2.6000000000000001,-1.8,-1.3,-1.1000000000000001,-5.5,-3.2999999999999998,-1.3999999999999999,-3.3999999999999999,-3.7000000000000002,-3.8999999999999999],"text":["sektori: Valtionhallinto<br />time: 1975-01-01<br />values:   0.8","sektori: Valtionhallinto<br />time: 1976-01-01<br />values:   3.6","sektori: Valtionhallinto<br />time: 1977-01-01<br />values:   2.1","sektori: Valtionhallinto<br />time: 1978-01-01<br />values:   0.9","sektori: Valtionhallinto<br />time: 1979-01-01<br />values:  -0.3","sektori: Valtionhallinto<br />time: 1980-01-01<br />values:  -0.1","sektori: Valtionhallinto<br />time: 1981-01-01<br />values:   0.9","sektori: Valtionhallinto<br />time: 1982-01-01<br />values:  -0.3","sektori: Valtionhallinto<br />time: 1983-01-01<br />values:  -1.5","sektori: Valtionhallinto<br />time: 1984-01-01<br />values:   0.1","sektori: Valtionhallinto<br />time: 1985-01-01<br />values:   0.2","sektori: Valtionhallinto<br />time: 1986-01-01<br />values:   0.9","sektori: Valtionhallinto<br />time: 1987-01-01<br />values:  -0.9","sektori: Valtionhallinto<br />time: 1988-01-01<br />values:   1.9","sektori: Valtionhallinto<br />time: 1989-01-01<br />values:   2.7","sektori: Valtionhallinto<br />time: 1990-01-01<br />values:   0.7","sektori: Valtionhallinto<br />time: 1991-01-01<br />values:  -4.7","sektori: Valtionhallinto<br />time: 1992-01-01<br />values:  -8.0","sektori: Valtionhallinto<br />time: 1993-01-01<br />values: -11.5","sektori: Valtionhallinto<br />time: 1994-01-01<br />values: -11.5","sektori: Valtionhallinto<br />time: 1995-01-01<br />values: -11.0","sektori: Valtionhallinto<br />time: 1996-01-01<br />values:  -7.5","sektori: Valtionhallinto<br />time: 1997-01-01<br />values:  -3.6","sektori: Valtionhallinto<br />time: 1998-01-01<br />values:  -1.4","sektori: Valtionhallinto<br />time: 1999-01-01<br />values:  -1.1","sektori: Valtionhallinto<br />time: 2000-01-01<br />values:   2.6","sektori: Valtionhallinto<br />time: 2001-01-01<br />values:   1.4","sektori: Valtionhallinto<br />time: 2002-01-01<br />values:   0.9","sektori: Valtionhallinto<br />time: 2003-01-01<br />values:   0.1","sektori: Valtionhallinto<br />time: 2004-01-01<br />values:  -0.1","sektori: Valtionhallinto<br />time: 2005-01-01<br />values:   0.0","sektori: Valtionhallinto<br />time: 2006-01-01<br />values:  -0.2","sektori: Valtionhallinto<br />time: 2007-01-01<br />values:   0.9","sektori: Valtionhallinto<br />time: 2008-01-01<br />values:   0.5","sektori: Valtionhallinto<br />time: 2009-01-01<br />values:  -4.5","sektori: Valtionhallinto<br />time: 2010-01-01<br />values:  -5.3","sektori: Valtionhallinto<br />time: 2011-01-01<br />values:  -3.2","sektori: Valtionhallinto<br />time: 2012-01-01<br />values:  -3.7","sektori: Valtionhallinto<br />time: 2013-01-01<br />values:  -3.7","sektori: Valtionhallinto<br />time: 2014-01-01<br />values:  -3.8","sektori: Valtionhallinto<br />time: 2015-01-01<br />values:  -3.0","sektori: Valtionhallinto<br />time: 2016-01-01<br />values:  -2.6","sektori: Valtionhallinto<br />time: 2017-01-01<br />values:  -1.8","sektori: Valtionhallinto<br />time: 2018-01-01<br />values:  -1.3","sektori: Valtionhallinto<br />time: 2019-01-01<br />values:  -1.1","sektori: Valtionhallinto<br />time: 2020-01-01<br />values:  -5.5","sektori: Valtionhallinto<br />time: 2021-01-01<br />values:  -3.3","sektori: Valtionhallinto<br />time: 2022-01-01<br />values:  -1.4","sektori: Valtionhallinto<br />time: 2023-01-01<br />values:  -3.4","sektori: Valtionhallinto<br />time: 2024-01-01<br />values:  -3.7","sektori: Valtionhallinto<br />time: 2025-01-01<br />values:  -3.9"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Valtionhallinto","legendgroup":"Valtionhallinto","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1826,2191,2557,2922,3287,3652,4018,4383,4748,5113,5479,5844,6209,6574,6940,7305,7670,8035,8401,8766,9131,9496,9862,10227,10592,10957,11323,11688,12053,12418,12784,13149,13514,13879,14245,14610,14975,15340,15706,16071,16436,16801,17167,17532,17897,18262,18628,18993,19358,19723,20089],"y":[1.6000000000000001,1.6000000000000001,1.6000000000000001,1.3,1.2,0.59999999999999998,0.80000000000000004,0.80000000000000004,0.69999999999999996,0.90000000000000002,0.59999999999999998,0.59999999999999998,0.10000000000000001,0.59999999999999998,0.69999999999999996,0.40000000000000002,-0.29999999999999999,0,0.69999999999999996,1.3999999999999999,1.3999999999999999,1,-0.5,-0.20000000000000001,-0.20000000000000001,0.20000000000000001,-0.40000000000000002,-0.40000000000000002,-0.69999999999999996,-0.80000000000000004,-0.69999999999999996,-0.29999999999999999,-0.20000000000000001,-0.40000000000000002,-0.59999999999999998,-0.20000000000000001,-0.5,-1,-0.69999999999999996,-0.69999999999999996,-0.59999999999999998,-0.40000000000000002,-0.20000000000000001,-0.90000000000000002,-1.3,0,-0.29999999999999999,-0.10000000000000001,-1,-1,-0.29999999999999999],"text":["sektori: Paikallishallinto<br />time: 1975-01-01<br />values:   1.6","sektori: Paikallishallinto<br />time: 1976-01-01<br />values:   1.6","sektori: Paikallishallinto<br />time: 1977-01-01<br />values:   1.6","sektori: Paikallishallinto<br />time: 1978-01-01<br />values:   1.3","sektori: Paikallishallinto<br />time: 1979-01-01<br />values:   1.2","sektori: Paikallishallinto<br />time: 1980-01-01<br />values:   0.6","sektori: Paikallishallinto<br />time: 1981-01-01<br />values:   0.8","sektori: Paikallishallinto<br />time: 1982-01-01<br />values:   0.8","sektori: Paikallishallinto<br />time: 1983-01-01<br />values:   0.7","sektori: Paikallishallinto<br />time: 1984-01-01<br />values:   0.9","sektori: Paikallishallinto<br />time: 1985-01-01<br />values:   0.6","sektori: Paikallishallinto<br />time: 1986-01-01<br />values:   0.6","sektori: Paikallishallinto<br />time: 1987-01-01<br />values:   0.1","sektori: Paikallishallinto<br />time: 1988-01-01<br />values:   0.6","sektori: Paikallishallinto<br />time: 1989-01-01<br />values:   0.7","sektori: Paikallishallinto<br />time: 1990-01-01<br />values:   0.4","sektori: Paikallishallinto<br />time: 1991-01-01<br />values:  -0.3","sektori: Paikallishallinto<br />time: 1992-01-01<br />values:   0.0","sektori: Paikallishallinto<br />time: 1993-01-01<br />values:   0.7","sektori: Paikallishallinto<br />time: 1994-01-01<br />values:   1.4","sektori: Paikallishallinto<br />time: 1995-01-01<br />values:   1.4","sektori: Paikallishallinto<br />time: 1996-01-01<br />values:   1.0","sektori: Paikallishallinto<br />time: 1997-01-01<br />values:  -0.5","sektori: Paikallishallinto<br />time: 1998-01-01<br />values:  -0.2","sektori: Paikallishallinto<br />time: 1999-01-01<br />values:  -0.2","sektori: Paikallishallinto<br />time: 2000-01-01<br />values:   0.2","sektori: Paikallishallinto<br />time: 2001-01-01<br />values:  -0.4","sektori: Paikallishallinto<br />time: 2002-01-01<br />values:  -0.4","sektori: Paikallishallinto<br />time: 2003-01-01<br />values:  -0.7","sektori: Paikallishallinto<br />time: 2004-01-01<br />values:  -0.8","sektori: Paikallishallinto<br />time: 2005-01-01<br />values:  -0.7","sektori: Paikallishallinto<br />time: 2006-01-01<br />values:  -0.3","sektori: Paikallishallinto<br />time: 2007-01-01<br />values:  -0.2","sektori: Paikallishallinto<br />time: 2008-01-01<br />values:  -0.4","sektori: Paikallishallinto<br />time: 2009-01-01<br />values:  -0.6","sektori: Paikallishallinto<br />time: 2010-01-01<br />values:  -0.2","sektori: Paikallishallinto<br />time: 2011-01-01<br />values:  -0.5","sektori: Paikallishallinto<br />time: 2012-01-01<br />values:  -1.0","sektori: Paikallishallinto<br />time: 2013-01-01<br />values:  -0.7","sektori: Paikallishallinto<br />time: 2014-01-01<br />values:  -0.7","sektori: Paikallishallinto<br />time: 2015-01-01<br />values:  -0.6","sektori: Paikallishallinto<br />time: 2016-01-01<br />values:  -0.4","sektori: Paikallishallinto<br />time: 2017-01-01<br />values:  -0.2","sektori: Paikallishallinto<br />time: 2018-01-01<br />values:  -0.9","sektori: Paikallishallinto<br />time: 2019-01-01<br />values:  -1.3","sektori: Paikallishallinto<br />time: 2020-01-01<br />values:   0.0","sektori: Paikallishallinto<br />time: 2021-01-01<br />values:  -0.3","sektori: Paikallishallinto<br />time: 2022-01-01<br />values:  -0.1","sektori: Paikallishallinto<br />time: 2023-01-01<br />values:  -1.0","sektori: Paikallishallinto<br />time: 2024-01-01<br />values:  -1.0","sektori: Paikallishallinto<br />time: 2025-01-01<br />values:  -0.3"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Paikallishallinto","legendgroup":"Paikallishallinto","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1826,2191,2557,2922,3287,3652,4018,4383,4748,5113,5479,5844,6209,6574,6940,7305,7670,8035,8401,8766,9131,9496,9862,10227,10592,10957,11323,11688,12053,12418,12784,13149,13514,13879,14245,14610,14975,15340,15706,16071,16436,16801,17167,17532,17897,18262,18628,18993,19358,19723,20089],"y":[2.6000000000000001,2.5,2.6000000000000001,1.6000000000000001,2.5,3.2000000000000002,3.5,2.6000000000000001,2.2999999999999998,2.2000000000000002,2.6000000000000001,2.2999999999999998,2.3999999999999999,2.6000000000000001,3.2999999999999998,4.2000000000000002,4.0999999999999996,2.7000000000000002,2.8999999999999999,3.7000000000000002,3.7999999999999998,3.2999999999999998,2.8999999999999999,3.2999999999999998,3,4.0999999999999996,4,3.5,3,3.1000000000000001,3.2999999999999998,4.5,4.4000000000000004,4.0999999999999996,2.7000000000000002,3,2.7000000000000002,2.6000000000000001,1.8999999999999999,1.5,1.2,1.3,1.3,1.3,1.3999999999999999,0,1,1.3,1.5,0.29999999999999999,0.69999999999999996],"text":["sektori: Sosiaaliturvarahastot<br />time: 1975-01-01<br />values:   2.6","sektori: Sosiaaliturvarahastot<br />time: 1976-01-01<br />values:   2.5","sektori: Sosiaaliturvarahastot<br />time: 1977-01-01<br />values:   2.6","sektori: Sosiaaliturvarahastot<br />time: 1978-01-01<br />values:   1.6","sektori: Sosiaaliturvarahastot<br />time: 1979-01-01<br />values:   2.5","sektori: Sosiaaliturvarahastot<br />time: 1980-01-01<br />values:   3.2","sektori: Sosiaaliturvarahastot<br />time: 1981-01-01<br />values:   3.5","sektori: Sosiaaliturvarahastot<br />time: 1982-01-01<br />values:   2.6","sektori: Sosiaaliturvarahastot<br />time: 1983-01-01<br />values:   2.3","sektori: Sosiaaliturvarahastot<br />time: 1984-01-01<br />values:   2.2","sektori: Sosiaaliturvarahastot<br />time: 1985-01-01<br />values:   2.6","sektori: Sosiaaliturvarahastot<br />time: 1986-01-01<br />values:   2.3","sektori: Sosiaaliturvarahastot<br />time: 1987-01-01<br />values:   2.4","sektori: Sosiaaliturvarahastot<br />time: 1988-01-01<br />values:   2.6","sektori: Sosiaaliturvarahastot<br />time: 1989-01-01<br />values:   3.3","sektori: Sosiaaliturvarahastot<br />time: 1990-01-01<br />values:   4.2","sektori: Sosiaaliturvarahastot<br />time: 1991-01-01<br />values:   4.1","sektori: Sosiaaliturvarahastot<br />time: 1992-01-01<br />values:   2.7","sektori: Sosiaaliturvarahastot<br />time: 1993-01-01<br />values:   2.9","sektori: Sosiaaliturvarahastot<br />time: 1994-01-01<br />values:   3.7","sektori: Sosiaaliturvarahastot<br />time: 1995-01-01<br />values:   3.8","sektori: Sosiaaliturvarahastot<br />time: 1996-01-01<br />values:   3.3","sektori: Sosiaaliturvarahastot<br />time: 1997-01-01<br />values:   2.9","sektori: Sosiaaliturvarahastot<br />time: 1998-01-01<br />values:   3.3","sektori: Sosiaaliturvarahastot<br />time: 1999-01-01<br />values:   3.0","sektori: Sosiaaliturvarahastot<br />time: 2000-01-01<br />values:   4.1","sektori: Sosiaaliturvarahastot<br />time: 2001-01-01<br />values:   4.0","sektori: Sosiaaliturvarahastot<br />time: 2002-01-01<br />values:   3.5","sektori: Sosiaaliturvarahastot<br />time: 2003-01-01<br />values:   3.0","sektori: Sosiaaliturvarahastot<br />time: 2004-01-01<br />values:   3.1","sektori: Sosiaaliturvarahastot<br />time: 2005-01-01<br />values:   3.3","sektori: Sosiaaliturvarahastot<br />time: 2006-01-01<br />values:   4.5","sektori: Sosiaaliturvarahastot<br />time: 2007-01-01<br />values:   4.4","sektori: Sosiaaliturvarahastot<br />time: 2008-01-01<br />values:   4.1","sektori: Sosiaaliturvarahastot<br />time: 2009-01-01<br />values:   2.7","sektori: Sosiaaliturvarahastot<br />time: 2010-01-01<br />values:   3.0","sektori: Sosiaaliturvarahastot<br />time: 2011-01-01<br />values:   2.7","sektori: Sosiaaliturvarahastot<br />time: 2012-01-01<br />values:   2.6","sektori: Sosiaaliturvarahastot<br />time: 2013-01-01<br />values:   1.9","sektori: Sosiaaliturvarahastot<br />time: 2014-01-01<br />values:   1.5","sektori: Sosiaaliturvarahastot<br />time: 2015-01-01<br />values:   1.2","sektori: Sosiaaliturvarahastot<br />time: 2016-01-01<br />values:   1.3","sektori: Sosiaaliturvarahastot<br />time: 2017-01-01<br />values:   1.3","sektori: Sosiaaliturvarahastot<br />time: 2018-01-01<br />values:   1.3","sektori: Sosiaaliturvarahastot<br />time: 2019-01-01<br />values:   1.4","sektori: Sosiaaliturvarahastot<br />time: 2020-01-01<br />values:   0.0","sektori: Sosiaaliturvarahastot<br />time: 2021-01-01<br />values:   1.0","sektori: Sosiaaliturvarahastot<br />time: 2022-01-01<br />values:   1.3","sektori: Sosiaaliturvarahastot<br />time: 2023-01-01<br />values:   1.5","sektori: Sosiaaliturvarahastot<br />time: 2024-01-01<br />values:   0.3","sektori: Sosiaaliturvarahastot<br />time: 2025-01-01<br />values:   0.7"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(54,90,189,1)","dash":"solid"},"hoveron":"points","name":"Sosiaaliturvarahastot","legendgroup":"Sosiaaliturvarahastot","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":45.790490385463976},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"EDP-alijäämä sektoreittain, suhteessa BKT:hen, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[912.84999999999991,21002.150000000001],"tickmode":"array","ticktext":["1980","1990","2000","2010","2020"],"tickvals":[3651.9999999999995,7305,10957,14610,18262],"categoryorder":"array","categoryarray":["1980","1990","2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-12.300000000000001,5.2999999999999998],"tickmode":"array","ticktext":["-10","-5","0","5"],"tickvals":[-10,-5,0,5],"categoryorder":"array","categoryarray":["-10","-5","0","5"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Lähde: Tilastokeskus, julkisyhteisöjen alijäämä ja velka","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae54c9b3851":{"colour":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"ae54c9b3851","visdat":{"ae54c9b3851":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-alijaama-sektoreittain-sv.png">På svenska</a> · <a href="kuvat/julkinen-alijaama-sektoreittain-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px">122g Julkisyhteisöjen EDP-alijäämä ja -velka, vuosittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+1.7.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+EDP-velka, suhde BKT:hen, %
+</dd>
+<dt>Sektori</dt>
+<dd>
+S13 Julkisyhteisöt
+</dd>
+</dl>
+</details>
+</section>
+<section id="velka-neljännesvuosittain" class="level2">
+<h2 class="anchored" data-anchor-id="velka-neljännesvuosittain">Velka neljännesvuosittain</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Taso</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Vuosimuutos</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>velka_q <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S13_C"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"varojenluokitus_5_20180101"</span> <span class="ot">=</span> <span class="st">"F2TF4"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"jyev-K"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>tekstit_velka_q <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Julkisyhteisöjen EDP-velka, miljoonaa euroa"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Sulautettu velka"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen velka neljännesvuosittain"</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Den offentliga sektorns EDP-skuld, miljoner euro"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Konsoliderad skuld"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns skuld kvartalsvis"</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"General government EDP debt, EUR million"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Consolidated debt"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government debt by quarter"</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>kuvio_velka_q <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_velka_q[[kieli]]</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(velka_q, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_velka_q</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_velka_q<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_velka_q<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c0193160dfd44cc4232b" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-c0193160dfd44cc4232b">{"x":{"data":[{"x":[10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[62608,61227,63072,61564,62293,62661,61788,62825,59970,61047,61773,63299,65850,68461,67427,68508,64653,66964,68546,71335,64482,66020,65658,69397,64571,68980,64712,69532,66050,67806,63619,67340,64941,66119,59673,67435,75054,67349,73894,80200,83731,88437,89197,94286,93409,93844,98361,102829,104698,112013,110986,115931,117918,122910,118488,123750,127385,130374,129445,133420,136221,140052,137492,144537,146794,142416,143278,148088,149252,148988,146417,149611,148295,149147,149230,151569,152148,158022,155915,155819,168113,176796,172079,178040,179425,180730,181858,181911,185340,189071,190334,196844,198031,202976,203533,210542,214586,220236,225577,227757,233545,246086,242622,249147,255139],"text":["time: 2000-01-01<br />values:  62608","time: 2000-04-01<br />values:  61227","time: 2000-07-01<br />values:  63072","time: 2000-10-01<br />values:  61564","time: 2001-01-01<br />values:  62293","time: 2001-04-01<br />values:  62661","time: 2001-07-01<br />values:  61788","time: 2001-10-01<br />values:  62825","time: 2002-01-01<br />values:  59970","time: 2002-04-01<br />values:  61047","time: 2002-07-01<br />values:  61773","time: 2002-10-01<br />values:  63299","time: 2003-01-01<br />values:  65850","time: 2003-04-01<br />values:  68461","time: 2003-07-01<br />values:  67427","time: 2003-10-01<br />values:  68508","time: 2004-01-01<br />values:  64653","time: 2004-04-01<br />values:  66964","time: 2004-07-01<br />values:  68546","time: 2004-10-01<br />values:  71335","time: 2005-01-01<br />values:  64482","time: 2005-04-01<br />values:  66020","time: 2005-07-01<br />values:  65658","time: 2005-10-01<br />values:  69397","time: 2006-01-01<br />values:  64571","time: 2006-04-01<br />values:  68980","time: 2006-07-01<br />values:  64712","time: 2006-10-01<br />values:  69532","time: 2007-01-01<br />values:  66050","time: 2007-04-01<br />values:  67806","time: 2007-07-01<br />values:  63619","time: 2007-10-01<br />values:  67340","time: 2008-01-01<br />values:  64941","time: 2008-04-01<br />values:  66119","time: 2008-07-01<br />values:  59673","time: 2008-10-01<br />values:  67435","time: 2009-01-01<br />values:  75054","time: 2009-04-01<br />values:  67349","time: 2009-07-01<br />values:  73894","time: 2009-10-01<br />values:  80200","time: 2010-01-01<br />values:  83731","time: 2010-04-01<br />values:  88437","time: 2010-07-01<br />values:  89197","time: 2010-10-01<br />values:  94286","time: 2011-01-01<br />values:  93409","time: 2011-04-01<br />values:  93844","time: 2011-07-01<br />values:  98361","time: 2011-10-01<br />values: 102829","time: 2012-01-01<br />values: 104698","time: 2012-04-01<br />values: 112013","time: 2012-07-01<br />values: 110986","time: 2012-10-01<br />values: 115931","time: 2013-01-01<br />values: 117918","time: 2013-04-01<br />values: 122910","time: 2013-07-01<br />values: 118488","time: 2013-10-01<br />values: 123750","time: 2014-01-01<br />values: 127385","time: 2014-04-01<br />values: 130374","time: 2014-07-01<br />values: 129445","time: 2014-10-01<br />values: 133420","time: 2015-01-01<br />values: 136221","time: 2015-04-01<br />values: 140052","time: 2015-07-01<br />values: 137492","time: 2015-10-01<br />values: 144537","time: 2016-01-01<br />values: 146794","time: 2016-04-01<br />values: 142416","time: 2016-07-01<br />values: 143278","time: 2016-10-01<br />values: 148088","time: 2017-01-01<br />values: 149252","time: 2017-04-01<br />values: 148988","time: 2017-07-01<br />values: 146417","time: 2017-10-01<br />values: 149611","time: 2018-01-01<br />values: 148295","time: 2018-04-01<br />values: 149147","time: 2018-07-01<br />values: 149230","time: 2018-10-01<br />values: 151569","time: 2019-01-01<br />values: 152148","time: 2019-04-01<br />values: 158022","time: 2019-07-01<br />values: 155915","time: 2019-10-01<br />values: 155819","time: 2020-01-01<br />values: 168113","time: 2020-04-01<br />values: 176796","time: 2020-07-01<br />values: 172079","time: 2020-10-01<br />values: 178040","time: 2021-01-01<br />values: 179425","time: 2021-04-01<br />values: 180730","time: 2021-07-01<br />values: 181858","time: 2021-10-01<br />values: 181911","time: 2022-01-01<br />values: 185340","time: 2022-04-01<br />values: 189071","time: 2022-07-01<br />values: 190334","time: 2022-10-01<br />values: 196844","time: 2023-01-01<br />values: 198031","time: 2023-04-01<br />values: 202976","time: 2023-07-01<br />values: 203533","time: 2023-10-01<br />values: 210542","time: 2024-01-01<br />values: 214586","time: 2024-04-01<br />values: 220236","time: 2024-07-01<br />values: 225577","time: 2024-10-01<br />values: 227757","time: 2025-01-01<br />values: 233545","time: 2025-04-01<br />values: 246086","time: 2025-07-01<br />values: 242622","time: 2025-10-01<br />values: 249147","time: 2026-01-01<br />values: 255139"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":64.918759376746678},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Julkisyhteisöjen EDP-velka, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10482.15,20928.849999999999],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[49899.699999999997,264912.29999999999],"tickmode":"array","ticktext":["50000","100000","150000","200000","250000"],"tickvals":[50000,100000,150000,200000,250000],"categoryorder":"array","categoryarray":["50000","100000","150000","200000","250000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Sulautettu velka","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, julkisyhteisöjen velka neljännesvuosittain","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae5613af450":{"x":{},"y":{},"type":"scatter"}},"cur_data":"ae5613af450","visdat":{"ae5613af450":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-velka-taso-sv.png">På svenska</a> · <a href="kuvat/julkinen-velka-taso-en.png">In English</a></p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>velka_q_muutos <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S13_C"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"varojenluokitus_5_20180101"</span> <span class="ot">=</span> <span class="st">"F2TF4"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"jyev-K"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Tilasto julkaisee vain tason, joten vuosimuutos lasketaan nelja neljannesta</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># taaksepain.</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>velka_q_muutos <span class="ot">&lt;-</span> velka_q_muutos[<span class="fu">order</span>(velka_q_muutos<span class="sc">$</span>time), ]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>velka_q_muutos<span class="sc">$</span>muutos <span class="ot">&lt;-</span> <span class="fu">visu_change</span>(velka_q_muutos<span class="sc">$</span>values, <span class="at">lag =</span> <span class="dv">4</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>tekstit_velka_muutos <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Julkisyhteisöjen velan muutos vuodentakaisesta, %"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen velka neljännesvuosittain"</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Förändring i den offentliga sektorns skuld från året innan, %"</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns skuld kvartalsvis"</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Change in general government debt from a year earlier, %"</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government debt by quarter"</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>kuvio_velka_muutos <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_velka_muutos[[kieli]]</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(velka_q_muutos, <span class="at">y =</span> <span class="st">"muutos"</span>, <span class="at">type =</span> <span class="st">"col"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_velka_muutos</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">caption =</span> tekstit_velka_muutos<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-7ce656bb8c574e55c62c" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-7ce656bb8c574e55c62c">{"x":{"data":[{"orientation":"v","width":[81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81],"base":[null,null,null,null,-0.50313059033989527,0,-2.0357686453576829,0,-3.7291509479395746,-2.5757648297984437,-0.024276558555058614,0,0,0,0,0,-1.8177676537585397,-2.1866464118257101,0,0,-0.2644888868265971,-1.4097126814407779,-4.2132290724476995,-2.7167589542300363,0,0,-1.4407992933077485,0,0,-1.7019425920556719,-1.6890221288169083,-3.1525053212909215,-1.679031037093115,-2.487980414712565,-6.2025495528065466,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.64119743789028405,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[null,null,null,null,0.50313059033989527,2.3421039737370863,2.0357686453576829,2.0482749658891519,3.7291509479395746,2.5757648297984437,0.024276558555058614,0.75447672105053432,9.8049024512256047,12.144740937310594,9.1528661389280064,8.2291979336166499,1.8177676537585397,2.1866464118257101,1.6595725747845735,4.1265253692999382,0.2644888868265971,1.4097126814407779,4.2132290724476995,2.7167589542300363,0.13802301417449314,4.4834898515601296,1.4407992933077485,0.19453290488060659,2.2905019281101335,1.7019425920556719,1.6890221288169083,3.1525053212909215,1.679031037093115,2.487980414712565,6.2025495528065466,0.14107514107513097,15.572596664664839,1.8602822184243584,23.831548606572483,18.929339363831833,11.561009406560618,31.311526526006329,20.709394538122172,17.563591022443891,11.558443109481553,6.1139568280244694,10.273888135251186,9.0607301189996381,12.0855592073569,19.360854183538635,12.835371742865576,12.741541782960052,12.626793252975222,9.7283351039611397,6.7594110968951071,6.7445290733280983,8.0284604555708192,6.0727361484012699,9.2473499426102279,7.8141414141414067,6.9364524865564992,7.4232592388052909,6.2165398431766494,8.3323339829111109,7.7616520213476647,1.6879444777653907,4.2082448433363506,2.4568103668956676,1.6744553592108691,4.6146500393214218,2.1908457683663896,1.0284425476743575,0.64119743789028405,0.10672000429565731,1.9212249943654003,1.3087272994632748,2.5981995347112097,5.9505052062730046,4.4796622663003438,2.8040034571713113,10.493072534637339,11.880624216881186,10.367187249462839,14.260776927075636,6.7288074093020844,2.2251634652367791,5.6828549677764295,2.1742305099977433,3.2966420509962457,4.6151718032424016,4.660779289335637,8.2089593262639315,6.8474155605913412,7.3543801005971243,6.9346517175071121,6.9588100221495086,8.3598022531825791,8.5034683903515642,10.830676106577307,8.1765158495691992,8.8351523398544138,11.737408961296069,7.5561781564609909,9.3915884034299744,9.2461838189642265],"text":["time: 2000-01-01<br />muutos:          NA","time: 2000-04-01<br />muutos:          NA","time: 2000-07-01<br />muutos:          NA","time: 2000-10-01<br />muutos:          NA","time: 2001-01-01<br />muutos: -0.50313059","time: 2001-04-01<br />muutos:  2.34210397","time: 2001-07-01<br />muutos: -2.03576865","time: 2001-10-01<br />muutos:  2.04827497","time: 2002-01-01<br />muutos: -3.72915095","time: 2002-04-01<br />muutos: -2.57576483","time: 2002-07-01<br />muutos: -0.02427656","time: 2002-10-01<br />muutos:  0.75447672","time: 2003-01-01<br />muutos:  9.80490245","time: 2003-04-01<br />muutos: 12.14474094","time: 2003-07-01<br />muutos:  9.15286614","time: 2003-10-01<br />muutos:  8.22919793","time: 2004-01-01<br />muutos: -1.81776765","time: 2004-04-01<br />muutos: -2.18664641","time: 2004-07-01<br />muutos:  1.65957257","time: 2004-10-01<br />muutos:  4.12652537","time: 2005-01-01<br />muutos: -0.26448889","time: 2005-04-01<br />muutos: -1.40971268","time: 2005-07-01<br />muutos: -4.21322907","time: 2005-10-01<br />muutos: -2.71675895","time: 2006-01-01<br />muutos:  0.13802301","time: 2006-04-01<br />muutos:  4.48348985","time: 2006-07-01<br />muutos: -1.44079929","time: 2006-10-01<br />muutos:  0.19453290","time: 2007-01-01<br />muutos:  2.29050193","time: 2007-04-01<br />muutos: -1.70194259","time: 2007-07-01<br />muutos: -1.68902213","time: 2007-10-01<br />muutos: -3.15250532","time: 2008-01-01<br />muutos: -1.67903104","time: 2008-04-01<br />muutos: -2.48798041","time: 2008-07-01<br />muutos: -6.20254955","time: 2008-10-01<br />muutos:  0.14107514","time: 2009-01-01<br />muutos: 15.57259666","time: 2009-04-01<br />muutos:  1.86028222","time: 2009-07-01<br />muutos: 23.83154861","time: 2009-10-01<br />muutos: 18.92933936","time: 2010-01-01<br />muutos: 11.56100941","time: 2010-04-01<br />muutos: 31.31152653","time: 2010-07-01<br />muutos: 20.70939454","time: 2010-10-01<br />muutos: 17.56359102","time: 2011-01-01<br />muutos: 11.55844311","time: 2011-04-01<br />muutos:  6.11395683","time: 2011-07-01<br />muutos: 10.27388814","time: 2011-10-01<br />muutos:  9.06073012","time: 2012-01-01<br />muutos: 12.08555921","time: 2012-04-01<br />muutos: 19.36085418","time: 2012-07-01<br />muutos: 12.83537174","time: 2012-10-01<br />muutos: 12.74154178","time: 2013-01-01<br />muutos: 12.62679325","time: 2013-04-01<br />muutos:  9.72833510","time: 2013-07-01<br />muutos:  6.75941110","time: 2013-10-01<br />muutos:  6.74452907","time: 2014-01-01<br />muutos:  8.02846046","time: 2014-04-01<br />muutos:  6.07273615","time: 2014-07-01<br />muutos:  9.24734994","time: 2014-10-01<br />muutos:  7.81414141","time: 2015-01-01<br />muutos:  6.93645249","time: 2015-04-01<br />muutos:  7.42325924","time: 2015-07-01<br />muutos:  6.21653984","time: 2015-10-01<br />muutos:  8.33233398","time: 2016-01-01<br />muutos:  7.76165202","time: 2016-04-01<br />muutos:  1.68794448","time: 2016-07-01<br />muutos:  4.20824484","time: 2016-10-01<br />muutos:  2.45681037","time: 2017-01-01<br />muutos:  1.67445536","time: 2017-04-01<br />muutos:  4.61465004","time: 2017-07-01<br />muutos:  2.19084577","time: 2017-10-01<br />muutos:  1.02844255","time: 2018-01-01<br />muutos: -0.64119744","time: 2018-04-01<br />muutos:  0.10672000","time: 2018-07-01<br />muutos:  1.92122499","time: 2018-10-01<br />muutos:  1.30872730","time: 2019-01-01<br />muutos:  2.59819953","time: 2019-04-01<br />muutos:  5.95050521","time: 2019-07-01<br />muutos:  4.47966227","time: 2019-10-01<br />muutos:  2.80400346","time: 2020-01-01<br />muutos: 10.49307253","time: 2020-04-01<br />muutos: 11.88062422","time: 2020-07-01<br />muutos: 10.36718725","time: 2020-10-01<br />muutos: 14.26077693","time: 2021-01-01<br />muutos:  6.72880741","time: 2021-04-01<br />muutos:  2.22516347","time: 2021-07-01<br />muutos:  5.68285497","time: 2021-10-01<br />muutos:  2.17423051","time: 2022-01-01<br />muutos:  3.29664205","time: 2022-04-01<br />muutos:  4.61517180","time: 2022-07-01<br />muutos:  4.66077929","time: 2022-10-01<br />muutos:  8.20895933","time: 2023-01-01<br />muutos:  6.84741556","time: 2023-04-01<br />muutos:  7.35438010","time: 2023-07-01<br />muutos:  6.93465172","time: 2023-10-01<br />muutos:  6.95881002","time: 2024-01-01<br />muutos:  8.35980225","time: 2024-04-01<br />muutos:  8.50346839","time: 2024-07-01<br />muutos: 10.83067611","time: 2024-10-01<br />muutos:  8.17651585","time: 2025-01-01<br />muutos:  8.83515234","time: 2025-04-01<br />muutos: 11.73740896","time: 2025-07-01<br />muutos:  7.55617816","time: 2025-10-01<br />muutos:  9.39158840","time: 2026-01-01<br />muutos:  9.24618382"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,100,117,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Julkisyhteisöjen velan muutos vuodentakaisesta, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10437.6,20973.400000000001],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-8.0782533567471901,33.187230329946971],"tickmode":"array","ticktext":["0","10","20","30"],"tickvals":[0,10,20.000000000000004,30],"categoryorder":"array","categoryarray":["0","10","20","30"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Lähde: Tilastokeskus, julkisyhteisöjen velka neljännesvuosittain","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae57494980c":{"x":{},"y":{},"type":"bar"}},"cur_data":"ae57494980c","visdat":{"ae57494980c":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-velka-muutos-sv.png">På svenska</a> · <a href="kuvat/julkinen-velka-muutos-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px">11yv Julkisyhteisöjen EDP-velka, neljännesvuosittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+1.7.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+EDP-velka, miljoonaa euroa
+</dd>
+<dt>Velallissektori</dt>
+<dd>
+S13_C Julkisyhteisöt, sulautettu
+</dd>
+<dt>Vara</dt>
+<dd>
+F2-F4 Käteisraha, talletukset, velkapaperit ja lainat
+</dd>
+</dl>
+</details>
+</section>
+<section id="tulot-ja-menot" class="level2">
+<h2 class="anchored" data-anchor-id="tulot-ja-menot">Tulot ja menot</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Suhde BKT:hen</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Rahoitusasema</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>erat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"OTRS"</span>, <span class="st">"OTES"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>tulot_menot_suhde <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> erat,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S13"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"ratio_kausit"</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>tekstit_suhde <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Julkisyhteisöjen tulot ja menot suhteessa BKT:hen, %"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Kausitasoitettu ja työpäiväkorjattu sarja; erotus on rahoitusasema"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen tulot ja menot"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">OTRS =</span> <span class="st">"Tulot"</span>, <span class="at">OTES =</span> <span class="st">"Menot"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Den offentliga sektorns inkomster och utgifter i förhållande till BNP, %"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Säsongrensad och arbetsdagskorrigerad serie; skillnaden är finansieringsställningen"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns inkomster och utgifter"</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">OTRS =</span> <span class="st">"Inkomster"</span>, <span class="at">OTES =</span> <span class="st">"Utgifter"</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"General government revenue and expenditure relative to GDP, %"</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Seasonally and working day adjusted; the gap is net lending"</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government revenue and expenditure"</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">OTRS =</span> <span class="st">"Revenue"</span>, <span class="at">OTES =</span> <span class="st">"Expenditure"</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>kuvio_suhde <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_suhde[[kieli]]</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> tulot_menot_suhde</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>era <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>taloustoimi_1_20180101, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat), <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">colour =</span> <span class="st">"era"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko,</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_suhde</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_suhde<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_suhde<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-866753667cacda0bab2b" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-866753667cacda0bab2b">{"x":{"data":[{"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[51.700000000000003,51.799999999999997,52.899999999999999,54.200000000000003,54.5,54.200000000000003,53,57.5,52.299999999999997,52.799999999999997,52.100000000000001,51.899999999999999,53.799999999999997,51.899999999999999,52.5,51.899999999999999,51.600000000000001,52,51.700000000000003,51.799999999999997,51.5,51.399999999999999,51.799999999999997,50.600000000000001,50.399999999999999,52,52,52.299999999999997,51.899999999999999,51.299999999999997,52.5,52.5,51.5,51.5,50.899999999999999,52.899999999999999,52.200000000000003,53,51.5,51.600000000000001,52.600000000000001,51.700000000000003,51.200000000000003,50.899999999999999,51.899999999999999,51.100000000000001,51.600000000000001,51.200000000000003,51.899999999999999,53,53.700000000000003,52.700000000000003,53.700000000000003,53.200000000000003,53.299999999999997,53.899999999999999,54.299999999999997,54.700000000000003,54.600000000000001,54.700000000000003,54.700000000000003,54.399999999999999,54.700000000000003,54.700000000000003,53.299999999999997,53.700000000000003,52.899999999999999,53.5,53.600000000000001,53.5,53.700000000000003,52.799999999999997,52.299999999999997,53,51.899999999999999,51.700000000000003,52.100000000000001,51.700000000000003,52.5,50.799999999999997,51.899999999999999,51.700000000000003,51,52.100000000000001,50.5,51.100000000000001,51.399999999999999,50.700000000000003,52.100000000000001,52.200000000000003,51.799999999999997,53.700000000000003,52,53.399999999999999,51.5,52.899999999999999,52.600000000000001,52.399999999999999,53.299999999999997,53.899999999999999,53.799999999999997,53.299999999999997,53.299999999999997,53.299999999999997,54.299999999999997,53.600000000000001,53.600000000000001,53.200000000000003,53.5],"text":["era: Tulot<br />time: 1999-01-01<br />values: 51.7","era: Tulot<br />time: 1999-04-01<br />values: 51.8","era: Tulot<br />time: 1999-07-01<br />values: 52.9","era: Tulot<br />time: 1999-10-01<br />values: 54.2","era: Tulot<br />time: 2000-01-01<br />values: 54.5","era: Tulot<br />time: 2000-04-01<br />values: 54.2","era: Tulot<br />time: 2000-07-01<br />values: 53.0","era: Tulot<br />time: 2000-10-01<br />values: 57.5","era: Tulot<br />time: 2001-01-01<br />values: 52.3","era: Tulot<br />time: 2001-04-01<br />values: 52.8","era: Tulot<br />time: 2001-07-01<br />values: 52.1","era: Tulot<br />time: 2001-10-01<br />values: 51.9","era: Tulot<br />time: 2002-01-01<br />values: 53.8","era: Tulot<br />time: 2002-04-01<br />values: 51.9","era: Tulot<br />time: 2002-07-01<br />values: 52.5","era: Tulot<br />time: 2002-10-01<br />values: 51.9","era: Tulot<br />time: 2003-01-01<br />values: 51.6","era: Tulot<br />time: 2003-04-01<br />values: 52.0","era: Tulot<br />time: 2003-07-01<br />values: 51.7","era: Tulot<br />time: 2003-10-01<br />values: 51.8","era: Tulot<br />time: 2004-01-01<br />values: 51.5","era: Tulot<br />time: 2004-04-01<br />values: 51.4","era: Tulot<br />time: 2004-07-01<br />values: 51.8","era: Tulot<br />time: 2004-10-01<br />values: 50.6","era: Tulot<br />time: 2005-01-01<br />values: 50.4","era: Tulot<br />time: 2005-04-01<br />values: 52.0","era: Tulot<br />time: 2005-07-01<br />values: 52.0","era: Tulot<br />time: 2005-10-01<br />values: 52.3","era: Tulot<br />time: 2006-01-01<br />values: 51.9","era: Tulot<br />time: 2006-04-01<br />values: 51.3","era: Tulot<br />time: 2006-07-01<br />values: 52.5","era: Tulot<br />time: 2006-10-01<br />values: 52.5","era: Tulot<br />time: 2007-01-01<br />values: 51.5","era: Tulot<br />time: 2007-04-01<br />values: 51.5","era: Tulot<br />time: 2007-07-01<br />values: 50.9","era: Tulot<br />time: 2007-10-01<br />values: 52.9","era: Tulot<br />time: 2008-01-01<br />values: 52.2","era: Tulot<br />time: 2008-04-01<br />values: 53.0","era: Tulot<br />time: 2008-07-01<br />values: 51.5","era: Tulot<br />time: 2008-10-01<br />values: 51.6","era: Tulot<br />time: 2009-01-01<br />values: 52.6","era: Tulot<br />time: 2009-04-01<br />values: 51.7","era: Tulot<br />time: 2009-07-01<br />values: 51.2","era: Tulot<br />time: 2009-10-01<br />values: 50.9","era: Tulot<br />time: 2010-01-01<br />values: 51.9","era: Tulot<br />time: 2010-04-01<br />values: 51.1","era: Tulot<br />time: 2010-07-01<br />values: 51.6","era: Tulot<br />time: 2010-10-01<br />values: 51.2","era: Tulot<br />time: 2011-01-01<br />values: 51.9","era: Tulot<br />time: 2011-04-01<br />values: 53.0","era: Tulot<br />time: 2011-07-01<br />values: 53.7","era: Tulot<br />time: 2011-10-01<br />values: 52.7","era: Tulot<br />time: 2012-01-01<br />values: 53.7","era: Tulot<br />time: 2012-04-01<br />values: 53.2","era: Tulot<br />time: 2012-07-01<br />values: 53.3","era: Tulot<br />time: 2012-10-01<br />values: 53.9","era: Tulot<br />time: 2013-01-01<br />values: 54.3","era: Tulot<br />time: 2013-04-01<br />values: 54.7","era: Tulot<br />time: 2013-07-01<br />values: 54.6","era: Tulot<br />time: 2013-10-01<br />values: 54.7","era: Tulot<br />time: 2014-01-01<br />values: 54.7","era: Tulot<br />time: 2014-04-01<br />values: 54.4","era: Tulot<br />time: 2014-07-01<br />values: 54.7","era: Tulot<br />time: 2014-10-01<br />values: 54.7","era: Tulot<br />time: 2015-01-01<br />values: 53.3","era: Tulot<br />time: 2015-04-01<br />values: 53.7","era: Tulot<br />time: 2015-07-01<br />values: 52.9","era: Tulot<br />time: 2015-10-01<br />values: 53.5","era: Tulot<br />time: 2016-01-01<br />values: 53.6","era: Tulot<br />time: 2016-04-01<br />values: 53.5","era: Tulot<br />time: 2016-07-01<br />values: 53.7","era: Tulot<br />time: 2016-10-01<br />values: 52.8","era: Tulot<br />time: 2017-01-01<br />values: 52.3","era: Tulot<br />time: 2017-04-01<br />values: 53.0","era: Tulot<br />time: 2017-07-01<br />values: 51.9","era: Tulot<br />time: 2017-10-01<br />values: 51.7","era: Tulot<br />time: 2018-01-01<br />values: 52.1","era: Tulot<br />time: 2018-04-01<br />values: 51.7","era: Tulot<br />time: 2018-07-01<br />values: 52.5","era: Tulot<br />time: 2018-10-01<br />values: 50.8","era: Tulot<br />time: 2019-01-01<br />values: 51.9","era: Tulot<br />time: 2019-04-01<br />values: 51.7","era: Tulot<br />time: 2019-07-01<br />values: 51.0","era: Tulot<br />time: 2019-10-01<br />values: 52.1","era: Tulot<br />time: 2020-01-01<br />values: 50.5","era: Tulot<br />time: 2020-04-01<br />values: 51.1","era: Tulot<br />time: 2020-07-01<br />values: 51.4","era: Tulot<br />time: 2020-10-01<br />values: 50.7","era: Tulot<br />time: 2021-01-01<br />values: 52.1","era: Tulot<br />time: 2021-04-01<br />values: 52.2","era: Tulot<br />time: 2021-07-01<br />values: 51.8","era: Tulot<br />time: 2021-10-01<br />values: 53.7","era: Tulot<br />time: 2022-01-01<br />values: 52.0","era: Tulot<br />time: 2022-04-01<br />values: 53.4","era: Tulot<br />time: 2022-07-01<br />values: 51.5","era: Tulot<br />time: 2022-10-01<br />values: 52.9","era: Tulot<br />time: 2023-01-01<br />values: 52.6","era: Tulot<br />time: 2023-04-01<br />values: 52.4","era: Tulot<br />time: 2023-07-01<br />values: 53.3","era: Tulot<br />time: 2023-10-01<br />values: 53.9","era: Tulot<br />time: 2024-01-01<br />values: 53.8","era: Tulot<br />time: 2024-04-01<br />values: 53.3","era: Tulot<br />time: 2024-07-01<br />values: 53.3","era: Tulot<br />time: 2024-10-01<br />values: 53.3","era: Tulot<br />time: 2025-01-01<br />values: 54.3","era: Tulot<br />time: 2025-04-01<br />values: 53.6","era: Tulot<br />time: 2025-07-01<br />values: 53.6","era: Tulot<br />time: 2025-10-01<br />values: 53.2","era: Tulot<br />time: 2026-01-01<br />values: 53.5"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Tulot","legendgroup":"Tulot","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[51.600000000000001,51.100000000000001,51,50.200000000000003,48.799999999999997,48.100000000000001,47.799999999999997,47.100000000000001,46.5,47.100000000000001,47.200000000000003,48.299999999999997,48.600000000000001,48.200000000000003,48.600000000000001,48.399999999999999,49.100000000000001,49.299999999999997,49.600000000000001,49.299999999999997,49.399999999999999,49.299999999999997,49.399999999999999,48.399999999999999,48.200000000000003,49.600000000000001,49.399999999999999,48.899999999999999,48.200000000000003,48.200000000000003,48.100000000000001,47.799999999999997,47.299999999999997,46.399999999999999,46.5,46.100000000000001,46.700000000000003,47.600000000000001,47.600000000000001,49.600000000000001,51.100000000000001,54.700000000000003,54.899999999999999,55.700000000000003,55.399999999999999,53.899999999999999,53.700000000000003,53.200000000000003,53.5,53.700000000000003,53.5,54.600000000000001,54.700000000000003,55.799999999999997,56.200000000000003,56.200000000000003,56.899999999999999,57.200000000000003,57.100000000000001,57.200000000000003,57.700000000000003,57.5,57.600000000000001,57.700000000000003,56.600000000000001,55.700000000000003,54.600000000000001,56.100000000000001,55.299999999999997,55.899999999999999,55.299999999999997,53.799999999999997,53.100000000000001,52.600000000000001,53.5,52.100000000000001,52.399999999999999,52.700000000000003,52.799999999999997,52.700000000000003,53.600000000000001,52.5,52.399999999999999,52,53.100000000000001,59.200000000000003,56.399999999999999,57.399999999999999,57.100000000000001,55.299999999999997,54.299999999999997,53.899999999999999,53.200000000000003,51.799999999999997,52.600000000000001,53,54.399999999999999,56,56.100000000000001,57.100000000000001,57.200000000000003,58.100000000000001,57.899999999999999,57.799999999999997,57.299999999999997,57.600000000000001,57.700000000000003,57.5,56.799999999999997],"text":["era: Menot<br />time: 1999-01-01<br />values: 51.6","era: Menot<br />time: 1999-04-01<br />values: 51.1","era: Menot<br />time: 1999-07-01<br />values: 51.0","era: Menot<br />time: 1999-10-01<br />values: 50.2","era: Menot<br />time: 2000-01-01<br />values: 48.8","era: Menot<br />time: 2000-04-01<br />values: 48.1","era: Menot<br />time: 2000-07-01<br />values: 47.8","era: Menot<br />time: 2000-10-01<br />values: 47.1","era: Menot<br />time: 2001-01-01<br />values: 46.5","era: Menot<br />time: 2001-04-01<br />values: 47.1","era: Menot<br />time: 2001-07-01<br />values: 47.2","era: Menot<br />time: 2001-10-01<br />values: 48.3","era: Menot<br />time: 2002-01-01<br />values: 48.6","era: Menot<br />time: 2002-04-01<br />values: 48.2","era: Menot<br />time: 2002-07-01<br />values: 48.6","era: Menot<br />time: 2002-10-01<br />values: 48.4","era: Menot<br />time: 2003-01-01<br />values: 49.1","era: Menot<br />time: 2003-04-01<br />values: 49.3","era: Menot<br />time: 2003-07-01<br />values: 49.6","era: Menot<br />time: 2003-10-01<br />values: 49.3","era: Menot<br />time: 2004-01-01<br />values: 49.4","era: Menot<br />time: 2004-04-01<br />values: 49.3","era: Menot<br />time: 2004-07-01<br />values: 49.4","era: Menot<br />time: 2004-10-01<br />values: 48.4","era: Menot<br />time: 2005-01-01<br />values: 48.2","era: Menot<br />time: 2005-04-01<br />values: 49.6","era: Menot<br />time: 2005-07-01<br />values: 49.4","era: Menot<br />time: 2005-10-01<br />values: 48.9","era: Menot<br />time: 2006-01-01<br />values: 48.2","era: Menot<br />time: 2006-04-01<br />values: 48.2","era: Menot<br />time: 2006-07-01<br />values: 48.1","era: Menot<br />time: 2006-10-01<br />values: 47.8","era: Menot<br />time: 2007-01-01<br />values: 47.3","era: Menot<br />time: 2007-04-01<br />values: 46.4","era: Menot<br />time: 2007-07-01<br />values: 46.5","era: Menot<br />time: 2007-10-01<br />values: 46.1","era: Menot<br />time: 2008-01-01<br />values: 46.7","era: Menot<br />time: 2008-04-01<br />values: 47.6","era: Menot<br />time: 2008-07-01<br />values: 47.6","era: Menot<br />time: 2008-10-01<br />values: 49.6","era: Menot<br />time: 2009-01-01<br />values: 51.1","era: Menot<br />time: 2009-04-01<br />values: 54.7","era: Menot<br />time: 2009-07-01<br />values: 54.9","era: Menot<br />time: 2009-10-01<br />values: 55.7","era: Menot<br />time: 2010-01-01<br />values: 55.4","era: Menot<br />time: 2010-04-01<br />values: 53.9","era: Menot<br />time: 2010-07-01<br />values: 53.7","era: Menot<br />time: 2010-10-01<br />values: 53.2","era: Menot<br />time: 2011-01-01<br />values: 53.5","era: Menot<br />time: 2011-04-01<br />values: 53.7","era: Menot<br />time: 2011-07-01<br />values: 53.5","era: Menot<br />time: 2011-10-01<br />values: 54.6","era: Menot<br />time: 2012-01-01<br />values: 54.7","era: Menot<br />time: 2012-04-01<br />values: 55.8","era: Menot<br />time: 2012-07-01<br />values: 56.2","era: Menot<br />time: 2012-10-01<br />values: 56.2","era: Menot<br />time: 2013-01-01<br />values: 56.9","era: Menot<br />time: 2013-04-01<br />values: 57.2","era: Menot<br />time: 2013-07-01<br />values: 57.1","era: Menot<br />time: 2013-10-01<br />values: 57.2","era: Menot<br />time: 2014-01-01<br />values: 57.7","era: Menot<br />time: 2014-04-01<br />values: 57.5","era: Menot<br />time: 2014-07-01<br />values: 57.6","era: Menot<br />time: 2014-10-01<br />values: 57.7","era: Menot<br />time: 2015-01-01<br />values: 56.6","era: Menot<br />time: 2015-04-01<br />values: 55.7","era: Menot<br />time: 2015-07-01<br />values: 54.6","era: Menot<br />time: 2015-10-01<br />values: 56.1","era: Menot<br />time: 2016-01-01<br />values: 55.3","era: Menot<br />time: 2016-04-01<br />values: 55.9","era: Menot<br />time: 2016-07-01<br />values: 55.3","era: Menot<br />time: 2016-10-01<br />values: 53.8","era: Menot<br />time: 2017-01-01<br />values: 53.1","era: Menot<br />time: 2017-04-01<br />values: 52.6","era: Menot<br />time: 2017-07-01<br />values: 53.5","era: Menot<br />time: 2017-10-01<br />values: 52.1","era: Menot<br />time: 2018-01-01<br />values: 52.4","era: Menot<br />time: 2018-04-01<br />values: 52.7","era: Menot<br />time: 2018-07-01<br />values: 52.8","era: Menot<br />time: 2018-10-01<br />values: 52.7","era: Menot<br />time: 2019-01-01<br />values: 53.6","era: Menot<br />time: 2019-04-01<br />values: 52.5","era: Menot<br />time: 2019-07-01<br />values: 52.4","era: Menot<br />time: 2019-10-01<br />values: 52.0","era: Menot<br />time: 2020-01-01<br />values: 53.1","era: Menot<br />time: 2020-04-01<br />values: 59.2","era: Menot<br />time: 2020-07-01<br />values: 56.4","era: Menot<br />time: 2020-10-01<br />values: 57.4","era: Menot<br />time: 2021-01-01<br />values: 57.1","era: Menot<br />time: 2021-04-01<br />values: 55.3","era: Menot<br />time: 2021-07-01<br />values: 54.3","era: Menot<br />time: 2021-10-01<br />values: 53.9","era: Menot<br />time: 2022-01-01<br />values: 53.2","era: Menot<br />time: 2022-04-01<br />values: 51.8","era: Menot<br />time: 2022-07-01<br />values: 52.6","era: Menot<br />time: 2022-10-01<br />values: 53.0","era: Menot<br />time: 2023-01-01<br />values: 54.4","era: Menot<br />time: 2023-04-01<br />values: 56.0","era: Menot<br />time: 2023-07-01<br />values: 56.1","era: Menot<br />time: 2023-10-01<br />values: 57.1","era: Menot<br />time: 2024-01-01<br />values: 57.2","era: Menot<br />time: 2024-04-01<br />values: 58.1","era: Menot<br />time: 2024-07-01<br />values: 57.9","era: Menot<br />time: 2024-10-01<br />values: 57.8","era: Menot<br />time: 2025-01-01<br />values: 57.3","era: Menot<br />time: 2025-04-01<br />values: 57.6","era: Menot<br />time: 2025-07-01<br />values: 57.7","era: Menot<br />time: 2025-10-01<br />values: 57.5","era: Menot<br />time: 2026-01-01<br />values: 56.8"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Menot","legendgroup":"Menot","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Julkisyhteisöjen tulot ja menot suhteessa BKT:hen, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10098.9,20947.099999999999],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[45.445,59.855000000000004],"tickmode":"array","ticktext":["50","55"],"tickvals":[50,55],"categoryorder":"array","categoryarray":["50","55"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kausitasoitettu ja työpäiväkorjattu sarja; erotus on rahoitusasema","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, julkisyhteisöjen tulot ja menot","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae5339c2669":{"colour":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"ae5339c2669","visdat":{"ae5339c2669":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-tulot-menot-suhde-sv.png">På svenska</a> · <a href="kuvat/julkinen-tulot-menot-suhde-en.png">In English</a></p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>rahoitusasema <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="st">"B9"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S13"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"jtume-KAUSIT"</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>tekstit_rahoitusasema <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Julkisyhteisöjen nettoluotonanto, miljoonaa euroa"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Kausitasoitettu ja työpäiväkorjattu; miinusmerkkinen on alijäämä"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, julkisyhteisöjen tulot ja menot"</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Den offentliga sektorns nettoutlåning, miljoner euro"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Säsongrensad och arbetsdagskorrigerad; ett negativt tal är underskott"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, offentliga sektorns inkomster och utgifter"</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"General government net lending, EUR million"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Seasonally and working day adjusted; a negative figure is a deficit"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, general government revenue and expenditure"</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>kuvio_rahoitusasema <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_rahoitusasema[[kieli]]</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(rahoitusasema, <span class="at">type =</span> <span class="st">"col"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>            <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_rahoitusasema</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_rahoitusasema<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_rahoitusasema<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a4750869409d2b49a5bf" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-a4750869409d2b49a5bf">{"x":{"data":[{"orientation":"v","width":[81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1348,-1704,-2179,-1568,-1293,-991,-992,-789,-345,0,-972,-464,-1322,-1411,-1113,-1286,-1273,-1291,-1282,-1542,-1591,-1463,-1569,-1728,-1069,-941,-1363,-945,-1294,-886,-545,-445,0,-898,-268,-168,-576,-179,-1099,-999,-487,-828,0,-1553,-4590,-2967,-3972,-3040,-1927,-1545,-86,-747,0,-704,-87,-1221,-2497,-1916,-2176,-2341,-3301,-3206,-3144,-2119,-2796,-2844,-3055,-2335],"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[31,211,596,1299,1890,2047,1800,3658,2065,2061,1775,1300,1904,1389,1432,1337,919,1023,792,969,825,837,948,906,919,971,1072,1417,1600,1317,1902,2075,1890,2343,2051,3278,2635,2624,1912,948,721,1348,1704,2179,1568,1293,991,992,789,345,104,972,464,1322,1411,1113,1286,1273,1291,1282,1542,1591,1463,1569,1728,1069,941,1363,945,1294,886,545,445,197,898,268,168,576,179,1099,999,487,828,86,1553,4590,2967,3972,3040,1927,1545,86,747,1061,704,87,1221,2497,1916,2176,2341,3301,3206,3144,2119,2796,2844,3055,2335],"text":["time: 1999-01-01<br />values:    31","time: 1999-04-01<br />values:   211","time: 1999-07-01<br />values:   596","time: 1999-10-01<br />values:  1299","time: 2000-01-01<br />values:  1890","time: 2000-04-01<br />values:  2047","time: 2000-07-01<br />values:  1800","time: 2000-10-01<br />values:  3658","time: 2001-01-01<br />values:  2065","time: 2001-04-01<br />values:  2061","time: 2001-07-01<br />values:  1775","time: 2001-10-01<br />values:  1300","time: 2002-01-01<br />values:  1904","time: 2002-04-01<br />values:  1389","time: 2002-07-01<br />values:  1432","time: 2002-10-01<br />values:  1337","time: 2003-01-01<br />values:   919","time: 2003-04-01<br />values:  1023","time: 2003-07-01<br />values:   792","time: 2003-10-01<br />values:   969","time: 2004-01-01<br />values:   825","time: 2004-04-01<br />values:   837","time: 2004-07-01<br />values:   948","time: 2004-10-01<br />values:   906","time: 2005-01-01<br />values:   919","time: 2005-04-01<br />values:   971","time: 2005-07-01<br />values:  1072","time: 2005-10-01<br />values:  1417","time: 2006-01-01<br />values:  1600","time: 2006-04-01<br />values:  1317","time: 2006-07-01<br />values:  1902","time: 2006-10-01<br />values:  2075","time: 2007-01-01<br />values:  1890","time: 2007-04-01<br />values:  2343","time: 2007-07-01<br />values:  2051","time: 2007-10-01<br />values:  3278","time: 2008-01-01<br />values:  2635","time: 2008-04-01<br />values:  2624","time: 2008-07-01<br />values:  1912","time: 2008-10-01<br />values:   948","time: 2009-01-01<br />values:   721","time: 2009-04-01<br />values: -1348","time: 2009-07-01<br />values: -1704","time: 2009-10-01<br />values: -2179","time: 2010-01-01<br />values: -1568","time: 2010-04-01<br />values: -1293","time: 2010-07-01<br />values:  -991","time: 2010-10-01<br />values:  -992","time: 2011-01-01<br />values:  -789","time: 2011-04-01<br />values:  -345","time: 2011-07-01<br />values:   104","time: 2011-10-01<br />values:  -972","time: 2012-01-01<br />values:  -464","time: 2012-04-01<br />values: -1322","time: 2012-07-01<br />values: -1411","time: 2012-10-01<br />values: -1113","time: 2013-01-01<br />values: -1286","time: 2013-04-01<br />values: -1273","time: 2013-07-01<br />values: -1291","time: 2013-10-01<br />values: -1282","time: 2014-01-01<br />values: -1542","time: 2014-04-01<br />values: -1591","time: 2014-07-01<br />values: -1463","time: 2014-10-01<br />values: -1569","time: 2015-01-01<br />values: -1728","time: 2015-04-01<br />values: -1069","time: 2015-07-01<br />values:  -941","time: 2015-10-01<br />values: -1363","time: 2016-01-01<br />values:  -945","time: 2016-04-01<br />values: -1294","time: 2016-07-01<br />values:  -886","time: 2016-10-01<br />values:  -545","time: 2017-01-01<br />values:  -445","time: 2017-04-01<br />values:   197","time: 2017-07-01<br />values:  -898","time: 2017-10-01<br />values:  -268","time: 2018-01-01<br />values:  -168","time: 2018-04-01<br />values:  -576","time: 2018-07-01<br />values:  -179","time: 2018-10-01<br />values: -1099","time: 2019-01-01<br />values:  -999","time: 2019-04-01<br />values:  -487","time: 2019-07-01<br />values:  -828","time: 2019-10-01<br />values:    86","time: 2020-01-01<br />values: -1553","time: 2020-04-01<br />values: -4590","time: 2020-07-01<br />values: -2967","time: 2020-10-01<br />values: -3972","time: 2021-01-01<br />values: -3040","time: 2021-04-01<br />values: -1927","time: 2021-07-01<br />values: -1545","time: 2021-10-01<br />values:   -86","time: 2022-01-01<br />values:  -747","time: 2022-04-01<br />values:  1061","time: 2022-07-01<br />values:  -704","time: 2022-10-01<br />values:   -87","time: 2023-01-01<br />values: -1221","time: 2023-04-01<br />values: -2497","time: 2023-07-01<br />values: -1916","time: 2023-10-01<br />values: -2176","time: 2024-01-01<br />values: -2341","time: 2024-04-01<br />values: -3301","time: 2024-07-01<br />values: -3206","time: 2024-10-01<br />values: -3144","time: 2025-01-01<br />values: -2119","time: 2025-04-01<br />values: -2796","time: 2025-07-01<br />values: -2844","time: 2025-10-01<br />values: -3055","time: 2026-01-01<br />values: -2335"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,100,117,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Julkisyhteisöjen nettoluotonanto, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10054.35,20991.650000000001],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-5002.3999999999996,4070.4000000000001],"tickmode":"array","ticktext":["-5000","-2500","0","2500"],"tickvals":[-5000,-2500,0,2500],"categoryorder":"array","categoryarray":["-5000","-2500","0","2500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kausitasoitettu ja työpäiväkorjattu; miinusmerkkinen on alijäämä","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, julkisyhteisöjen tulot ja menot","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"ae5deb56ae":{"x":{},"y":{},"type":"bar"}},"cur_data":"ae5deb56ae","visdat":{"ae5deb56ae":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/julkinen-rahoitusasema-sv.png">På svenska</a> · <a href="kuvat/julkinen-rahoitusasema-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px">11zf Julkisyhteisöjen tulot ja menot, neljännesvuosittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+1.7.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+Suhde BKT:hen (kausitasoitettu ja työpäiväkorjattu sarja), %
+</dd>
+<dt>Taloustoimi</dt>
+<dd>
+OTRS Tulot yhteensä, sulautettu · OTES Menot yhteensä, sulautettu
+</dd>
+<dt>Sektori</dt>
+<dd>
+S13 Julkisyhteisöt
+</dd>
+</dl>
+</details>
+<p>Lähteet: <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__jali/">Julkisyhteisöjen alijäämä ja velka</a> (122g), <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__jyev/">Julkisyhteisöjen velka neljännesvuosittain</a> (11yv) ja <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__jtume/">Julkisyhteisöjen tulot ja menot</a> (11zf).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopioitu!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopioitu!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jhuovari\.github\.io\/visu\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Lähde: Tilastokeskus, StatFin</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Rakennettu <a href="https://github.com/jhuovari/visu">visu</a>-paketilla</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

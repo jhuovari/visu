@@ -1,0 +1,242 @@
+---
+title: "Kotitaloudet"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"
+---
+
+Kotitalouksien taloudellinen asema kahdesta suunnasta: paljonko tuloista jää
+säästöön ja paljonko velkaa on suhteessa tuloihin. Säästämisaste on
+sektoritilien tunnusluku ja velkaantumisaste rahoitustilinpidon.
+
+## Säästämisaste
+
+::: {.panel-tabset}
+
+### Kotitaloudet
+
+```{r}
+library(visu)
+
+saastaminen <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "contentscode" = c("ntp-tasm_b8n", "ntp-kausit_b8n")
+  )
+)
+
+tekstit <- list(
+  fi = list(
+    otsikko = "Kotitalouksien säästämisaste, %",
+    selite = "Säästö suhteessa käytettävissä olevaan tuloon",
+    lahde = "Lähde: Tilastokeskus, kansantalouden sektoritilit",
+    sarjat = c("ntp-tasm_b8n" = "Alkuperäinen", "ntp-kausit_b8n" = "Kausitasoitettu")
+  ),
+  sv = list(
+    otsikko = "Hushållens sparkvot, %",
+    selite = "Sparande i förhållande till disponibel inkomst",
+    lahde = "Källa: Statistikcentralen, sektorräkenskaper",
+    sarjat = c("ntp-tasm_b8n" = "Ursprunglig", "ntp-kausit_b8n" = "Säsongrensad")
+  ),
+  en = list(
+    otsikko = "Household saving rate, %",
+    selite = "Saving relative to disposable income",
+    lahde = "Source: Statistics Finland, sector accounts",
+    sarjat = c("ntp-tasm_b8n" = "Original", "ntp-kausit_b8n" = "Seasonally adjusted")
+  )
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  d <- saastaminen
+  # Sama ilmio eri tavalla siloitettuna: sama vari, kausitasoitettu paksummalla.
+  d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, linewidth = "sarja", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio("fi") |>
+  visu_interactive(subtitle = tekstit$fi$selite, caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "saastamisaste")
+```
+
+### Investointiaste
+
+```{r}
+library(visu)
+
+investoinnit <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = c("S14", "S11"),
+    "contentscode" = "ntp-kausit_p51k"
+  )
+)
+
+tekstit_inv <- list(
+  fi = list(
+    otsikko = "Investointiaste, kausitasoitettu, %",
+    selite = "Kiinteän pääoman bruttomuodostus suhteessa sektorin tuloon",
+    lahde = "Lähde: Tilastokeskus, kansantalouden sektoritilit",
+    sarjat = c(S14 = "Kotitaloudet", S11 = "Yritykset")
+  ),
+  sv = list(
+    otsikko = "Investeringsgrad, säsongrensad, %",
+    selite = "Fast bruttoinvestering i förhållande till sektorns inkomst",
+    lahde = "Källa: Statistikcentralen, sektorräkenskaper",
+    sarjat = c(S14 = "Hushåll", S11 = "Företag")
+  ),
+  en = list(
+    otsikko = "Investment rate, seasonally adjusted, %",
+    selite = "Gross fixed capital formation relative to sector income",
+    lahde = "Source: Statistics Finland, sector accounts",
+    sarjat = c(S14 = "Households", S11 = "Corporations")
+  )
+)
+
+kuvio_inv <- function(kieli) {
+  t <- tekstit_inv[[kieli]]
+  d <- investoinnit
+  d$sektori <- factor(d$sektoriluokitus_7_20230101, levels = names(t$sarjat),
+                      labels = t$sarjat)
+  visu_plot(d, colour = "sektori", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_inv("fi") |>
+  visu_interactive(subtitle = tekstit_inv$fi$selite, caption = tekstit_inv$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_inv, "investointiaste")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(saastaminen, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/")
+```
+
+## Velkaantuminen
+
+::: {.panel-tabset}
+
+### Velkaantumisaste
+
+```{r}
+library(visu)
+
+velkaantuminen <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "contentscode" = "F4_B6N"
+  )
+)
+
+tekstit_velka <- list(
+  fi = list(
+    otsikko = "Kotitalouksien velkaantumisaste, %",
+    selite = "Lainat suhteessa neljän vuosineljänneksen käytettävissä olevaan tuloon",
+    lahde = "Lähde: Tilastokeskus, kansantalouden rahoitustilinpito"
+  ),
+  sv = list(
+    otsikko = "Hushållens skuldsättningsgrad, %",
+    selite = "Lån i förhållande till disponibel inkomst under fyra kvartal",
+    lahde = "Källa: Statistikcentralen, finansräkenskaper"
+  ),
+  en = list(
+    otsikko = "Household indebtedness ratio, %",
+    selite = "Loans relative to disposable income over four quarters",
+    lahde = "Source: Statistics Finland, financial accounts"
+  )
+)
+
+kuvio_velka <- function(kieli) {
+  t <- tekstit_velka[[kieli]]
+  visu_plot(velkaantuminen, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_velka("fi") |>
+  visu_interactive(subtitle = tekstit_velka$fi$selite,
+                   caption = tekstit_velka$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_velka, "velkaantumisaste")
+```
+
+### Lainakanta
+
+```{r}
+library(visu)
+
+lainat <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "contentscode" = c("F4", "F423")
+  )
+)
+
+tekstit_lainat <- list(
+  fi = list(
+    otsikko = "Kotitalouksien lainat, miljoonaa euroa",
+    lahde = "Lähde: Tilastokeskus, kansantalouden rahoitustilinpito",
+    sarjat = c(F4 = "Lainat yhteensä", F423 = "Osuus asuntoyhtiölainoista")
+  ),
+  sv = list(
+    otsikko = "Hushållens lån, miljoner euro",
+    lahde = "Källa: Statistikcentralen, finansräkenskaper",
+    sarjat = c(F4 = "Lån totalt", F423 = "Andel av bostadsbolagslån")
+  ),
+  en = list(
+    otsikko = "Household loans, EUR million",
+    lahde = "Source: Statistics Finland, financial accounts",
+    sarjat = c(F4 = "Loans total", F423 = "Share of housing company loans")
+  )
+)
+
+kuvio_lainat <- function(kieli) {
+  t <- tekstit_lainat[[kieli]]
+  d <- lainat
+  d$laji <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "laji", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_lainat("fi") |>
+  visu_interactive(caption = tekstit_lainat$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_lainat, "kotitalouksien-lainat")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(velkaantuminen, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/")
+```
+
+Lähteet: [Kansantalouden sektoritilit](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/) (15a8) ja [Kansantalouden rahoitustilinpito](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__rtp/) (129g).
