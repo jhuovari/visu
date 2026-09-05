@@ -10,6 +10,8 @@ Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla on `Näytä koodi`
 kopioida sellaisenaan omaan R-istuntoon. Saman sarjan taso ja muutos ovat
 kuvion välilehdillä, kuvion alta saa ruotsin- ja englanninkielisen version
 ladattavana kuvana, ja `Kuvion tiedot` kertoo mistä taulusta luvut ovat.
+Alkuperäinen, kausitasoitettu ja trendi ovat samalla värillä eri paksuisin
+viivoin, koska kyse on samasta ilmiöstä eri tavalla siloitettuna.
 
 Sivusto tarkistaa arkiaamuina, onko kuvion lähdetaulu päivittynyt, ja
 rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.

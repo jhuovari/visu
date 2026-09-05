@@ -1,12 +1,16 @@
 ---
 title: "Työmarkkinat"
 visu:
-  table_url: "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/"
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"
 ---
 
-Työvoimatutkimuksen tärkeimmät tunnusluvut kuukausitasolla. Alkuperäinen sarja
-kertoo, mitä kuukaudessa mitattiin, ja trendisarja sen, mihin suuntaan
-työmarkkinat ovat menossa.
+Työvoimatutkimuksen tärkeimmät tunnusluvut kuukausitasolla ja palkansaajien
+määrä vuositasolla. Alkuperäinen sarja kertoo, mitä kuukaudessa mitattiin, ja
+trendisarja sen, mihin suuntaan työmarkkinat ovat menossa. Ne ovat samassa
+kuviossa samalla värillä eri paksuisin viivoin, koska kyse on samasta
+ilmiöstä eri tavalla siloitettuna.
 
 Tasot ovat suoraan tilastosta. Tilasto ei julkaise vuosimuutoksia, joten ne
 lasketaan tällä sivulla alkuperäisestä sarjasta 12 kuukauden takaiseen
@@ -53,7 +57,8 @@ kuvio <- function(kieli) {
   t <- tekstit[[kieli]]
   d <- tyottomyys
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "sarja", title = t$otsikko, caption = t$lahde)
+  # Sama ilmio eri tavalla siloitettuna: sama vari, trendi paksummalla.
+  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde)
 }
 
 kuvio("fi") |>
@@ -217,7 +222,8 @@ kuvio_tyolliset <- function(kieli) {
   t <- tekstit_tyolliset[[kieli]]
   d <- tyolliset
   d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, colour = "sarja", title = t$otsikko, caption = t$lahde)
+  # Sama ilmio eri tavalla siloitettuna: sama vari, trendi paksummalla.
+  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde)
 }
 
 kuvio_tyolliset("fi") |>
@@ -293,4 +299,111 @@ visu_downloads(kuvio_maarat, "tyolliset-muutos")
 visu_metadata(maarat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/")
 ```
 
-Lähde: [Tilastokeskus, työvoimatutkimus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tyti/), taulu 135z.
+## Palkansaajat
+
+::: {.panel-tabset}
+
+### Yhteensä
+
+```{r}
+library(visu)
+
+palkansaajat <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
+  query = list(
+    "timeperiod_y" = "*",
+    "sukupuoli_9_20180101" = "SSS",
+    "contentscode" = "Palkansaajat_yht"
+  )
+)
+
+tekstit_palkansaajat <- list(
+  fi = list(
+    otsikko = "Palkansaajat, 1 000 henkeä",
+    lahde = "Lähde: Tilastokeskus, työvoimatutkimus"
+  ),
+  sv = list(
+    otsikko = "Löntagare, 1 000 personer",
+    lahde = "Källa: Statistikcentralen, arbetskraftsundersökningen"
+  ),
+  en = list(
+    otsikko = "Employees, 1,000 persons",
+    lahde = "Source: Statistics Finland, Labour Force Survey"
+  )
+)
+
+kuvio_palkansaajat <- function(kieli) {
+  t <- tekstit_palkansaajat[[kieli]]
+  visu_plot(palkansaajat, title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_palkansaajat("fi") |>
+  visu_interactive(caption = tekstit_palkansaajat$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_palkansaajat, "palkansaajat-yhteensa")
+```
+
+### Sukupuolen mukaan
+
+```{r}
+library(visu)
+
+palkansaajat_sp <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
+  query = list(
+    "timeperiod_y" = "*",
+    "sukupuoli_9_20180101" = c("1", "2"),
+    "contentscode" = "Palkansaajat_yht"
+  )
+)
+
+tekstit_palkansaajat_sp <- list(
+  fi = list(
+    otsikko = "Palkansaajat sukupuolen mukaan, 1 000 henkeä",
+    lahde = "Lähde: Tilastokeskus, työvoimatutkimus",
+    sarjat = c("1" = "Miehet", "2" = "Naiset")
+  ),
+  sv = list(
+    otsikko = "Löntagare efter kön, 1 000 personer",
+    lahde = "Källa: Statistikcentralen, arbetskraftsundersökningen",
+    sarjat = c("1" = "Män", "2" = "Kvinnor")
+  ),
+  en = list(
+    otsikko = "Employees by sex, 1,000 persons",
+    lahde = "Source: Statistics Finland, Labour Force Survey",
+    sarjat = c("1" = "Males", "2" = "Females")
+  )
+)
+
+kuvio_palkansaajat_sp <- function(kieli) {
+  t <- tekstit_palkansaajat_sp[[kieli]]
+  d <- palkansaajat_sp
+  # Miehet ja naiset ovat eri joukkoja, joten ne erotetaan varilla.
+  d$sukupuoli <- factor(d$sukupuoli_9_20180101, levels = names(t$sarjat),
+                        labels = t$sarjat)
+  visu_plot(d, colour = "sukupuoli", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_palkansaajat_sp("fi") |>
+  visu_interactive(caption = tekstit_palkansaajat_sp$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_palkansaajat_sp, "palkansaajat-sukupuolittain")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(palkansaajat_sp, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/")
+```
+
+Lähde: [Tilastokeskus, työvoimatutkimus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tyti/), taulut 135z ja 11pk.

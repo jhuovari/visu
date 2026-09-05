@@ -9,6 +9,7 @@ visu_plot(
   x = NULL,
   y = NULL,
   colour = NULL,
+  linewidth = NULL,
   type = c("line", "col", "area"),
   title = NULL,
   subtitle = NULL,
@@ -27,6 +28,14 @@ ole, datan viimeinen numeerinen sarake.}
 
 \item{colour}{Valinnainen luokittelusarake merkkijonona. Piirtotyypeissä
 \code{col} ja \code{area} se ohjaa täyttöväriä, tyypissä \code{line} viivan väriä.}
+
+\item{linewidth}{Valinnainen sarake, jonka luokat ovat saman sarjan
+versioita: alkuperäinen, kausitasoitettu ja trendi. Ne piirretään samalla
+värillä mutta eri paksuisella viivalla, koska ne ovat sama ilmiö eri
+tavalla siloitettuna — eri värit antaisivat ymmärtää, että kyse on eri
+sarjoista. Järjestä luokat karkeimmasta siloitetuimpaan, eli
+alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
+Vain piirtotyypille \code{"line"}.}
 
 \item{type}{Piirtotyyppi: \code{"line"} (oletus), \code{"col"} tai \code{"area"}.}
 
