@@ -7,8 +7,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px": "2026-08-13T08:52:22",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-08-28T11:57:42"
     },
-    "code_hash": "94ee93d08845282bc7533039d5482f80550f5362a512115c399f52dffc4f138b",
-    "built_at": "2026-09-01T05:22:11Z"
+    "code_hash": "915d9c90ecf16718a87fa012b33f26bf52175e043e523a4d48acabf50a4e0d1b",
+    "built_at": "2026-09-05T08:30:46Z"
   },
   "neljannesvuositilinpito": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
@@ -16,8 +16,8 @@
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-08-28T15:14:03"
     },
-    "code_hash": "71dd44e98ef87884d71beee64d56f949aac6cb4e3f0ee75f57c594114cff09b3",
-    "built_at": "2026-08-31T17:28:39Z"
+    "code_hash": "a13c885a32f41f7381c98e38579102302f70c9852edcdf3ba04cc94b28b71c02",
+    "built_at": "2026-09-05T08:34:44Z"
   },
   "palkansaajat": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
@@ -39,7 +39,7 @@
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px": "2026-08-24T10:49:35"
     },
-    "code_hash": "3b85eecae54e2b70665d282ddd715f63d1fa3e83ab1759776c76bd372ac678dc",
-    "built_at": "2026-08-31T17:30:00Z"
+    "code_hash": "efab4b3ce3ffe4f1a216a725bbfd33dd63193c780455e8c6b1a2c5750589db60",
+    "built_at": "2026-09-05T08:34:44Z"
   }
 }

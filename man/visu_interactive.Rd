@@ -9,6 +9,7 @@ visu_interactive(
   tooltip = c("x", "y", "colour", "fill"),
   subtitle = NULL,
   caption = NULL,
+  locale = "fi",
   ...
 )
 }
@@ -18,6 +19,9 @@ visu_interactive(
 \item{tooltip}{Vihjelaatikossa näytettävät aestetiikat.}
 
 \item{subtitle, caption}{Valinnaiset tekstit, jotka ggplotly muuten pudottaisi.}
+
+\item{locale}{Plotlyn työkalupalkin ja lukumuotoilun kieli. Plotlyn mukana
+tulevat muun muassa \code{"fi"} ja \code{"sv"}; englanti on sen oletus.}
 
 \item{...}{Lisäargumentit funktiolle \code{plotly::ggplotly()}.}
 }

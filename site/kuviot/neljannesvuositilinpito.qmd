@@ -8,11 +8,16 @@ Kansantalouden neljännesvuositilinpidon keskeiset erät. Tasot ovat
 kausitasoitettuja ja työpäiväkorjattuja volyymisarjoja viitevuoden 2015
 hinnoin, ja muutokset saman sarjan volyymin muutoksia vuodentakaisesta.
 Kausitasoitettu sarja kertoo suhdannekäänteen aikaisimmin, trendisarja
-luotettavimmin. Neljännesvuosisarjojen tasokuvat on rajattu kymmeneen
-vuoteen; koko historia näkyy bruttokansantuotteen vuosimuutoksesta ja
-kysynnän pääerien tasoista.
+luotettavimmin.
+
+Saman sarjan taso ja muutos ovat kuvion välilehdillä, ja kuvion alta saa
+ruotsin- ja englanninkielisen version ladattavana kuvana.
 
 ## Bruttokansantuote
+
+::: {.panel-tabset}
+
+### Taso
 
 ```{r}
 library(visu)
@@ -26,30 +31,51 @@ bkt <- pxwebtools::pxw_get_data(
   )
 )
 
-# Tiedot-muuttujan selitteet ovat kuvion selitteeksi liian pitkia.
-bkt$sarja <- factor(
-  bkt$contentscode,
-  levels = c("kausitvv2015", "trendivv2015"),
-  labels = c("Kausitasoitettu", "Trendi")
-)
-
-# Koko historiassa sarjat kulkevat paallekkain, joten taso rajataan
-# viimeiseen kymmeneen vuoteen. Pitka kuva on kuvioissa 2 ja 3.
+# Koko historiassa sarjat kulkevat paallekkain, joten taso rajataan viimeiseen
+# kymmeneen vuoteen. Pitka kuva on vuosimuutoksessa ja kysynnan paaerissa.
 alku <- seq(max(bkt$time), by = "-10 years", length.out = 2)[2]
 bkt <- bkt[bkt$time >= alku, ]
 
-bkt |>
-  visu_plot(
-    colour = "sarja",
-    title = "Bruttokansantuotteen volyymi, miljoonaa euroa"
-  ) |>
-  visu_interactive(
-    subtitle = "Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015",
-    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+tekstit <- list(
+  fi = list(
+    otsikko = "Bruttokansantuotteen volyymi, miljoonaa euroa",
+    selite = "Viitevuosi 2015",
+    lahde = "Lähde: Tilastokeskus, neljännesvuositilinpito",
+    sarjat = c(kausitvv2015 = "Kausitasoitettu", trendivv2015 = "Trendi")
+  ),
+  sv = list(
+    otsikko = "Bruttonationalproduktens volym, miljoner euro",
+    selite = "Referensår 2015",
+    lahde = "Källa: Statistikcentralen, kvartalsräkenskaper",
+    sarjat = c(kausitvv2015 = "Säsongrensad", trendivv2015 = "Trend")
+  ),
+  en = list(
+    otsikko = "Volume of gross domestic product, EUR million",
+    selite = "Reference year 2015",
+    lahde = "Source: Statistics Finland, quarterly national accounts",
+    sarjat = c(kausitvv2015 = "Seasonally adjusted", trendivv2015 = "Trend")
   )
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  d <- bkt
+  d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "sarja", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio("fi") |>
+  visu_interactive(subtitle = tekstit$fi$selite, caption = tekstit$fi$lahde)
 ```
 
-## Bruttokansantuotteen vuosimuutos
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "bkt-taso")
+```
+
+### Vuosimuutos
 
 ```{r}
 library(visu)
@@ -63,95 +89,181 @@ bkt_muutos <- pxwebtools::pxw_get_data(
   )
 )
 
-bkt_muutos |>
-  visu_plot(
-    type = "col",
-    title = "Bruttokansantuotteen volyymin muutos vuodentakaisesta, %"
-  ) |>
-  visu_interactive(
-    subtitle = "Kausitasoitettu ja työpäiväkorjattu sarja",
-    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+tekstit_muutos <- list(
+  fi = list(
+    otsikko = "Bruttokansantuotteen volyymin muutos vuodentakaisesta, %",
+    selite = "Kausitasoitettu ja työpäiväkorjattu sarja",
+    lahde = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+  ),
+  sv = list(
+    otsikko = "Förändring av bruttonationalproduktens volym från året innan, %",
+    selite = "Säsongrensad och arbetsdagskorrigerad serie",
+    lahde = "Källa: Statistikcentralen, kvartalsräkenskaper"
+  ),
+  en = list(
+    otsikko = "Change in the volume of gross domestic product from a year earlier, %",
+    selite = "Seasonally and working day adjusted series",
+    lahde = "Source: Statistics Finland, quarterly national accounts"
   )
+)
+
+kuvio_muutos <- function(kieli) {
+  t <- tekstit_muutos[[kieli]]
+  visu_plot(bkt_muutos, type = "col", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_muutos("fi") |>
+  visu_interactive(subtitle = tekstit_muutos$fi$selite,
+                   caption = tekstit_muutos$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_muutos, "bkt-muutos")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(bkt, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/")
 ```
 
 ## Kysynnän pääerät
 
+::: {.panel-tabset}
+
+### Taso
+
 ```{r}
 library(visu)
 
-erat <- c(
-  "P3KS14_S15" = "Yksityinen kulutus",
-  "P3KS13" = "Julkinen kulutus",
-  "P51K" = "Investoinnit",
-  "P6K" = "Vienti"
-)
+erat <- c("P3KS14_S15", "P3KS13", "P51K", "P6K")
 
 kysynta <- pxwebtools::pxw_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
   query = list(
     "timeperiod_q" = "*",
-    "taloustoimi_1_20180101" = names(erat),
+    "taloustoimi_1_20180101" = erat,
     "contentscode" = "kausitvv2015"
   )
 )
 
-kysynta$era <- factor(
-  kysynta$taloustoimi_1_20180101,
-  levels = names(erat),
-  labels = erat
+tekstit_kysynta <- list(
+  fi = list(
+    otsikko = "Kysynnän pääerien volyymi, miljoonaa euroa",
+    selite = "Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015",
+    lahde = "Lähde: Tilastokeskus, neljännesvuositilinpito",
+    sarjat = c(P3KS14_S15 = "Yksityinen kulutus", P3KS13 = "Julkinen kulutus",
+               P51K = "Investoinnit", P6K = "Vienti")
+  ),
+  sv = list(
+    otsikko = "Efterfrågans huvudposter, volym, miljoner euro",
+    selite = "Säsongrensad och arbetsdagskorrigerad, referensår 2015",
+    lahde = "Källa: Statistikcentralen, kvartalsräkenskaper",
+    sarjat = c(P3KS14_S15 = "Privat konsumtion", P3KS13 = "Offentlig konsumtion",
+               P51K = "Investeringar", P6K = "Export")
+  ),
+  en = list(
+    otsikko = "Volume of main demand components, EUR million",
+    selite = "Seasonally and working day adjusted, reference year 2015",
+    lahde = "Source: Statistics Finland, quarterly national accounts",
+    sarjat = c(P3KS14_S15 = "Private consumption", P3KS13 = "Public consumption",
+               P51K = "Investment", P6K = "Exports")
+  )
 )
 
-kysynta |>
-  visu_plot(
-    colour = "era",
-    title = "Kysynnän pääerien volyymi, miljoonaa euroa"
-  ) |>
-  visu_interactive(
-    subtitle = "Kausitasoitettu ja työpäiväkorjattu, viitevuosi 2015",
-    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
-  )
+kuvio_kysynta <- function(kieli) {
+  t <- tekstit_kysynta[[kieli]]
+  d <- kysynta
+  d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "era", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_kysynta("fi") |>
+  visu_interactive(subtitle = tekstit_kysynta$fi$selite,
+                   caption = tekstit_kysynta$fi$lahde)
 ```
 
-## Kysynnän pääerien vuosimuutos
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kysynta, "kysynta-taso")
+```
+
+### Vuosimuutos
 
 ```{r}
 library(visu)
 
-erat <- c(
-  "P3KS14_S15" = "Yksityinen kulutus",
-  "P3KS13" = "Julkinen kulutus",
-  "P51K" = "Investoinnit",
-  "P6K" = "Vienti"
-)
+erat <- c("P3KS14_S15", "P3KS13", "P51K", "P6K")
 
 kysynta_muutos <- pxwebtools::pxw_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
   query = list(
     "timeperiod_q" = "*",
-    "taloustoimi_1_20180101" = names(erat),
+    "taloustoimi_1_20180101" = erat,
     "contentscode" = "vol_vv_kausitvv2015"
   )
-)
-
-kysynta_muutos$era <- factor(
-  kysynta_muutos$taloustoimi_1_20180101,
-  levels = names(erat),
-  labels = erat
 )
 
 # Nelja neljannesvuosisarjaa koko historiassa on lukukelvoton ryteikko.
 alku <- seq(max(kysynta_muutos$time), by = "-10 years", length.out = 2)[2]
 kysynta_muutos <- kysynta_muutos[kysynta_muutos$time >= alku, ]
 
-kysynta_muutos |>
-  visu_plot(
-    colour = "era",
-    title = "Kysynnän pääerien volyymin muutos vuodentakaisesta, %"
-  ) |>
-  visu_interactive(
-    subtitle = "Kausitasoitettu ja työpäiväkorjattu sarja",
-    caption = "Lähde: Tilastokeskus, neljännesvuositilinpito"
+tekstit_kysynta_muutos <- list(
+  fi = list(
+    otsikko = "Kysynnän pääerien volyymin muutos vuodentakaisesta, %",
+    selite = "Kausitasoitettu ja työpäiväkorjattu sarja",
+    lahde = "Lähde: Tilastokeskus, neljännesvuositilinpito",
+    sarjat = c(P3KS14_S15 = "Yksityinen kulutus", P3KS13 = "Julkinen kulutus",
+               P51K = "Investoinnit", P6K = "Vienti")
+  ),
+  sv = list(
+    otsikko = "Förändring av efterfrågans huvudposter från året innan, %",
+    selite = "Säsongrensad och arbetsdagskorrigerad serie",
+    lahde = "Källa: Statistikcentralen, kvartalsräkenskaper",
+    sarjat = c(P3KS14_S15 = "Privat konsumtion", P3KS13 = "Offentlig konsumtion",
+               P51K = "Investeringar", P6K = "Export")
+  ),
+  en = list(
+    otsikko = "Change in the volume of main demand components from a year earlier, %",
+    selite = "Seasonally and working day adjusted series",
+    lahde = "Source: Statistics Finland, quarterly national accounts",
+    sarjat = c(P3KS14_S15 = "Private consumption", P3KS13 = "Public consumption",
+               P51K = "Investment", P6K = "Exports")
   )
+)
+
+kuvio_kysynta_muutos <- function(kieli) {
+  t <- tekstit_kysynta_muutos[[kieli]]
+  d <- kysynta_muutos
+  d$era <- factor(d$taloustoimi_1_20180101, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "era", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_kysynta_muutos("fi") |>
+  visu_interactive(subtitle = tekstit_kysynta_muutos$fi$selite,
+                   caption = tekstit_kysynta_muutos$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kysynta_muutos, "kysynta-muutos")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(kysynta, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/")
 ```
 
 Lähde: [Tilastokeskus, neljännesvuositilinpito](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/), taulu 132h.

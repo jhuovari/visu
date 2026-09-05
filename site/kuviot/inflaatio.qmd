@@ -9,16 +9,20 @@ visu:
 
 Kolme mittaria samasta ilmiöstä. Kuluttajahintaindeksi (KHI) on kansallinen
 inflaatiomittari, yhdenmukaistettu kuluttajahintaindeksi (YKHI) EU-maiden
-vertailukelpoinen indeksi, ja YKHI:n ennakko on kuukauden lopussa julkaistava
-pikaestimaatti, joka tulee saataville noin kaksi viikkoa ennen varsinaista
-julkistusta. YKHI kiintein veroin (YKHI-KIVE) kertoo, paljonko inflaatiota
-jäisi jäljelle ilman välillisten verojen muutoksia.
+vertailukelpoinen indeksi, ja YKHI:n ennakko on kuukauden vaihteessa
+julkaistava pikaestimaatti noin kaksi viikkoa ennen varsinaista julkistusta.
+YKHI kiintein veroin (YKHI-KIVE) kertoo, paljonko inflaatiota jäisi jäljelle
+ilman välillisten verojen muutoksia.
 
-Sivu lukee kolmea taulua, ja mikä tahansa niistä päivittyy, kuvio rakennetaan
-uudelleen. Ennakkotaulu päivittyy kuukauden vaihteessa, KHI ja YKHI
-kuukauden puolivälissä.
+Saman sarjan taso ja muutos ovat kuvion välilehdillä. Kuvion alta saa
+ruotsin- ja englanninkielisen version ladattavana kuvana, ja kuvion tiedot
+kertovat mistä taulusta luvut ovat.
 
-## Vuosimuutos
+## Kuluttajahinnat
+
+::: {.panel-tabset}
+
+### Vuosimuutos
 
 ```{r}
 library(visu)
@@ -51,26 +55,59 @@ ennakko <- pxwebtools::pxw_get_data(
 )
 
 muutos <- rbind(
-  data.frame(time = khi$time, sarja = "Kuluttajahintaindeksi (KHI)", values = khi$values),
-  data.frame(time = ykhi$time, sarja = "Yhdenmukaistettu (YKHI)", values = ykhi$values),
-  data.frame(time = ennakko$time, sarja = "YKHI, ennakko", values = ennakko$values)
+  data.frame(time = khi$time, sarja = "khi", values = khi$values),
+  data.frame(time = ykhi$time, sarja = "ykhi", values = ykhi$values),
+  data.frame(time = ennakko$time, sarja = "ennakko", values = ennakko$values)
 )
 
-muutos$sarja <- factor(muutos$sarja, levels = c(
-  "Kuluttajahintaindeksi (KHI)", "Yhdenmukaistettu (YKHI)", "YKHI, ennakko"
-))
-
-# Ennakkotaulu kattaa vain kulumassa olevan vuoden, joten koko historia
-# hukuttaisi sen. Kaikkia sarjoja rajataan samalta kohdalta.
+# Ennakkotaulu kattaa vain kuluvan vuoden, joten koko historia hukuttaisi sen.
 alku <- seq(max(muutos$time), by = "-8 years", length.out = 2)[2]
 muutos <- muutos[muutos$time >= alku, ]
 
-muutos |>
-  visu_plot(colour = "sarja", title = "Kuluttajahintojen vuosimuutos, %") |>
-  visu_interactive(caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi")
+# Kaannokset elavat kuvion koodin vieressa: sama funktio piirtaa seka sivun
+# suomenkielisen kuvion etta ladattavat kieliversiot.
+tekstit <- list(
+  fi = list(
+    otsikko = "Kuluttajahintojen vuosimuutos, %",
+    lahde = "Lähde: Tilastokeskus, kuluttajahintaindeksi",
+    sarjat = c(khi = "Kuluttajahintaindeksi (KHI)",
+               ykhi = "Yhdenmukaistettu (YKHI)",
+               ennakko = "YKHI, ennakko")
+  ),
+  sv = list(
+    otsikko = "Konsumentprisernas årsförändring, %",
+    lahde = "Källa: Statistikcentralen, konsumentprisindex",
+    sarjat = c(khi = "Konsumentprisindex (KPI)",
+               ykhi = "Harmoniserat (HKPI)",
+               ennakko = "HKPI, preliminär")
+  ),
+  en = list(
+    otsikko = "Annual change in consumer prices, %",
+    lahde = "Source: Statistics Finland, Consumer Price Index",
+    sarjat = c(khi = "Consumer Price Index (CPI)",
+               ykhi = "Harmonised (HICP)",
+               ennakko = "HICP, preliminary")
+  )
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  d <- muutos
+  d$mittari <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "mittari", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio("fi") |>
+  visu_interactive(caption = tekstit$fi$lahde)
 ```
 
-## Indeksipisteluku
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "kuluttajahinnat-vuosimuutos")
+```
+
+### Indeksipisteluku
 
 ```{r}
 library(visu)
@@ -94,18 +131,59 @@ ykhi_taso <- pxwebtools::pxw_get_data(
 )
 
 taso <- rbind(
-  data.frame(time = khi_taso$time, sarja = "Kuluttajahintaindeksi (KHI)",
-             values = khi_taso$values),
-  data.frame(time = ykhi_taso$time, sarja = "Yhdenmukaistettu (YKHI)",
-             values = ykhi_taso$values)
+  data.frame(time = khi_taso$time, sarja = "khi", values = khi_taso$values),
+  data.frame(time = ykhi_taso$time, sarja = "ykhi", values = ykhi_taso$values)
 )
 
-taso |>
-  visu_plot(
-    colour = "sarja",
-    title = "Kuluttajahintojen indeksipisteluku, 2025 = 100"
-  ) |>
-  visu_interactive(caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi")
+tekstit_taso <- list(
+  fi = list(
+    otsikko = "Kuluttajahintojen indeksipisteluku, 2025 = 100",
+    lahde = "Lähde: Tilastokeskus, kuluttajahintaindeksi",
+    sarjat = c(khi = "Kuluttajahintaindeksi (KHI)",
+               ykhi = "Yhdenmukaistettu (YKHI)")
+  ),
+  sv = list(
+    otsikko = "Konsumentpriserna, indextal, 2025 = 100",
+    lahde = "Källa: Statistikcentralen, konsumentprisindex",
+    sarjat = c(khi = "Konsumentprisindex (KPI)",
+               ykhi = "Harmoniserat (HKPI)")
+  ),
+  en = list(
+    otsikko = "Consumer prices, point figure, 2025 = 100",
+    lahde = "Source: Statistics Finland, Consumer Price Index",
+    sarjat = c(khi = "Consumer Price Index (CPI)",
+               ykhi = "Harmonised (HICP)")
+  )
+)
+
+kuvio_taso <- function(kieli) {
+  t <- tekstit_taso[[kieli]]
+  d <- taso
+  d$mittari <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "mittari", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_taso("fi") |>
+  visu_interactive(caption = tekstit_taso$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_taso, "kuluttajahinnat-taso")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  list(khi, ykhi, ennakko),
+  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/")
+)
 ```
 
 ## Välillisten verojen vaikutus
@@ -122,122 +200,219 @@ kive <- pxwebtools::pxw_get_data(
   )
 )
 
-kive$sarja <- factor(
-  kive$contentscode,
-  levels = c("vm_ykhi", "vm_ykhi_kive"),
-  labels = c("YKHI", "YKHI kiintein veroin")
-)
-
 alku <- seq(max(kive$time), by = "-8 years", length.out = 2)[2]
 kive <- kive[kive$time >= alku, ]
 
-kive |>
-  visu_plot(
-    colour = "sarja",
-    title = "YKHI:n vuosimuutos alkuperäisin ja kiintein veroin, %"
-  ) |>
+tekstit_kive <- list(
+  fi = list(
+    otsikko = "YKHI:n vuosimuutos alkuperäisin ja kiintein veroin, %",
+    selite = "Sarjojen ero on välillisten verojen muutosten vaikutus",
+    lahde = "Lähde: Tilastokeskus, kuluttajahintaindeksi",
+    sarjat = c(vm_ykhi = "YKHI", vm_ykhi_kive = "YKHI kiintein veroin")
+  ),
+  sv = list(
+    otsikko = "HKPI:s årsförändring med ursprungliga och konstanta skatter, %",
+    selite = "Skillnaden mellan serierna är de indirekta skatternas inverkan",
+    lahde = "Källa: Statistikcentralen, konsumentprisindex",
+    sarjat = c(vm_ykhi = "HKPI", vm_ykhi_kive = "HKPI, konstanta skatter")
+  ),
+  en = list(
+    otsikko = "Annual change in HICP at original and constant taxes, %",
+    selite = "The gap between the series is the effect of indirect tax changes",
+    lahde = "Source: Statistics Finland, Consumer Price Index",
+    sarjat = c(vm_ykhi = "HICP", vm_ykhi_kive = "HICP at constant taxes")
+  )
+)
+
+kuvio_kive <- function(kieli) {
+  t <- tekstit_kive[[kieli]]
+  d <- kive
+  d$mittari <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "mittari", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_kive("fi") |>
   visu_interactive(
-    subtitle = "Sarjojen ero on välillisten verojen muutosten vaikutus",
-    caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
+    subtitle = tekstit_kive$fi$selite,
+    caption = tekstit_kive$fi$lahde
   )
 ```
 
-## Hyödykeryhmien vuosimuutos
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kive, "ykhi-kive")
+visu_metadata(kive, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/")
+```
+
+## Hyödykeryhmät
+
+::: {.panel-tabset}
+
+### Vuosimuutos
 
 ```{r}
 library(visu)
 
-ryhmat <- c(
-  "01" = "Elintarvikkeet",
-  "04" = "Asuminen ja energia",
-  "07" = "Liikenne",
-  "11" = "Ravintolat ja hotellit"
-)
+ryhmat <- c("01", "04", "07", "11")
 
 ryhma_muutos <- pxwebtools::pxw_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
   query = list(
     "timeperiod_m" = "*",
-    "coicop_46_20231201" = names(ryhmat),
+    "coicop_46_20231201" = ryhmat,
     "contentscode" = "vm_khi"
   )
-)
-
-ryhma_muutos$ryhma <- factor(
-  ryhma_muutos$coicop_46_20231201,
-  levels = names(ryhmat),
-  labels = ryhmat
 )
 
 alku <- seq(max(ryhma_muutos$time), by = "-8 years", length.out = 2)[2]
 ryhma_muutos <- ryhma_muutos[ryhma_muutos$time >= alku, ]
 
-ryhma_muutos |>
-  visu_plot(
-    colour = "ryhma",
-    title = "Hyödykeryhmien vuosimuutos, %"
-  ) |>
+tekstit_ryhmat <- list(
+  fi = list(
+    otsikko = "Hyödykeryhmien vuosimuutos, %",
+    selite = "Neljä painavinta pääryhmää kuluttajahintaindeksin korista",
+    lahde = "Lähde: Tilastokeskus, kuluttajahintaindeksi",
+    sarjat = c("01" = "Elintarvikkeet", "04" = "Asuminen ja energia",
+               "07" = "Liikenne", "11" = "Ravintolat ja hotellit")
+  ),
+  sv = list(
+    otsikko = "Varugruppernas årsförändring, %",
+    selite = "De fyra tyngsta huvudgrupperna i konsumentprisindexets korg",
+    lahde = "Källa: Statistikcentralen, konsumentprisindex",
+    sarjat = c("01" = "Livsmedel", "04" = "Boende och energi",
+               "07" = "Transport", "11" = "Restauranger och logitjänster")
+  ),
+  en = list(
+    otsikko = "Annual change by commodity group, %",
+    selite = "The four heaviest main groups in the consumer price index basket",
+    lahde = "Source: Statistics Finland, Consumer Price Index",
+    sarjat = c("01" = "Food", "04" = "Housing and energy",
+               "07" = "Transport", "11" = "Restaurants and accommodation")
+  )
+)
+
+kuvio_ryhmat <- function(kieli) {
+  t <- tekstit_ryhmat[[kieli]]
+  d <- ryhma_muutos
+  d$ryhma <- factor(d$coicop_46_20231201, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "ryhma", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_ryhmat("fi") |>
   visu_interactive(
-    subtitle = "Neljä painavinta pääryhmää kuluttajahintaindeksin korista",
-    caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
+    subtitle = tekstit_ryhmat$fi$selite,
+    caption = tekstit_ryhmat$fi$lahde
   )
 ```
 
-## Mistä vuosimuutos syntyi
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_ryhmat, "hyodykeryhmat-vuosimuutos")
+```
+
+### Vaikutus vuosimuutokseen
 
 ```{r}
 library(visu)
 
-paaryhmat <- c(
-  "01" = "Elintarvikkeet",
-  "02" = "Alkoholi ja tupakka",
-  "03" = "Vaatetus ja jalkineet",
-  "04" = "Asuminen ja energia",
-  "05" = "Kalusteet ja kodinhoito",
-  "06" = "Terveys",
-  "07" = "Liikenne",
-  "08" = "Informaatio ja viestintä",
-  "09" = "Kulttuuri ja vapaa-aika",
-  "10" = "Koulutus",
-  "11" = "Ravintolat ja hotellit",
-  "12" = "Vakuutus- ja rahoituspalvelut",
-  "13" = "Muut tavarat ja palvelut"
-)
+paaryhmat <- c("01", "02", "03", "04", "05", "06", "07",
+               "08", "09", "10", "11", "12", "13")
 
 vaikutus <- pxwebtools::pxw_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
   query = list(
     "timeperiod_m" = "*",
-    "coicop_46_20231201" = names(paaryhmat),
+    "coicop_46_20231201" = paaryhmat,
     "contentscode" = "vv_khi"
   )
 )
 
 # Vaikutukset lasketaan vain nykyisella perusvuodella, joten sarja on lyhyt ja
 # poikkileikkaus viimeisimmasta kuukaudesta kertoo siita enemman kuin aikasarja.
-# Pylvaat suuruusjarjestykseen: taso muodostaa tekijajarjestyksen.
-viimeisin <- vaikutus[!is.na(vaikutus$values) & vaikutus$time == max(vaikutus$time[!is.na(vaikutus$values)]), ]
+viimeisin <- vaikutus[!is.na(vaikutus$values), ]
+viimeisin <- viimeisin[viimeisin$time == max(viimeisin$time), ]
 viimeisin <- viimeisin[order(viimeisin$values), ]
-viimeisin$ryhma <- factor(
-  paaryhmat[as.character(viimeisin$coicop_46_20231201)],
-  levels = paaryhmat[as.character(viimeisin$coicop_46_20231201)]
+
+nimet <- list(
+  fi = c("01" = "Elintarvikkeet", "02" = "Alkoholi ja tupakka",
+         "03" = "Vaatetus ja jalkineet", "04" = "Asuminen ja energia",
+         "05" = "Kalusteet ja kodinhoito", "06" = "Terveys", "07" = "Liikenne",
+         "08" = "Informaatio ja viestintä", "09" = "Kulttuuri ja vapaa-aika",
+         "10" = "Koulutus", "11" = "Ravintolat ja hotellit",
+         "12" = "Vakuutus- ja rahoituspalvelut", "13" = "Muut tavarat ja palvelut"),
+  sv = c("01" = "Livsmedel", "02" = "Alkohol och tobak",
+         "03" = "Kläder och skor", "04" = "Boende och energi",
+         "05" = "Inventarier och hushållsvård", "06" = "Hälsovård",
+         "07" = "Transport", "08" = "Information och kommunikation",
+         "09" = "Kultur och fritid", "10" = "Utbildning",
+         "11" = "Restauranger och logitjänster",
+         "12" = "Försäkrings- och finanstjänster", "13" = "Övriga varor och tjänster"),
+  en = c("01" = "Food", "02" = "Alcohol and tobacco",
+         "03" = "Clothing and footwear", "04" = "Housing and energy",
+         "05" = "Furnishings and household", "06" = "Health", "07" = "Transport",
+         "08" = "Information and communication", "09" = "Culture and recreation",
+         "10" = "Education", "11" = "Restaurants and accommodation",
+         "12" = "Insurance and financial services", "13" = "Other goods and services")
 )
 
-kuvio <- visu_plot(
-  viimeisin,
-  x = "ryhma",
-  type = "col",
-  title = paste0(
-    "Hyödykeryhmien vaikutus vuosimuutokseen ",
-    format(max(viimeisin$time), "%m/%Y"), ", %-yksikköä"
+kuukausi <- format(max(viimeisin$time), "%m/%Y")
+
+tekstit_vaikutus <- list(
+  fi = list(
+    otsikko = paste0("Hyödykeryhmien vaikutus vuosimuutokseen ", kuukausi,
+                     ", %-yksikköä"),
+    selite = "Pääryhmien vaikutukset summautuvat kokonaisindeksin vuosimuutokseen",
+    lahde = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
+  ),
+  sv = list(
+    otsikko = paste0("Varugruppernas inverkan på årsförändringen ", kuukausi,
+                     ", procentenheter"),
+    selite = "Huvudgruppernas inverkan summerar till totalindexets årsförändring",
+    lahde = "Källa: Statistikcentralen, konsumentprisindex"
+  ),
+  en = list(
+    otsikko = paste0("Contribution to the annual change by commodity group ",
+                     kuukausi, ", percentage points"),
+    selite = "The contributions of the main groups sum to the total index change",
+    lahde = "Source: Statistics Finland, Consumer Price Index"
   )
 )
 
-visu_interactive(
-  kuvio + ggplot2::coord_flip(),
-  subtitle = "Pääryhmien vaikutukset summautuvat kokonaisindeksin vuosimuutokseen",
-  caption = "Lähde: Tilastokeskus, kuluttajahintaindeksi"
-)
+kuvio_vaikutus <- function(kieli) {
+  t <- tekstit_vaikutus[[kieli]]
+  koodit <- as.character(viimeisin$coicop_46_20231201)
+  d <- viimeisin
+  # Pylvaat suuruusjarjestykseen: data on jo jarjestetty, joten tasojen
+  # jarjestys seuraa arvoja.
+  d$ryhma <- factor(nimet[[kieli]][koodit], levels = nimet[[kieli]][koodit])
+  visu_plot(d, x = "ryhma", type = "col", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde) +
+    ggplot2::coord_flip()
+}
+
+kuvio_vaikutus("fi") |>
+  visu_interactive(
+    subtitle = tekstit_vaikutus$fi$selite,
+    caption = tekstit_vaikutus$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_vaikutus, "hyodykeryhmat-vaikutus")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(ryhma_muutos, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/")
 ```
 
 Lähde: [Tilastokeskus, kuluttajahintaindeksi](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__khi/), taulut 15b5, 15b7 ja 15b9.
