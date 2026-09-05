@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Kotitaloudet – visu</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2872a7511705894b565d6ebf33be87ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ei tuloksia",
+    "search-matching-documents-text": "tulokset",
+    "search-copy-link-title": "Kopioi linkki hakuun",
+    "search-hide-matches-text": "Piilota loput tulokset",
+    "search-more-match-text": "tulos tässä dokumentissa",
+    "search-more-matches-text": "tulosta tässä dokumentissa",
+    "search-clear-button-title": "Tyhjennä",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Peruuta",
+    "search-submit-button-title": "Lähetä",
+    "search-label": "Hae"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+<script src="../site_libs/plotly-locale-fi-2.25.2/fi.js"></script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">visu</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Hae"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Vaihda navigointi" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Kuviot</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Kotitaloudet</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Kotitalouksien taloudellinen asema kahdesta suunnasta: paljonko tuloista jää säästöön ja paljonko velkaa on suhteessa tuloihin. Säästämisaste on sektoritilien tunnusluku ja velkaantumisaste rahoitustilinpidon.</p>
+<section id="säästämisaste" class="level2">
+<h2 class="anchored" data-anchor-id="säästämisaste">Säästämisaste</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Kotitaloudet</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Investointiaste</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>saastaminen <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S14"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"ntp-tasm_b8n"</span>, <span class="st">"ntp-kausit_b8n"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>tekstit <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Kotitalouksien säästämisaste, %"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Säästö suhteessa käytettävissä olevaan tuloon"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, kansantalouden sektoritilit"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="st">"ntp-tasm_b8n"</span> <span class="ot">=</span> <span class="st">"Alkuperäinen"</span>, <span class="st">"ntp-kausit_b8n"</span> <span class="ot">=</span> <span class="st">"Kausitasoitettu"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Hushållens sparkvot, %"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Sparande i förhållande till disponibel inkomst"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, sektorräkenskaper"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="st">"ntp-tasm_b8n"</span> <span class="ot">=</span> <span class="st">"Ursprunglig"</span>, <span class="st">"ntp-kausit_b8n"</span> <span class="ot">=</span> <span class="st">"Säsongrensad"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Household saving rate, %"</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Saving relative to disposable income"</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, sector accounts"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="st">"ntp-tasm_b8n"</span> <span class="ot">=</span> <span class="st">"Original"</span>, <span class="st">"ntp-kausit_b8n"</span> <span class="ot">=</span> <span class="st">"Seasonally adjusted"</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>kuvio <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit[[kieli]]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> saastaminen</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sama ilmio eri tavalla siloitettuna: sama vari, kausitasoitettu paksummalla.</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>sarja <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>contentscode, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat), <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">linewidth =</span> <span class="st">"sarja"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit<span class="sc">$</span>fi<span class="sc">$</span>selite, <span class="at">caption =</span> tekstit<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-56eada32e065299833c9" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-56eada32e065299833c9">{"x":{"data":[{"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[4.9000000000000004,1.3,3.8999999999999999,-1.1000000000000001,4,1.7,4.9000000000000004,-6,-3,7.7999999999999998,3.1000000000000001,-3.3999999999999999,7.4000000000000004,-1.7,1,0.90000000000000002,3.3999999999999999,3.7999999999999998,-0.59999999999999998,0,-1.5,7,1.6000000000000001,2.6000000000000001,-2.7999999999999998,5.4000000000000004,0.59999999999999998,-0.90000000000000002,-1.6000000000000001,0.5,-0.80000000000000004,-1.5,-5.5,5,-1.1000000000000001,-0.69999999999999996,-7.7000000000000002,5.4000000000000004,-1.8,1.7,-3.2000000000000002,9.5999999999999996,4.5,3.7000000000000002,3.3999999999999999,9.5,2.3999999999999999,2.2999999999999998,0.5,8.5,-0.59999999999999998,1.5,-6.7000000000000002,11.1,0.69999999999999996,-0.20000000000000001,-1.5,6.9000000000000004,-0.29999999999999999,0.5,-4.2000000000000002,6.0999999999999996,-0.29999999999999999,1.1000000000000001,-3.2999999999999998,6,-0.5,-0.40000000000000002,-1.8,4.4000000000000004,-2.2999999999999998,-0.69999999999999996,-1.7,6.2999999999999998,0.5,-2.8999999999999999,-0.59999999999999998,4.5999999999999996,-0.10000000000000001,0.40000000000000002,0.59999999999999998,9.0999999999999996,5.7000000000000002,-4.5999999999999996,3.5,15.300000000000001,6.9000000000000004,-0.5,5.7999999999999998,9.5999999999999996,6.2000000000000002,-5.2000000000000002,3.2000000000000002,6.4000000000000004,3.3999999999999999,-7.5999999999999996,1.3999999999999999,6.2999999999999998,5.0999999999999996,-5.2999999999999998,1.3,7.2000000000000002,6.7000000000000002,-0.40000000000000002,4.0999999999999996,10.199999999999999,8.8000000000000007,0,4.5],"text":["time: 1999-01-01<br />values:  4.9","time: 1999-04-01<br />values:  1.3","time: 1999-07-01<br />values:  3.9","time: 1999-10-01<br />values: -1.1","time: 2000-01-01<br />values:  4.0","time: 2000-04-01<br />values:  1.7","time: 2000-07-01<br />values:  4.9","time: 2000-10-01<br />values: -6.0","time: 2001-01-01<br />values: -3.0","time: 2001-04-01<br />values:  7.8","time: 2001-07-01<br />values:  3.1","time: 2001-10-01<br />values: -3.4","time: 2002-01-01<br />values:  7.4","time: 2002-04-01<br />values: -1.7","time: 2002-07-01<br />values:  1.0","time: 2002-10-01<br />values:  0.9","time: 2003-01-01<br />values:  3.4","time: 2003-04-01<br />values:  3.8","time: 2003-07-01<br />values: -0.6","time: 2003-10-01<br />values:  0.0","time: 2004-01-01<br />values: -1.5","time: 2004-04-01<br />values:  7.0","time: 2004-07-01<br />values:  1.6","time: 2004-10-01<br />values:  2.6","time: 2005-01-01<br />values: -2.8","time: 2005-04-01<br />values:  5.4","time: 2005-07-01<br />values:  0.6","time: 2005-10-01<br />values: -0.9","time: 2006-01-01<br />values: -1.6","time: 2006-04-01<br />values:  0.5","time: 2006-07-01<br />values: -0.8","time: 2006-10-01<br />values: -1.5","time: 2007-01-01<br />values: -5.5","time: 2007-04-01<br />values:  5.0","time: 2007-07-01<br />values: -1.1","time: 2007-10-01<br />values: -0.7","time: 2008-01-01<br />values: -7.7","time: 2008-04-01<br />values:  5.4","time: 2008-07-01<br />values: -1.8","time: 2008-10-01<br />values:  1.7","time: 2009-01-01<br />values: -3.2","time: 2009-04-01<br />values:  9.6","time: 2009-07-01<br />values:  4.5","time: 2009-10-01<br />values:  3.7","time: 2010-01-01<br />values:  3.4","time: 2010-04-01<br />values:  9.5","time: 2010-07-01<br />values:  2.4","time: 2010-10-01<br />values:  2.3","time: 2011-01-01<br />values:  0.5","time: 2011-04-01<br />values:  8.5","time: 2011-07-01<br />values: -0.6","time: 2011-10-01<br />values:  1.5","time: 2012-01-01<br />values: -6.7","time: 2012-04-01<br />values: 11.1","time: 2012-07-01<br />values:  0.7","time: 2012-10-01<br />values: -0.2","time: 2013-01-01<br />values: -1.5","time: 2013-04-01<br />values:  6.9","time: 2013-07-01<br />values: -0.3","time: 2013-10-01<br />values:  0.5","time: 2014-01-01<br />values: -4.2","time: 2014-04-01<br />values:  6.1","time: 2014-07-01<br />values: -0.3","time: 2014-10-01<br />values:  1.1","time: 2015-01-01<br />values: -3.3","time: 2015-04-01<br />values:  6.0","time: 2015-07-01<br />values: -0.5","time: 2015-10-01<br />values: -0.4","time: 2016-01-01<br />values: -1.8","time: 2016-04-01<br />values:  4.4","time: 2016-07-01<br />values: -2.3","time: 2016-10-01<br />values: -0.7","time: 2017-01-01<br />values: -1.7","time: 2017-04-01<br />values:  6.3","time: 2017-07-01<br />values:  0.5","time: 2017-10-01<br />values: -2.9","time: 2018-01-01<br />values: -0.6","time: 2018-04-01<br />values:  4.6","time: 2018-07-01<br />values: -0.1","time: 2018-10-01<br />values:  0.4","time: 2019-01-01<br />values:  0.6","time: 2019-04-01<br />values:  9.1","time: 2019-07-01<br />values:  5.7","time: 2019-10-01<br />values: -4.6","time: 2020-01-01<br />values:  3.5","time: 2020-04-01<br />values: 15.3","time: 2020-07-01<br />values:  6.9","time: 2020-10-01<br />values: -0.5","time: 2021-01-01<br />values:  5.8","time: 2021-04-01<br />values:  9.6","time: 2021-07-01<br />values:  6.2","time: 2021-10-01<br />values: -5.2","time: 2022-01-01<br />values:  3.2","time: 2022-04-01<br />values:  6.4","time: 2022-07-01<br />values:  3.4","time: 2022-10-01<br />values: -7.6","time: 2023-01-01<br />values:  1.4","time: 2023-04-01<br />values:  6.3","time: 2023-07-01<br />values:  5.1","time: 2023-10-01<br />values: -5.3","time: 2024-01-01<br />values:  1.3","time: 2024-04-01<br />values:  7.2","time: 2024-07-01<br />values:  6.7","time: 2024-10-01<br />values: -0.4","time: 2025-01-01<br />values:  4.1","time: 2025-04-01<br />values: 10.2","time: 2025-07-01<br />values:  8.8","time: 2025-10-01<br />values:  0.0","time: 2026-01-01<br />values:  4.5"],"type":"scatter","mode":"lines","line":{"width":1.7007874015748035,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Alkuperäinen","legendgroup":"Alkuperäinen","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[3,0.90000000000000002,1.5,3.2999999999999998,3.7000000000000002,-0.80000000000000004,2.8999999999999999,-1.3,2.2000000000000002,2.2999999999999998,0.69999999999999996,0.40000000000000002,1.8999999999999999,0.90000000000000002,0.80000000000000004,3.7999999999999998,1.3999999999999999,2.2000000000000002,0.69999999999999996,2.1000000000000001,1.8999999999999999,3.3999999999999999,2.7000000000000002,2.5,0.69999999999999996,1,1.3999999999999999,-0.10000000000000001,-0.20000000000000001,-2.3999999999999999,0,-0.80000000000000004,-1.3,-0.40000000000000002,0.40000000000000002,-0.10000000000000001,-1.3999999999999999,-0.5,-0.40000000000000002,1.3,1.3999999999999999,4.7999999999999998,5.4000000000000004,4.2999999999999998,5.7000000000000002,4.2999999999999998,4.4000000000000004,3.6000000000000001,4.2000000000000002,2.7000000000000002,1.3999999999999999,2.2999999999999998,-1.8999999999999999,5.7000000000000002,2.2000000000000002,0.59999999999999998,1.8,2.1000000000000001,1.2,1.3,0.40000000000000002,0.90000000000000002,0.59999999999999998,1.6000000000000001,0.40000000000000002,0.80000000000000004,0.80000000000000004,0.5,-0.10000000000000001,-0.20000000000000001,-0.40000000000000002,0.90000000000000002,-0.20000000000000001,1.6000000000000001,2.3999999999999999,-1.1000000000000001,0.40000000000000002,0.20000000000000001,1.8999999999999999,2.1000000000000001,2.2000000000000002,3,3.3999999999999999,3.2000000000000002,3.3999999999999999,11.800000000000001,3.5,7.0999999999999996,5.7000000000000002,5.4000000000000004,3.8999999999999999,2.1000000000000001,4.2999999999999998,-0.10000000000000001,0.80000000000000004,1,2,1.3999999999999999,2.6000000000000001,2.2999999999999998,2.3999999999999999,3.5,3.5,5.9000000000000004,5,7,5.7999999999999998,6.0999999999999996,5.4000000000000004],"text":["time: 1999-01-01<br />values:  3.0","time: 1999-04-01<br />values:  0.9","time: 1999-07-01<br />values:  1.5","time: 1999-10-01<br />values:  3.3","time: 2000-01-01<br />values:  3.7","time: 2000-04-01<br />values: -0.8","time: 2000-07-01<br />values:  2.9","time: 2000-10-01<br />values: -1.3","time: 2001-01-01<br />values:  2.2","time: 2001-04-01<br />values:  2.3","time: 2001-07-01<br />values:  0.7","time: 2001-10-01<br />values:  0.4","time: 2002-01-01<br />values:  1.9","time: 2002-04-01<br />values:  0.9","time: 2002-07-01<br />values:  0.8","time: 2002-10-01<br />values:  3.8","time: 2003-01-01<br />values:  1.4","time: 2003-04-01<br />values:  2.2","time: 2003-07-01<br />values:  0.7","time: 2003-10-01<br />values:  2.1","time: 2004-01-01<br />values:  1.9","time: 2004-04-01<br />values:  3.4","time: 2004-07-01<br />values:  2.7","time: 2004-10-01<br />values:  2.5","time: 2005-01-01<br />values:  0.7","time: 2005-04-01<br />values:  1.0","time: 2005-07-01<br />values:  1.4","time: 2005-10-01<br />values: -0.1","time: 2006-01-01<br />values: -0.2","time: 2006-04-01<br />values: -2.4","time: 2006-07-01<br />values:  0.0","time: 2006-10-01<br />values: -0.8","time: 2007-01-01<br />values: -1.3","time: 2007-04-01<br />values: -0.4","time: 2007-07-01<br />values:  0.4","time: 2007-10-01<br />values: -0.1","time: 2008-01-01<br />values: -1.4","time: 2008-04-01<br />values: -0.5","time: 2008-07-01<br />values: -0.4","time: 2008-10-01<br />values:  1.3","time: 2009-01-01<br />values:  1.4","time: 2009-04-01<br />values:  4.8","time: 2009-07-01<br />values:  5.4","time: 2009-10-01<br />values:  4.3","time: 2010-01-01<br />values:  5.7","time: 2010-04-01<br />values:  4.3","time: 2010-07-01<br />values:  4.4","time: 2010-10-01<br />values:  3.6","time: 2011-01-01<br />values:  4.2","time: 2011-04-01<br />values:  2.7","time: 2011-07-01<br />values:  1.4","time: 2011-10-01<br />values:  2.3","time: 2012-01-01<br />values: -1.9","time: 2012-04-01<br />values:  5.7","time: 2012-07-01<br />values:  2.2","time: 2012-10-01<br />values:  0.6","time: 2013-01-01<br />values:  1.8","time: 2013-04-01<br />values:  2.1","time: 2013-07-01<br />values:  1.2","time: 2013-10-01<br />values:  1.3","time: 2014-01-01<br />values:  0.4","time: 2014-04-01<br />values:  0.9","time: 2014-07-01<br />values:  0.6","time: 2014-10-01<br />values:  1.6","time: 2015-01-01<br />values:  0.4","time: 2015-04-01<br />values:  0.8","time: 2015-07-01<br />values:  0.8","time: 2015-10-01<br />values:  0.5","time: 2016-01-01<br />values: -0.1","time: 2016-04-01<br />values: -0.2","time: 2016-07-01<br />values: -0.4","time: 2016-10-01<br />values:  0.9","time: 2017-01-01<br />values: -0.2","time: 2017-04-01<br />values:  1.6","time: 2017-07-01<br />values:  2.4","time: 2017-10-01<br />values: -1.1","time: 2018-01-01<br />values:  0.4","time: 2018-04-01<br />values:  0.2","time: 2018-07-01<br />values:  1.9","time: 2018-10-01<br />values:  2.1","time: 2019-01-01<br />values:  2.2","time: 2019-04-01<br />values:  3.0","time: 2019-07-01<br />values:  3.4","time: 2019-10-01<br />values:  3.2","time: 2020-01-01<br />values:  3.4","time: 2020-04-01<br />values: 11.8","time: 2020-07-01<br />values:  3.5","time: 2020-10-01<br />values:  7.1","time: 2021-01-01<br />values:  5.7","time: 2021-04-01<br />values:  5.4","time: 2021-07-01<br />values:  3.9","time: 2021-10-01<br />values:  2.1","time: 2022-01-01<br />values:  4.3","time: 2022-04-01<br />values: -0.1","time: 2022-07-01<br />values:  0.8","time: 2022-10-01<br />values:  1.0","time: 2023-01-01<br />values:  2.0","time: 2023-04-01<br />values:  1.4","time: 2023-07-01<br />values:  2.6","time: 2023-10-01<br />values:  2.3","time: 2024-01-01<br />values:  2.4","time: 2024-04-01<br />values:  3.5","time: 2024-07-01<br />values:  3.5","time: 2024-10-01<br />values:  5.9","time: 2025-01-01<br />values:  5.0","time: 2025-04-01<br />values:  7.0","time: 2025-07-01<br />values:  5.8","time: 2025-10-01<br />values:  6.1","time: 2026-01-01<br />values:  5.4"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Kausitasoitettu","legendgroup":"Kausitasoitettu","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Kotitalouksien säästämisaste, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10098.9,20947.099999999999],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-8.8499999999999996,16.449999999999999],"tickmode":"array","ticktext":["-5","0","5","10","15"],"tickvals":[-5,0,5,10.000000000000002,15.000000000000002],"categoryorder":"array","categoryarray":["-5","0","5","10","15"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Säästö suhteessa käytettävissä olevaan tuloon","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, kansantalouden sektoritilit","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b1d4cc3db7f":{"linewidth":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"b1d4cc3db7f","visdat":{"b1d4cc3db7f":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/saastamisaste-sv.png">På svenska</a> · <a href="kuvat/saastamisaste-en.png">In English</a></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>investoinnit <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"S14"</span>, <span class="st">"S11"</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"ntp-kausit_p51k"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>tekstit_inv <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Investointiaste, kausitasoitettu, %"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Kiinteän pääoman bruttomuodostus suhteessa sektorin tuloon"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, kansantalouden sektoritilit"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">S14 =</span> <span class="st">"Kotitaloudet"</span>, <span class="at">S11 =</span> <span class="st">"Yritykset"</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Investeringsgrad, säsongrensad, %"</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Fast bruttoinvestering i förhållande till sektorns inkomst"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, sektorräkenskaper"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">S14 =</span> <span class="st">"Hushåll"</span>, <span class="at">S11 =</span> <span class="st">"Företag"</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Investment rate, seasonally adjusted, %"</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Gross fixed capital formation relative to sector income"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, sector accounts"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">S14 =</span> <span class="st">"Households"</span>, <span class="at">S11 =</span> <span class="st">"Corporations"</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>kuvio_inv <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_inv[[kieli]]</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> investoinnit</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>sektori <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>sektoriluokitus_7_20230101, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat),</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">colour =</span> <span class="st">"sektori"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_inv</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_inv<span class="sc">$</span>fi<span class="sc">$</span>selite, <span class="at">caption =</span> tekstit_inv<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-38f2e4841087d27f661f" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-38f2e4841087d27f661f">{"x":{"data":[{"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[12.699999999999999,12.800000000000001,12.4,11.9,13.199999999999999,13.6,12.9,13.1,12.199999999999999,11.699999999999999,11.699999999999999,11.699999999999999,11.5,11.5,11.4,11,11.699999999999999,11.699999999999999,12.300000000000001,12.4,12.800000000000001,12.9,13,13.199999999999999,13.5,14,14.300000000000001,14.699999999999999,14.6,14.6,14.4,14.9,15,15.1,14.9,14.6,14.300000000000001,13.6,13.300000000000001,12.4,11.9,11,10.699999999999999,11,11.5,12.6,12.800000000000001,12.9,13,12.699999999999999,13.199999999999999,13.199999999999999,13.4,13.1,13.300000000000001,13.199999999999999,12.9,12.699999999999999,12.6,12.4,12.199999999999999,12,11.800000000000001,11.300000000000001,11.300000000000001,11.1,11,11.9,12.1,12.699999999999999,13.300000000000001,12.4,12.9,12.800000000000001,12.699999999999999,13.5,13.4,13.5,13.6,13.4,13.6,13.300000000000001,13.1,13.4,13.1,13.4,13,12.5,12.800000000000001,12.800000000000001,12.9,13.5,14.300000000000001,13.5,13.5,12.5,12.4,11.5,10.6,9.8000000000000007,8.5,8.4000000000000004,8.0999999999999996,7.9000000000000004,8,8,8,8.0999999999999996,7.7999999999999998],"text":["sektori: Kotitaloudet<br />time: 1999-01-01<br />values: 12.7","sektori: Kotitaloudet<br />time: 1999-04-01<br />values: 12.8","sektori: Kotitaloudet<br />time: 1999-07-01<br />values: 12.4","sektori: Kotitaloudet<br />time: 1999-10-01<br />values: 11.9","sektori: Kotitaloudet<br />time: 2000-01-01<br />values: 13.2","sektori: Kotitaloudet<br />time: 2000-04-01<br />values: 13.6","sektori: Kotitaloudet<br />time: 2000-07-01<br />values: 12.9","sektori: Kotitaloudet<br />time: 2000-10-01<br />values: 13.1","sektori: Kotitaloudet<br />time: 2001-01-01<br />values: 12.2","sektori: Kotitaloudet<br />time: 2001-04-01<br />values: 11.7","sektori: Kotitaloudet<br />time: 2001-07-01<br />values: 11.7","sektori: Kotitaloudet<br />time: 2001-10-01<br />values: 11.7","sektori: Kotitaloudet<br />time: 2002-01-01<br />values: 11.5","sektori: Kotitaloudet<br />time: 2002-04-01<br />values: 11.5","sektori: Kotitaloudet<br />time: 2002-07-01<br />values: 11.4","sektori: Kotitaloudet<br />time: 2002-10-01<br />values: 11.0","sektori: Kotitaloudet<br />time: 2003-01-01<br />values: 11.7","sektori: Kotitaloudet<br />time: 2003-04-01<br />values: 11.7","sektori: Kotitaloudet<br />time: 2003-07-01<br />values: 12.3","sektori: Kotitaloudet<br />time: 2003-10-01<br />values: 12.4","sektori: Kotitaloudet<br />time: 2004-01-01<br />values: 12.8","sektori: Kotitaloudet<br />time: 2004-04-01<br />values: 12.9","sektori: Kotitaloudet<br />time: 2004-07-01<br />values: 13.0","sektori: Kotitaloudet<br />time: 2004-10-01<br />values: 13.2","sektori: Kotitaloudet<br />time: 2005-01-01<br />values: 13.5","sektori: Kotitaloudet<br />time: 2005-04-01<br />values: 14.0","sektori: Kotitaloudet<br />time: 2005-07-01<br />values: 14.3","sektori: Kotitaloudet<br />time: 2005-10-01<br />values: 14.7","sektori: Kotitaloudet<br />time: 2006-01-01<br />values: 14.6","sektori: Kotitaloudet<br />time: 2006-04-01<br />values: 14.6","sektori: Kotitaloudet<br />time: 2006-07-01<br />values: 14.4","sektori: Kotitaloudet<br />time: 2006-10-01<br />values: 14.9","sektori: Kotitaloudet<br />time: 2007-01-01<br />values: 15.0","sektori: Kotitaloudet<br />time: 2007-04-01<br />values: 15.1","sektori: Kotitaloudet<br />time: 2007-07-01<br />values: 14.9","sektori: Kotitaloudet<br />time: 2007-10-01<br />values: 14.6","sektori: Kotitaloudet<br />time: 2008-01-01<br />values: 14.3","sektori: Kotitaloudet<br />time: 2008-04-01<br />values: 13.6","sektori: Kotitaloudet<br />time: 2008-07-01<br />values: 13.3","sektori: Kotitaloudet<br />time: 2008-10-01<br />values: 12.4","sektori: Kotitaloudet<br />time: 2009-01-01<br />values: 11.9","sektori: Kotitaloudet<br />time: 2009-04-01<br />values: 11.0","sektori: Kotitaloudet<br />time: 2009-07-01<br />values: 10.7","sektori: Kotitaloudet<br />time: 2009-10-01<br />values: 11.0","sektori: Kotitaloudet<br />time: 2010-01-01<br />values: 11.5","sektori: Kotitaloudet<br />time: 2010-04-01<br />values: 12.6","sektori: Kotitaloudet<br />time: 2010-07-01<br />values: 12.8","sektori: Kotitaloudet<br />time: 2010-10-01<br />values: 12.9","sektori: Kotitaloudet<br />time: 2011-01-01<br />values: 13.0","sektori: Kotitaloudet<br />time: 2011-04-01<br />values: 12.7","sektori: Kotitaloudet<br />time: 2011-07-01<br />values: 13.2","sektori: Kotitaloudet<br />time: 2011-10-01<br />values: 13.2","sektori: Kotitaloudet<br />time: 2012-01-01<br />values: 13.4","sektori: Kotitaloudet<br />time: 2012-04-01<br />values: 13.1","sektori: Kotitaloudet<br />time: 2012-07-01<br />values: 13.3","sektori: Kotitaloudet<br />time: 2012-10-01<br />values: 13.2","sektori: Kotitaloudet<br />time: 2013-01-01<br />values: 12.9","sektori: Kotitaloudet<br />time: 2013-04-01<br />values: 12.7","sektori: Kotitaloudet<br />time: 2013-07-01<br />values: 12.6","sektori: Kotitaloudet<br />time: 2013-10-01<br />values: 12.4","sektori: Kotitaloudet<br />time: 2014-01-01<br />values: 12.2","sektori: Kotitaloudet<br />time: 2014-04-01<br />values: 12.0","sektori: Kotitaloudet<br />time: 2014-07-01<br />values: 11.8","sektori: Kotitaloudet<br />time: 2014-10-01<br />values: 11.3","sektori: Kotitaloudet<br />time: 2015-01-01<br />values: 11.3","sektori: Kotitaloudet<br />time: 2015-04-01<br />values: 11.1","sektori: Kotitaloudet<br />time: 2015-07-01<br />values: 11.0","sektori: Kotitaloudet<br />time: 2015-10-01<br />values: 11.9","sektori: Kotitaloudet<br />time: 2016-01-01<br />values: 12.1","sektori: Kotitaloudet<br />time: 2016-04-01<br />values: 12.7","sektori: Kotitaloudet<br />time: 2016-07-01<br />values: 13.3","sektori: Kotitaloudet<br />time: 2016-10-01<br />values: 12.4","sektori: Kotitaloudet<br />time: 2017-01-01<br />values: 12.9","sektori: Kotitaloudet<br />time: 2017-04-01<br />values: 12.8","sektori: Kotitaloudet<br />time: 2017-07-01<br />values: 12.7","sektori: Kotitaloudet<br />time: 2017-10-01<br />values: 13.5","sektori: Kotitaloudet<br />time: 2018-01-01<br />values: 13.4","sektori: Kotitaloudet<br />time: 2018-04-01<br />values: 13.5","sektori: Kotitaloudet<br />time: 2018-07-01<br />values: 13.6","sektori: Kotitaloudet<br />time: 2018-10-01<br />values: 13.4","sektori: Kotitaloudet<br />time: 2019-01-01<br />values: 13.6","sektori: Kotitaloudet<br />time: 2019-04-01<br />values: 13.3","sektori: Kotitaloudet<br />time: 2019-07-01<br />values: 13.1","sektori: Kotitaloudet<br />time: 2019-10-01<br />values: 13.4","sektori: Kotitaloudet<br />time: 2020-01-01<br />values: 13.1","sektori: Kotitaloudet<br />time: 2020-04-01<br />values: 13.4","sektori: Kotitaloudet<br />time: 2020-07-01<br />values: 13.0","sektori: Kotitaloudet<br />time: 2020-10-01<br />values: 12.5","sektori: Kotitaloudet<br />time: 2021-01-01<br />values: 12.8","sektori: Kotitaloudet<br />time: 2021-04-01<br />values: 12.8","sektori: Kotitaloudet<br />time: 2021-07-01<br />values: 12.9","sektori: Kotitaloudet<br />time: 2021-10-01<br />values: 13.5","sektori: Kotitaloudet<br />time: 2022-01-01<br />values: 14.3","sektori: Kotitaloudet<br />time: 2022-04-01<br />values: 13.5","sektori: Kotitaloudet<br />time: 2022-07-01<br />values: 13.5","sektori: Kotitaloudet<br />time: 2022-10-01<br />values: 12.5","sektori: Kotitaloudet<br />time: 2023-01-01<br />values: 12.4","sektori: Kotitaloudet<br />time: 2023-04-01<br />values: 11.5","sektori: Kotitaloudet<br />time: 2023-07-01<br />values: 10.6","sektori: Kotitaloudet<br />time: 2023-10-01<br />values:  9.8","sektori: Kotitaloudet<br />time: 2024-01-01<br />values:  8.5","sektori: Kotitaloudet<br />time: 2024-04-01<br />values:  8.4","sektori: Kotitaloudet<br />time: 2024-07-01<br />values:  8.1","sektori: Kotitaloudet<br />time: 2024-10-01<br />values:  7.9","sektori: Kotitaloudet<br />time: 2025-01-01<br />values:  8.0","sektori: Kotitaloudet<br />time: 2025-04-01<br />values:  8.0","sektori: Kotitaloudet<br />time: 2025-07-01<br />values:  8.0","sektori: Kotitaloudet<br />time: 2025-10-01<br />values:  8.1","sektori: Kotitaloudet<br />time: 2026-01-01<br />values:  7.8"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Kotitaloudet","legendgroup":"Kotitaloudet","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[10592,10682,10773,10865,10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[26.699999999999999,26.399999999999999,25.699999999999999,27.199999999999999,26.699999999999999,28,27.800000000000001,29.100000000000001,29.5,28.899999999999999,28.899999999999999,28.199999999999999,26.300000000000001,26.199999999999999,26.100000000000001,25.600000000000001,25.5,25.600000000000001,25.800000000000001,25.800000000000001,25.600000000000001,25.5,25.300000000000001,25.5,25.899999999999999,27.399999999999999,27,27.199999999999999,27.300000000000001,26.800000000000001,27.100000000000001,25.100000000000001,27.300000000000001,29.100000000000001,29.100000000000001,28.699999999999999,30.5,30.399999999999999,31,30.300000000000001,32.700000000000003,30.899999999999999,28.399999999999999,29.800000000000001,28.300000000000001,28.800000000000001,29.399999999999999,27.899999999999999,27.199999999999999,27.899999999999999,28.399999999999999,28.899999999999999,29.5,28.699999999999999,29.300000000000001,28.399999999999999,28.600000000000001,27,25.899999999999999,27,26,26.800000000000001,26.899999999999999,26.899999999999999,26.899999999999999,27.199999999999999,27.899999999999999,27.899999999999999,29.199999999999999,28.300000000000001,26.300000000000001,30.100000000000001,27.300000000000001,29.600000000000001,30,28.600000000000001,29.399999999999999,30.199999999999999,30.600000000000001,30.300000000000001,29.100000000000001,29.5,30.399999999999999,28.600000000000001,28.699999999999999,31.300000000000001,29.699999999999999,30.300000000000001,32.299999999999997,32,30.100000000000001,29.899999999999999,29.899999999999999,31.399999999999999,31.199999999999999,31.800000000000001,31.5,32,32.100000000000001,31,34.5,29.600000000000001,29.5,29.399999999999999,30.199999999999999,31.100000000000001,30.899999999999999,29.899999999999999,30],"text":["sektori: Yritykset<br />time: 1999-01-01<br />values: 26.7","sektori: Yritykset<br />time: 1999-04-01<br />values: 26.4","sektori: Yritykset<br />time: 1999-07-01<br />values: 25.7","sektori: Yritykset<br />time: 1999-10-01<br />values: 27.2","sektori: Yritykset<br />time: 2000-01-01<br />values: 26.7","sektori: Yritykset<br />time: 2000-04-01<br />values: 28.0","sektori: Yritykset<br />time: 2000-07-01<br />values: 27.8","sektori: Yritykset<br />time: 2000-10-01<br />values: 29.1","sektori: Yritykset<br />time: 2001-01-01<br />values: 29.5","sektori: Yritykset<br />time: 2001-04-01<br />values: 28.9","sektori: Yritykset<br />time: 2001-07-01<br />values: 28.9","sektori: Yritykset<br />time: 2001-10-01<br />values: 28.2","sektori: Yritykset<br />time: 2002-01-01<br />values: 26.3","sektori: Yritykset<br />time: 2002-04-01<br />values: 26.2","sektori: Yritykset<br />time: 2002-07-01<br />values: 26.1","sektori: Yritykset<br />time: 2002-10-01<br />values: 25.6","sektori: Yritykset<br />time: 2003-01-01<br />values: 25.5","sektori: Yritykset<br />time: 2003-04-01<br />values: 25.6","sektori: Yritykset<br />time: 2003-07-01<br />values: 25.8","sektori: Yritykset<br />time: 2003-10-01<br />values: 25.8","sektori: Yritykset<br />time: 2004-01-01<br />values: 25.6","sektori: Yritykset<br />time: 2004-04-01<br />values: 25.5","sektori: Yritykset<br />time: 2004-07-01<br />values: 25.3","sektori: Yritykset<br />time: 2004-10-01<br />values: 25.5","sektori: Yritykset<br />time: 2005-01-01<br />values: 25.9","sektori: Yritykset<br />time: 2005-04-01<br />values: 27.4","sektori: Yritykset<br />time: 2005-07-01<br />values: 27.0","sektori: Yritykset<br />time: 2005-10-01<br />values: 27.2","sektori: Yritykset<br />time: 2006-01-01<br />values: 27.3","sektori: Yritykset<br />time: 2006-04-01<br />values: 26.8","sektori: Yritykset<br />time: 2006-07-01<br />values: 27.1","sektori: Yritykset<br />time: 2006-10-01<br />values: 25.1","sektori: Yritykset<br />time: 2007-01-01<br />values: 27.3","sektori: Yritykset<br />time: 2007-04-01<br />values: 29.1","sektori: Yritykset<br />time: 2007-07-01<br />values: 29.1","sektori: Yritykset<br />time: 2007-10-01<br />values: 28.7","sektori: Yritykset<br />time: 2008-01-01<br />values: 30.5","sektori: Yritykset<br />time: 2008-04-01<br />values: 30.4","sektori: Yritykset<br />time: 2008-07-01<br />values: 31.0","sektori: Yritykset<br />time: 2008-10-01<br />values: 30.3","sektori: Yritykset<br />time: 2009-01-01<br />values: 32.7","sektori: Yritykset<br />time: 2009-04-01<br />values: 30.9","sektori: Yritykset<br />time: 2009-07-01<br />values: 28.4","sektori: Yritykset<br />time: 2009-10-01<br />values: 29.8","sektori: Yritykset<br />time: 2010-01-01<br />values: 28.3","sektori: Yritykset<br />time: 2010-04-01<br />values: 28.8","sektori: Yritykset<br />time: 2010-07-01<br />values: 29.4","sektori: Yritykset<br />time: 2010-10-01<br />values: 27.9","sektori: Yritykset<br />time: 2011-01-01<br />values: 27.2","sektori: Yritykset<br />time: 2011-04-01<br />values: 27.9","sektori: Yritykset<br />time: 2011-07-01<br />values: 28.4","sektori: Yritykset<br />time: 2011-10-01<br />values: 28.9","sektori: Yritykset<br />time: 2012-01-01<br />values: 29.5","sektori: Yritykset<br />time: 2012-04-01<br />values: 28.7","sektori: Yritykset<br />time: 2012-07-01<br />values: 29.3","sektori: Yritykset<br />time: 2012-10-01<br />values: 28.4","sektori: Yritykset<br />time: 2013-01-01<br />values: 28.6","sektori: Yritykset<br />time: 2013-04-01<br />values: 27.0","sektori: Yritykset<br />time: 2013-07-01<br />values: 25.9","sektori: Yritykset<br />time: 2013-10-01<br />values: 27.0","sektori: Yritykset<br />time: 2014-01-01<br />values: 26.0","sektori: Yritykset<br />time: 2014-04-01<br />values: 26.8","sektori: Yritykset<br />time: 2014-07-01<br />values: 26.9","sektori: Yritykset<br />time: 2014-10-01<br />values: 26.9","sektori: Yritykset<br />time: 2015-01-01<br />values: 26.9","sektori: Yritykset<br />time: 2015-04-01<br />values: 27.2","sektori: Yritykset<br />time: 2015-07-01<br />values: 27.9","sektori: Yritykset<br />time: 2015-10-01<br />values: 27.9","sektori: Yritykset<br />time: 2016-01-01<br />values: 29.2","sektori: Yritykset<br />time: 2016-04-01<br />values: 28.3","sektori: Yritykset<br />time: 2016-07-01<br />values: 26.3","sektori: Yritykset<br />time: 2016-10-01<br />values: 30.1","sektori: Yritykset<br />time: 2017-01-01<br />values: 27.3","sektori: Yritykset<br />time: 2017-04-01<br />values: 29.6","sektori: Yritykset<br />time: 2017-07-01<br />values: 30.0","sektori: Yritykset<br />time: 2017-10-01<br />values: 28.6","sektori: Yritykset<br />time: 2018-01-01<br />values: 29.4","sektori: Yritykset<br />time: 2018-04-01<br />values: 30.2","sektori: Yritykset<br />time: 2018-07-01<br />values: 30.6","sektori: Yritykset<br />time: 2018-10-01<br />values: 30.3","sektori: Yritykset<br />time: 2019-01-01<br />values: 29.1","sektori: Yritykset<br />time: 2019-04-01<br />values: 29.5","sektori: Yritykset<br />time: 2019-07-01<br />values: 30.4","sektori: Yritykset<br />time: 2019-10-01<br />values: 28.6","sektori: Yritykset<br />time: 2020-01-01<br />values: 28.7","sektori: Yritykset<br />time: 2020-04-01<br />values: 31.3","sektori: Yritykset<br />time: 2020-07-01<br />values: 29.7","sektori: Yritykset<br />time: 2020-10-01<br />values: 30.3","sektori: Yritykset<br />time: 2021-01-01<br />values: 32.3","sektori: Yritykset<br />time: 2021-04-01<br />values: 32.0","sektori: Yritykset<br />time: 2021-07-01<br />values: 30.1","sektori: Yritykset<br />time: 2021-10-01<br />values: 29.9","sektori: Yritykset<br />time: 2022-01-01<br />values: 29.9","sektori: Yritykset<br />time: 2022-04-01<br />values: 31.4","sektori: Yritykset<br />time: 2022-07-01<br />values: 31.2","sektori: Yritykset<br />time: 2022-10-01<br />values: 31.8","sektori: Yritykset<br />time: 2023-01-01<br />values: 31.5","sektori: Yritykset<br />time: 2023-04-01<br />values: 32.0","sektori: Yritykset<br />time: 2023-07-01<br />values: 32.1","sektori: Yritykset<br />time: 2023-10-01<br />values: 31.0","sektori: Yritykset<br />time: 2024-01-01<br />values: 34.5","sektori: Yritykset<br />time: 2024-04-01<br />values: 29.6","sektori: Yritykset<br />time: 2024-07-01<br />values: 29.5","sektori: Yritykset<br />time: 2024-10-01<br />values: 29.4","sektori: Yritykset<br />time: 2025-01-01<br />values: 30.2","sektori: Yritykset<br />time: 2025-04-01<br />values: 31.1","sektori: Yritykset<br />time: 2025-07-01<br />values: 30.9","sektori: Yritykset<br />time: 2025-10-01<br />values: 29.9","sektori: Yritykset<br />time: 2026-01-01<br />values: 30.0"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Yritykset","legendgroup":"Yritykset","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":39.414400721703075},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Investointiaste, kausitasoitettu, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10098.9,20947.099999999999],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4649999999999999,35.835000000000001],"tickmode":"array","ticktext":["10","15","20","25","30","35"],"tickvals":[10,15,20,25,30,35],"categoryorder":"array","categoryarray":["10","15","20","25","30","35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Kiinteän pääoman bruttomuodostus suhteessa sektorin tuloon","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, kansantalouden sektoritilit","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b1d2cd78311":{"colour":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"b1d2cd78311","visdat":{"b1d2cd78311":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/investointiaste-sv.png">På svenska</a> · <a href="kuvat/investointiaste-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px">15a8 QSA Sektoritilien tunnuslukuja neljännesvuosittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+28.8.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+Kausitasoitetun ja työpäiväkorjatun sarjan säästämisaste, % · Alkuperäisen sarjan säästämisaste, %
+</dd>
+<dt>Sektori</dt>
+<dd>
+S14 Kotitaloudet
+</dd>
+</dl>
+</details>
+</section>
+<section id="velkaantuminen" class="level2">
+<h2 class="anchored" data-anchor-id="velkaantuminen">Velkaantuminen</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Velkaantumisaste</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Lainakanta</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>velkaantuminen <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S14"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"F4_B6N"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>tekstit_velka <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Kotitalouksien velkaantumisaste, %"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Lainat suhteessa neljän vuosineljänneksen käytettävissä olevaan tuloon"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, kansantalouden rahoitustilinpito"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Hushållens skuldsättningsgrad, %"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Lån i förhållande till disponibel inkomst under fyra kvartal"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, finansräkenskaper"</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Household indebtedness ratio, %"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Loans relative to disposable income over four quarters"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, financial accounts"</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>kuvio_velka <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_velka[[kieli]]</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(velkaantuminen, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_velka</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_velka<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_velka<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b92ed1528f8ea674b37e" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-b92ed1528f8ea674b37e">{"x":{"data":[{"x":[10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[62.799999999999997,63.399999999999999,64.5,65.799999999999997,67.599999999999994,66.900000000000006,67.599999999999994,67.5,66.099999999999994,68.900000000000006,70.099999999999994,70.700000000000003,71.599999999999994,72.5,74.700000000000003,75.900000000000006,77.5,79.200000000000003,80.900000000000006,82.099999999999994,83.700000000000003,86.599999999999994,89.099999999999994,92,92.299999999999997,96,98,99.900000000000006,101.3,102.09999999999999,104,104.7,105.7,106.59999999999999,107.59999999999999,106.59999999999999,106.8,107.90000000000001,108.2,109,108.09999999999999,109.2,110,110.2,110.2,110.2,111,111.3,112.2,113.09999999999999,113.7,114.2,114,114.8,115.09999999999999,114.90000000000001,115.90000000000001,116.7,117.3,117.09999999999999,117,117.8,118.5,119.2,119.2,120.8,122.2,122.5,123,123.7,124.40000000000001,125.5,125.8,126.90000000000001,128,127.2,127.8,127.7,126.3,127.90000000000001,128.30000000000001,130.40000000000001,132,133.09999999999999,133.09999999999999,133.19999999999999,133.09999999999999,134.09999999999999,134.30000000000001,134.19999999999999,134.40000000000001,133.40000000000001,130.80000000000001,129.30000000000001,128.09999999999999,126.7,126.3,125.59999999999999,124.2,122.2,121.40000000000001,120.2,119.8,119,118.40000000000001],"text":["time: 2000-01-01<br />values:  62.8","time: 2000-04-01<br />values:  63.4","time: 2000-07-01<br />values:  64.5","time: 2000-10-01<br />values:  65.8","time: 2001-01-01<br />values:  67.6","time: 2001-04-01<br />values:  66.9","time: 2001-07-01<br />values:  67.6","time: 2001-10-01<br />values:  67.5","time: 2002-01-01<br />values:  66.1","time: 2002-04-01<br />values:  68.9","time: 2002-07-01<br />values:  70.1","time: 2002-10-01<br />values:  70.7","time: 2003-01-01<br />values:  71.6","time: 2003-04-01<br />values:  72.5","time: 2003-07-01<br />values:  74.7","time: 2003-10-01<br />values:  75.9","time: 2004-01-01<br />values:  77.5","time: 2004-04-01<br />values:  79.2","time: 2004-07-01<br />values:  80.9","time: 2004-10-01<br />values:  82.1","time: 2005-01-01<br />values:  83.7","time: 2005-04-01<br />values:  86.6","time: 2005-07-01<br />values:  89.1","time: 2005-10-01<br />values:  92.0","time: 2006-01-01<br />values:  92.3","time: 2006-04-01<br />values:  96.0","time: 2006-07-01<br />values:  98.0","time: 2006-10-01<br />values:  99.9","time: 2007-01-01<br />values: 101.3","time: 2007-04-01<br />values: 102.1","time: 2007-07-01<br />values: 104.0","time: 2007-10-01<br />values: 104.7","time: 2008-01-01<br />values: 105.7","time: 2008-04-01<br />values: 106.6","time: 2008-07-01<br />values: 107.6","time: 2008-10-01<br />values: 106.6","time: 2009-01-01<br />values: 106.8","time: 2009-04-01<br />values: 107.9","time: 2009-07-01<br />values: 108.2","time: 2009-10-01<br />values: 109.0","time: 2010-01-01<br />values: 108.1","time: 2010-04-01<br />values: 109.2","time: 2010-07-01<br />values: 110.0","time: 2010-10-01<br />values: 110.2","time: 2011-01-01<br />values: 110.2","time: 2011-04-01<br />values: 110.2","time: 2011-07-01<br />values: 111.0","time: 2011-10-01<br />values: 111.3","time: 2012-01-01<br />values: 112.2","time: 2012-04-01<br />values: 113.1","time: 2012-07-01<br />values: 113.7","time: 2012-10-01<br />values: 114.2","time: 2013-01-01<br />values: 114.0","time: 2013-04-01<br />values: 114.8","time: 2013-07-01<br />values: 115.1","time: 2013-10-01<br />values: 114.9","time: 2014-01-01<br />values: 115.9","time: 2014-04-01<br />values: 116.7","time: 2014-07-01<br />values: 117.3","time: 2014-10-01<br />values: 117.1","time: 2015-01-01<br />values: 117.0","time: 2015-04-01<br />values: 117.8","time: 2015-07-01<br />values: 118.5","time: 2015-10-01<br />values: 119.2","time: 2016-01-01<br />values: 119.2","time: 2016-04-01<br />values: 120.8","time: 2016-07-01<br />values: 122.2","time: 2016-10-01<br />values: 122.5","time: 2017-01-01<br />values: 123.0","time: 2017-04-01<br />values: 123.7","time: 2017-07-01<br />values: 124.4","time: 2017-10-01<br />values: 125.5","time: 2018-01-01<br />values: 125.8","time: 2018-04-01<br />values: 126.9","time: 2018-07-01<br />values: 128.0","time: 2018-10-01<br />values: 127.2","time: 2019-01-01<br />values: 127.8","time: 2019-04-01<br />values: 127.7","time: 2019-07-01<br />values: 126.3","time: 2019-10-01<br />values: 127.9","time: 2020-01-01<br />values: 128.3","time: 2020-04-01<br />values: 130.4","time: 2020-07-01<br />values: 132.0","time: 2020-10-01<br />values: 133.1","time: 2021-01-01<br />values: 133.1","time: 2021-04-01<br />values: 133.2","time: 2021-07-01<br />values: 133.1","time: 2021-10-01<br />values: 134.1","time: 2022-01-01<br />values: 134.3","time: 2022-04-01<br />values: 134.2","time: 2022-07-01<br />values: 134.4","time: 2022-10-01<br />values: 133.4","time: 2023-01-01<br />values: 130.8","time: 2023-04-01<br />values: 129.3","time: 2023-07-01<br />values: 128.1","time: 2023-10-01<br />values: 126.7","time: 2024-01-01<br />values: 126.3","time: 2024-04-01<br />values: 125.6","time: 2024-07-01<br />values: 124.2","time: 2024-10-01<br />values: 122.2","time: 2025-01-01<br />values: 121.4","time: 2025-04-01<br />values: 120.2","time: 2025-07-01<br />values: 119.8","time: 2025-10-01<br />values: 119.0","time: 2026-01-01<br />values: 118.4"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":45.790490385463976},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Kotitalouksien velkaantumisaste, %","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10482.15,20928.849999999999],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[59.219999999999999,137.98000000000002],"tickmode":"array","ticktext":["60","80","100","120"],"tickvals":[60,80,100,120],"categoryorder":"array","categoryarray":["60","80","100","120"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Lainat suhteessa neljän vuosineljänneksen käytettävissä olevaan tuloon","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, kansantalouden rahoitustilinpito","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b1d1de9c0be":{"x":{},"y":{},"type":"scatter"}},"cur_data":"b1d1de9c0be","visdat":{"b1d1de9c0be":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/velkaantumisaste-sv.png">På svenska</a> · <a href="kuvat/velkaantumisaste-en.png">In English</a></p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>lainat <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sektoriluokitus_7_20230101"</span> <span class="ot">=</span> <span class="st">"S14"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"F4"</span>, <span class="st">"F423"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>tekstit_lainat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Kotitalouksien lainat, miljoonaa euroa"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, kansantalouden rahoitustilinpito"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">F4 =</span> <span class="st">"Lainat yhteensä"</span>, <span class="at">F423 =</span> <span class="st">"Osuus asuntoyhtiölainoista"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Hushållens lån, miljoner euro"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, finansräkenskaper"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">F4 =</span> <span class="st">"Lån totalt"</span>, <span class="at">F423 =</span> <span class="st">"Andel av bostadsbolagslån"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Household loans, EUR million"</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, financial accounts"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">F4 =</span> <span class="st">"Loans total"</span>, <span class="at">F423 =</span> <span class="st">"Share of housing company loans"</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>kuvio_lainat <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_lainat[[kieli]]</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> lainat</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>laji <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>contentscode, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat), <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">colour =</span> <span class="st">"laji"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_lainat</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">caption =</span> tekstit_lainat<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-87bb438bef0c26b70806" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-87bb438bef0c26b70806">{"x":{"data":[{"x":[10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[38542,39456,40643,41346,42059,42978,43874,44706,45237,46587,47742,49164,49952,51818,53987,55411,56784,59110,60990,62951,64349,67132,69741,72183,73732,76560,78855,81326,83026,85697,88347,90221,91984,94505,96386,97008,97675,99232,100733,102192,103411,105476,107088,108496,109404,111342,113104,114440,115492,117612,119268,120175,121348,121958,122842,123335,124299,125415,126632,127230,127892,129503,130743,131762,132614,134768,136381,137350,138646,140345,142445,143710,145090,147170,149228,150260,151538,153566,155232,155851,157730,159118,161174,162989,163296,165617,167453,169438,171048,173115,174911,175320,174185,174062,174659,174737,175190,174921,174714,174107,174102,173848,174374,173899,173415],"text":["laji: Lainat yhteensä<br />time: 2000-01-01<br />values:  38542","laji: Lainat yhteensä<br />time: 2000-04-01<br />values:  39456","laji: Lainat yhteensä<br />time: 2000-07-01<br />values:  40643","laji: Lainat yhteensä<br />time: 2000-10-01<br />values:  41346","laji: Lainat yhteensä<br />time: 2001-01-01<br />values:  42059","laji: Lainat yhteensä<br />time: 2001-04-01<br />values:  42978","laji: Lainat yhteensä<br />time: 2001-07-01<br />values:  43874","laji: Lainat yhteensä<br />time: 2001-10-01<br />values:  44706","laji: Lainat yhteensä<br />time: 2002-01-01<br />values:  45237","laji: Lainat yhteensä<br />time: 2002-04-01<br />values:  46587","laji: Lainat yhteensä<br />time: 2002-07-01<br />values:  47742","laji: Lainat yhteensä<br />time: 2002-10-01<br />values:  49164","laji: Lainat yhteensä<br />time: 2003-01-01<br />values:  49952","laji: Lainat yhteensä<br />time: 2003-04-01<br />values:  51818","laji: Lainat yhteensä<br />time: 2003-07-01<br />values:  53987","laji: Lainat yhteensä<br />time: 2003-10-01<br />values:  55411","laji: Lainat yhteensä<br />time: 2004-01-01<br />values:  56784","laji: Lainat yhteensä<br />time: 2004-04-01<br />values:  59110","laji: Lainat yhteensä<br />time: 2004-07-01<br />values:  60990","laji: Lainat yhteensä<br />time: 2004-10-01<br />values:  62951","laji: Lainat yhteensä<br />time: 2005-01-01<br />values:  64349","laji: Lainat yhteensä<br />time: 2005-04-01<br />values:  67132","laji: Lainat yhteensä<br />time: 2005-07-01<br />values:  69741","laji: Lainat yhteensä<br />time: 2005-10-01<br />values:  72183","laji: Lainat yhteensä<br />time: 2006-01-01<br />values:  73732","laji: Lainat yhteensä<br />time: 2006-04-01<br />values:  76560","laji: Lainat yhteensä<br />time: 2006-07-01<br />values:  78855","laji: Lainat yhteensä<br />time: 2006-10-01<br />values:  81326","laji: Lainat yhteensä<br />time: 2007-01-01<br />values:  83026","laji: Lainat yhteensä<br />time: 2007-04-01<br />values:  85697","laji: Lainat yhteensä<br />time: 2007-07-01<br />values:  88347","laji: Lainat yhteensä<br />time: 2007-10-01<br />values:  90221","laji: Lainat yhteensä<br />time: 2008-01-01<br />values:  91984","laji: Lainat yhteensä<br />time: 2008-04-01<br />values:  94505","laji: Lainat yhteensä<br />time: 2008-07-01<br />values:  96386","laji: Lainat yhteensä<br />time: 2008-10-01<br />values:  97008","laji: Lainat yhteensä<br />time: 2009-01-01<br />values:  97675","laji: Lainat yhteensä<br />time: 2009-04-01<br />values:  99232","laji: Lainat yhteensä<br />time: 2009-07-01<br />values: 100733","laji: Lainat yhteensä<br />time: 2009-10-01<br />values: 102192","laji: Lainat yhteensä<br />time: 2010-01-01<br />values: 103411","laji: Lainat yhteensä<br />time: 2010-04-01<br />values: 105476","laji: Lainat yhteensä<br />time: 2010-07-01<br />values: 107088","laji: Lainat yhteensä<br />time: 2010-10-01<br />values: 108496","laji: Lainat yhteensä<br />time: 2011-01-01<br />values: 109404","laji: Lainat yhteensä<br />time: 2011-04-01<br />values: 111342","laji: Lainat yhteensä<br />time: 2011-07-01<br />values: 113104","laji: Lainat yhteensä<br />time: 2011-10-01<br />values: 114440","laji: Lainat yhteensä<br />time: 2012-01-01<br />values: 115492","laji: Lainat yhteensä<br />time: 2012-04-01<br />values: 117612","laji: Lainat yhteensä<br />time: 2012-07-01<br />values: 119268","laji: Lainat yhteensä<br />time: 2012-10-01<br />values: 120175","laji: Lainat yhteensä<br />time: 2013-01-01<br />values: 121348","laji: Lainat yhteensä<br />time: 2013-04-01<br />values: 121958","laji: Lainat yhteensä<br />time: 2013-07-01<br />values: 122842","laji: Lainat yhteensä<br />time: 2013-10-01<br />values: 123335","laji: Lainat yhteensä<br />time: 2014-01-01<br />values: 124299","laji: Lainat yhteensä<br />time: 2014-04-01<br />values: 125415","laji: Lainat yhteensä<br />time: 2014-07-01<br />values: 126632","laji: Lainat yhteensä<br />time: 2014-10-01<br />values: 127230","laji: Lainat yhteensä<br />time: 2015-01-01<br />values: 127892","laji: Lainat yhteensä<br />time: 2015-04-01<br />values: 129503","laji: Lainat yhteensä<br />time: 2015-07-01<br />values: 130743","laji: Lainat yhteensä<br />time: 2015-10-01<br />values: 131762","laji: Lainat yhteensä<br />time: 2016-01-01<br />values: 132614","laji: Lainat yhteensä<br />time: 2016-04-01<br />values: 134768","laji: Lainat yhteensä<br />time: 2016-07-01<br />values: 136381","laji: Lainat yhteensä<br />time: 2016-10-01<br />values: 137350","laji: Lainat yhteensä<br />time: 2017-01-01<br />values: 138646","laji: Lainat yhteensä<br />time: 2017-04-01<br />values: 140345","laji: Lainat yhteensä<br />time: 2017-07-01<br />values: 142445","laji: Lainat yhteensä<br />time: 2017-10-01<br />values: 143710","laji: Lainat yhteensä<br />time: 2018-01-01<br />values: 145090","laji: Lainat yhteensä<br />time: 2018-04-01<br />values: 147170","laji: Lainat yhteensä<br />time: 2018-07-01<br />values: 149228","laji: Lainat yhteensä<br />time: 2018-10-01<br />values: 150260","laji: Lainat yhteensä<br />time: 2019-01-01<br />values: 151538","laji: Lainat yhteensä<br />time: 2019-04-01<br />values: 153566","laji: Lainat yhteensä<br />time: 2019-07-01<br />values: 155232","laji: Lainat yhteensä<br />time: 2019-10-01<br />values: 155851","laji: Lainat yhteensä<br />time: 2020-01-01<br />values: 157730","laji: Lainat yhteensä<br />time: 2020-04-01<br />values: 159118","laji: Lainat yhteensä<br />time: 2020-07-01<br />values: 161174","laji: Lainat yhteensä<br />time: 2020-10-01<br />values: 162989","laji: Lainat yhteensä<br />time: 2021-01-01<br />values: 163296","laji: Lainat yhteensä<br />time: 2021-04-01<br />values: 165617","laji: Lainat yhteensä<br />time: 2021-07-01<br />values: 167453","laji: Lainat yhteensä<br />time: 2021-10-01<br />values: 169438","laji: Lainat yhteensä<br />time: 2022-01-01<br />values: 171048","laji: Lainat yhteensä<br />time: 2022-04-01<br />values: 173115","laji: Lainat yhteensä<br />time: 2022-07-01<br />values: 174911","laji: Lainat yhteensä<br />time: 2022-10-01<br />values: 175320","laji: Lainat yhteensä<br />time: 2023-01-01<br />values: 174185","laji: Lainat yhteensä<br />time: 2023-04-01<br />values: 174062","laji: Lainat yhteensä<br />time: 2023-07-01<br />values: 174659","laji: Lainat yhteensä<br />time: 2023-10-01<br />values: 174737","laji: Lainat yhteensä<br />time: 2024-01-01<br />values: 175190","laji: Lainat yhteensä<br />time: 2024-04-01<br />values: 174921","laji: Lainat yhteensä<br />time: 2024-07-01<br />values: 174714","laji: Lainat yhteensä<br />time: 2024-10-01<br />values: 174107","laji: Lainat yhteensä<br />time: 2025-01-01<br />values: 174102","laji: Lainat yhteensä<br />time: 2025-04-01<br />values: 173848","laji: Lainat yhteensä<br />time: 2025-07-01<br />values: 174374","laji: Lainat yhteensä<br />time: 2025-10-01<br />values: 173899","laji: Lainat yhteensä<br />time: 2026-01-01<br />values: 173415"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Lainat yhteensä","legendgroup":"Lainat yhteensä","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[10957,11048,11139,11231,11323,11413,11504,11596,11688,11778,11869,11961,12053,12143,12234,12326,12418,12509,12600,12692,12784,12874,12965,13057,13149,13239,13330,13422,13514,13604,13695,13787,13879,13970,14061,14153,14245,14335,14426,14518,14610,14700,14791,14883,14975,15065,15156,15248,15340,15431,15522,15614,15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454],"y":[1610,1666,1744,1783,1813,1770,1688,1590,1588,1611,1679,1917,2070,2137,2217,2165,2201,2364,2504,2688,2737,2764,2913,2988,3031,3184,3269,3360,3396,3423,3561,3693,3671,3602,3707,3729,3700,3613,3773,3881,3982,4076,4153,4221,4314,4379,4438,4569,4714,4928,5097,5191,5981,6282,6545,6634,6832,7091,7425,7757,8083,8411,8737,9063,9637,10211,10785,11359,11750,12141,12532,12923,13620,14318,15015,15711,16212,16768,16963,16596,17280,17919,18342,18792,17946,18378,19017,19674,19575,20115,20781,21483,21195,21564,21879,22050,22599,22536,22428,22077,22212,21708,21888,21690,21672],"text":["laji: Osuus asuntoyhtiölainoista<br />time: 2000-01-01<br />values:   1610","laji: Osuus asuntoyhtiölainoista<br />time: 2000-04-01<br />values:   1666","laji: Osuus asuntoyhtiölainoista<br />time: 2000-07-01<br />values:   1744","laji: Osuus asuntoyhtiölainoista<br />time: 2000-10-01<br />values:   1783","laji: Osuus asuntoyhtiölainoista<br />time: 2001-01-01<br />values:   1813","laji: Osuus asuntoyhtiölainoista<br />time: 2001-04-01<br />values:   1770","laji: Osuus asuntoyhtiölainoista<br />time: 2001-07-01<br />values:   1688","laji: Osuus asuntoyhtiölainoista<br />time: 2001-10-01<br />values:   1590","laji: Osuus asuntoyhtiölainoista<br />time: 2002-01-01<br />values:   1588","laji: Osuus asuntoyhtiölainoista<br />time: 2002-04-01<br />values:   1611","laji: Osuus asuntoyhtiölainoista<br />time: 2002-07-01<br />values:   1679","laji: Osuus asuntoyhtiölainoista<br />time: 2002-10-01<br />values:   1917","laji: Osuus asuntoyhtiölainoista<br />time: 2003-01-01<br />values:   2070","laji: Osuus asuntoyhtiölainoista<br />time: 2003-04-01<br />values:   2137","laji: Osuus asuntoyhtiölainoista<br />time: 2003-07-01<br />values:   2217","laji: Osuus asuntoyhtiölainoista<br />time: 2003-10-01<br />values:   2165","laji: Osuus asuntoyhtiölainoista<br />time: 2004-01-01<br />values:   2201","laji: Osuus asuntoyhtiölainoista<br />time: 2004-04-01<br />values:   2364","laji: Osuus asuntoyhtiölainoista<br />time: 2004-07-01<br />values:   2504","laji: Osuus asuntoyhtiölainoista<br />time: 2004-10-01<br />values:   2688","laji: Osuus asuntoyhtiölainoista<br />time: 2005-01-01<br />values:   2737","laji: Osuus asuntoyhtiölainoista<br />time: 2005-04-01<br />values:   2764","laji: Osuus asuntoyhtiölainoista<br />time: 2005-07-01<br />values:   2913","laji: Osuus asuntoyhtiölainoista<br />time: 2005-10-01<br />values:   2988","laji: Osuus asuntoyhtiölainoista<br />time: 2006-01-01<br />values:   3031","laji: Osuus asuntoyhtiölainoista<br />time: 2006-04-01<br />values:   3184","laji: Osuus asuntoyhtiölainoista<br />time: 2006-07-01<br />values:   3269","laji: Osuus asuntoyhtiölainoista<br />time: 2006-10-01<br />values:   3360","laji: Osuus asuntoyhtiölainoista<br />time: 2007-01-01<br />values:   3396","laji: Osuus asuntoyhtiölainoista<br />time: 2007-04-01<br />values:   3423","laji: Osuus asuntoyhtiölainoista<br />time: 2007-07-01<br />values:   3561","laji: Osuus asuntoyhtiölainoista<br />time: 2007-10-01<br />values:   3693","laji: Osuus asuntoyhtiölainoista<br />time: 2008-01-01<br />values:   3671","laji: Osuus asuntoyhtiölainoista<br />time: 2008-04-01<br />values:   3602","laji: Osuus asuntoyhtiölainoista<br />time: 2008-07-01<br />values:   3707","laji: Osuus asuntoyhtiölainoista<br />time: 2008-10-01<br />values:   3729","laji: Osuus asuntoyhtiölainoista<br />time: 2009-01-01<br />values:   3700","laji: Osuus asuntoyhtiölainoista<br />time: 2009-04-01<br />values:   3613","laji: Osuus asuntoyhtiölainoista<br />time: 2009-07-01<br />values:   3773","laji: Osuus asuntoyhtiölainoista<br />time: 2009-10-01<br />values:   3881","laji: Osuus asuntoyhtiölainoista<br />time: 2010-01-01<br />values:   3982","laji: Osuus asuntoyhtiölainoista<br />time: 2010-04-01<br />values:   4076","laji: Osuus asuntoyhtiölainoista<br />time: 2010-07-01<br />values:   4153","laji: Osuus asuntoyhtiölainoista<br />time: 2010-10-01<br />values:   4221","laji: Osuus asuntoyhtiölainoista<br />time: 2011-01-01<br />values:   4314","laji: Osuus asuntoyhtiölainoista<br />time: 2011-04-01<br />values:   4379","laji: Osuus asuntoyhtiölainoista<br />time: 2011-07-01<br />values:   4438","laji: Osuus asuntoyhtiölainoista<br />time: 2011-10-01<br />values:   4569","laji: Osuus asuntoyhtiölainoista<br />time: 2012-01-01<br />values:   4714","laji: Osuus asuntoyhtiölainoista<br />time: 2012-04-01<br />values:   4928","laji: Osuus asuntoyhtiölainoista<br />time: 2012-07-01<br />values:   5097","laji: Osuus asuntoyhtiölainoista<br />time: 2012-10-01<br />values:   5191","laji: Osuus asuntoyhtiölainoista<br />time: 2013-01-01<br />values:   5981","laji: Osuus asuntoyhtiölainoista<br />time: 2013-04-01<br />values:   6282","laji: Osuus asuntoyhtiölainoista<br />time: 2013-07-01<br />values:   6545","laji: Osuus asuntoyhtiölainoista<br />time: 2013-10-01<br />values:   6634","laji: Osuus asuntoyhtiölainoista<br />time: 2014-01-01<br />values:   6832","laji: Osuus asuntoyhtiölainoista<br />time: 2014-04-01<br />values:   7091","laji: Osuus asuntoyhtiölainoista<br />time: 2014-07-01<br />values:   7425","laji: Osuus asuntoyhtiölainoista<br />time: 2014-10-01<br />values:   7757","laji: Osuus asuntoyhtiölainoista<br />time: 2015-01-01<br />values:   8083","laji: Osuus asuntoyhtiölainoista<br />time: 2015-04-01<br />values:   8411","laji: Osuus asuntoyhtiölainoista<br />time: 2015-07-01<br />values:   8737","laji: Osuus asuntoyhtiölainoista<br />time: 2015-10-01<br />values:   9063","laji: Osuus asuntoyhtiölainoista<br />time: 2016-01-01<br />values:   9637","laji: Osuus asuntoyhtiölainoista<br />time: 2016-04-01<br />values:  10211","laji: Osuus asuntoyhtiölainoista<br />time: 2016-07-01<br />values:  10785","laji: Osuus asuntoyhtiölainoista<br />time: 2016-10-01<br />values:  11359","laji: Osuus asuntoyhtiölainoista<br />time: 2017-01-01<br />values:  11750","laji: Osuus asuntoyhtiölainoista<br />time: 2017-04-01<br />values:  12141","laji: Osuus asuntoyhtiölainoista<br />time: 2017-07-01<br />values:  12532","laji: Osuus asuntoyhtiölainoista<br />time: 2017-10-01<br />values:  12923","laji: Osuus asuntoyhtiölainoista<br />time: 2018-01-01<br />values:  13620","laji: Osuus asuntoyhtiölainoista<br />time: 2018-04-01<br />values:  14318","laji: Osuus asuntoyhtiölainoista<br />time: 2018-07-01<br />values:  15015","laji: Osuus asuntoyhtiölainoista<br />time: 2018-10-01<br />values:  15711","laji: Osuus asuntoyhtiölainoista<br />time: 2019-01-01<br />values:  16212","laji: Osuus asuntoyhtiölainoista<br />time: 2019-04-01<br />values:  16768","laji: Osuus asuntoyhtiölainoista<br />time: 2019-07-01<br />values:  16963","laji: Osuus asuntoyhtiölainoista<br />time: 2019-10-01<br />values:  16596","laji: Osuus asuntoyhtiölainoista<br />time: 2020-01-01<br />values:  17280","laji: Osuus asuntoyhtiölainoista<br />time: 2020-04-01<br />values:  17919","laji: Osuus asuntoyhtiölainoista<br />time: 2020-07-01<br />values:  18342","laji: Osuus asuntoyhtiölainoista<br />time: 2020-10-01<br />values:  18792","laji: Osuus asuntoyhtiölainoista<br />time: 2021-01-01<br />values:  17946","laji: Osuus asuntoyhtiölainoista<br />time: 2021-04-01<br />values:  18378","laji: Osuus asuntoyhtiölainoista<br />time: 2021-07-01<br />values:  19017","laji: Osuus asuntoyhtiölainoista<br />time: 2021-10-01<br />values:  19674","laji: Osuus asuntoyhtiölainoista<br />time: 2022-01-01<br />values:  19575","laji: Osuus asuntoyhtiölainoista<br />time: 2022-04-01<br />values:  20115","laji: Osuus asuntoyhtiölainoista<br />time: 2022-07-01<br />values:  20781","laji: Osuus asuntoyhtiölainoista<br />time: 2022-10-01<br />values:  21483","laji: Osuus asuntoyhtiölainoista<br />time: 2023-01-01<br />values:  21195","laji: Osuus asuntoyhtiölainoista<br />time: 2023-04-01<br />values:  21564","laji: Osuus asuntoyhtiölainoista<br />time: 2023-07-01<br />values:  21879","laji: Osuus asuntoyhtiölainoista<br />time: 2023-10-01<br />values:  22050","laji: Osuus asuntoyhtiölainoista<br />time: 2024-01-01<br />values:  22599","laji: Osuus asuntoyhtiölainoista<br />time: 2024-04-01<br />values:  22536","laji: Osuus asuntoyhtiölainoista<br />time: 2024-07-01<br />values:  22428","laji: Osuus asuntoyhtiölainoista<br />time: 2024-10-01<br />values:  22077","laji: Osuus asuntoyhtiölainoista<br />time: 2025-01-01<br />values:  22212","laji: Osuus asuntoyhtiölainoista<br />time: 2025-04-01<br />values:  21708","laji: Osuus asuntoyhtiölainoista<br />time: 2025-07-01<br />values:  21888","laji: Osuus asuntoyhtiölainoista<br />time: 2025-10-01<br />values:  21690","laji: Osuus asuntoyhtiölainoista<br />time: 2026-01-01<br />values:  21672"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Osuus asuntoyhtiölainoista","legendgroup":"Osuus asuntoyhtiölainoista","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":64.918759376746678},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Kotitalouksien lainat, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10482.15,20928.849999999999],"tickmode":"array","ticktext":["2000","2010","2020"],"tickvals":[10957,14610,18262],"categoryorder":"array","categoryarray":["2000","2010","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-7098.6000000000004,184006.60000000001],"tickmode":"array","ticktext":["0","50000","100000","150000"],"tickvals":[-9.0949470177292824e-13,50000,100000,150000],"categoryorder":"array","categoryarray":["0","50000","100000","150000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Lähde: Tilastokeskus, kansantalouden rahoitustilinpito","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b1d4b6cba49":{"colour":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"b1d4b6cba49","visdat":{"b1d4b6cba49":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/kotitalouksien-lainat-sv.png">På svenska</a> · <a href="kuvat/kotitalouksien-lainat-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px">129g Kotitalouksien tunnuslukuja, neljännesvuosittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+1.7.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+Velkaantumisaste, %
+</dd>
+<dt>Sektori</dt>
+<dd>
+S14 Kotitaloudet
+</dd>
+</dl>
+</details>
+<p>Lähteet: <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/">Kansantalouden sektoritilit</a> (15a8) ja <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__rtp/">Kansantalouden rahoitustilinpito</a> (129g).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopioitu!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopioitu!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jhuovari\.github\.io\/visu\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Lähde: Tilastokeskus, StatFin</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Rakennettu <a href="https://github.com/jhuovari/visu">visu</a>-paketilla</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fi" xml:lang="fi"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Ulkomaantalous – visu</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2872a7511705894b565d6ebf33be87ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ei tuloksia",
+    "search-matching-documents-text": "tulokset",
+    "search-copy-link-title": "Kopioi linkki hakuun",
+    "search-hide-matches-text": "Piilota loput tulokset",
+    "search-more-match-text": "tulos tässä dokumentissa",
+    "search-more-matches-text": "tulosta tässä dokumentissa",
+    "search-clear-button-title": "Tyhjennä",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Peruuta",
+    "search-submit-button-title": "Lähetä",
+    "search-label": "Hae"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+<script src="../site_libs/plotly-locale-fi-2.25.2/fi.js"></script>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">visu</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Hae"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Vaihda navigointi" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Kuviot</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Ulkomaantalous</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Suomen talouden suhde ulkomaihin. Vaihtotase kertoo, ansaitseeko Suomi ulkomailta enemmän kuin maksaa sinne, ja tavaroiden ja palveluiden ulkomaankauppa erittelee, mistä virta syntyy.</p>
+<p>Vaihtotase on kuukausisarjana hyvin heiluva, joten oletusnäkymä on 12 kuukauden liukuva summa. Yksittäiset kuukaudet ovat omalla välilehdellään.</p>
+<section id="vaihtotase" class="level2">
+<h2 class="anchored" data-anchor-id="vaihtotase">Vaihtotase</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">12 kuukauden summa</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Kuukausittain</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>vaihtotase <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_m"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="st">"CA"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"NB12"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>tekstit <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Vaihtotase, 12 kuukauden liukuva summa, miljoonaa euroa"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Positiivinen luku on ylijäämä"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, maksutase ja ulkomainen varallisuusasema"</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Bytesbalansen, glidande summa för 12 månader, miljoner euro"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Ett positivt tal är överskott"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, betalningsbalans och utlandsställning"</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Current account, 12-month rolling sum, EUR million"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"A positive figure is a surplus"</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, balance of payments and international investment position"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>kuvio <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit[[kieli]]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(vaihtotase, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit<span class="sc">$</span>fi<span class="sc">$</span>selite, <span class="at">caption =</span> tekstit<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c150183da789a31e7dea" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-c150183da789a31e7dea">{"x":{"data":[{"x":[13149,13180,13208,13239,13269,13300,13330,13361,13392,13422,13453,13483,13514,13545,13573,13604,13634,13665,13695,13726,13757,13787,13818,13848,13879,13910,13939,13970,14000,14031,14061,14092,14123,14153,14184,14214,14245,14276,14304,14335,14365,14396,14426,14457,14488,14518,14549,14579,14610,14641,14669,14700,14730,14761,14791,14822,14853,14883,14914,14944,14975,15006,15034,15065,15095,15126,15156,15187,15218,15248,15279,15309,15340,15371,15400,15431,15461,15492,15522,15553,15584,15614,15645,15675,15706,15737,15765,15796,15826,15857,15887,15918,15949,15979,16010,16040,16071,16102,16130,16161,16191,16222,16252,16283,16314,16344,16375,16405,16436,16467,16495,16526,16556,16587,16617,16648,16679,16709,16740,16770,16801,16832,16861,16892,16922,16953,16983,17014,17045,17075,17106,17136,17167,17198,17226,17257,17287,17318,17348,17379,17410,17440,17471,17501,17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866,17897,17928,17956,17987,18017,18048,18078,18109,18140,18170,18201,18231,18262,18293,18322,18353,18383,18414,18444,18475,18506,18536,18567,18597,18628,18659,18687,18718,18748,18779,18809,18840,18871,18901,18932,18962,18993,19024,19052,19083,19113,19144,19174,19205,19236,19266,19297,19327,19358,19389,19417,19448,19478,19509,19539,19570,19601,19631,19662,19692,19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058,20089,20120,20148,20179,20209,20240,20270,20301,20332,20362,20393,20423,20454,20485,20513,20544,20574,20605],"y":[null,null,null,null,null,null,null,null,null,null,null,6797,6350,6033,6304,6940,5957,5817,6237,6486,6864,7149,7632,7535,7511,8019,8001,7505,7012,7341,6870,6355,5586,5591,4862,4939,4689,4111,3620,4322,4238,3612,3750,3200,2638,3865,3604,3627,3777,3348,3049,2888,2936,3288,2683,2599,2680,2327,2280,2563,2422,2509,2231,1411,1058,695,876,424,631,-1747,-2076,-3067,-3810,-4403,-4686,-4951,-3885,-4113,-4526,-4238,-4606,-4168,-3988,-4468,-4499,-3780,-3421,-3800,-3329,-3551,-3996,-3784,-3997,-4065,-3799,-3832,-3893,-3753,-3726,-3487,-3887,-3855,-4245,-4306,-3710,-3409,-3804,-2793,-2487,-3081,-2869,-2769,-2555,-2361,-1230,-1194,-1482,-1563,-1642,-1909,-2075,-1829,-1741,-1611,-2237,-2880,-3449,-3718,-3727,-3830,-3886,-4252,-3673,-3640,-3588,-3357,-3067,-3263,-2624,-2303,-2613,-2251,-2091,-1472,-1424,-1550,-1892,-2155,-2747,-2930,-3319,-3687,-3817,-3935,-3706,-3736,-3162,-2857,-2858,-5966,-4771,-3396,-3075,-2645,-2131,-1777,-1771,-328,-586,-1342,-1901,2075,1293,230,175,278,33,355,778,1000,722,1549,1919,1623,2083,3079,3407,3355,4318,1624,1554,822,136,-212,-916,-4192,-5852,-6202,-7217,-7741,-8173,-6553,-6108,-6430,-5980,-6036,-4517,-4042,-3128,-2995,-2636,-2012,-2000,-2087,-1706,-2502,-2636,-2837,-3889,-3988,-3530,-2394,-1944,-1918,-1477,-1475,-2683,-1767,-1073,0,-1371,1746,2360,2254,4024,3979,3042,3857,3888,4227,4134,3123,5774,4128,3312,4859],"text":["time: 2006-01-01<br />values:    NA","time: 2006-02-01<br />values:    NA","time: 2006-03-01<br />values:    NA","time: 2006-04-01<br />values:    NA","time: 2006-05-01<br />values:    NA","time: 2006-06-01<br />values:    NA","time: 2006-07-01<br />values:    NA","time: 2006-08-01<br />values:    NA","time: 2006-09-01<br />values:    NA","time: 2006-10-01<br />values:    NA","time: 2006-11-01<br />values:    NA","time: 2006-12-01<br />values:  6797","time: 2007-01-01<br />values:  6350","time: 2007-02-01<br />values:  6033","time: 2007-03-01<br />values:  6304","time: 2007-04-01<br />values:  6940","time: 2007-05-01<br />values:  5957","time: 2007-06-01<br />values:  5817","time: 2007-07-01<br />values:  6237","time: 2007-08-01<br />values:  6486","time: 2007-09-01<br />values:  6864","time: 2007-10-01<br />values:  7149","time: 2007-11-01<br />values:  7632","time: 2007-12-01<br />values:  7535","time: 2008-01-01<br />values:  7511","time: 2008-02-01<br />values:  8019","time: 2008-03-01<br />values:  8001","time: 2008-04-01<br />values:  7505","time: 2008-05-01<br />values:  7012","time: 2008-06-01<br />values:  7341","time: 2008-07-01<br />values:  6870","time: 2008-08-01<br />values:  6355","time: 2008-09-01<br />values:  5586","time: 2008-10-01<br />values:  5591","time: 2008-11-01<br />values:  4862","time: 2008-12-01<br />values:  4939","time: 2009-01-01<br />values:  4689","time: 2009-02-01<br />values:  4111","time: 2009-03-01<br />values:  3620","time: 2009-04-01<br />values:  4322","time: 2009-05-01<br />values:  4238","time: 2009-06-01<br />values:  3612","time: 2009-07-01<br />values:  3750","time: 2009-08-01<br />values:  3200","time: 2009-09-01<br />values:  2638","time: 2009-10-01<br />values:  3865","time: 2009-11-01<br />values:  3604","time: 2009-12-01<br />values:  3627","time: 2010-01-01<br />values:  3777","time: 2010-02-01<br />values:  3348","time: 2010-03-01<br />values:  3049","time: 2010-04-01<br />values:  2888","time: 2010-05-01<br />values:  2936","time: 2010-06-01<br />values:  3288","time: 2010-07-01<br />values:  2683","time: 2010-08-01<br />values:  2599","time: 2010-09-01<br />values:  2680","time: 2010-10-01<br />values:  2327","time: 2010-11-01<br />values:  2280","time: 2010-12-01<br />values:  2563","time: 2011-01-01<br />values:  2422","time: 2011-02-01<br />values:  2509","time: 2011-03-01<br />values:  2231","time: 2011-04-01<br />values:  1411","time: 2011-05-01<br />values:  1058","time: 2011-06-01<br />values:   695","time: 2011-07-01<br />values:   876","time: 2011-08-01<br />values:   424","time: 2011-09-01<br />values:   631","time: 2011-10-01<br />values: -1747","time: 2011-11-01<br />values: -2076","time: 2011-12-01<br />values: -3067","time: 2012-01-01<br />values: -3810","time: 2012-02-01<br />values: -4403","time: 2012-03-01<br />values: -4686","time: 2012-04-01<br />values: -4951","time: 2012-05-01<br />values: -3885","time: 2012-06-01<br />values: -4113","time: 2012-07-01<br />values: -4526","time: 2012-08-01<br />values: -4238","time: 2012-09-01<br />values: -4606","time: 2012-10-01<br />values: -4168","time: 2012-11-01<br />values: -3988","time: 2012-12-01<br />values: -4468","time: 2013-01-01<br />values: -4499","time: 2013-02-01<br />values: -3780","time: 2013-03-01<br />values: -3421","time: 2013-04-01<br />values: -3800","time: 2013-05-01<br />values: -3329","time: 2013-06-01<br />values: -3551","time: 2013-07-01<br />values: -3996","time: 2013-08-01<br />values: -3784","time: 2013-09-01<br />values: -3997","time: 2013-10-01<br />values: -4065","time: 2013-11-01<br />values: -3799","time: 2013-12-01<br />values: -3832","time: 2014-01-01<br />values: -3893","time: 2014-02-01<br />values: -3753","time: 2014-03-01<br />values: -3726","time: 2014-04-01<br />values: -3487","time: 2014-05-01<br />values: -3887","time: 2014-06-01<br />values: -3855","time: 2014-07-01<br />values: -4245","time: 2014-08-01<br />values: -4306","time: 2014-09-01<br />values: -3710","time: 2014-10-01<br />values: -3409","time: 2014-11-01<br />values: -3804","time: 2014-12-01<br />values: -2793","time: 2015-01-01<br />values: -2487","time: 2015-02-01<br />values: -3081","time: 2015-03-01<br />values: -2869","time: 2015-04-01<br />values: -2769","time: 2015-05-01<br />values: -2555","time: 2015-06-01<br />values: -2361","time: 2015-07-01<br />values: -1230","time: 2015-08-01<br />values: -1194","time: 2015-09-01<br />values: -1482","time: 2015-10-01<br />values: -1563","time: 2015-11-01<br />values: -1642","time: 2015-12-01<br />values: -1909","time: 2016-01-01<br />values: -2075","time: 2016-02-01<br />values: -1829","time: 2016-03-01<br />values: -1741","time: 2016-04-01<br />values: -1611","time: 2016-05-01<br />values: -2237","time: 2016-06-01<br />values: -2880","time: 2016-07-01<br />values: -3449","time: 2016-08-01<br />values: -3718","time: 2016-09-01<br />values: -3727","time: 2016-10-01<br />values: -3830","time: 2016-11-01<br />values: -3886","time: 2016-12-01<br />values: -4252","time: 2017-01-01<br />values: -3673","time: 2017-02-01<br />values: -3640","time: 2017-03-01<br />values: -3588","time: 2017-04-01<br />values: -3357","time: 2017-05-01<br />values: -3067","time: 2017-06-01<br />values: -3263","time: 2017-07-01<br />values: -2624","time: 2017-08-01<br />values: -2303","time: 2017-09-01<br />values: -2613","time: 2017-10-01<br />values: -2251","time: 2017-11-01<br />values: -2091","time: 2017-12-01<br />values: -1472","time: 2018-01-01<br />values: -1424","time: 2018-02-01<br />values: -1550","time: 2018-03-01<br />values: -1892","time: 2018-04-01<br />values: -2155","time: 2018-05-01<br />values: -2747","time: 2018-06-01<br />values: -2930","time: 2018-07-01<br />values: -3319","time: 2018-08-01<br />values: -3687","time: 2018-09-01<br />values: -3817","time: 2018-10-01<br />values: -3935","time: 2018-11-01<br />values: -3706","time: 2018-12-01<br />values: -3736","time: 2019-01-01<br />values: -3162","time: 2019-02-01<br />values: -2857","time: 2019-03-01<br />values: -2858","time: 2019-04-01<br />values: -5966","time: 2019-05-01<br />values: -4771","time: 2019-06-01<br />values: -3396","time: 2019-07-01<br />values: -3075","time: 2019-08-01<br />values: -2645","time: 2019-09-01<br />values: -2131","time: 2019-10-01<br />values: -1777","time: 2019-11-01<br />values: -1771","time: 2019-12-01<br />values:  -328","time: 2020-01-01<br />values:  -586","time: 2020-02-01<br />values: -1342","time: 2020-03-01<br />values: -1901","time: 2020-04-01<br />values:  2075","time: 2020-05-01<br />values:  1293","time: 2020-06-01<br />values:   230","time: 2020-07-01<br />values:   175","time: 2020-08-01<br />values:   278","time: 2020-09-01<br />values:    33","time: 2020-10-01<br />values:   355","time: 2020-11-01<br />values:   778","time: 2020-12-01<br />values:  1000","time: 2021-01-01<br />values:   722","time: 2021-02-01<br />values:  1549","time: 2021-03-01<br />values:  1919","time: 2021-04-01<br />values:  1623","time: 2021-05-01<br />values:  2083","time: 2021-06-01<br />values:  3079","time: 2021-07-01<br />values:  3407","time: 2021-08-01<br />values:  3355","time: 2021-09-01<br />values:  4318","time: 2021-10-01<br />values:  1624","time: 2021-11-01<br />values:  1554","time: 2021-12-01<br />values:   822","time: 2022-01-01<br />values:   136","time: 2022-02-01<br />values:  -212","time: 2022-03-01<br />values:  -916","time: 2022-04-01<br />values: -4192","time: 2022-05-01<br />values: -5852","time: 2022-06-01<br />values: -6202","time: 2022-07-01<br />values: -7217","time: 2022-08-01<br />values: -7741","time: 2022-09-01<br />values: -8173","time: 2022-10-01<br />values: -6553","time: 2022-11-01<br />values: -6108","time: 2022-12-01<br />values: -6430","time: 2023-01-01<br />values: -5980","time: 2023-02-01<br />values: -6036","time: 2023-03-01<br />values: -4517","time: 2023-04-01<br />values: -4042","time: 2023-05-01<br />values: -3128","time: 2023-06-01<br />values: -2995","time: 2023-07-01<br />values: -2636","time: 2023-08-01<br />values: -2012","time: 2023-09-01<br />values: -2000","time: 2023-10-01<br />values: -2087","time: 2023-11-01<br />values: -1706","time: 2023-12-01<br />values: -2502","time: 2024-01-01<br />values: -2636","time: 2024-02-01<br />values: -2837","time: 2024-03-01<br />values: -3889","time: 2024-04-01<br />values: -3988","time: 2024-05-01<br />values: -3530","time: 2024-06-01<br />values: -2394","time: 2024-07-01<br />values: -1944","time: 2024-08-01<br />values: -1918","time: 2024-09-01<br />values: -1477","time: 2024-10-01<br />values: -1475","time: 2024-11-01<br />values: -2683","time: 2024-12-01<br />values: -1767","time: 2025-01-01<br />values: -1073","time: 2025-02-01<br />values:     0","time: 2025-03-01<br />values: -1371","time: 2025-04-01<br />values:  1746","time: 2025-05-01<br />values:  2360","time: 2025-06-01<br />values:  2254","time: 2025-07-01<br />values:  4024","time: 2025-08-01<br />values:  3979","time: 2025-09-01<br />values:  3042","time: 2025-10-01<br />values:  3857","time: 2025-11-01<br />values:  3888","time: 2025-12-01<br />values:  4227","time: 2026-01-01<br />values:  4134","time: 2026-02-01<br />values:  3123","time: 2026-03-01<br />values:  5774","time: 2026-04-01<br />values:  4128","time: 2026-05-01<br />values:  3312","time: 2026-06-01<br />values:  4859"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Vaihtotase, 12 kuukauden liukuva summa, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[12776.200000000001,20977.799999999999],"tickmode":"array","ticktext":["2005","2010","2015","2020","2025"],"tickvals":[12784,14610,16436,18262,20089],"categoryorder":"array","categoryarray":["2005","2010","2015","2020","2025"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-8982.6000000000004,8828.6000000000004],"tickmode":"array","ticktext":["-5000","0","5000"],"tickvals":[-5000,0,5000],"categoryorder":"array","categoryarray":["-5000","0","5000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Positiivinen luku on ylijäämä","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, maksutase ja ulkomainen varallisuusasema","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b8f133c76b8":{"x":{},"y":{},"type":"scatter"}},"cur_data":"b8f133c76b8","visdat":{"b8f133c76b8":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/vaihtotase-12kk-sv.png">På svenska</a> · <a href="kuvat/vaihtotase-12kk-en.png">In English</a></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>vaihtotase_kk <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_m"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="st">"CA"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"NB"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Kuukausisarja on hyvin heiluva, joten nakyma rajataan viimeiseen</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># kymmeneen vuoteen. Pitka kuva on liukuvassa summassa.</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>alku <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">max</span>(vaihtotase_kk<span class="sc">$</span>time), <span class="at">by =</span> <span class="st">"-10 years"</span>, <span class="at">length.out =</span> <span class="dv">2</span>)[<span class="dv">2</span>]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>vaihtotase_kk <span class="ot">&lt;-</span> vaihtotase_kk[vaihtotase_kk<span class="sc">$</span>time <span class="sc">&gt;=</span> alku, ]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>tekstit_kk <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Vaihtotase kuukausittain, miljoonaa euroa"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, maksutase ja ulkomainen varallisuusasema"</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Bytesbalansen månadsvis, miljoner euro"</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, betalningsbalans och utlandsställning"</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Current account by month, EUR million"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, balance of payments and international investment position"</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>kuvio_kk <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_kk[[kieli]]</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(vaihtotase_kk, <span class="at">type =</span> <span class="st">"col"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_kk</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">caption =</span> tekstit_kk<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-1bbeb0476d524f570bdb" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-1bbeb0476d524f570bdb">{"x":{"data":[{"orientation":"v","width":[25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709,25.19999999999709],"base":[-459,-446,-112,0,-127,-94,-520,0,-85,-245,-1002,-242,-654,0,0,-80,0,0,0,0,-211,-587,-1266,-833,-837,-197,-160,-209,0,0,0,0,0,-588,-4373,0,0,0,0,0,0,0,0,0,-663,-1147,-397,-420,-525,0,0,0,0,0,0,0,0,-777,-693,0,0,0,0,0,-1901,0,0,-564,-184,-1482,-3969,-1620,0,-619,-202,0,-280,0,0,-114,-240,0,-3494,-706,0,-259,0,0,-368,0,-117,-248,-441,-1014,-3593,-247,0,0,0,0,-366,0,0,0,0,-2386,-476,0,0,0,0,0,0,0,0,0,-380,0,-2121,-449,0],"x":[16953,16983,17014,17045,17075,17106,17136,17167,17198,17226,17257,17287,17318,17348,17379,17410,17440,17471,17501,17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866,17897,17928,17956,17987,18017,18048,18078,18109,18140,18170,18201,18231,18262,18293,18322,18353,18383,18414,18444,18475,18506,18536,18567,18597,18628,18659,18687,18718,18748,18779,18809,18840,18871,18901,18932,18962,18993,19024,19052,19083,19113,19144,19174,19205,19236,19266,19297,19327,19358,19389,19417,19448,19478,19509,19539,19570,19601,19631,19662,19692,19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058,20089,20120,20148,20179,20209,20240,20270,20301,20332,20362,20393,20423,20454,20485,20513,20544,20574,20605],"y":[459,446,112,230,127,94,520,34,85,245,1002,242,654,192,208,80,236,66,100,83,211,587,1266,833,837,197,160,209,117,295,69,657,93,588,4373,362,538,124,270,304,472,301,1511,400,663,1147,397,420,525,69,374,59,794,725,1733,122,163,777,693,40,470,397,322,1023,1901,654,1001,564,184,1482,3969,1620,121,619,202,590,280,1099,680,114,240,38,3494,706,253,259,422,602,368,1480,117,248,441,1014,3593,247,1388,191,449,1043,366,273,799,446,631,2386,476,367,1282,1960,405,106,448,304,1138,353,380,265,2121,449,2830],"text":["time: 2016-06-01<br />values:  -459","time: 2016-07-01<br />values:  -446","time: 2016-08-01<br />values:  -112","time: 2016-09-01<br />values:   230","time: 2016-10-01<br />values:  -127","time: 2016-11-01<br />values:   -94","time: 2016-12-01<br />values:  -520","time: 2017-01-01<br />values:    34","time: 2017-02-01<br />values:   -85","time: 2017-03-01<br />values:  -245","time: 2017-04-01<br />values: -1002","time: 2017-05-01<br />values:  -242","time: 2017-06-01<br />values:  -654","time: 2017-07-01<br />values:   192","time: 2017-08-01<br />values:   208","time: 2017-09-01<br />values:   -80","time: 2017-10-01<br />values:   236","time: 2017-11-01<br />values:    66","time: 2017-12-01<br />values:   100","time: 2018-01-01<br />values:    83","time: 2018-02-01<br />values:  -211","time: 2018-03-01<br />values:  -587","time: 2018-04-01<br />values: -1266","time: 2018-05-01<br />values:  -833","time: 2018-06-01<br />values:  -837","time: 2018-07-01<br />values:  -197","time: 2018-08-01<br />values:  -160","time: 2018-09-01<br />values:  -209","time: 2018-10-01<br />values:   117","time: 2018-11-01<br />values:   295","time: 2018-12-01<br />values:    69","time: 2019-01-01<br />values:   657","time: 2019-02-01<br />values:    93","time: 2019-03-01<br />values:  -588","time: 2019-04-01<br />values: -4373","time: 2019-05-01<br />values:   362","time: 2019-06-01<br />values:   538","time: 2019-07-01<br />values:   124","time: 2019-08-01<br />values:   270","time: 2019-09-01<br />values:   304","time: 2019-10-01<br />values:   472","time: 2019-11-01<br />values:   301","time: 2019-12-01<br />values:  1511","time: 2020-01-01<br />values:   400","time: 2020-02-01<br />values:  -663","time: 2020-03-01<br />values: -1147","time: 2020-04-01<br />values:  -397","time: 2020-05-01<br />values:  -420","time: 2020-06-01<br />values:  -525","time: 2020-07-01<br />values:    69","time: 2020-08-01<br />values:   374","time: 2020-09-01<br />values:    59","time: 2020-10-01<br />values:   794","time: 2020-11-01<br />values:   725","time: 2020-12-01<br />values:  1733","time: 2021-01-01<br />values:   122","time: 2021-02-01<br />values:   163","time: 2021-03-01<br />values:  -777","time: 2021-04-01<br />values:  -693","time: 2021-05-01<br />values:    40","time: 2021-06-01<br />values:   470","time: 2021-07-01<br />values:   397","time: 2021-08-01<br />values:   322","time: 2021-09-01<br />values:  1023","time: 2021-10-01<br />values: -1901","time: 2021-11-01<br />values:   654","time: 2021-12-01<br />values:  1001","time: 2022-01-01<br />values:  -564","time: 2022-02-01<br />values:  -184","time: 2022-03-01<br />values: -1482","time: 2022-04-01<br />values: -3969","time: 2022-05-01<br />values: -1620","time: 2022-06-01<br />values:   121","time: 2022-07-01<br />values:  -619","time: 2022-08-01<br />values:  -202","time: 2022-09-01<br />values:   590","time: 2022-10-01<br />values:  -280","time: 2022-11-01<br />values:  1099","time: 2022-12-01<br />values:   680","time: 2023-01-01<br />values:  -114","time: 2023-02-01<br />values:  -240","time: 2023-03-01<br />values:    38","time: 2023-04-01<br />values: -3494","time: 2023-05-01<br />values:  -706","time: 2023-06-01<br />values:   253","time: 2023-07-01<br />values:  -259","time: 2023-08-01<br />values:   422","time: 2023-09-01<br />values:   602","time: 2023-10-01<br />values:  -368","time: 2023-11-01<br />values:  1480","time: 2023-12-01<br />values:  -117","time: 2024-01-01<br />values:  -248","time: 2024-02-01<br />values:  -441","time: 2024-03-01<br />values: -1014","time: 2024-04-01<br />values: -3593","time: 2024-05-01<br />values:  -247","time: 2024-06-01<br />values:  1388","time: 2024-07-01<br />values:   191","time: 2024-08-01<br />values:   449","time: 2024-09-01<br />values:  1043","time: 2024-10-01<br />values:  -366","time: 2024-11-01<br />values:   273","time: 2024-12-01<br />values:   799","time: 2025-01-01<br />values:   446","time: 2025-02-01<br />values:   631","time: 2025-03-01<br />values: -2386","time: 2025-04-01<br />values:  -476","time: 2025-05-01<br />values:   367","time: 2025-06-01<br />values:  1282","time: 2025-07-01<br />values:  1960","time: 2025-08-01<br />values:   405","time: 2025-09-01<br />values:   106","time: 2025-10-01<br />values:   448","time: 2025-11-01<br />values:   304","time: 2025-12-01<br />values:  1138","time: 2026-01-01<br />values:   353","time: 2026-02-01<br />values:  -380","time: 2026-03-01<br />values:   265","time: 2026-04-01<br />values: -2121","time: 2026-05-01<br />values:  -449","time: 2026-06-01<br />values:  2830"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,100,117,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Vaihtotase kuukausittain, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[16756.540000000001,20801.459999999999],"tickmode":"array","ticktext":["2016","2018","2020","2022","2024","2026"],"tickvals":[16801,17532,18262,18993,19723,20454],"categoryorder":"array","categoryarray":["2016","2018","2020","2022","2024","2026"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-4733.1499999999996,3190.1500000000001],"tickmode":"array","ticktext":["-4000","-2000","0","2000"],"tickvals":[-4000,-2000,0,2000],"categoryorder":"array","categoryarray":["-4000","-2000","0","2000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.14999999999999999,"title":{"text":""}},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Lähde: Tilastokeskus, maksutase ja ulkomainen varallisuusasema","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b8f479a3e70":{"x":{},"y":{},"type":"bar"}},"cur_data":"b8f479a3e70","visdat":{"b8f479a3e70":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/vaihtotase-kuukausittain-sv.png">På svenska</a> · <a href="kuvat/vaihtotase-kuukausittain-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px">114s Maksutase, kuukausittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+11.8.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+Netto, 12 kk:n liukuva summa, miljoonaa euroa
+</dd>
+<dt>Maksutase-erä</dt>
+<dd>
+CA Vaihtotase
+</dd>
+</dl>
+</details>
+</section>
+<section id="tavaroiden-ja-palveluiden-ulkomaankauppa" class="level2">
+<h2 class="anchored" data-anchor-id="tavaroiden-ja-palveluiden-ulkomaankauppa">Tavaroiden ja palveluiden ulkomaankauppa</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Vienti ja tuonti</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Tavarat ja palvelut</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>kauppa <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"valtio_27_20180101"</span> <span class="ot">=</span> <span class="st">"ULK"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="st">"GS"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"tpulk_C"</span>, <span class="st">"tpulk_D"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>tekstit_kauppa <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Tavaroiden ja palveluiden vienti ja tuonti, miljoonaa euroa"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Ulkomaat yhteensä, neljännesvuosittain"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, tavaroiden ja palveluiden ulkomaankauppa"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">tpulk_C =</span> <span class="st">"Vienti"</span>, <span class="at">tpulk_D =</span> <span class="st">"Tuonti"</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Export och import av varor och tjänster, miljoner euro"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Utlandet totalt, kvartalsvis"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, utrikeshandel med varor och tjänster"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">tpulk_C =</span> <span class="st">"Export"</span>, <span class="at">tpulk_D =</span> <span class="st">"Import"</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Exports and imports of goods and services, EUR million"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">selite =</span> <span class="st">"Total foreign countries, by quarter"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, international trade in goods and services"</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">tpulk_C =</span> <span class="st">"Exports"</span>, <span class="at">tpulk_D =</span> <span class="st">"Imports"</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>kuvio_kauppa <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_kauppa[[kieli]]</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> kauppa</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>virta <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>contentscode, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat), <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">colour =</span> <span class="st">"virta"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko,</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">subtitle =</span> t<span class="sc">$</span>selite, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_kauppa</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">subtitle =</span> tekstit_kauppa<span class="sc">$</span>fi<span class="sc">$</span>selite,</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>                   <span class="at">caption =</span> tekstit_kauppa<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-1b26e8242950767382ce" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-1b26e8242950767382ce">{"x":{"data":[{"x":[15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[19240,19304,19419,19875,17832,19235,19158,19543,18090,19223,18387,19513,17995,19405,18840,19980,20590,21602,21171,22397,21849,22738,22290,23910,23643,24058,23590,25592,21759,19539,19789,24519,21140,23044,24973,30156,27082,30932,31312,33855,29443,29024,27655,30637,26210,29472,28825,30552,28426,29968,30042,32229,29904,34573],"text":["virta: Vienti<br />time: 2013-01-01<br />values: 19240","virta: Vienti<br />time: 2013-04-01<br />values: 19304","virta: Vienti<br />time: 2013-07-01<br />values: 19419","virta: Vienti<br />time: 2013-10-01<br />values: 19875","virta: Vienti<br />time: 2014-01-01<br />values: 17832","virta: Vienti<br />time: 2014-04-01<br />values: 19235","virta: Vienti<br />time: 2014-07-01<br />values: 19158","virta: Vienti<br />time: 2014-10-01<br />values: 19543","virta: Vienti<br />time: 2015-01-01<br />values: 18090","virta: Vienti<br />time: 2015-04-01<br />values: 19223","virta: Vienti<br />time: 2015-07-01<br />values: 18387","virta: Vienti<br />time: 2015-10-01<br />values: 19513","virta: Vienti<br />time: 2016-01-01<br />values: 17995","virta: Vienti<br />time: 2016-04-01<br />values: 19405","virta: Vienti<br />time: 2016-07-01<br />values: 18840","virta: Vienti<br />time: 2016-10-01<br />values: 19980","virta: Vienti<br />time: 2017-01-01<br />values: 20590","virta: Vienti<br />time: 2017-04-01<br />values: 21602","virta: Vienti<br />time: 2017-07-01<br />values: 21171","virta: Vienti<br />time: 2017-10-01<br />values: 22397","virta: Vienti<br />time: 2018-01-01<br />values: 21849","virta: Vienti<br />time: 2018-04-01<br />values: 22738","virta: Vienti<br />time: 2018-07-01<br />values: 22290","virta: Vienti<br />time: 2018-10-01<br />values: 23910","virta: Vienti<br />time: 2019-01-01<br />values: 23643","virta: Vienti<br />time: 2019-04-01<br />values: 24058","virta: Vienti<br />time: 2019-07-01<br />values: 23590","virta: Vienti<br />time: 2019-10-01<br />values: 25592","virta: Vienti<br />time: 2020-01-01<br />values: 21759","virta: Vienti<br />time: 2020-04-01<br />values: 19539","virta: Vienti<br />time: 2020-07-01<br />values: 19789","virta: Vienti<br />time: 2020-10-01<br />values: 24519","virta: Vienti<br />time: 2021-01-01<br />values: 21140","virta: Vienti<br />time: 2021-04-01<br />values: 23044","virta: Vienti<br />time: 2021-07-01<br />values: 24973","virta: Vienti<br />time: 2021-10-01<br />values: 30156","virta: Vienti<br />time: 2022-01-01<br />values: 27082","virta: Vienti<br />time: 2022-04-01<br />values: 30932","virta: Vienti<br />time: 2022-07-01<br />values: 31312","virta: Vienti<br />time: 2022-10-01<br />values: 33855","virta: Vienti<br />time: 2023-01-01<br />values: 29443","virta: Vienti<br />time: 2023-04-01<br />values: 29024","virta: Vienti<br />time: 2023-07-01<br />values: 27655","virta: Vienti<br />time: 2023-10-01<br />values: 30637","virta: Vienti<br />time: 2024-01-01<br />values: 26210","virta: Vienti<br />time: 2024-04-01<br />values: 29472","virta: Vienti<br />time: 2024-07-01<br />values: 28825","virta: Vienti<br />time: 2024-10-01<br />values: 30552","virta: Vienti<br />time: 2025-01-01<br />values: 28426","virta: Vienti<br />time: 2025-04-01<br />values: 29968","virta: Vienti<br />time: 2025-07-01<br />values: 30042","virta: Vienti<br />time: 2025-10-01<br />values: 32229","virta: Vienti<br />time: 2026-01-01<br />values: 29904","virta: Vienti<br />time: 2026-04-01<br />values: 34573"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Vienti","legendgroup":"Vienti","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[19944,19622,19901,20374,18582,19944,19418,19914,18896,18541,18536,20075,18523,19760,19193,21021,20447,21470,20826,22133,22179,22949,22918,24701,23182,24068,23654,24371,22953,19668,20595,21811,21843,23187,24861,29285,29496,33049,32617,33320,29571,29499,27863,29767,28435,28529,28160,29529,27940,28723,28938,30736,30382,32789],"text":["virta: Tuonti<br />time: 2013-01-01<br />values: 19944","virta: Tuonti<br />time: 2013-04-01<br />values: 19622","virta: Tuonti<br />time: 2013-07-01<br />values: 19901","virta: Tuonti<br />time: 2013-10-01<br />values: 20374","virta: Tuonti<br />time: 2014-01-01<br />values: 18582","virta: Tuonti<br />time: 2014-04-01<br />values: 19944","virta: Tuonti<br />time: 2014-07-01<br />values: 19418","virta: Tuonti<br />time: 2014-10-01<br />values: 19914","virta: Tuonti<br />time: 2015-01-01<br />values: 18896","virta: Tuonti<br />time: 2015-04-01<br />values: 18541","virta: Tuonti<br />time: 2015-07-01<br />values: 18536","virta: Tuonti<br />time: 2015-10-01<br />values: 20075","virta: Tuonti<br />time: 2016-01-01<br />values: 18523","virta: Tuonti<br />time: 2016-04-01<br />values: 19760","virta: Tuonti<br />time: 2016-07-01<br />values: 19193","virta: Tuonti<br />time: 2016-10-01<br />values: 21021","virta: Tuonti<br />time: 2017-01-01<br />values: 20447","virta: Tuonti<br />time: 2017-04-01<br />values: 21470","virta: Tuonti<br />time: 2017-07-01<br />values: 20826","virta: Tuonti<br />time: 2017-10-01<br />values: 22133","virta: Tuonti<br />time: 2018-01-01<br />values: 22179","virta: Tuonti<br />time: 2018-04-01<br />values: 22949","virta: Tuonti<br />time: 2018-07-01<br />values: 22918","virta: Tuonti<br />time: 2018-10-01<br />values: 24701","virta: Tuonti<br />time: 2019-01-01<br />values: 23182","virta: Tuonti<br />time: 2019-04-01<br />values: 24068","virta: Tuonti<br />time: 2019-07-01<br />values: 23654","virta: Tuonti<br />time: 2019-10-01<br />values: 24371","virta: Tuonti<br />time: 2020-01-01<br />values: 22953","virta: Tuonti<br />time: 2020-04-01<br />values: 19668","virta: Tuonti<br />time: 2020-07-01<br />values: 20595","virta: Tuonti<br />time: 2020-10-01<br />values: 21811","virta: Tuonti<br />time: 2021-01-01<br />values: 21843","virta: Tuonti<br />time: 2021-04-01<br />values: 23187","virta: Tuonti<br />time: 2021-07-01<br />values: 24861","virta: Tuonti<br />time: 2021-10-01<br />values: 29285","virta: Tuonti<br />time: 2022-01-01<br />values: 29496","virta: Tuonti<br />time: 2022-04-01<br />values: 33049","virta: Tuonti<br />time: 2022-07-01<br />values: 32617","virta: Tuonti<br />time: 2022-10-01<br />values: 33320","virta: Tuonti<br />time: 2023-01-01<br />values: 29571","virta: Tuonti<br />time: 2023-04-01<br />values: 29499","virta: Tuonti<br />time: 2023-07-01<br />values: 27863","virta: Tuonti<br />time: 2023-10-01<br />values: 29767","virta: Tuonti<br />time: 2024-01-01<br />values: 28435","virta: Tuonti<br />time: 2024-04-01<br />values: 28529","virta: Tuonti<br />time: 2024-07-01<br />values: 28160","virta: Tuonti<br />time: 2024-10-01<br />values: 29529","virta: Tuonti<br />time: 2025-01-01<br />values: 27940","virta: Tuonti<br />time: 2025-04-01<br />values: 28723","virta: Tuonti<br />time: 2025-07-01<br />values: 28938","virta: Tuonti<br />time: 2025-10-01<br />values: 30736","virta: Tuonti<br />time: 2026-01-01<br />values: 30382","virta: Tuonti<br />time: 2026-04-01<br />values: 32789"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Tuonti","legendgroup":"Tuonti","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Tavaroiden ja palveluiden vienti ja tuonti, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[15464.1,20785.900000000001],"tickmode":"array","ticktext":["2015","2020","2025"],"tickvals":[16436,18262,20089],"categoryorder":"array","categoryarray":["2015","2020","2025"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[16994.950000000001,35410.050000000003],"tickmode":"array","ticktext":["20000","25000","30000","35000"],"tickvals":[20000,25000,30000,35000],"categoryorder":"array","categoryarray":["20000","25000","30000","35000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Ulkomaat yhteensä, neljännesvuosittain","x":0,"y":1.0600000000000001,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":12}},{"text":"Lähde: Tilastokeskus, tavaroiden ja palveluiden ulkomaankauppa","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b8f717e5d2f":{"colour":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"b8f717e5d2f","visdat":{"b8f717e5d2f":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/ulkomaankauppa-vienti-tuonti-sv.png">På svenska</a> · <a href="kuvat/ulkomaankauppa-vienti-tuonti-en.png">In English</a></p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Näytä koodi</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visu)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>vienti_erat <span class="ot">&lt;-</span> pxwebtools<span class="sc">::</span><span class="fu">pxw_get_data</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">url =</span> <span class="st">"https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"timeperiod_q"</span> <span class="ot">=</span> <span class="st">"*"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"valtio_27_20180101"</span> <span class="ot">=</span> <span class="st">"ULK"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"taloustoimi_1_20180101"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"G"</span>, <span class="st">"S"</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"contentscode"</span> <span class="ot">=</span> <span class="st">"tpulk_C"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>tekstit_erat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">fi =</span> <span class="fu">list</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Vienti tavaroihin ja palveluihin jaettuna, miljoonaa euroa"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Lähde: Tilastokeskus, tavaroiden ja palveluiden ulkomaankauppa"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">G =</span> <span class="st">"Tavarat"</span>, <span class="at">S =</span> <span class="st">"Palvelut"</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">sv =</span> <span class="fu">list</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Export fördelad på varor och tjänster, miljoner euro"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Källa: Statistikcentralen, utrikeshandel med varor och tjänster"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">G =</span> <span class="st">"Varor"</span>, <span class="at">S =</span> <span class="st">"Tjänster"</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">en =</span> <span class="fu">list</span>(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">otsikko =</span> <span class="st">"Exports split into goods and services, EUR million"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">lahde =</span> <span class="st">"Source: Statistics Finland, international trade in goods and services"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">sarjat =</span> <span class="fu">c</span>(<span class="at">G =</span> <span class="st">"Goods"</span>, <span class="at">S =</span> <span class="st">"Services"</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>kuvio_erat <span class="ot">&lt;-</span> <span class="cf">function</span>(kieli) {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> tekstit_erat[[kieli]]</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> vienti_erat</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  d<span class="sc">$</span>era <span class="ot">&lt;-</span> <span class="fu">factor</span>(d<span class="sc">$</span>taloustoimi_1_20180101, <span class="at">levels =</span> <span class="fu">names</span>(t<span class="sc">$</span>sarjat), <span class="at">labels =</span> t<span class="sc">$</span>sarjat)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_plot</span>(d, <span class="at">colour =</span> <span class="st">"era"</span>, <span class="at">title =</span> t<span class="sc">$</span>otsikko, <span class="at">caption =</span> t<span class="sc">$</span>lahde)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="fu">kuvio_erat</span>(<span class="st">"fi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visu_interactive</span>(<span class="at">caption =</span> tekstit_erat<span class="sc">$</span>fi<span class="sc">$</span>lahde)</span></code></pre></div><button title="Kopioi leikepöydälle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4c8f9bfda41cdf1dafe3" style="width:100%;height:365px;"></div>
+<script type="application/json" data-for="htmlwidget-4c8f9bfda41cdf1dafe3">{"x":{"data":[{"x":[15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[14752,14796,14426,14611,13163,14516,13947,14435,12686,13945,12877,13506,12180,13807,13037,13699,14358,15239,14746,15113,15245,16192,15286,16203,16256,16114,15435,17123,14594,13793,13996,16575,15097,16596,17983,20561,19573,22869,22769,23647,20933,20835,19321,21549,17288,20330,19240,19722,19393,19839,20718,20886,20584,24820],"text":["era: Tavarat<br />time: 2013-01-01<br />values: 14752","era: Tavarat<br />time: 2013-04-01<br />values: 14796","era: Tavarat<br />time: 2013-07-01<br />values: 14426","era: Tavarat<br />time: 2013-10-01<br />values: 14611","era: Tavarat<br />time: 2014-01-01<br />values: 13163","era: Tavarat<br />time: 2014-04-01<br />values: 14516","era: Tavarat<br />time: 2014-07-01<br />values: 13947","era: Tavarat<br />time: 2014-10-01<br />values: 14435","era: Tavarat<br />time: 2015-01-01<br />values: 12686","era: Tavarat<br />time: 2015-04-01<br />values: 13945","era: Tavarat<br />time: 2015-07-01<br />values: 12877","era: Tavarat<br />time: 2015-10-01<br />values: 13506","era: Tavarat<br />time: 2016-01-01<br />values: 12180","era: Tavarat<br />time: 2016-04-01<br />values: 13807","era: Tavarat<br />time: 2016-07-01<br />values: 13037","era: Tavarat<br />time: 2016-10-01<br />values: 13699","era: Tavarat<br />time: 2017-01-01<br />values: 14358","era: Tavarat<br />time: 2017-04-01<br />values: 15239","era: Tavarat<br />time: 2017-07-01<br />values: 14746","era: Tavarat<br />time: 2017-10-01<br />values: 15113","era: Tavarat<br />time: 2018-01-01<br />values: 15245","era: Tavarat<br />time: 2018-04-01<br />values: 16192","era: Tavarat<br />time: 2018-07-01<br />values: 15286","era: Tavarat<br />time: 2018-10-01<br />values: 16203","era: Tavarat<br />time: 2019-01-01<br />values: 16256","era: Tavarat<br />time: 2019-04-01<br />values: 16114","era: Tavarat<br />time: 2019-07-01<br />values: 15435","era: Tavarat<br />time: 2019-10-01<br />values: 17123","era: Tavarat<br />time: 2020-01-01<br />values: 14594","era: Tavarat<br />time: 2020-04-01<br />values: 13793","era: Tavarat<br />time: 2020-07-01<br />values: 13996","era: Tavarat<br />time: 2020-10-01<br />values: 16575","era: Tavarat<br />time: 2021-01-01<br />values: 15097","era: Tavarat<br />time: 2021-04-01<br />values: 16596","era: Tavarat<br />time: 2021-07-01<br />values: 17983","era: Tavarat<br />time: 2021-10-01<br />values: 20561","era: Tavarat<br />time: 2022-01-01<br />values: 19573","era: Tavarat<br />time: 2022-04-01<br />values: 22869","era: Tavarat<br />time: 2022-07-01<br />values: 22769","era: Tavarat<br />time: 2022-10-01<br />values: 23647","era: Tavarat<br />time: 2023-01-01<br />values: 20933","era: Tavarat<br />time: 2023-04-01<br />values: 20835","era: Tavarat<br />time: 2023-07-01<br />values: 19321","era: Tavarat<br />time: 2023-10-01<br />values: 21549","era: Tavarat<br />time: 2024-01-01<br />values: 17288","era: Tavarat<br />time: 2024-04-01<br />values: 20330","era: Tavarat<br />time: 2024-07-01<br />values: 19240","era: Tavarat<br />time: 2024-10-01<br />values: 19722","era: Tavarat<br />time: 2025-01-01<br />values: 19393","era: Tavarat<br />time: 2025-04-01<br />values: 19839","era: Tavarat<br />time: 2025-07-01<br />values: 20718","era: Tavarat<br />time: 2025-10-01<br />values: 20886","era: Tavarat<br />time: 2026-01-01<br />values: 20584","era: Tavarat<br />time: 2026-04-01<br />values: 24820"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(0,100,117,1)","dash":"solid"},"hoveron":"points","name":"Tavarat","legendgroup":"Tavarat","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[15706,15796,15887,15979,16071,16161,16252,16344,16436,16526,16617,16709,16801,16892,16983,17075,17167,17257,17348,17440,17532,17622,17713,17805,17897,17987,18078,18170,18262,18353,18444,18536,18628,18718,18809,18901,18993,19083,19174,19266,19358,19448,19539,19631,19723,19814,19905,19997,20089,20179,20270,20362,20454,20544],"y":[4488,4508,4992,5264,4669,4719,5212,5108,5403,5279,5510,6007,5815,5598,5802,6282,6232,6363,6425,7285,6604,6546,7004,7708,7386,7945,8155,8469,7165,5746,5793,7944,6043,6448,6990,9595,7509,8063,8542,10208,8510,8188,8335,9088,8922,9141,9585,10830,9034,10129,9324,11343,9319,9753],"text":["era: Palvelut<br />time: 2013-01-01<br />values:  4488","era: Palvelut<br />time: 2013-04-01<br />values:  4508","era: Palvelut<br />time: 2013-07-01<br />values:  4992","era: Palvelut<br />time: 2013-10-01<br />values:  5264","era: Palvelut<br />time: 2014-01-01<br />values:  4669","era: Palvelut<br />time: 2014-04-01<br />values:  4719","era: Palvelut<br />time: 2014-07-01<br />values:  5212","era: Palvelut<br />time: 2014-10-01<br />values:  5108","era: Palvelut<br />time: 2015-01-01<br />values:  5403","era: Palvelut<br />time: 2015-04-01<br />values:  5279","era: Palvelut<br />time: 2015-07-01<br />values:  5510","era: Palvelut<br />time: 2015-10-01<br />values:  6007","era: Palvelut<br />time: 2016-01-01<br />values:  5815","era: Palvelut<br />time: 2016-04-01<br />values:  5598","era: Palvelut<br />time: 2016-07-01<br />values:  5802","era: Palvelut<br />time: 2016-10-01<br />values:  6282","era: Palvelut<br />time: 2017-01-01<br />values:  6232","era: Palvelut<br />time: 2017-04-01<br />values:  6363","era: Palvelut<br />time: 2017-07-01<br />values:  6425","era: Palvelut<br />time: 2017-10-01<br />values:  7285","era: Palvelut<br />time: 2018-01-01<br />values:  6604","era: Palvelut<br />time: 2018-04-01<br />values:  6546","era: Palvelut<br />time: 2018-07-01<br />values:  7004","era: Palvelut<br />time: 2018-10-01<br />values:  7708","era: Palvelut<br />time: 2019-01-01<br />values:  7386","era: Palvelut<br />time: 2019-04-01<br />values:  7945","era: Palvelut<br />time: 2019-07-01<br />values:  8155","era: Palvelut<br />time: 2019-10-01<br />values:  8469","era: Palvelut<br />time: 2020-01-01<br />values:  7165","era: Palvelut<br />time: 2020-04-01<br />values:  5746","era: Palvelut<br />time: 2020-07-01<br />values:  5793","era: Palvelut<br />time: 2020-10-01<br />values:  7944","era: Palvelut<br />time: 2021-01-01<br />values:  6043","era: Palvelut<br />time: 2021-04-01<br />values:  6448","era: Palvelut<br />time: 2021-07-01<br />values:  6990","era: Palvelut<br />time: 2021-10-01<br />values:  9595","era: Palvelut<br />time: 2022-01-01<br />values:  7509","era: Palvelut<br />time: 2022-04-01<br />values:  8063","era: Palvelut<br />time: 2022-07-01<br />values:  8542","era: Palvelut<br />time: 2022-10-01<br />values: 10208","era: Palvelut<br />time: 2023-01-01<br />values:  8510","era: Palvelut<br />time: 2023-04-01<br />values:  8188","era: Palvelut<br />time: 2023-07-01<br />values:  8335","era: Palvelut<br />time: 2023-10-01<br />values:  9088","era: Palvelut<br />time: 2024-01-01<br />values:  8922","era: Palvelut<br />time: 2024-04-01<br />values:  9141","era: Palvelut<br />time: 2024-07-01<br />values:  9585","era: Palvelut<br />time: 2024-10-01<br />values: 10830","era: Palvelut<br />time: 2025-01-01<br />values:  9034","era: Palvelut<br />time: 2025-04-01<br />values: 10129","era: Palvelut<br />time: 2025-07-01<br />values:  9324","era: Palvelut<br />time: 2025-10-01<br />values: 11343","era: Palvelut<br />time: 2026-01-01<br />values:  9319","era: Palvelut<br />time: 2026-04-01<br />values:  9753"],"type":"scatter","mode":"lines","line":{"width":3.0236220472440949,"color":"rgba(196,137,3,1)","dash":"solid"},"hoveron":"points","name":"Palvelut","legendgroup":"Palvelut","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":26.456692913385819,"b":80,"l":58.542669712985777},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"Vienti tavaroihin ja palveluihin jaettuna, miljoonaa euroa","font":{"color":"rgba(0,0,0,1)","family":"","size":19.128268991282692},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[15464.1,20785.900000000001],"tickmode":"array","ticktext":["2015","2020","2025"],"tickvals":[16436,18262,20089],"categoryorder":"array","categoryarray":["2015","2020","2025"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919289,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[3471.4000000000001,25836.599999999999],"tickmode":"array","ticktext":["5000","10000","15000","20000","25000"],"tickvals":[5000,10000,15000,20000,25000],"categoryorder":"array","categoryarray":["5000","10000","15000","20000","25000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.9850560398505608,"tickwidth":0.72455564360919278,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.0615604867573376,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}},"orientation":"h","x":0,"y":-0.14999999999999999},"hovermode":"closest","barmode":"relative","annotations":[{"text":"Lähde: Tilastokeskus, tavaroiden ja palveluiden ulkomaankauppa","x":0,"y":-0.28000000000000003,"xref":"paper","yref":"paper","xanchor":"left","yanchor":"top","showarrow":false,"font":{"size":10}}]},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"locale":"fi","displaylogo":false,"modeBarButtonsToRemove":["select2d","lasso2d","autoScale2d"]},"source":"A","attrs":{"b8f1eb0fc44":{"colour":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"b8f1eb0fc44","visdat":{"b8f1eb0fc44":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Lataa kuva: <a href="kuvat/ulkomaankauppa-tavarat-palvelut-sv.png">På svenska</a> · <a href="kuvat/ulkomaankauppa-tavarat-palvelut-en.png">In English</a></p>
+</div>
+</div>
+</div>
+<details class="kuvion-tiedot">
+<summary>
+Kuvion tiedot
+</summary>
+<dl>
+<dt>Taulu</dt>
+<dd>
+<a href="https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px">12gq Tavaroiden ja palveluiden ulkomaankauppa, neljännesvuosittain</a>
+</dd>
+<dt>Päivitetty</dt>
+<dd>
+11.8.2026
+</dd>
+<dt>Sarjat</dt>
+<dd>
+Vienti, miljoonaa euroa · Tuonti, miljoonaa euroa
+</dd>
+<dt>Alue</dt>
+<dd>
+Ulkomaat yhteensä
+</dd>
+<dt>Palveluerä</dt>
+<dd>
+GS Tavarat ja palvelut
+</dd>
+</dl>
+</details>
+<p>Lähteet: <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__mata/">Maksutase ja ulkomainen varallisuusasema</a> (114s) ja <a href="https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tpulk/">Tavaroiden ja palveluiden ulkomaankauppa</a> (12gq).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopioitu!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopioitu!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jhuovari\.github\.io\/visu\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Lähde: Tilastokeskus, StatFin</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Rakennettu <a href="https://github.com/jhuovari/visu">visu</a>-paketilla</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

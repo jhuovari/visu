@@ -1,0 +1,305 @@
+---
+title: "Suhdannekuva"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"
+---
+
+Kaksi kuukausittain julkaistavaa mittaria, jotka kertovat talouden käänteestä
+ennen neljännesvuositilinpitoa. Tuotannon suhdannekuvaaja on kansantalouden
+tuotannon kuukausikuva, ja kuluttajien luottamusindikaattori kertoo miten
+kotitaloudet odottavat talouden kehittyvän.
+
+Alkuperäinen, kausitasoitettu ja trendi ovat samassa kuviossa samalla värillä
+eri paksuisin viivoin: kyse on samasta ilmiöstä eri tavalla siloitettuna.
+
+## Tuotannon suhdannekuvaaja
+
+::: {.panel-tabset}
+
+### Taso
+
+```{r}
+library(visu)
+
+tuotanto <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "toimiala_79_20180101" = "SSS",
+    "contentscode" = c("ind_tasm_2015", "ind_kausit_2015", "ind_trendi_2015")
+  )
+)
+
+tekstit <- list(
+  fi = list(
+    otsikko = "Tuotannon suhdannekuvaaja, 2015 = 100",
+    lahde = "Lähde: Tilastokeskus, tuotannon suhdannekuvaaja",
+    sarjat = c(ind_tasm_2015 = "Alkuperäinen",
+               ind_kausit_2015 = "Kausitasoitettu",
+               ind_trendi_2015 = "Trendi")
+  ),
+  sv = list(
+    otsikko = "Produktionens konjunkturindikator, 2015 = 100",
+    lahde = "Källa: Statistikcentralen, produktionens konjunkturindikator",
+    sarjat = c(ind_tasm_2015 = "Ursprunglig",
+               ind_kausit_2015 = "Säsongrensad",
+               ind_trendi_2015 = "Trend")
+  ),
+  en = list(
+    otsikko = "Monthly indicator of total output, 2015 = 100",
+    lahde = "Source: Statistics Finland, monthly indicator of total output",
+    sarjat = c(ind_tasm_2015 = "Original",
+               ind_kausit_2015 = "Seasonally adjusted",
+               ind_trendi_2015 = "Trend")
+  )
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  d <- tuotanto
+  # Karkeimmasta siloitetuimpaan, jolloin viiva paksunee jarjestyksessa.
+  d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, linewidth = "sarja", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio("fi") |>
+  visu_interactive(caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "tuotanto-taso")
+```
+
+### Vuosimuutos
+
+```{r}
+library(visu)
+
+tuotanto_muutos <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "toimiala_79_20180101" = "SSS",
+    "contentscode" = "vol_muutos_edvv_tyop"
+  )
+)
+
+tekstit_muutos <- list(
+  fi = list(
+    otsikko = "Tuotannon volyymin muutos vuodentakaisesta, %",
+    selite = "Työpäiväkorjattu sarja",
+    lahde = "Lähde: Tilastokeskus, tuotannon suhdannekuvaaja"
+  ),
+  sv = list(
+    otsikko = "Förändring av produktionens volym från året innan, %",
+    selite = "Arbetsdagskorrigerad serie",
+    lahde = "Källa: Statistikcentralen, produktionens konjunkturindikator"
+  ),
+  en = list(
+    otsikko = "Change in the volume of output from a year earlier, %",
+    selite = "Working day adjusted series",
+    lahde = "Source: Statistics Finland, monthly indicator of total output"
+  )
+)
+
+kuvio_muutos <- function(kieli) {
+  t <- tekstit_muutos[[kieli]]
+  visu_plot(tuotanto_muutos, type = "col", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_muutos("fi") |>
+  visu_interactive(subtitle = tekstit_muutos$fi$selite,
+                   caption = tekstit_muutos$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_muutos, "tuotanto-muutos")
+```
+
+### Toimialoittain
+
+```{r}
+library(visu)
+
+toimialat <- c("A", "BTF", "GTT")
+
+tuotanto_toimiala <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "toimiala_79_20180101" = toimialat,
+    "contentscode" = "ind_trendi_2015"
+  )
+)
+
+tekstit_toimiala <- list(
+  fi = list(
+    otsikko = "Tuotannon suhdannekuvaaja toimialoittain, trendi, 2015 = 100",
+    lahde = "Lähde: Tilastokeskus, tuotannon suhdannekuvaaja",
+    sarjat = c(A = "Alkutuotanto", BTF = "Jalostus", GTT = "Palvelut")
+  ),
+  sv = list(
+    otsikko = "Produktionens konjunkturindikator efter näringsgren, trend, 2015 = 100",
+    lahde = "Källa: Statistikcentralen, produktionens konjunkturindikator",
+    sarjat = c(A = "Primärproduktion", BTF = "Förädling", GTT = "Tjänster")
+  ),
+  en = list(
+    otsikko = "Monthly indicator of output by industry, trend, 2015 = 100",
+    lahde = "Source: Statistics Finland, monthly indicator of total output",
+    sarjat = c(A = "Primary production", BTF = "Secondary production", GTT = "Services")
+  )
+)
+
+kuvio_toimiala <- function(kieli) {
+  t <- tekstit_toimiala[[kieli]]
+  d <- tuotanto_toimiala
+  # Eri toimialat ovat eri joukkoja, joten ne erotetaan varilla.
+  d$toimiala <- factor(d$toimiala_79_20180101, levels = names(t$sarjat),
+                       labels = t$sarjat)
+  visu_plot(d, colour = "toimiala", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_toimiala("fi") |>
+  visu_interactive(caption = tekstit_toimiala$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_toimiala, "tuotanto-toimialoittain")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(tuotanto, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/")
+```
+
+## Kuluttajien luottamus
+
+::: {.panel-tabset}
+
+### Luottamusindikaattori
+
+```{r}
+library(visu)
+
+luottamus <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = "CCI_A1"
+  )
+)
+
+tekstit_luottamus <- list(
+  fi = list(
+    otsikko = "Kuluttajien luottamusindikaattori, saldoluku",
+    selite = "Neljän osatekijän keskiarvo; nolla on neutraali odotus",
+    lahde = "Lähde: Tilastokeskus, kuluttajien luottamus"
+  ),
+  sv = list(
+    otsikko = "Konsumenternas förtroendeindikator, saldotal",
+    selite = "Medelvärdet av fyra delfaktorer; noll är en neutral förväntan",
+    lahde = "Källa: Statistikcentralen, konsumenternas förtroende"
+  ),
+  en = list(
+    otsikko = "Consumer confidence indicator, balance figure",
+    selite = "Average of four components; zero is a neutral expectation",
+    lahde = "Source: Statistics Finland, consumer confidence"
+  )
+)
+
+kuvio_luottamus <- function(kieli) {
+  t <- tekstit_luottamus[[kieli]]
+  visu_plot(luottamus, title = t$otsikko, subtitle = t$selite, caption = t$lahde)
+}
+
+kuvio_luottamus("fi") |>
+  visu_interactive(subtitle = tekstit_luottamus$fi$selite,
+                   caption = tekstit_luottamus$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_luottamus, "luottamus-indikaattori")
+```
+
+### Osatekijät
+
+```{r}
+library(visu)
+
+osat <- c("CCI_B1", "CCI_B2", "CCI_B4", "CCI_E1")
+
+luottamus_osat <- pxwebtools::pxw_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = osat
+  )
+)
+
+tekstit_osat <- list(
+  fi = list(
+    otsikko = "Kuluttajien luottamuksen osatekijät, saldoluku",
+    lahde = "Lähde: Tilastokeskus, kuluttajien luottamus",
+    sarjat = c(CCI_B1 = "Oma talous nyt",
+               CCI_B2 = "Oma talous 12 kk kuluttua",
+               CCI_B4 = "Suomen talous 12 kk kuluttua",
+               CCI_E1 = "Rahankäyttö kestotavaroihin")
+  ),
+  sv = list(
+    otsikko = "Delfaktorer i konsumenternas förtroende, saldotal",
+    lahde = "Källa: Statistikcentralen, konsumenternas förtroende",
+    sarjat = c(CCI_B1 = "Egen ekonomi nu",
+               CCI_B2 = "Egen ekonomi om 12 mån",
+               CCI_B4 = "Finlands ekonomi om 12 mån",
+               CCI_E1 = "Penninganvändning på kapitalvaror")
+  ),
+  en = list(
+    otsikko = "Components of consumer confidence, balance figure",
+    lahde = "Source: Statistics Finland, consumer confidence",
+    sarjat = c(CCI_B1 = "Own economy now",
+               CCI_B2 = "Own economy in 12 months",
+               CCI_B4 = "Finland's economy in 12 months",
+               CCI_E1 = "Spending on durables")
+  )
+)
+
+kuvio_osat <- function(kieli) {
+  t <- tekstit_osat[[kieli]]
+  d <- luottamus_osat
+  d$osa <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "osa", title = t$otsikko, caption = t$lahde)
+}
+
+kuvio_osat("fi") |>
+  visu_interactive(caption = tekstit_osat$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_osat, "luottamus-osatekijat")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(luottamus_osat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/")
+```
+
+Lähteet: [Tuotannon suhdannekuvaaja](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ktkk/) (taulu 132f) ja [Kuluttajien luottamus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__kbar/) (taulu 11cc).
