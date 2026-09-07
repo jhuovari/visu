@@ -23,7 +23,7 @@ eri paksuisin viivoin: kyse on samasta ilmiöstä eri tavalla siloitettuna.
 ```{r}
 library(visu)
 
-tuotanto <- pxwebtools::pxw_get_data(
+tuotanto <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -79,7 +79,7 @@ visu_downloads(kuvio, "tuotanto-taso")
 ```{r}
 library(visu)
 
-tuotanto_muutos <- pxwebtools::pxw_get_data(
+tuotanto_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -130,7 +130,7 @@ library(visu)
 
 toimialat <- c("A", "BTF", "GTT")
 
-tuotanto_toimiala <- pxwebtools::pxw_get_data(
+tuotanto_toimiala <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -193,7 +193,7 @@ visu_metadata(tuotanto, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132
 ```{r}
 library(visu)
 
-luottamus <- pxwebtools::pxw_get_data(
+luottamus <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -243,7 +243,7 @@ library(visu)
 
 osat <- c("CCI_B1", "CCI_B2", "CCI_B4", "CCI_E1")
 
-luottamus_osat <- pxwebtools::pxw_get_data(
+luottamus_osat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
   query = list(
     "timeperiod_m" = "*",

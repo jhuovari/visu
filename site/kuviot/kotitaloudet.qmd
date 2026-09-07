@@ -19,7 +19,7 @@ sektoritilien tunnusluku ja velkaantumisaste rahoitustilinpidon.
 ```{r}
 library(visu)
 
-saastaminen <- pxwebtools::pxw_get_data(
+saastaminen <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -73,7 +73,7 @@ visu_downloads(kuvio, "saastamisaste")
 ```{r}
 library(visu)
 
-investoinnit <- pxwebtools::pxw_get_data(
+investoinnit <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -139,7 +139,7 @@ visu_metadata(saastaminen, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/1
 ```{r}
 library(visu)
 
-velkaantuminen <- pxwebtools::pxw_get_data(
+velkaantuminen <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -188,7 +188,7 @@ visu_downloads(kuvio_velka, "velkaantumisaste")
 ```{r}
 library(visu)
 
-lainat <- pxwebtools::pxw_get_data(
+lainat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/",
   query = list(
     "timeperiod_q" = "*",

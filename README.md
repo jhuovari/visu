@@ -25,7 +25,7 @@ visu:
 ```{r}
 library(visu)
 
-dat <- pxwebtools::pxw_get_data(
+dat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
   query = list(
     "timeperiod_y" = "*",
@@ -167,6 +167,22 @@ pilkku, englannissa piste. Anna kuvion rakentavalle funktiolle tulleen kielen
 koodi — `visu_plot(..., lang = kieli)` — jolloin `visu_downloads()`:n
 kirjoittamat ruotsin- ja englanninkieliset kuvat saavat kumpikin oman
 muotoilunsa.
+
+## Rajapinnan pyyntötahti
+
+Data haetaan `visu_get_data()`:lla, joka on kuori `pxwebtools::pxw_get_data()`:n
+ympärillä. StatFin rajoittaa pyyntöjen määrää aikaikkunassa ja vastaa
+ylityksestä koodilla 429; rajoitus jää päälle hetkeksi, ja silloin myös taulun
+metatietopyyntö palauttaa jotain muuta kuin PxWeb-konfiguraation, mistä `pxweb`
+kertoo virheellä "This is not a PXWEB API".
+
+Kuori pitää pyyntötahdin rajan alapuolella ja yrittää uudelleen pidentyvin
+odotuksin, jos rajoitus silti osuu. Tämä on tarpeen erityisesti silloin kun
+kaikki kuviot rakentuvat samalla ajolla — esimerkiksi kun `visu_plot()`:n
+rajapinta muuttuu ja jokaisen kuvion koodi muuttuu kerralla. Tuoreustarkistus
+ja kuvion tiedot käyttävät samaa tahdinpitoa, joten ikkuna näkee ajon kaikki
+pyynnöt. Rajat ovat optioissa `visu.px_max`, `visu.px_window`, `visu.px_tries`
+ja `visu.px_backoff`.
 
 Etulehden ja koodilohkon taulujen pitää olla samat. `visu_check_charts()`
 tarkistaa tämän molempiin suuntiin — etulehdessä luetellun taulun pitää

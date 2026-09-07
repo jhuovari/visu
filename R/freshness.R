@@ -3,6 +3,8 @@
 the <- new.env(parent = emptyenv())
 the$folder_listing <- list()
 the$table_meta <- list()
+# Rajapintapyyntojen aikaleimat tahdinpitoa varten (R/data.R).
+the$px_calls <- numeric()
 
 #' Tyhjennä kansiolistausten välimuisti
 #'
@@ -11,6 +13,7 @@ the$table_meta <- list()
 visu_clear_cache <- function() {
   the$folder_listing <- list()
   the$table_meta <- list()
+  the$px_calls <- numeric()
   invisible(NULL)
 }
 
@@ -60,14 +63,7 @@ visu_folder_listing <- function(folder) {
     return(if (identical(cached, NA)) NULL else cached)
   }
 
-  listing <- tryCatch(
-    jsonlite::fromJSON(folder, simplifyDataFrame = TRUE),
-    error = function(e) {
-      warning("Kansiolistausta ei saatu osoitteesta ", folder, ": ",
-              conditionMessage(e), call. = FALSE)
-      NULL
-    }
-  )
+  listing <- visu_px_json(folder, "Kansiolistausta")
   if (!is.data.frame(listing)) listing <- NULL
 
   the$folder_listing[[folder]] <- listing %||% NA

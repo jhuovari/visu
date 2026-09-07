@@ -27,7 +27,7 @@ englanninkielisen version ladattavana kuvana.
 ```{r}
 library(visu)
 
-tyottomyys <- pxwebtools::pxw_get_data(
+tyottomyys <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -76,7 +76,7 @@ visu_downloads(kuvio, "tyottomyysaste-taso")
 ```{r}
 library(visu)
 
-tyottomyys_muutos <- pxwebtools::pxw_get_data(
+tyottomyys_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -136,7 +136,7 @@ visu_metadata(tyottomyys, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/1
 ```{r}
 library(visu)
 
-tyollisyysaste <- pxwebtools::pxw_get_data(
+tyollisyysaste <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -192,7 +192,7 @@ visu_metadata(tyollisyysaste, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ty
 ```{r}
 library(visu)
 
-tyolliset <- pxwebtools::pxw_get_data(
+tyolliset <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -241,7 +241,7 @@ visu_downloads(kuvio_tyolliset, "tyolliset-taso")
 ```{r}
 library(visu)
 
-maarat <- pxwebtools::pxw_get_data(
+maarat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -309,7 +309,7 @@ visu_metadata(maarat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.
 ```{r}
 library(visu)
 
-palkansaajat <- pxwebtools::pxw_get_data(
+palkansaajat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
   query = list(
     "timeperiod_y" = "*",
@@ -353,7 +353,7 @@ visu_downloads(kuvio_palkansaajat, "palkansaajat-yhteensa")
 ```{r}
 library(visu)
 
-palkansaajat_sp <- pxwebtools::pxw_get_data(
+palkansaajat_sp <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
   query = list(
     "timeperiod_y" = "*",
