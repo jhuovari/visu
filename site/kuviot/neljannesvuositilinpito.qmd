@@ -23,7 +23,7 @@ ruotsin- ja englanninkielisen version ladattavana kuvana.
 ```{r}
 library(visu)
 
-bkt <- pxwebtools::pxw_get_data(
+bkt <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -82,7 +82,7 @@ visu_downloads(kuvio, "bkt-taso")
 ```{r}
 library(visu)
 
-bkt_muutos <- pxwebtools::pxw_get_data(
+bkt_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -145,7 +145,7 @@ library(visu)
 
 erat <- c("P3KS14_S15", "P3KS13", "P51K", "P6K")
 
-kysynta <- pxwebtools::pxw_get_data(
+kysynta <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -204,7 +204,7 @@ library(visu)
 
 erat <- c("P3KS14_S15", "P3KS13", "P51K", "P6K")
 
-kysynta_muutos <- pxwebtools::pxw_get_data(
+kysynta_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
   query = list(
     "timeperiod_q" = "*",

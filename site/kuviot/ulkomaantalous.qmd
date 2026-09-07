@@ -22,7 +22,7 @@ kuukauden liukuva summa. Yksittäiset kuukaudet ovat omalla välilehdellään.
 ```{r}
 library(visu)
 
-vaihtotase <- pxwebtools::pxw_get_data(
+vaihtotase <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -70,7 +70,7 @@ visu_downloads(kuvio, "vaihtotase-12kk")
 ```{r}
 library(visu)
 
-vaihtotase_kk <- pxwebtools::pxw_get_data(
+vaihtotase_kk <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -132,7 +132,7 @@ visu_metadata(vaihtotase, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/1
 ```{r}
 library(visu)
 
-kauppa <- pxwebtools::pxw_get_data(
+kauppa <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -187,7 +187,7 @@ visu_downloads(kuvio_kauppa, "ulkomaankauppa-vienti-tuonti")
 ```{r}
 library(visu)
 
-vienti_erat <- pxwebtools::pxw_get_data(
+vienti_erat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/",
   query = list(
     "timeperiod_q" = "*",

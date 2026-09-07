@@ -117,14 +117,7 @@ visu_table_meta <- function(url) {
   cached <- the$table_meta[[clean]]
   if (!is.null(cached)) return(if (identical(cached, NA)) list() else cached)
 
-  meta <- tryCatch(
-    jsonlite::fromJSON(clean, simplifyDataFrame = TRUE),
-    error = function(e) {
-      warning("Taulun metatietoja ei saatu osoitteesta ", clean, ": ",
-              conditionMessage(e), call. = FALSE)
-      NULL
-    }
-  )
+  meta <- visu_px_json(clean, "Taulun metatietoja")
   if (!is.list(meta)) meta <- NULL
 
   the$table_meta[[clean]] <- meta %||% NA

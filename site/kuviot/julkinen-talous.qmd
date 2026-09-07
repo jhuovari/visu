@@ -21,7 +21,7 @@ arvioidaan EU:n vakaus- ja kasvusopimuksessa.
 ```{r}
 library(visu)
 
-velka_suhde <- pxwebtools::pxw_get_data(
+velka_suhde <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/",
   query = list(
     "timeperiod_y" = "*",
@@ -70,7 +70,7 @@ visu_downloads(kuvio_velka, "julkinen-velka-suhde")
 ```{r}
 library(visu)
 
-alijaama <- pxwebtools::pxw_get_data(
+alijaama <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/",
   query = list(
     "timeperiod_y" = "*",
@@ -121,7 +121,7 @@ library(visu)
 
 sektorit <- c("S1311", "S1313", "S1314")
 
-alijaama_sektori <- pxwebtools::pxw_get_data(
+alijaama_sektori <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/",
   query = list(
     "timeperiod_y" = "*",
@@ -187,7 +187,7 @@ visu_metadata(velka_suhde, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/
 ```{r}
 library(visu)
 
-velka_q <- pxwebtools::pxw_get_data(
+velka_q <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -237,7 +237,7 @@ visu_downloads(kuvio_velka_q, "julkinen-velka-taso")
 ```{r}
 library(visu)
 
-velka_q_muutos <- pxwebtools::pxw_get_data(
+velka_q_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -302,7 +302,7 @@ library(visu)
 
 erat <- c("OTRS", "OTES")
 
-tulot_menot_suhde <- pxwebtools::pxw_get_data(
+tulot_menot_suhde <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/",
   query = list(
     "timeperiod_q" = "*",
@@ -357,7 +357,7 @@ visu_downloads(kuvio_suhde, "julkinen-tulot-menot-suhde")
 ```{r}
 library(visu)
 
-rahoitusasema <- pxwebtools::pxw_get_data(
+rahoitusasema <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/",
   query = list(
     "timeperiod_q" = "*",

@@ -27,7 +27,7 @@ kertovat mistä taulusta luvut ovat.
 ```{r}
 library(visu)
 
-khi <- pxwebtools::pxw_get_data(
+khi <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -36,7 +36,7 @@ khi <- pxwebtools::pxw_get_data(
   )
 )
 
-ykhi <- pxwebtools::pxw_get_data(
+ykhi <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -45,7 +45,7 @@ ykhi <- pxwebtools::pxw_get_data(
   )
 )
 
-ennakko <- pxwebtools::pxw_get_data(
+ennakko <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -113,7 +113,7 @@ visu_downloads(kuvio, "kuluttajahinnat-vuosimuutos")
 ```{r}
 library(visu)
 
-khi_taso <- pxwebtools::pxw_get_data(
+khi_taso <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -122,7 +122,7 @@ khi_taso <- pxwebtools::pxw_get_data(
   )
 )
 
-ykhi_taso <- pxwebtools::pxw_get_data(
+ykhi_taso <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -192,7 +192,7 @@ visu_metadata(
 ```{r}
 library(visu)
 
-kive <- pxwebtools::pxw_get_data(
+kive <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -258,7 +258,7 @@ library(visu)
 
 ryhmat <- c("01", "04", "07", "11")
 
-ryhma_muutos <- pxwebtools::pxw_get_data(
+ryhma_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
   query = list(
     "timeperiod_m" = "*",
@@ -323,7 +323,7 @@ library(visu)
 paaryhmat <- c("01", "02", "03", "04", "05", "06", "07",
                "08", "09", "10", "11", "12", "13")
 
-vaikutus <- pxwebtools::pxw_get_data(
+vaikutus <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
   query = list(
     "timeperiod_m" = "*",
