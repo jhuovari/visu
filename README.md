@@ -288,4 +288,5 @@ pak::pak("jhuovari/visu")
 
 ## Lisenssi
 
-GPL-3. Lisenssin koko teksti on tiedostossa [LICENSE.md](LICENSE.md).
+GPL (>= 3), eli GPL:n versio 3 tai halutessa mikä tahansa myöhempi
+versio. Version 3 koko teksti on tiedostossa [LICENSE.md](LICENSE.md).

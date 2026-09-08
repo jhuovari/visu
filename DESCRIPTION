@@ -14,7 +14,7 @@ Description: Rakentaa StatFin-datasta interaktiivisia kuvioita ggplot2:lla
     paivittyy inkrementaalisesti: paketti tarkistaa kunkin kuvion lahdetaulun
     paivitysajan PxWeb-rajapinnasta ja renderoi uudelleen vain ne kuviot,
     joiden data on muuttunut.
-License: GPL-3
+License: GPL (>= 3)
 URL: https://jhuovari.github.io/visu/, https://github.com/jhuovari/visu
 BugReports: https://github.com/jhuovari/visu/issues
 Encoding: UTF-8
