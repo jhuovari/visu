@@ -1,7 +1,7 @@
 Package: visu
 Type: Package
 Title: StatFin Datan Haku ja Visualisointi
-Version: 0.6.1
+Version: 0.6.2
 Authors@R: c(
     person(
       "Janne", "Huovari",
@@ -14,7 +14,7 @@ Description: Rakentaa StatFin-datasta interaktiivisia kuvioita ggplot2:lla
     paivittyy inkrementaalisesti: paketti tarkistaa kunkin kuvion lahdetaulun
     paivitysajan PxWeb-rajapinnasta ja renderoi uudelleen vain ne kuviot,
     joiden data on muuttunut.
-License: MIT + file LICENSE
+License: GPL-3
 URL: https://jhuovari.github.io/visu/, https://github.com/jhuovari/visu
 BugReports: https://github.com/jhuovari/visu/issues
 Encoding: UTF-8

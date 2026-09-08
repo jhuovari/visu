@@ -285,3 +285,7 @@ POST https://api.github.com/repos/jhuovari/visu/actions/workflows/update-site.ym
 # install.packages("pak")
 pak::pak("jhuovari/visu")
 ```
+
+## Lisenssi
+
+GPL-3. Lisenssin koko teksti on tiedostossa [LICENSE.md](LICENSE.md).
