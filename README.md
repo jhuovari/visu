@@ -285,3 +285,10 @@ POST https://api.github.com/repos/jhuovari/visu/actions/workflows/update-site.ym
 # install.packages("pak")
 pak::pak("jhuovari/visu")
 ```
+
+## Lisenssi
+
+GPL (>= 3), eli GPL:n versio 3 tai halutessa mikä tahansa myöhempi
+versio. Version 3 koko teksti on tiedostossa [LICENSE.md](LICENSE.md).
+
+Copyright (C) 2026 Janne Huovari.
