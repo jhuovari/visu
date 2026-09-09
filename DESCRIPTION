@@ -1,12 +1,12 @@
 Package: visu
 Type: Package
 Title: StatFin Datan Haku ja Visualisointi
-Version: 0.6.2
+Version: 0.6.3
 Authors@R: c(
     person(
       "Janne", "Huovari",
       email = "janne.huovari@gov.fi",
-      role = c("aut", "cre")
+      role = c("aut", "cre", "cph")
     )
   )
 Description: Rakentaa StatFin-datasta interaktiivisia kuvioita ggplot2:lla

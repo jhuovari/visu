@@ -290,3 +290,5 @@ pak::pak("jhuovari/visu")
 
 GPL (>= 3), eli GPL:n versio 3 tai halutessa mikä tahansa myöhempi
 versio. Version 3 koko teksti on tiedostossa [LICENSE.md](LICENSE.md).
+
+Copyright (C) 2026 Janne Huovari.
