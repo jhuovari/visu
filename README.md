@@ -198,6 +198,22 @@ rajataan näkyvään dataan, koska koko historian vaihteluväli litistäisi
 näkymän. Oman alun saa argumentilla `start = as.Date("2000-01-01")` ja koko
 historian näkyviin arvolla `start = NA`.
 
+`visu_interactive()` huolehtii siitä, että zoomattu kuvio pysyy luettavana:
+
+- **Aika-akseli on plotlyn oma `date`-akseli.** ggplotly kiinnittäisi
+  akselimerkinnät alkunäkymään, jolloin sen ulkopuolelta ne puuttuisivat
+  kokonaan. Nyt plotly muodostaa ne zoomin mukaan — vuosia, kuukausia tai
+  päiviä sen mukaan, kuinka lähelle mennään.
+- **Y-akseli seuraa aika-akselin zoomia.** Plotly ei tee sitä itse, joten
+  kuvioon liitetään pieni JavaScript, joka laskee näkyvän aikavälin arvoista
+  uuden y-rajan. Pylväissä huomioidaan `base`, koska ggplotly tallentaa
+  pylvään korkeuden ja alkupään erikseen.
+- **Nollaviiva on muoto, ei jälki.** ggplotly piirtäisi sen alkunäkymän
+  levyisenä janana, joka loppuisi kesken zoomatessa.
+
+Desimaalierotin tulee plotlyn `separators`-asetuksesta, joka seuraa
+`locale`-argumenttia.
+
 ## Päivitystieto
 
 Aikaleimat näytetään muodossa `11.9.2026 klo 8:08` Suomen aikaan.
