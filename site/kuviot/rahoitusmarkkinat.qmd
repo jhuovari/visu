@@ -5,6 +5,7 @@ visu:
     - "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A"
     - "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A"
     - "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU"
+    - "https://www.suomenpankki.fi/api/interestrates/euribor"
     - "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT"
     - "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV"
     - "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y"
@@ -23,9 +24,12 @@ rajapinta on avoin eikä vaadi avainta, ja kumpikin kertoo päivitysaikansa
 `Last-Modified`-otsakkeessa, joten sivu päivittyy samalla logiikalla kuin
 StatFin-sivut.
 
-Euribor puuttuu tarkoituksella: sen hallinnoija EMMI lisensoi datan, eikä
-päivätason Euriboria saa keskuspankkien avoimista rajapinnoista. EKP julkaisee
-sen vain kuukausitasolla.
+Euribor tulee Suomen Pankin korkorajapinnasta. Se näyttää vain viimeisimmät
+noin kolme viikkoa eikä tottele aikarajausparametreja, joten historia kerätään
+itse tiedostoon `site/data/euribor.csv` joka ajolla. Sarja siis pitenee sitä
+mukaa kuin sivustoa päivitetään, eikä se ulotu taaksepäin kauemmas kuin
+ensimmäiseen ajoon. Sama rajapinta ei kerro päivitysaikaansa, joten tämä sivu
+rakentuu uudelleen joka ajolla — muut sivut vain kun niiden data on muuttunut.
 
 ## Valuuttakurssit
 
@@ -184,6 +188,62 @@ visu_metadata(brent, "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBR
 
 ::: {.panel-tabset}
 
+### Euribor
+
+```{r}
+library(visu)
+
+# Rajapinta antaa vain viimeisimmat noin kolme viikkoa, joten havainnot
+# yhdistetaan aiemmin kertyneisiin. Polku on sivun hakemistosta katsottuna.
+euribor <- visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor") |>
+  visu_accumulate("../data/euribor.csv")
+
+tekstit_euribor <- list(
+  fi = list(
+    otsikko = "Euribor-korot, %",
+    selite = "Historia kertyy sivuston ajoista, ks. sivun alku",
+    lahde = "Lähde: Suomen Pankki",
+    sarjat = c(euribor1vko = "1 viikko", euribor1kk = "1 kuukausi",
+               euribor3kk = "3 kuukautta", euribor6kk = "6 kuukautta",
+               euribor12kk = "12 kuukautta")
+  ),
+  sv = list(
+    otsikko = "Euriborräntor, %",
+    selite = "Historiken byggs upp av webbplatsens körningar",
+    lahde = "Källa: Finlands Bank",
+    sarjat = c(euribor1vko = "1 vecka", euribor1kk = "1 månad",
+               euribor3kk = "3 månader", euribor6kk = "6 månader",
+               euribor12kk = "12 månader")
+  ),
+  en = list(
+    otsikko = "Euribor rates, %",
+    selite = "History accumulates from the site's own runs",
+    lahde = "Source: Bank of Finland",
+    sarjat = c(euribor1vko = "1 week", euribor1kk = "1 month",
+               euribor3kk = "3 months", euribor6kk = "6 months",
+               euribor12kk = "12 months")
+  )
+)
+
+kuvio_euribor <- function(kieli) {
+  t <- tekstit_euribor[[kieli]]
+  d <- euribor
+  d$maturiteetti <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "maturiteetti", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_euribor("fi") |>
+  visu_interactive(subtitle = tekstit_euribor$fi$selite,
+                   caption = tekstit_euribor$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_euribor, "euribor")
+```
+
 ### Lyhyet korot
 
 ```{r}
@@ -302,8 +362,9 @@ visu_downloads(kuvio_tuotot, "korot-valtionlainat")
 #| echo: false
 #| output: asis
 visu_metadata(
-  list(estr, ohjauskorot, tuotot),
-  c("https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT",
+  list(euribor, estr, ohjauskorot, tuotot),
+  c("https://www.suomenpankki.fi/api/interestrates/euribor",
+    "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT",
     "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV",
     "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y")
 )

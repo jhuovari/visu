@@ -129,3 +129,102 @@ visu_http_updated <- function(url) {
   if (is.na(aika)) return(NA_character_)
   format(aika, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 }
+
+#' Hae Suomen Pankin korkosarja
+#'
+#' Lukee Suomen Pankin verkkosivujen korkorajapinnan, joka palauttaa JSONina
+#' yhden sarjan kutakin maturiteettia kohti. Rajapinta ei vaadi avainta.
+#'
+#' Rajapinta antaa vain viimeisimmät noin kolme viikkoa eikä tottele
+#' aikarajausparametreja, joten pidempi historia pitää kerätä itse:
+#' ks. [visu_accumulate()].
+#'
+#' @param url Rajapinnan osoite, esim.
+#'   `"https://www.suomenpankki.fi/api/interestrates/euribor"`.
+#' @return Data frame sarakkeilla `time`, `sarja` ja `values`.
+#' @examples
+#' \dontrun{
+#' visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor")
+#' }
+#' @export
+visu_get_bof <- function(url) {
+  raaka <- visu_px_json(url, "Korkoja")
+  if (is.null(raaka)) {
+    stop("Osoitteesta ", url, " ei saatu korkoja.", call. = FALSE)
+  }
+
+  # Sarjat ovat listan nimettyja alkioita; muut kentat, kuten errors, eivat
+  # ole havaintotauluja eivatka kuulu tulokseen.
+  sarjat <- Filter(function(x) is.data.frame(x) &&
+                     all(c("date", "value") %in% names(x)), raaka)
+  if (length(sarjat) == 0L) {
+    stop("Osoite ", url, " ei palauttanut odotettua JSON-muotoa. ",
+         "Kentat: ", paste(names(raaka), collapse = ", "), call. = FALSE)
+  }
+
+  osat <- lapply(names(sarjat), function(nimi) {
+    data.frame(
+      time = as.Date(sarjat[[nimi]]$date),
+      sarja = nimi,
+      values = suppressWarnings(as.numeric(sarjat[[nimi]]$value)),
+      stringsAsFactors = FALSE
+    )
+  })
+  d <- do.call(rbind, osat)
+  d <- d[!is.na(d$time) & !is.na(d$values), , drop = FALSE]
+  d <- d[order(d$sarja, d$time), , drop = FALSE]
+  rownames(d) <- NULL
+  d
+}
+
+#' Kerää lyhyen ikkunan rajapinnasta pitkä sarja
+#'
+#' Yhdistää uudet havainnot aiemmin tallennettuun csv-tiedostoon ja palauttaa
+#' koko kertyneen sarjan. Tarkoitettu lähteille, jotka näyttävät vain
+#' viimeisimmät viikot: kun sivusto ajetaan säännöllisesti, historia karttuu
+#' tiedostoon eikä katkea.
+#'
+#' Päällekkäisissä havainnoissa uusi arvo voittaa, jotta lähteen korjaukset
+#' menevät läpi. Tiedosto kirjoitetaan aina järjestyksessä, jotta git-diff
+#' näyttää vain uudet rivit.
+#'
+#' @param data Uudet havainnot. Sarake `values` on arvo, muut sarakkeet
+#'   yhdessä yksilöivät havainnon.
+#' @param path Csv-tiedoston polku. Luodaan jos sitä ei vielä ole.
+#' @return Koko kertynyt sarja data framena.
+#' @examples
+#' \dontrun{
+#' visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor") |>
+#'   visu_accumulate("../data/euribor.csv")
+#' }
+#' @export
+visu_accumulate <- function(data, path) {
+  if (!"values" %in% names(data)) {
+    stop("Datassa pitää olla sarake `values`.", call. = FALSE)
+  }
+  avaimet <- setdiff(names(data), "values")
+
+  vanha <- visu_read_accumulated(path, names(data))
+  # Uudet rivit viimeisena, jotta duplicated() pudottaa vanhan arvon.
+  kaikki <- rbind(vanha, data[names(vanha)])
+  kaikki <- kaikki[!duplicated(kaikki[avaimet], fromLast = TRUE), , drop = FALSE]
+  kaikki <- kaikki[do.call(order, kaikki[avaimet]), , drop = FALSE]
+  rownames(kaikki) <- NULL
+
+  dir.create(dirname(path), showWarnings = FALSE, recursive = TRUE)
+  utils::write.csv(kaikki, path, row.names = FALSE, fileEncoding = "UTF-8")
+  kaikki
+}
+
+# Aiemmin kertynyt sarja, tai tyhja kehys samoilla sarakkeilla. Aika luetaan
+# Date-tyypiksi, jotta yhdistetty kehys kelpaa kuviolle sellaisenaan.
+visu_read_accumulated <- function(path, sarakkeet) {
+  if (!file.exists(path)) {
+    tyhja <- lapply(sarakkeet, function(x) character())
+    return(as.data.frame(stats::setNames(tyhja, sarakkeet),
+                         stringsAsFactors = FALSE)[0, , drop = FALSE])
+  }
+  vanha <- utils::read.csv(path, stringsAsFactors = FALSE)
+  if ("time" %in% names(vanha)) vanha$time <- as.Date(vanha$time)
+  vanha[sarakkeet]
+}

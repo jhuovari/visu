@@ -182,12 +182,14 @@ test_that("koodilohkon lahteet loytyvat myos muista kuin PxWeb-hauista", {
     '  "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A"',
     ')',
     'c <- visu_get_fred("https://fred.stlouisfed.org/graph/fredgraph.csv?id=X")',
+    'd <- visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor")',
     sep = "\n")
 
   expect_setequal(
     visu:::visu_body_table_urls(body),
     c("https://pxdata.stat.fi/x/StatFin/tyti/135z.px/",
       "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A",
-      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=X")
+      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=X",
+      "https://www.suomenpankki.fi/api/interestrates/euribor")
   )
 })

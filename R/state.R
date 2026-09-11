@@ -175,7 +175,7 @@ visu_body_table_urls <- function(body) {
   # yhteista paatetta, joten ne poimitaan datahakufunktion argumentista.
   px <- regmatches(body, gregexpr("https?://[^\"'[:space:])]+\\.px/?", body))[[1]]
   kutsut <- regmatches(body, gregexpr(
-    "visu_get_(ecb|fred)\\(\\s*\"[^\"]+", body))[[1]]
+    "visu_get_(ecb|fred|bof)\\(\\s*\"[^\"]+", body))[[1]]
   muut <- sub("^[^\"]*\"", "", kutsut)
   unique(c(px, muut))
 }

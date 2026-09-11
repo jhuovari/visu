@@ -179,6 +179,7 @@ kumpikaan ei vaadi avainta:
   muoto kuin `visu_get_data()`:lla.
 - `visu_get_fred()` lukee FREDin csv-viennistä. FRED on jakelukanava, joten
   kerro kuviossa alkuperäinen lähde: Brentin takana on EIA.
+- `visu_get_bof()` lukee Suomen Pankin korkorajapinnan, josta Euribor tulee.
 
 Kummallekin annetaan osoite sellaisenaan, ei sarjatunnusta, jotta koodissa
 oleva osoite on sama kuin etulehdessä ja `visu_check_charts()` voi verrata
@@ -190,9 +191,25 @@ asian kuin PxWebin `updated`, joten inkrementaalinen päivitys toimii näillekin
 kuvioille ilman erillistä logiikkaa. Jos otsaketta ei tule, aikaleima on `NA`
 ja tuoreus päätellään datan tiivisteestä kuten ennenkin.
 
-Euribor ei ole mukana: sen hallinnoija EMMI lisensoi datan, eikä päivätason
-Euriboria saa keskuspankkien avoimista rajapinnoista. EKP julkaisee sen vain
-kuukausitasolla.
+### Lyhyen ikkunan lähteet
+
+Suomen Pankin korkorajapinta näyttää vain viimeisimmät noin kolme viikkoa eikä
+tottele aikarajausparametreja. `visu_accumulate()` yhdistää uudet havainnot
+repositoriossa olevaan csv-tiedostoon ja palauttaa koko kertyneen sarjan, joten
+historia karttuu sivuston omista ajoista:
+
+```r
+visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor") |>
+  visu_accumulate("../data/euribor.csv")
+```
+
+Päällekkäisissä havainnoissa uusi arvo voittaa, jotta lähteen korjaukset menevät
+läpi, ja tiedosto kirjoitetaan järjestyksessä, jotta git-diff näyttää vain uudet
+rivit. Sarja ei ulotu taaksepäin kauemmas kuin ensimmäiseen ajoon.
+
+Rajapinta ei myöskään kerro päivitysaikaansa, joten sen aikaleima on `NA` ja
+kuvio rakentuu uudelleen joka ajolla. Se on tässä tarkoitus: muuten historia ei
+karttuisi.
 
 ## Rajapinnan pyyntötahti
 
