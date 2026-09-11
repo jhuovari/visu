@@ -21,7 +21,8 @@ visu_interactive(
 \item{subtitle, caption}{Valinnaiset tekstit, jotka ggplotly muuten pudottaisi.}
 
 \item{locale}{Plotlyn työkalupalkin ja lukumuotoilun kieli. Plotlyn mukana
-tulevat muun muassa \code{"fi"} ja \code{"sv"}; englanti on sen oletus.}
+tulevat muun muassa \code{"fi"} ja \code{"sv"}; englanti on sen oletus. Ohjaa myös
+desimaalierottimen: suomessa ja ruotsissa pilkku.}
 
 \item{...}{Lisäargumentit funktiolle \code{plotly::ggplotly()}.}
 }
