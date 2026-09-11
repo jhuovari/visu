@@ -105,10 +105,44 @@ visu_table_link <- function(meta, url) {
   paste0("[", teksti, "](", sub("/+$", "", url), ")")
 }
 
+#' Muotoile aikaleima Suomen aikaan
+#'
+#' Näyttää aikaleiman muodossa `11.9.2026 klo 8:08`. Vyöhyke luetaan
+#' leimasta: `Z`-päätteinen on UTC:tä ja muunnetaan Suomen aikaan, vyöhykkeetön
+#' on jo Suomen aikaa, kuten StatFinin `updated`-kentässä. Pelkästä
+#' päivämäärästä jätetään kellonaika pois, koska sitä ei tiedetä.
+#'
+#' @param stamp Aikaleima merkkijonona, esim. `"2026-09-11T05:08:15Z"`.
+#' @return Muotoiltu merkkijono, tai syöte sellaisenaan jos sitä ei voi lukea.
+#' @examples
+#' visu_format_stamp("2026-09-11T05:08:15Z")
+#' visu_format_stamp("2026-09-11T08:00:03")
+#' @export
 visu_format_stamp <- function(stamp) {
-  aika <- as.POSIXct(sub("Z$", "", stamp), format = "%Y-%m-%dT%H:%M:%S", tz = "UTC")
+  aika <- visu_parse_stamp(stamp)
   if (is.na(aika)) return(as.character(stamp))
-  format(aika, "%-d.%-m.%Y")
+  osat <- as.POSIXlt(aika, tz = "Europe/Helsinki")
+  paiva <- sprintf("%d.%d.%d", osat$mday, osat$mon + 1L, osat$year + 1900L)
+  if (!visu_stamp_has_time(stamp)) return(paiva)
+  sprintf("%s klo %d:%02d", paiva, osat$hour, osat$min)
+}
+
+# Aikaleiman vyohyke luetaan leimasta: StatFin antaa Suomen ajan ilman
+# vyohyketta, oma tilatiedostomme UTC:n Z-paatteella. Kumpikin nakyy lopulta
+# Suomen aikana, joten pelkka merkkijonon siivous ei riita.
+visu_parse_stamp <- function(stamp) {
+  s <- as.character(stamp)[1]
+  if (is.na(s) || !nzchar(s)) return(as.POSIXct(NA))
+  tz <- if (grepl("Z$", s)) "UTC" else "Europe/Helsinki"
+  s <- sub("Z$", "", s)
+  aika <- as.POSIXct(s, format = "%Y-%m-%dT%H:%M:%S", tz = tz)
+  if (is.na(aika)) aika <- as.POSIXct(s, format = "%Y-%m-%d", tz = tz)
+  aika
+}
+
+# Pelkka paivamaara nayttaisi kellonajan 0:00, mika olisi vaara tieto.
+visu_stamp_has_time <- function(stamp) {
+  grepl("T[0-9]{2}:[0-9]{2}", as.character(stamp)[1])
 }
 
 # Taulun metatiedot haetaan kerran ajoa kohti, kuten kansiolistauksetkin.

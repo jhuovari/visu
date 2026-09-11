@@ -125,3 +125,19 @@ test_that("sitkea rajoitus kaataa vasta yritysten jalkeen", {
   expect_error(suppressMessages(visu_get_data("https://example.org/x.px/")), "429")
   expect_equal(kutsuja, 3L)
 })
+
+test_that("aikaleima muotoillaan Suomen aikaan vyohykkeen mukaan", {
+  # StatFinin leima on jo Suomen aikaa, omamme UTC:ta Z-paatteella.
+  expect_equal(visu_format_stamp("2026-09-11T08:00:03"), "11.9.2026 klo 8:00")
+  expect_equal(visu_format_stamp("2026-09-11T05:08:15Z"), "11.9.2026 klo 8:08")
+  # Talvella siirtyma on kaksi tuntia.
+  expect_equal(visu_format_stamp("2026-01-15T06:05:00Z"), "15.1.2026 klo 8:05")
+})
+
+test_that("pelkasta paivamaarasta jatetaan kellonaika pois", {
+  expect_equal(visu_format_stamp("2026-09-11"), "11.9.2026")
+})
+
+test_that("lukukelvoton leima palautetaan sellaisenaan", {
+  expect_equal(visu_format_stamp("ei vielä rakennettu"), "ei vielä rakennettu")
+})

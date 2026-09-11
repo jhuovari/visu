@@ -6,6 +6,12 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Kotitalouksien taloudellinen asema kahdesta suunnasta: paljonko tuloista jää
 säästöön ja paljonko velkaa on suhteessa tuloihin. Säästämisaste on
 sektoritilien tunnusluku ja velkaantumisaste rahoitustilinpidon.

@@ -4,6 +4,12 @@ visu:
   table_url: "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Kansantalouden neljännesvuositilinpidon keskeiset erät. Tasot ovat
 kausitasoitettuja ja työpäiväkorjattuja volyymisarjoja viitevuoden 2015
 hinnoin, ja muutokset saman sarjan volyymin muutoksia vuodentakaisesta.
@@ -31,11 +37,6 @@ bkt <- visu_get_data(
     "contentscode" = c("kausitvv2015", "trendivv2015")
   )
 )
-
-# Koko historiassa sarjat kulkevat paallekkain, joten taso rajataan viimeiseen
-# kymmeneen vuoteen. Pitka kuva on vuosimuutoksessa ja kysynnan paaerissa.
-alku <- seq(max(bkt$time), by = "-10 years", length.out = 2)[2]
-bkt <- bkt[bkt$time >= alku, ]
 
 tekstit <- list(
   fi = list(
@@ -212,10 +213,6 @@ kysynta_muutos <- visu_get_data(
     "contentscode" = "vol_vv_kausitvv2015"
   )
 )
-
-# Nelja neljannesvuosisarjaa koko historiassa on lukukelvoton ryteikko.
-alku <- seq(max(kysynta_muutos$time), by = "-10 years", length.out = 2)[2]
-kysynta_muutos <- kysynta_muutos[kysynta_muutos$time >= alku, ]
 
 tekstit_kysynta_muutos <- list(
   fi = list(

@@ -22,6 +22,12 @@
 #'   erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan
 #'   funktion kielikoodi, jolloin ladattavat käännökset saavat oman
 #'   muotoilunsa.
+#' @param start Oletusnäkymän alku. `NULL` (oletus) aloittaa pyöristetystä
+#'   vuodesta, joka jättää näkyviin 10-15 kokonaista vuotta ja siirtyy viiden
+#'   vuoden askelin: vuonna 2026 alku on 2015 ja vuodesta 2030 alkaen 2020.
+#'   Vanhempi data jää kuvioon, joten interaktiivisessa kuviossa siihen voi
+#'   zoomata. Jos data alkaa myöhemmin, alku on datan alku. Anna `Date` oman
+#'   alun asettamiseksi tai `NA` koko historian näyttämiseksi.
 #' @param zeroline Nollaviiva. Oletuksena `NULL`, jolloin viiva piirretään kun
 #'   arvot ovat sekä nollan ala- että yläpuolella — muutoskuvioissa ja
 #'   rahoitusaseman kaltaisissa sarjoissa nolla on se raja, jonka kohdalla
@@ -41,6 +47,7 @@ visu_plot <- function(data,
                       linewidth = NULL,
                       type = c("line", "col", "area"),
                       lang = "fi",
+                      start = NULL,
                       zeroline = NULL,
                       title = NULL,
                       subtitle = NULL,
@@ -89,8 +96,13 @@ visu_plot <- function(data,
     p <- p + ggplot2::aes(linewidth = .data[[linewidth]])
   }
 
+  # Nakyma rajataan vasta koordinaatistossa, joten data jaa kuvioon
+  # kokonaan ja interaktiivisessa kuviossa voi zoomata vanhempaan.
+  raja <- visu_view_start(data, x, start)
+  nakyva <- visu_visible_rows(data, x, raja)
+
   # Nollaviiva geomin alle, jotta se ei peita dataa.
-  if (visu_needs_zeroline(data, y, zeroline)) {
+  if (visu_needs_zeroline(nakyva, y, zeroline)) {
     p <- p + ggplot2::geom_hline(yintercept = 0, colour = "grey35", linewidth = 0.3)
   }
 
@@ -111,8 +123,56 @@ visu_plot <- function(data,
       values = visu_linewidths(visu_level_count(data, linewidth))
     )
   }
+  if (!is.null(raja)) {
+    p <- p + ggplot2::coord_cartesian(
+      xlim = c(raja, max(data[[x]], na.rm = TRUE)),
+      ylim = visu_view_ylim(nakyva, y, type)
+    )
+  }
 
   p
+}
+
+# Oletusnakyman alku: viimeisin viidella jaollinen vuosi miinus kymmenen. Alku
+# pysyy siis samana viisi vuotta kerrallaan ja jattaa nakyviin 10-15
+# kokonaista vuotta. Sama saanto kaikissa kuvioissa, jotta niita voi verrata.
+visu_default_start <- function(today = Sys.Date()) {
+  vuosi <- as.integer(format(today, "%Y"))
+  as.Date(sprintf("%d-01-01", (vuosi %/% 5L) * 5L - 10L))
+}
+
+# Mista nakyma alkaa, vai rajataanko lainkaan. NULL tarkoittaa ettei rajata:
+# x ei ole aikaa, rajaus on nimenomaisesti pois, tai data alkaa muutenkin
+# vasta rajan jalkeen.
+visu_view_start <- function(data, x, start) {
+  if (length(start) == 1L && (isFALSE(start) || is.na(start))) return(NULL)
+  arvot <- data[[x]]
+  if (!inherits(arvot, c("Date", "POSIXct"))) return(NULL)
+
+  raja <- if (is.null(start)) visu_default_start() else as.Date(start)
+  arvot <- arvot[!is.na(arvot)]
+  if (length(arvot) == 0L || min(as.Date(arvot)) >= raja) return(NULL)
+  if (max(as.Date(arvot)) < raja) return(NULL)
+  raja
+}
+
+visu_visible_rows <- function(data, x, raja) {
+  if (is.null(raja)) return(data)
+  arvot <- as.Date(data[[x]])
+  data[!is.na(arvot) & arvot >= raja, , drop = FALSE]
+}
+
+# Y-akseli rajataan nakyvaan dataan, koska coord_cartesian ei laske sita
+# uudelleen ja koko historian vaihteluvali litistaisi nakyman. Pylvaat
+# lahtevat nollasta, joten nolla kuuluu aina mukaan. Pinotun alueen summaa ei
+# voi paatella riviarvoista, joten se jatetaan ggplotin laskettavaksi.
+visu_view_ylim <- function(data, y, type) {
+  if (identical(type, "area")) return(NULL)
+  arvot <- suppressWarnings(as.numeric(data[[y]]))
+  arvot <- arvot[is.finite(arvot)]
+  if (length(arvot) == 0L) return(NULL)
+  if (identical(type, "col")) arvot <- c(arvot, 0)
+  range(arvot)
 }
 
 # Nollaviiva piirretaan kun arvot ylittavat nollan kumpaankin suuntaan. Jos

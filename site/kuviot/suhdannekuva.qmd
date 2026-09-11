@@ -6,6 +6,12 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Kaksi kuukausittain julkaistavaa mittaria, jotka kertovat talouden käänteestä
 ennen neljännesvuositilinpitoa. Tuotannon suhdannekuvaaja on kansantalouden
 tuotannon kuukausikuva, ja kuluttajien luottamusindikaattori kertoo miten
