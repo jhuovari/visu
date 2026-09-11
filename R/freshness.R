@@ -31,8 +31,9 @@ visu_clear_cache <- function() {
 #'   tiivisteestä (`visu_data_hash()`).
 #' @export
 visu_table_updated <- function(url) {
+  # Muut kuin PxWeb-osoitteet kertovat tuoreutensa Last-Modified-otsakkeessa.
   parts <- visu_split_table_url(url)
-  if (is.null(parts)) return(NA_character_)
+  if (is.null(parts)) return(visu_http_updated(url))
 
   listing <- visu_folder_listing(parts$folder)
   if (is.null(listing) || !all(c("id", "updated") %in% names(listing))) {
@@ -49,6 +50,8 @@ visu_split_table_url <- function(url) {
   clean <- sub("[?#].*$", "", sub("/+$", "", url))
   parts <- strsplit(clean, "/", fixed = TRUE)[[1]]
   if (length(parts) < 2L) return(NULL)
+  # Vain PxWeb-taulu; muut osoitteet kasitellaan toisaalla.
+  if (!grepl("\\.px$", utils::tail(parts, 1L))) return(NULL)
   list(
     folder = paste(utils::head(parts, -1L), collapse = "/"),
     table = utils::tail(parts, 1L)

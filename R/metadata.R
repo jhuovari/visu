@@ -95,6 +95,17 @@ visu_variable_text <- function(meta, koodi) {
 }
 
 # Taulun tunnus ja otsikko linkkina PxWebin selausnakymaan.
+# Osoitteesta luettava otsikko: palvelin ja polun viimeinen osa riittavat
+# kertomaan mista sarja on.
+visu_url_title <- function(url) {
+  ilman <- sub("[?#].*$", "", url)
+  palvelin <- sub("^https?://([^/]+).*$", "\\1", url)
+  tunnus <- utils::tail(strsplit(ilman, "/", fixed = TRUE)[[1]], 1L)
+  kysely <- sub("^[^?]*\\??", "", url)
+  if (nzchar(kysely)) tunnus <- paste0(tunnus, "?", kysely)
+  paste0(palvelin, " ", tunnus)
+}
+
 visu_table_link <- function(meta, url) {
   parts <- visu_split_table_url(url)
   tunnus <- if (is.null(parts)) NULL else sub("\\.px$", "", parts$table)
@@ -150,6 +161,14 @@ visu_table_meta <- function(url) {
   clean <- sub("/+$", "", url)
   cached <- the$table_meta[[clean]]
   if (!is.null(cached)) return(if (identical(cached, NA)) list() else cached)
+
+  # Muilla kuin PxWeb-tauluilla ei ole vastaavaa metatietokyselya, joten
+  # otsikoksi riittaa lahde ja sarjatunnus osoitteesta.
+  if (is.null(visu_split_table_url(clean))) {
+    meta <- list(title = visu_url_title(clean))
+    the$table_meta[[clean]] <- meta
+    return(meta)
+  }
 
   meta <- visu_px_json(clean, "Taulun metatietoja")
   if (!is.list(meta)) meta <- NULL

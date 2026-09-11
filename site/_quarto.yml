@@ -14,7 +14,7 @@ website:
       - href: index.qmd
         text: "Kuviot"
   page-footer:
-    left: "Lähde: Tilastokeskus, StatFin"
+    left: "Lähteet: Tilastokeskus, EKP ja EIA"
     right: "Rakennettu [visu](https://github.com/jhuovari/visu)-paketilla"
 
 format:
