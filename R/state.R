@@ -171,8 +171,13 @@ visu_check_charts <- function(site_dir = NULL) {
 # Koodilohkoissa esiintyvat PxWeb-taulujen osoitteet. Taulun tunnistaa
 # .px-paatteesta, joten tilaston selauslinkit eivat osu tarkistukseen.
 visu_body_table_urls <- function(body) {
-  hits <- regmatches(body, gregexpr("https?://[^\"'[:space:])]+\\.px/?", body))[[1]]
-  unique(hits)
+  # PxWeb-taulut tunnistaa paatteesta. Muut lahteet ovat osoitteita ilman
+  # yhteista paatetta, joten ne poimitaan datahakufunktion argumentista.
+  px <- regmatches(body, gregexpr("https?://[^\"'[:space:])]+\\.px/?", body))[[1]]
+  kutsut <- regmatches(body, gregexpr(
+    "visu_get_(ecb|fred)\\(\\s*\"[^\"]+", body))[[1]]
+  muut <- sub("^[^\"]*\"", "", kutsut)
+  unique(c(px, muut))
 }
 
 # Vertailukelpoinen muoto: paattava kenoviiva ei vaihda taulua.

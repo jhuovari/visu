@@ -60,3 +60,33 @@ test_that("kuvio ilman nollaviivaa sailyttaa kaikki jalkensa", {
   expect_length(b$x$data, 1L)
   expect_length(b$x$layout$shapes, 0L)
 })
+
+test_that("luokka-akselin nimet sailyvat, koska ne ovat vain merkinnoissa", {
+  d <- data.frame(
+    ryhma = factor(rep(c("Liikenne", "Asuminen"), 2),
+                   levels = c("Liikenne", "Asuminen")),
+    paiva = factor(rep(c("a", "b"), each = 2)),
+    values = c(1, 2, 1.5, 2.5)
+  )
+
+  b <- plotly::plotly_build(visu_interactive(visu_plot(d, x = "ryhma", colour = "paiva")))
+
+  expect_equal(as.character(b$x$layout$xaxis$ticktext), c("Liikenne", "Asuminen"))
+})
+
+test_that("numeeriset merkinnat tunnistetaan pilkusta ja valilyonnista", {
+  expect_true(visu:::visu_numeric_ticks(c("0,5", "1,0")))
+  expect_true(visu:::visu_numeric_ticks(c("250 000", "300 000")))
+  expect_true(visu:::visu_numeric_ticks(c("−2", "0", "2")))
+  expect_false(visu:::visu_numeric_ticks(c("Liikenne", "Asuminen")))
+  expect_false(visu:::visu_numeric_ticks(NULL))
+})
+
+test_that("poikkileikkauskuvioon ei liiteta y-akselin zoomiskriptia", {
+  luokat <- visu_plot(data.frame(ryhma = c("a", "b"), values = c(1, 2)), type = "col")
+  aika <- visu_plot(data.frame(
+    time = as.Date(c("2024-01-01", "2024-02-01")), values = c(1, 2)))
+
+  expect_null(visu_interactive(luokat)$jsHooks$render)
+  expect_length(visu_interactive(aika)$jsHooks$render, 1L)
+})

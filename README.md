@@ -168,6 +168,32 @@ koodi — `visu_plot(..., lang = kieli)` — jolloin `visu_downloads()`:n
 kirjoittamat ruotsin- ja englanninkieliset kuvat saavat kumpikin oman
 muotoilunsa.
 
+## Muut lähteet kuin StatFin
+
+Päivätason markkinatieto tulee kahdesta avoimesta rajapinnasta, joista
+kumpikaan ei vaadi avainta:
+
+- `visu_get_ecb()` lukee EKP:n Data Portalin SDMX-rajapinnasta. Yhdellä
+  osoitteella saa useita sarjoja erottamalla koodit plusmerkillä, ja ne
+  ulottuvuudet joilla on useampi arvo tulevat luokittelusarakkeiksi — sama
+  muoto kuin `visu_get_data()`:lla.
+- `visu_get_fred()` lukee FREDin csv-viennistä. FRED on jakelukanava, joten
+  kerro kuviossa alkuperäinen lähde: Brentin takana on EIA.
+
+Kummallekin annetaan osoite sellaisenaan, ei sarjatunnusta, jotta koodissa
+oleva osoite on sama kuin etulehdessä ja `visu_check_charts()` voi verrata
+niitä. Tarkistus tunnistaa nämä lähteet hakufunktion argumentista, PxWeb-taulut
+edelleen `.px`-päätteestä.
+
+Tuoreus luetaan `Last-Modified`-otsakkeesta HEAD-pyynnöllä. Se ajaa saman
+asian kuin PxWebin `updated`, joten inkrementaalinen päivitys toimii näillekin
+kuvioille ilman erillistä logiikkaa. Jos otsaketta ei tule, aikaleima on `NA`
+ja tuoreus päätellään datan tiivisteestä kuten ennenkin.
+
+Euribor ei ole mukana: sen hallinnoija EMMI lisensoi datan, eikä päivätason
+Euriboria saa keskuspankkien avoimista rajapinnoista. EKP julkaisee sen vain
+kuukausitasolla.
+
 ## Rajapinnan pyyntötahti
 
 Data haetaan `visu_get_data()`:lla, joka on kuori `pxwebtools::pxw_get_data()`:n

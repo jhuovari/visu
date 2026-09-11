@@ -5,8 +5,9 @@ execute:
   echo: false
 ---
 
-Jokainen kuvio hakee datansa itse StatFinistä. Kuviosivulla on `Näytä koodi`
--taitoksen takana täsmälleen se koodi, joka kuvion tuottaa, joten sen voi
+Jokainen kuvio hakee datansa itse lähteestä — useimmat StatFinistä, kurssit,
+korot ja öljyn hinta EKP:n ja FREDin avoimista rajapinnoista. Kuviosivulla on
+`Näytä koodi` -taitoksen takana täsmälleen se koodi, joka kuvion tuottaa, joten sen voi
 kopioida sellaisenaan omaan R-istuntoon. Saman sarjan taso ja muutos ovat
 kuvion välilehdillä, kuvion alta saa ruotsin- ja englanninkielisen version
 ladattavana kuvana, ja `Kuvion tiedot` kertoo mistä taulusta luvut ovat.
@@ -14,7 +15,8 @@ Alkuperäinen, kausitasoitettu ja trendi ovat samalla värillä eri paksuisin
 viivoin, koska kyse on samasta ilmiöstä eri tavalla siloitettuna.
 
 Sivusto tarkistaa arkiaamuina, onko kuvion lähdetaulu päivittynyt, ja
-rakentaa uudelleen vain ne kuviot, joiden data on muuttunut.
+rakentaa uudelleen vain ne kuviot, joiden data on muuttunut. StatFin kertoo
+päivitysaikansa taulun tiedoissa, EKP ja FRED `Last-Modified`-otsakkeessa.
 
 ```{r}
 #| output: asis

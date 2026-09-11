@@ -141,3 +141,53 @@ test_that("pelkasta paivamaarasta jatetaan kellonaika pois", {
 test_that("lukukelvoton leima palautetaan sellaisenaan", {
   expect_equal(visu_format_stamp("ei vielä rakennettu"), "ei vielä rakennettu")
 })
+
+test_that("PxWeb-osoite tunnistetaan paatteesta, muut eivat", {
+  px <- visu:::visu_split_table_url("https://pxdata.stat.fi/x/StatFin/tyti/135z.px/")
+
+  expect_equal(px$table, "135z.px")
+  expect_null(visu:::visu_split_table_url(
+    "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A"))
+  expect_null(visu:::visu_split_table_url(
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU"))
+})
+
+test_that("Last-Modified luetaan UTC-leimaksi localesta riippumatta", {
+  otsakkeet <- c("HTTP/1.1 200 OK\r\n",
+                 "content-type: text/csv\r\n",
+                 "last-modified: Thu, 10 Sep 2026 18:15:35 GMT\r\n")
+  testthat::local_mocked_bindings(curlGetHeaders = function(...) otsakkeet,
+                                  .package = "base")
+
+  expect_equal(visu:::visu_http_updated("https://example.org/x.csv"),
+               "2026-09-10T18:15:35Z")
+  # Sama leima Suomen aikaan muotoiltuna.
+  expect_equal(visu_format_stamp("2026-09-10T18:15:35Z"), "10.9.2026 klo 21:15")
+})
+
+test_that("puuttuva Last-Modified ja kaatunut haku palauttavat NA", {
+  testthat::local_mocked_bindings(
+    curlGetHeaders = function(...) c("HTTP/1.1 200 OK\r\n"), .package = "base")
+  expect_true(is.na(visu:::visu_http_updated("https://example.org/x.csv")))
+
+  testthat::local_mocked_bindings(
+    curlGetHeaders = function(...) stop("verkko poikki"), .package = "base")
+  expect_true(is.na(visu:::visu_http_updated("https://example.org/x.csv")))
+})
+
+test_that("koodilohkon lahteet loytyvat myos muista kuin PxWeb-hauista", {
+  body <- paste(
+    'a <- visu_get_data(url = "https://pxdata.stat.fi/x/StatFin/tyti/135z.px/")',
+    'b <- visu_get_ecb(',
+    '  "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A"',
+    ')',
+    'c <- visu_get_fred("https://fred.stlouisfed.org/graph/fredgraph.csv?id=X")',
+    sep = "\n")
+
+  expect_setequal(
+    visu:::visu_body_table_urls(body),
+    c("https://pxdata.stat.fi/x/StatFin/tyti/135z.px/",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A",
+      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=X")
+  )
+})

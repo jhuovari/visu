@@ -32,8 +32,9 @@ visu_interactive <- function(p,
   # sen levyisena janana. Kumpikin loppuu kesken heti kun kuviota zoomataan
   # ulospain, joten ne puretaan plotlyn omiksi.
   w <- visu_hline_shape(w, p)
+  aika <- !is.null(visu_time_scale(p))
   w <- visu_time_axis(w, p)
-  w <- visu_dynamic_ticks(w)
+  w <- visu_dynamic_ticks(w, aika)
 
   annotations <- list()
   if (!is.null(subtitle)) {
@@ -52,7 +53,8 @@ visu_interactive <- function(p,
   )
 
   # Y-akseli seuraa aika-akselin zoomia, jotta nakyva sarja tayttaa kuvion.
-  w <- htmlwidgets::onRender(w, visu_autoscale_js())
+  # Vain aikasarjoissa: poikkileikkauskuviossa x-akselia ei zoomata.
+  if (aika) w <- htmlwidgets::onRender(w, visu_autoscale_js())
 
   plotly::config(
     w,
@@ -120,18 +122,41 @@ visu_time_scale <- function(p) {
 }
 
 # Kiinteat akselimerkinnat pois. ggplotly laskee ne alkunakymalle, joten
-# zoomattaessa akselit jaisivat tyhjiksi tai vanhentuneiksi. Y-akselille
-# annetaan ryhmitelty muoto, koska plotlyn oletus lyhentaisi tuhannet
-# muotoon "35k".
-visu_dynamic_ticks <- function(w) {
-  for (akseli in c("xaxis", "yaxis")) {
-    if (is.null(w$x$layout[[akseli]])) next
-    w$x$layout[[akseli]]$tickmode <- "auto"
-    w$x$layout[[akseli]]$tickvals <- NULL
-    w$x$layout[[akseli]]$ticktext <- NULL
+# zoomattaessa akselit jaisivat tyhjiksi tai vanhentuneiksi.
+#
+# Luokka-akselilla merkintataulukko on kuitenkin ainoa paikka, jossa luokkien
+# nimet ovat — ggplotly antaa jaljille pelkat jarjestysnumerot. Siksi taulukko
+# puretaan vain kun merkinnat ovat lukuja tai kun akselista tehtiin
+# aika-akseli. Numeeriselle akselille annetaan ryhmitelty muoto, koska
+# plotlyn oletus lyhentaisi tuhannet muotoon "35k".
+visu_dynamic_ticks <- function(w, aika = FALSE) {
+  if (aika || visu_numeric_ticks(w$x$layout$xaxis$ticktext)) {
+    w <- visu_clear_ticks(w, "xaxis", muoto = !aika)
   }
-  if (!is.null(w$x$layout$yaxis)) w$x$layout$yaxis$tickformat <- ","
+  if (visu_numeric_ticks(w$x$layout$yaxis$ticktext)) {
+    w <- visu_clear_ticks(w, "yaxis", muoto = TRUE)
+  }
   w
+}
+
+visu_clear_ticks <- function(w, akseli, muoto) {
+  if (is.null(w$x$layout[[akseli]])) return(w)
+  w$x$layout[[akseli]]$tickmode <- "auto"
+  w$x$layout[[akseli]]$tickvals <- NULL
+  w$x$layout[[akseli]]$ticktext <- NULL
+  if (muoto) w$x$layout[[akseli]]$tickformat <- ","
+  w
+}
+
+# Ovatko merkinnat lukuja? Desimaalipilkku ja tuhaterottimena kaytetty
+# valilyonti kuuluvat lukuun, samoin typografinen miinusmerkki.
+visu_numeric_ticks <- function(ticktext) {
+  if (is.null(ticktext) || length(ticktext) == 0L) return(FALSE)
+  teksti <- as.character(ticktext)
+  teksti <- gsub("\u2212", "-", teksti)
+  teksti <- gsub("[ \u00a0]", "", teksti)
+  teksti <- sub(",", ".", teksti, fixed = TRUE)
+  all(!is.na(suppressWarnings(as.numeric(teksti))))
 }
 
 # Desimaali- ja tuhaterotin plotlyn omille merkinnoille ja vihjelaatikolle.

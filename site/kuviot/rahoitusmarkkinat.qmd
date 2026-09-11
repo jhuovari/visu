@@ -1,0 +1,389 @@
+---
+title: "Rahoitusmarkkinat"
+visu:
+  table_url:
+    - "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A"
+    - "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A"
+    - "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU"
+    - "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT"
+    - "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV"
+    - "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y"
+    - "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"
+---
+
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
+Päivätason markkinatietoa: valuuttakurssit ja korot Euroopan keskuspankin
+Data Portalista, Brent-raakaöljy EIA:n sarjasta FREDin kautta. Kumpikin
+rajapinta on avoin eikä vaadi avainta, ja kumpikin kertoo päivitysaikansa
+`Last-Modified`-otsakkeessa, joten sivu päivittyy samalla logiikalla kuin
+StatFin-sivut.
+
+Euribor puuttuu tarkoituksella: sen hallinnoija EMMI lisensoi datan, eikä
+päivätason Euriboria saa keskuspankkien avoimista rajapinnoista. EKP julkaisee
+sen vain kuukausitasolla.
+
+## Valuuttakurssit
+
+::: {.panel-tabset}
+
+### Dollari ja punta
+
+```{r}
+library(visu)
+
+kurssit <- visu_get_ecb(
+  "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A"
+)
+
+tekstit_kurssit <- list(
+  fi = list(
+    otsikko = "Euron kurssi, valuuttaa euroa kohti",
+    selite = "Nouseva käyrä on vahvistuva euro",
+    lahde = "Lähde: EKP, euron viitekurssit",
+    sarjat = c(USD = "Yhdysvaltain dollari", GBP = "Englannin punta")
+  ),
+  sv = list(
+    otsikko = "Eurons kurs, valuta per euro",
+    selite = "En stigande kurva är en starkare euro",
+    lahde = "Källa: ECB, eurons referenskurser",
+    sarjat = c(USD = "US-dollar", GBP = "Brittiskt pund")
+  ),
+  en = list(
+    otsikko = "Euro exchange rate, currency per euro",
+    selite = "A rising line is a stronger euro",
+    lahde = "Source: ECB, euro reference rates",
+    sarjat = c(USD = "US dollar", GBP = "Pound sterling")
+  )
+)
+
+kuvio_kurssit <- function(kieli) {
+  t <- tekstit_kurssit[[kieli]]
+  d <- kurssit
+  d$valuutta <- factor(d$CURRENCY, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "valuutta", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
+}
+
+kuvio_kurssit("fi") |>
+  visu_interactive(subtitle = tekstit_kurssit$fi$selite,
+                   caption = tekstit_kurssit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kurssit, "valuutta-usd-gbp")
+```
+
+### Ruotsin kruunu
+
+```{r}
+library(visu)
+
+kruunu <- visu_get_ecb(
+  "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A"
+)
+
+tekstit_kruunu <- list(
+  fi = list(
+    otsikko = "Euron kurssi, Ruotsin kruunua euroa kohti",
+    selite = "Nouseva käyrä on vahvistuva euro",
+    lahde = "Lähde: EKP, euron viitekurssit"
+  ),
+  sv = list(
+    otsikko = "Eurons kurs, svenska kronor per euro",
+    selite = "En stigande kurva är en starkare euro",
+    lahde = "Källa: ECB, eurons referenskurser"
+  ),
+  en = list(
+    otsikko = "Euro exchange rate, Swedish kronor per euro",
+    selite = "A rising line is a stronger euro",
+    lahde = "Source: ECB, euro reference rates"
+  )
+)
+
+kuvio_kruunu <- function(kieli) {
+  t <- tekstit_kruunu[[kieli]]
+  visu_plot(kruunu, title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_kruunu("fi") |>
+  visu_interactive(subtitle = tekstit_kruunu$fi$selite,
+                   caption = tekstit_kruunu$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_kruunu, "valuutta-sek")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  list(kurssit, kruunu),
+  c("https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A",
+    "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A")
+)
+```
+
+## Raakaöljy
+
+```{r}
+library(visu)
+
+brent <- visu_get_fred(
+  "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU"
+)
+
+tekstit_brent <- list(
+  fi = list(
+    otsikko = "Brent-raakaöljy, dollaria tynnyriltä",
+    lahde = "Lähde: EIA, jakelu FRED"
+  ),
+  sv = list(
+    otsikko = "Brentråolja, dollar per fat",
+    lahde = "Källa: EIA, distribution FRED"
+  ),
+  en = list(
+    otsikko = "Brent crude oil, dollars per barrel",
+    lahde = "Source: EIA, distributed by FRED"
+  )
+)
+
+kuvio_brent <- function(kieli) {
+  t <- tekstit_brent[[kieli]]
+  visu_plot(brent, title = t$otsikko, caption = t$lahde, lang = kieli)
+}
+
+kuvio_brent("fi") |> visu_interactive(caption = tekstit_brent$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_brent, "brent")
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(brent, "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU")
+```
+
+## Korot
+
+::: {.panel-tabset}
+
+### Lyhyet korot
+
+```{r}
+library(visu)
+
+estr <- visu_get_ecb(
+  "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT"
+)
+ohjauskorot <- visu_get_ecb(
+  "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV"
+)
+
+lyhyet <- rbind(
+  data.frame(time = estr$time, koodi = "ESTR", values = estr$values),
+  data.frame(time = ohjauskorot$time,
+             koodi = as.character(ohjauskorot$PROVIDER_FM_ID),
+             values = ohjauskorot$values)
+)
+
+tekstit_lyhyet <- list(
+  fi = list(
+    otsikko = "Lyhyet korot, %",
+    selite = "Markkinakorko asettuu EKP:n korkoputkeen",
+    lahde = "Lähde: EKP",
+    sarjat = c(ESTR = "€STR, yön yli -korko", DFR = "EKP:n talletuskorko",
+               MRR_FR = "EKP:n ohjauskorko")
+  ),
+  sv = list(
+    otsikko = "Korta räntor, %",
+    selite = "Marknadsräntan ligger inom ECB:s räntekorridor",
+    lahde = "Källa: ECB",
+    sarjat = c(ESTR = "€STR, dagslåneränta", DFR = "ECB:s inlåningsränta",
+               MRR_FR = "ECB:s styrränta")
+  ),
+  en = list(
+    otsikko = "Short-term interest rates, %",
+    selite = "The market rate sits inside the ECB rate corridor",
+    lahde = "Source: ECB",
+    sarjat = c(ESTR = "€STR, overnight rate", DFR = "ECB deposit facility rate",
+               MRR_FR = "ECB main refinancing rate")
+  )
+)
+
+kuvio_lyhyet <- function(kieli) {
+  t <- tekstit_lyhyet[[kieli]]
+  d <- lyhyet
+  d$korko <- factor(d$koodi, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "korko", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_lyhyet("fi") |>
+  visu_interactive(subtitle = tekstit_lyhyet$fi$selite,
+                   caption = tekstit_lyhyet$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_lyhyet, "korot-lyhyet")
+```
+
+### Valtionlainojen korot
+
+```{r}
+library(visu)
+
+tuotot <- visu_get_ecb(
+  "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y"
+)
+
+tekstit_tuotot <- list(
+  fi = list(
+    otsikko = "Euroalueen valtionlainojen korot, %",
+    selite = "Parhaan luottoluokituksen valtiot, Svenssonin käyrä",
+    lahde = "Lähde: EKP, euroalueen tuottokäyrä",
+    sarjat = c(SR_2Y = "2 vuotta", SR_10Y = "10 vuotta")
+  ),
+  sv = list(
+    otsikko = "Statsobligationsräntor i euroområdet, %",
+    selite = "Stater med högsta kreditbetyg, Svenssonkurvan",
+    lahde = "Källa: ECB, euroområdets avkastningskurva",
+    sarjat = c(SR_2Y = "2 år", SR_10Y = "10 år")
+  ),
+  en = list(
+    otsikko = "Euro area government bond yields, %",
+    selite = "Triple A rated issuers, Svensson curve",
+    lahde = "Source: ECB, euro area yield curve",
+    sarjat = c(SR_2Y = "2 years", SR_10Y = "10 years")
+  )
+)
+
+kuvio_tuotot <- function(kieli) {
+  t <- tekstit_tuotot[[kieli]]
+  d <- tuotot
+  d$maturiteetti <- factor(d$DATA_TYPE_FM, levels = names(t$sarjat),
+                           labels = t$sarjat)
+  visu_plot(d, colour = "maturiteetti", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_tuotot("fi") |>
+  visu_interactive(subtitle = tekstit_tuotot$fi$selite,
+                   caption = tekstit_tuotot$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tuotot, "korot-valtionlainat")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  list(estr, ohjauskorot, tuotot),
+  c("https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT",
+    "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV",
+    "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y")
+)
+```
+
+## Forward-korot
+
+Testikuvio. Korkofutuureille ei löytynyt avointa lähdettä — pörssien
+selvityshinnat ovat lisensoituja — joten korko-odotuksia luetaan tässä
+tuottokäyrän hetkellisistä forward-koroista. Ne kertovat, minkä koron
+markkina hinnoittelee kullekin tulevalle hetkelle, eli saman asian kuin
+futuurikäyrä, mutta valtionlainojen kautta.
+
+Kuvio on poikkileikkaus: forward-korko maturiteetin mukaan viimeisimpänä
+päivänä ja vuosi sitten. Aikasarjakuvioista poiketen vaaka-akseli ei ole
+aikaa vaan maturiteetti vuosina.
+
+```{r}
+library(visu)
+
+forward <- visu_get_ecb(
+  "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"
+)
+
+# Kaksi paivaa vertailuun: tuorein ja lahinna vuoden takaista oleva.
+viimeisin <- max(forward$time)
+vuosi_sitten <- forward$time[which.min(abs(forward$time - (viimeisin - 365)))]
+kayra <- forward[forward$time %in% c(viimeisin, vuosi_sitten), ]
+
+# Maturiteetti vuosina oikealla asteikolla, ei luokkana: silloin kayran muoto
+# nakyy oikein ja lyhyt paa erottuu pitkasta.
+vuodet <- c(IF_3M = 0.25, IF_6M = 0.5, IF_1Y = 1, IF_2Y = 2, IF_3Y = 3,
+            IF_5Y = 5, IF_7Y = 7, IF_10Y = 10, IF_15Y = 15, IF_20Y = 20,
+            IF_30Y = 30)
+kayra$maturiteetti <- unname(vuodet[as.character(kayra$DATA_TYPE_FM)])
+kayra$paiva <- factor(format(kayra$time, "%-d.%-m.%Y"),
+                      levels = format(c(vuosi_sitten, viimeisin), "%-d.%-m.%Y"))
+kayra <- kayra[order(kayra$paiva, kayra$maturiteetti), ]
+
+tekstit_forward <- list(
+  fi = list(
+    otsikko = "Euroalueen hetkelliset forward-korot, %",
+    x_lab = "Maturiteetti, vuotta",
+    selite = "Korko, jonka markkina hinnoittelee kullekin tulevalle hetkelle",
+    lahde = "Lähde: EKP, euroalueen tuottokäyrä"
+  ),
+  sv = list(
+    otsikko = "Momentana forwardräntor i euroområdet, %",
+    x_lab = "Löptid, år",
+    selite = "Räntan som marknaden prissätter för varje framtida tidpunkt",
+    lahde = "Källa: ECB, euroområdets avkastningskurva"
+  ),
+  en = list(
+    otsikko = "Euro area instantaneous forward rates, %",
+    x_lab = "Maturity, years",
+    selite = "The rate the market prices for each future point in time",
+    lahde = "Source: ECB, euro area yield curve"
+  )
+)
+
+kuvio_forward <- function(kieli) {
+  t <- tekstit_forward[[kieli]]
+  visu_plot(kayra, x = "maturiteetti", colour = "paiva", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli,
+            x_lab = t$x_lab)
+}
+
+kuvio_forward("fi") |>
+  visu_interactive(subtitle = tekstit_forward$fi$selite,
+                   caption = tekstit_forward$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_forward, "forward-korot")
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(forward, "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y")
+```
