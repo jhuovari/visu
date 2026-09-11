@@ -64,10 +64,10 @@
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"],
     "title": "Ulkomaantalous",
     "source_updated": {
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px": "2026-08-11T09:32:32",
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px": "2026-09-11T08:00:03",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px": "2026-08-11T09:32:53"
     },
     "code_hash": "29758713afcda8d6d5c94c7fc821c03e773439616e73fbc8a5cc3af89cf2c7aa",
-    "built_at": "2026-09-07T05:44:03Z"
+    "built_at": "2026-09-11T05:08:15Z"
   }
 }
