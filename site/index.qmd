@@ -23,7 +23,7 @@ state <- visu::visu_state_read(".")
 
 built <- vapply(registry$id, function(id) {
   stamp <- state[[id]]$built_at
-  if (is.null(stamp)) "ei vielä rakennettu" else as.character(stamp)
+  if (is.null(stamp)) "ei vielä rakennettu" else visu::visu_format_stamp(stamp)
 }, character(1))
 
 cat(paste0(

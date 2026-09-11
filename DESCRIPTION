@@ -1,7 +1,7 @@
 Package: visu
 Type: Package
 Title: StatFin Datan Haku ja Visualisointi
-Version: 0.6.3
+Version: 0.7.0
 Authors@R: c(
     person(
       "Janne", "Huovari",
@@ -32,6 +32,7 @@ Imports:
     utils,
     yaml
 Suggests:
+    knitr,
     pxwebtools,
     testthat (>= 3.0.0)
 Remotes:

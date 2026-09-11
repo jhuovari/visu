@@ -6,6 +6,12 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Suomen talouden suhde ulkomaihin. Vaihtotase kertoo, ansaitseeko Suomi
 ulkomailta enemmän kuin maksaa sinne, ja tavaroiden ja palveluiden
 ulkomaankauppa erittelee, mistä virta syntyy.
@@ -78,11 +84,6 @@ vaihtotase_kk <- visu_get_data(
     "contentscode" = "NB"
   )
 )
-
-# Kuukausisarja on hyvin heiluva, joten nakyma rajataan viimeiseen
-# kymmeneen vuoteen. Pitka kuva on liukuvassa summassa.
-alku <- seq(max(vaihtotase_kk$time), by = "-10 years", length.out = 2)[2]
-vaihtotase_kk <- vaihtotase_kk[vaihtotase_kk$time >= alku, ]
 
 tekstit_kk <- list(
   fi = list(

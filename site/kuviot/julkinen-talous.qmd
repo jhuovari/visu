@@ -7,6 +7,12 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Julkisyhteisöjen rahoitusasema kolmesta suunnasta: EU:n alijäämä- ja
 velkakriteerien mukaiset vuosiluvut, velan neljännesvuosikehitys ja tulojen
 ja menojen erotus. EDP-luvut ovat samat, joilla Suomen julkista taloutta

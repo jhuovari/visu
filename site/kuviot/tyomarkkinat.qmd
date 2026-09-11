@@ -6,6 +6,12 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Työvoimatutkimuksen tärkeimmät tunnusluvut kuukausitasolla ja palkansaajien
 määrä vuositasolla. Alkuperäinen sarja kertoo, mitä kuukaudessa mitattiin, ja
 trendisarja sen, mihin suuntaan työmarkkinat ovat menossa. Ne ovat samassa

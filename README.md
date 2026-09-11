@@ -184,6 +184,42 @@ ja kuvion tiedot käyttävät samaa tahdinpitoa, joten ikkuna näkee ajon kaikki
 pyynnöt. Rajat ovat optioissa `visu.px_max`, `visu.px_window`, `visu.px_tries`
 ja `visu.px_backoff`.
 
+## Kuvion oletusnäkymä
+
+Kuvio sisältää aina koko haetun sarjan, mutta näkymä alkaa pyöristetystä
+vuodesta: viimeisimmästä viidellä jaollisesta vuodesta miinus kymmenen. Vuonna
+2026 alku on 2015 ja vuodesta 2030 alkaen 2020, joten näkyvissä on aina 10-15
+kokonaista vuotta ja kaikki kuviot alkavat samasta vuodesta. Jos data alkaa
+myöhemmin, alku on datan alku.
+
+Rajaus tehdään `coord_cartesian()`:lla eikä dataa suodattamalla, joten
+interaktiivisessa kuviossa voi zoomata vanhempaan historiaan. Y-akseli
+rajataan näkyvään dataan, koska koko historian vaihteluväli litistäisi
+näkymän. Oman alun saa argumentilla `start = as.Date("2000-01-01")` ja koko
+historian näkyviin arvolla `start = NA`.
+
+## Päivitystieto
+
+Aikaleimat näytetään muodossa `11.9.2026 klo 8:08` Suomen aikaan.
+`visu_format_stamp()` lukee vyöhykkeen leimasta: `Z`-päätteinen on UTC:tä ja
+muunnetaan, vyöhykkeetön on jo Suomen aikaa kuten StatFinin `updated`-kenttä.
+
+Kuviosivun alussa `visu_updated_note()` kertoo, milloin sivun lähdetiedot ovat
+viimeksi päivittyneet. Se lukee taulut etulehdestä itse, joten osoitteita ei
+tarvitse toistaa:
+
+````
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+````
+
+Kuviosivun rivi kertoo siis milloin luvut muuttuivat, etusivun luettelo
+puolestaan milloin kuvio viimeksi rakennettiin — ne eroavat, jos sivu on
+rakennettu uudelleen koodimuutoksen takia.
+
 Etulehden ja koodilohkon taulujen pitää olla samat. `visu_check_charts()`
 tarkistaa tämän molempiin suuntiin — etulehdessä luetellun taulun pitää
 esiintyä koodissa, ja koodissa haetun taulun pitää olla lueteltu etulehdessä —

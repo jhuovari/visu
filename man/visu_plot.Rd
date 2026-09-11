@@ -12,6 +12,7 @@ visu_plot(
   linewidth = NULL,
   type = c("line", "col", "area"),
   lang = "fi",
+  start = NULL,
   zeroline = NULL,
   title = NULL,
   subtitle = NULL,
@@ -45,6 +46,13 @@ Vain piirtotyypille \code{"line"}.}
 erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan
 funktion kielikoodi, jolloin ladattavat käännökset saavat oman
 muotoilunsa.}
+
+\item{start}{Oletusnäkymän alku. \code{NULL} (oletus) aloittaa pyöristetystä
+vuodesta, joka jättää näkyviin 10-15 kokonaista vuotta ja siirtyy viiden
+vuoden askelin: vuonna 2026 alku on 2015 ja vuodesta 2030 alkaen 2020.
+Vanhempi data jää kuvioon, joten interaktiivisessa kuviossa siihen voi
+zoomata. Jos data alkaa myöhemmin, alku on datan alku. Anna \code{Date} oman
+alun asettamiseksi tai \code{NA} koko historian näyttämiseksi.}
 
 \item{zeroline}{Nollaviiva. Oletuksena \code{NULL}, jolloin viiva piirretään kun
 arvot ovat sekä nollan ala- että yläpuolella — muutoskuvioissa ja

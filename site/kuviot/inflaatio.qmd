@@ -7,6 +7,12 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/"
 ---
 
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
 Kolme mittaria samasta ilmiöstä. Kuluttajahintaindeksi (KHI) on kansallinen
 inflaatiomittari, yhdenmukaistettu kuluttajahintaindeksi (YKHI) EU-maiden
 vertailukelpoinen indeksi, ja YKHI:n ennakko on kuukauden vaihteessa
@@ -59,10 +65,6 @@ muutos <- rbind(
   data.frame(time = ykhi$time, sarja = "ykhi", values = ykhi$values),
   data.frame(time = ennakko$time, sarja = "ennakko", values = ennakko$values)
 )
-
-# Ennakkotaulu kattaa vain kuluvan vuoden, joten koko historia hukuttaisi sen.
-alku <- seq(max(muutos$time), by = "-8 years", length.out = 2)[2]
-muutos <- muutos[muutos$time >= alku, ]
 
 # Kaannokset elavat kuvion koodin vieressa: sama funktio piirtaa seka sivun
 # suomenkielisen kuvion etta ladattavat kieliversiot.
@@ -201,9 +203,6 @@ kive <- visu_get_data(
   )
 )
 
-alku <- seq(max(kive$time), by = "-8 years", length.out = 2)[2]
-kive <- kive[kive$time >= alku, ]
-
 tekstit_kive <- list(
   fi = list(
     otsikko = "YKHI:n vuosimuutos alkuperäisin ja kiintein veroin, %",
@@ -266,9 +265,6 @@ ryhma_muutos <- visu_get_data(
     "contentscode" = "vm_khi"
   )
 )
-
-alku <- seq(max(ryhma_muutos$time), by = "-8 years", length.out = 2)[2]
-ryhma_muutos <- ryhma_muutos[ryhma_muutos$time >= alku, ]
 
 tekstit_ryhmat <- list(
   fi = list(
