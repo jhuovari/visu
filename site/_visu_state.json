@@ -3,12 +3,12 @@
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/"],
     "title": "Inflaatio",
     "source_updated": {
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px": "2026-08-13T08:52:21",
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px": "2026-08-13T08:52:22",
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px": "2026-09-11T09:18:11",
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px": "2026-09-11T09:18:12",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-08-28T11:57:42"
     },
-    "code_hash": "bab1f2346906d433b56e4a11afd10de270024f7dfea2c0606131f5c96ed4caea",
-    "built_at": "2026-09-07T05:44:03Z"
+    "code_hash": "4bc4fd1071fc38af1dd6dbdd29eb9ece45eb72fc637d74b405797f894361e1ae",
+    "built_at": "2026-09-14T05:13:06Z"
   },
   "julkinen-talous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"],
@@ -18,8 +18,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px": "2026-07-01T17:45:03",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px": "2026-07-01T17:45:03"
     },
-    "code_hash": "629d7d6fec4f9f437ade63f52085d6d8595217d53bd11362c8e056b659bd3450",
-    "built_at": "2026-09-07T05:44:03Z"
+    "code_hash": "d7a163f0df472a36b07a2b7777bfc23a3f38cb2ec6efc76818e365fd2f77271c",
+    "built_at": "2026-09-14T05:13:06Z"
   },
   "kotitaloudet": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"],
@@ -28,8 +28,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px": "2026-08-28T15:14:05",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px": "2026-07-01T18:01:20"
     },
-    "code_hash": "113b5985bdfa14cff2ab5083b0a81a5861372699e91bd5e1b9d8c117fd5af889",
-    "built_at": "2026-09-07T05:44:03Z"
+    "code_hash": "8cb20de8d06b93f5642ee451a08ef8296ec093ec0c1945c9d14adc3639fec3eb",
+    "built_at": "2026-09-14T05:13:06Z"
   },
   "neljannesvuositilinpito": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
@@ -37,8 +37,23 @@
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-08-28T15:14:03"
     },
-    "code_hash": "fe4e79b7da0f00216e897c8761de8b4143eaa956dac04320fd923e6fc96bb650",
-    "built_at": "2026-09-07T05:44:03Z"
+    "code_hash": "df87841e467073df5a3d4cb79d20c48c9bfe453e12dee890d5f147d83574c1b7",
+    "built_at": "2026-09-14T05:13:06Z"
+  },
+  "rahoitusmarkkinat": {
+    "table_url": ["https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A", "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU", "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT", "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"],
+    "title": "Rahoitusmarkkinat",
+    "source_updated": {
+      "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT": "2026-09-14T06:05:18Z",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A": "2026-09-14T14:54:09Z",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A": "2026-09-14T14:54:09Z",
+      "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV": "2026-09-14T23:35:43Z",
+      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y": "2026-09-14T10:00:00Z",
+      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y": "2026-09-14T10:00:00Z",
+      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-10T18:15:35Z"
+    },
+    "code_hash": "0dcbfeaff6f8ea4cf39611fd82ff05b0bb71f05c359275bee87c623feecace9b",
+    "built_at": "2026-09-15T05:07:34Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
@@ -47,8 +62,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px": "2026-08-25T15:29:24",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px": "2026-08-27T11:48:32"
     },
-    "code_hash": "8369ee7433a5ee04613431e362da061ab05ba9fe8f25138f6aa56ab6bb86560a",
-    "built_at": "2026-09-07T05:44:03Z"
+    "code_hash": "7037d48290c48c0f7296171a9ebefcb60f7b9415bfd2ca4444724090c8f8515c",
+    "built_at": "2026-09-14T05:13:06Z"
   },
   "tyomarkkinat": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"],
@@ -57,8 +72,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px": "2026-07-01T18:34:06",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px": "2026-08-24T10:49:35"
     },
-    "code_hash": "02ebbdbd0425e40dcb55a51444151314b60be94e3a4b816d76449f408f5b4aa1",
-    "built_at": "2026-09-07T05:44:03Z"
+    "code_hash": "a524fe6b03cfe868a5132070a172b27c8826fe4a93febbf878a3cc4ad4dca9bc",
+    "built_at": "2026-09-14T05:13:06Z"
   },
   "ulkomaantalous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"],
@@ -67,7 +82,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px": "2026-09-11T08:00:03",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px": "2026-08-11T09:32:53"
     },
-    "code_hash": "29758713afcda8d6d5c94c7fc821c03e773439616e73fbc8a5cc3af89cf2c7aa",
-    "built_at": "2026-09-11T05:08:15Z"
+    "code_hash": "ad7e2d040adf5dbfd256cbf683fc3fc0cb097af5a2f1b405ed72ba189936e674",
+    "built_at": "2026-09-14T05:13:06Z"
   }
 }
