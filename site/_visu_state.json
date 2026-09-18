@@ -15,45 +15,43 @@
     "title": "Julkinen talous",
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px": "2026-07-01T17:45:00",
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px": "2026-07-01T17:45:03",
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px": "2026-09-16T09:48:05",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px": "2026-07-01T17:45:03"
     },
     "code_hash": "d7a163f0df472a36b07a2b7777bfc23a3f38cb2ec6efc76818e365fd2f77271c",
-    "built_at": "2026-09-14T05:13:06Z"
+    "built_at": "2026-09-18T05:54:17Z"
   },
   "kotitaloudet": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"],
     "title": "Kotitaloudet",
     "source_updated": {
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px": "2026-08-28T15:14:05",
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px": "2026-09-17T13:47:42",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px": "2026-07-01T18:01:20"
     },
     "code_hash": "8cb20de8d06b93f5642ee451a08ef8296ec093ec0c1945c9d14adc3639fec3eb",
-    "built_at": "2026-09-14T05:13:06Z"
+    "built_at": "2026-09-18T05:54:17Z"
   },
   "neljannesvuositilinpito": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
     "title": "Neljännesvuositilinpito",
     "source_updated": {
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-08-28T15:14:03"
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-09-17T13:47:40"
     },
     "code_hash": "df87841e467073df5a3d4cb79d20c48c9bfe453e12dee890d5f147d83574c1b7",
-    "built_at": "2026-09-14T05:13:06Z"
+    "built_at": "2026-09-18T05:54:17Z"
   },
   "rahoitusmarkkinat": {
     "table_url": ["https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A", "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU", "https://www.suomenpankki.fi/api/interestrates/euribor", "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT", "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"],
     "title": "Rahoitusmarkkinat",
     "source_updated": {
-      "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT": "2026-09-16T06:05:23Z",
-      "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A": "2026-09-15T13:57:07Z",
-      "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A": "2026-09-15T13:57:07Z",
-      "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV": "2026-09-15T23:35:37Z",
-      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y": "2026-09-15T10:00:00Z",
-      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y": "2026-09-15T10:00:00Z",
-      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-10T18:15:35Z"
+      "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT": "2026-09-17T06:05:11Z",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A": "2026-09-17T13:57:10Z",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A": "2026-09-17T13:57:10Z",
+      "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV": "2026-09-17T23:35:07Z",
+      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-16T17:17:28Z"
     },
     "code_hash": "f8bfa97eec5aa06379cbc51f4bafa5ad90d4b34ce3a119407598a17b964272b5",
-    "built_at": "2026-09-16T08:44:46Z"
+    "built_at": "2026-09-18T05:54:17Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
@@ -79,10 +77,10 @@
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"],
     "title": "Ulkomaantalous",
     "source_updated": {
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px": "2026-09-11T08:00:03",
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px": "2026-08-11T09:32:53"
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px": "2026-09-17T09:17:50",
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px": "2026-09-17T12:20:32"
     },
     "code_hash": "ad7e2d040adf5dbfd256cbf683fc3fc0cb097af5a2f1b405ed72ba189936e674",
-    "built_at": "2026-09-14T05:13:06Z"
+    "built_at": "2026-09-18T05:54:17Z"
   }
 }
