@@ -25,11 +25,12 @@ rajapinta on avoin eikä vaadi avainta, ja kumpikin kertoo päivitysaikansa
 StatFin-sivut.
 
 Euribor tulee Suomen Pankin korkorajapinnasta. Se näyttää vain viimeisimmät
-noin kolme viikkoa eikä tottele aikarajausparametreja, joten historia kerätään
-itse tiedostoon `site/data/euribor.csv` joka ajolla. Sarja siis pitenee sitä
-mukaa kuin sivustoa päivitetään, eikä se ulotu taaksepäin kauemmas kuin
-ensimmäiseen ajoon. Sama rajapinta ei kerro päivitysaikaansa, joten tämä sivu
-rakentuu uudelleen joka ajolla — muut sivut vain kun niiden data on muuttunut.
+noin kolme viikkoa eikä tottele aikarajausparametreja, joten historia pidetään
+tiedostossa `site/data/euribor.csv`, johon joka ajo lisää uudet päivät. Sarjan
+pohjaksi on luettu Suomen Pankin oma euribor-historia vuoden 1999 alusta, ja
+rajapinta jatkaa sitä eteenpäin. Sama rajapinta ei kerro päivitysaikaansa,
+joten tämä sivu rakentuu uudelleen joka ajolla — muut sivut vain kun niiden
+data on muuttunut.
 
 ## Valuuttakurssit
 
@@ -201,7 +202,7 @@ euribor <- visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor")
 tekstit_euribor <- list(
   fi = list(
     otsikko = "Euribor-korot, %",
-    selite = "Historia kertyy sivuston ajoista, ks. sivun alku",
+    selite = "Päivittäin, vuodesta 1999",
     lahde = "Lähde: Suomen Pankki",
     sarjat = c(euribor1vko = "1 viikko", euribor1kk = "1 kuukausi",
                euribor3kk = "3 kuukautta", euribor6kk = "6 kuukautta",
@@ -209,7 +210,7 @@ tekstit_euribor <- list(
   ),
   sv = list(
     otsikko = "Euriborräntor, %",
-    selite = "Historiken byggs upp av webbplatsens körningar",
+    selite = "Dagligen, från 1999",
     lahde = "Källa: Finlands Bank",
     sarjat = c(euribor1vko = "1 vecka", euribor1kk = "1 månad",
                euribor3kk = "3 månader", euribor6kk = "6 månader",
@@ -217,7 +218,7 @@ tekstit_euribor <- list(
   ),
   en = list(
     otsikko = "Euribor rates, %",
-    selite = "History accumulates from the site's own runs",
+    selite = "Daily, since 1999",
     lahde = "Source: Bank of Finland",
     sarjat = c(euribor1vko = "1 week", euribor1kk = "1 month",
                euribor3kk = "3 months", euribor6kk = "6 months",
