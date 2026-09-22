@@ -13,7 +13,7 @@ visu_format_stamp(stamp)
 Muotoiltu merkkijono, tai syöte sellaisenaan jos sitä ei voi lukea.
 }
 \description{
-Näyttää aikaleiman muodossa \code{11.9.2026 klo 8:08}. Vyöhyke luetaan
+Näyttää aikaleiman muodossa \verb{11.9.2026 klo 8:08}. Vyöhyke luetaan
 leimasta: \code{Z}-päätteinen on UTC:tä ja muunnetaan Suomen aikaan, vyöhykkeetön
 on jo Suomen aikaa, kuten StatFinin \code{updated}-kentässä. Pelkästä
 päivämäärästä jätetään kellonaika pois, koska sitä ei tiedetä.

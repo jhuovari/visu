@@ -1,7 +1,7 @@
 Package: visu
 Type: Package
 Title: StatFin Datan Haku ja Visualisointi
-Version: 0.9.0
+Version: 0.10.0
 Authors@R: c(
     person(
       "Janne", "Huovari",
@@ -29,6 +29,7 @@ Imports:
     jsonlite,
     plotly,
     rlang,
+    seasonal,
     stats,
     utils,
     yaml
@@ -41,4 +42,4 @@ Remotes:
     jhuovari/ggcustom
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.0

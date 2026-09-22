@@ -48,12 +48,12 @@
       "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A": "2026-09-21T13:56:59Z",
       "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A": "2026-09-21T13:56:59Z",
       "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV": "2026-09-21T23:35:45Z",
-      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y": "2026-09-22T09:59:52Z",
-      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y": "2026-09-22T09:59:50Z",
+      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y": "2026-09-22T10:00:00Z",
+      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y": "2026-09-22T10:00:00Z",
       "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-16T17:17:28Z"
     },
     "code_hash": "88394c321dd4c854505c103ebc684e51afd3fd08cc9e3bdacce0f550d4a006dd",
-    "built_at": "2026-09-22T10:01:22Z"
+    "built_at": "2026-09-22T11:52:14Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
@@ -73,8 +73,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px": "2026-09-21T12:34:15",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px": "2026-09-21T12:34:15"
     },
-    "code_hash": "360c0c6b3aacae3b0c17f5855c13ff24c384a94db4f3b81ad4af4899f2b9020a",
-    "built_at": "2026-09-22T10:01:22Z"
+    "code_hash": "e450e26978c94778d352133bf8b4f3e99032a188dcd2d14288d0b05a8c1efcb6",
+    "built_at": "2026-09-22T11:52:14Z"
   },
   "ulkomaantalous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"],

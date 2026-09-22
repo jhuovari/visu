@@ -18,7 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Janne Huovari \email{janne.huovari@gov.fi}
+\strong{Maintainer}: Janne Huovari \email{janne.huovari@gov.fi} [copyright holder]
+
+Authors:
+\itemize{
+  \item Janne Huovari \email{janne.huovari@gov.fi} [copyright holder]
+}
 
 }
 \keyword{internal}
