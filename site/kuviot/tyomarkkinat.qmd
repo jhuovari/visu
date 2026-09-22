@@ -3,6 +3,7 @@ title: "Työmarkkinat"
 visu:
   table_url:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"
 ---
 
@@ -23,6 +24,12 @@ lasketaan tällä sivulla alkuperäisestä sarjasta 12 kuukauden takaiseen
 verrattuna — määristä henkinä ja asteista prosenttiyksikköinä. Saman sarjan
 taso ja muutos ovat kuvion välilehdillä, ja kuvion alta saa ruotsin- ja
 englanninkielisen version ladattavana kuvana.
+
+Muutamassa kuviossa luku on laskettu kahdesta julkaistusta sarjasta silloin,
+kun tilasto ei julkaise sitä valmiina. Laskutapa kerrotaan aina kuvion
+kohdalla, ja se on määritelmä eikä arvio: työvoima on työlliset ja työttömät
+yhteensä, ja työllisten määrä ikäluokassa on työllisyysaste kerrottuna saman
+ikäluokan väestöllä.
 
 ## Työttömyysaste
 
@@ -304,6 +311,243 @@ visu_downloads(kuvio_maarat, "tyolliset-muutos")
 #| echo: false
 #| output: asis
 visu_metadata(maarat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/")
+```
+
+## Työikäiset, työvoima ja työlliset
+
+```{r}
+library(visu)
+
+tunnusluvut <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = c("Tyolliset_kausi", "Tyottomat_kausi")
+  )
+)
+
+# Tunnuslukutaulussa ei ole vaestoa, joten se haetaan vaestotaulusta. Samalla
+# haetaan seuraavan kuvion ikaluokat, jotta taulua ei tarvitse hakea kahdesti.
+vaesto <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "sukupuoli_9_20180101" = "SSS",
+    "ikaryhma_19_20190101" = c("15-64", "20-69"),
+    "contentscode" = "tyti-Vaesto"
+  )
+)
+
+# Leveaksi, jotta tyolliset ja tyottomat osuvat varmasti samalle kuukaudelle.
+kausi <- stats::reshape(
+  as.data.frame(tunnusluvut[c("time", "contentscode", "values")]),
+  idvar = "time", timevar = "contentscode", direction = "wide"
+)
+names(kausi) <- sub("^values\\.", "", names(kausi))
+
+# Tyovoima on maaritelmaltaan tyolliset ja tyottomat yhteensa, joten sen
+# kausitasoitettu sarja on osiensa summa. Vaesto ei kaipaa kausitasoitusta:
+# se on kannan suure, joka muuttuu muutamia tuhansia kuukaudessa.
+osat <- list(
+  vaesto = data.frame(time = vaesto$time[vaesto$ikaryhma_19_20190101 == "15-64"],
+                      values = vaesto$values[vaesto$ikaryhma_19_20190101 == "15-64"]),
+  tyovoima = data.frame(time = kausi$time,
+                        values = kausi$Tyolliset_kausi + kausi$Tyottomat_kausi),
+  tyolliset = data.frame(time = kausi$time, values = kausi$Tyolliset_kausi),
+  tyottomat = data.frame(time = kausi$time, values = kausi$Tyottomat_kausi)
+)
+
+# Muutos yhteisesta lahtokohdasta, jotta eri kokoiset kannat ovat samassa
+# kuviossa vertailukelpoisia: tyollisia on kymmenkertaisesti tyottomiin nahden.
+perusta <- as.Date("2019-01-01")
+tarjonta <- do.call(rbind, lapply(names(osat), function(nimi) {
+  d <- osat[[nimi]]
+  d <- d[order(d$time), ]
+  d <- d[d$time >= perusta, ]
+  data.frame(time = d$time, sarja = nimi, values = d$values - d$values[1])
+}))
+
+tekstit_tarjonta <- list(
+  fi = list(
+    otsikko = "Muutos tammikuusta 2019, 1 000 henkeä",
+    selite = "Kausitasoitettu",
+    lahde = "Lähde: Tilastokeskus, työvoimatutkimus",
+    sarjat = c(vaesto = "Työikäinen väestö 15-64", tyovoima = "Työvoima 15-74",
+               tyolliset = "Työlliset 15-74", tyottomat = "Työttömät")
+  ),
+  sv = list(
+    otsikko = "Förändring från januari 2019, 1 000 personer",
+    selite = "Säsongrensad",
+    lahde = "Källa: Statistikcentralen, arbetskraftsundersökningen",
+    sarjat = c(vaesto = "Befolkning i arbetsför ålder 15-64",
+               tyovoima = "Arbetskraft 15-74", tyolliset = "Sysselsatta 15-74",
+               tyottomat = "Arbetslösa")
+  ),
+  en = list(
+    otsikko = "Change from January 2019, 1,000 persons",
+    selite = "Seasonally adjusted",
+    lahde = "Source: Statistics Finland, Labour Force Survey",
+    sarjat = c(vaesto = "Working-age population 15-64",
+               tyovoima = "Labour force 15-74", tyolliset = "Employed 15-74",
+               tyottomat = "Unemployed")
+  )
+)
+
+kuvio_tarjonta <- function(kieli) {
+  t <- tekstit_tarjonta[[kieli]]
+  d <- tarjonta
+  d$erittely <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "erittely", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli, zeroline = TRUE)
+}
+
+kuvio_tarjonta("fi") |>
+  visu_interactive(subtitle = tekstit_tarjonta$fi$selite,
+                   caption = tekstit_tarjonta$fi$lahde)
+```
+
+Työvoima on kasvanut selvästi työllisiä nopeammin, ja erotus on työttömyyttä.
+Työvoima on kasvanut myös moninkertaisesti työikäiseen väestöön nähden, eli
+kasvu tulee osallistumisen noususta eikä väestönkasvusta.
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tarjonta, "tyovoiman-tarjonta")
+visu_metadata(
+  list(tunnusluvut, vaesto),
+  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/")
+)
+```
+
+## Työlliset ikärajauksen mukaan
+
+```{r}
+library(visu)
+
+# Tilasto julkaisee kausitasoitetun ja trendisarjan tyollisten maarasta vain
+# 15-74-vuotiaista, mutta tyollisyysasteesta myos muista ikarajauksista.
+# Maara saadaan asteesta kertomalla se saman ikaluokan vaestolla, koska aste
+# on maaritelmaltaan tyolliset jaettuna vaestolla.
+ika_asteet <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "contentscode" = c("Tyolliset_kausi", "tyolliset_trendi",
+                       "Tyollaste_15_64_kausi", "tyollaste_15_64_trendi",
+                       "Tyollaste_20_69_kausi", "Tyollaste_20_69_trendi")
+  )
+)
+
+ika_maara <- function(koodi, ikaluokka) {
+  a <- ika_asteet[ika_asteet$contentscode == koodi, c("time", "values")]
+  v <- vaesto[vaesto$ikaryhma_19_20190101 == ikaluokka, c("time", "values")]
+  m <- merge(a, v, by = "time")
+  data.frame(time = m$time, values = m$values.x / 100 * m$values.y)
+}
+
+ika_suoraan <- function(koodi) {
+  d <- ika_asteet[ika_asteet$contentscode == koodi, ]
+  data.frame(time = d$time, values = d$values)
+}
+
+trendi <- rbind(
+  cbind(ika_maara("Tyollaste_20_69_trendi", "20-69"), ika = "20-69"),
+  cbind(ika_suoraan("tyolliset_trendi"), ika = "15-74"),
+  cbind(ika_maara("tyollaste_15_64_trendi", "15-64"), ika = "15-64")
+)
+
+kausitasoitettu <- rbind(
+  cbind(ika_maara("Tyollaste_20_69_kausi", "20-69"), ika = "20-69"),
+  cbind(ika_suoraan("Tyolliset_kausi"), ika = "15-74"),
+  cbind(ika_maara("Tyollaste_15_64_kausi", "15-64"), ika = "15-64")
+)
+
+tekstit_ika <- list(
+  fi = list(
+    otsikko = "Työlliset ikärajauksen mukaan, 1 000 henkeä",
+    selitteet = c(trendi = "Trendi", kausi = "Kausitasoitettu"),
+    lahde = "Lähde: Tilastokeskus, työvoimatutkimus",
+    ikaluokat = c("20-69" = "20-69-vuotiaat", "15-74" = "15-74-vuotiaat",
+                  "15-64" = "15-64-vuotiaat")
+  ),
+  sv = list(
+    otsikko = "Sysselsatta efter åldersavgränsning, 1 000 personer",
+    selitteet = c(trendi = "Trend", kausi = "Säsongrensad"),
+    lahde = "Källa: Statistikcentralen, arbetskraftsundersökningen",
+    ikaluokat = c("20-69" = "20-69-åringar", "15-74" = "15-74-åringar",
+                  "15-64" = "15-64-åringar")
+  ),
+  en = list(
+    otsikko = "Employed persons by age definition, 1,000 persons",
+    selitteet = c(trendi = "Trend", kausi = "Seasonally adjusted"),
+    lahde = "Source: Statistics Finland, Labour Force Survey",
+    ikaluokat = c("20-69" = "Persons aged 20-69", "15-74" = "Persons aged 15-74",
+                  "15-64" = "Persons aged 15-64")
+  )
+)
+
+# Kausitasoitettu ja trendi ovat sama ilmio eri tavalla siloitettuna, mutta
+# kolmella ikaluokalla ne olisivat kuusi viivaa ja kuusi selitetta. Siksi ne
+# ovat omilla valilehdillaan, jolloin kummassakin on kolme viivaa.
+kuvio_ika <- function(kieli, data, siloitus) {
+  t <- tekstit_ika[[kieli]]
+  d <- data
+  d$ikaluokka <- factor(d$ika, levels = names(t$ikaluokat), labels = t$ikaluokat)
+  visu_plot(d, colour = "ikaluokka", title = t$otsikko,
+            subtitle = t$selitteet[[siloitus]], caption = t$lahde, lang = kieli)
+}
+
+kuvio_ika_trendi <- function(kieli) kuvio_ika(kieli, trendi, "trendi")
+kuvio_ika_kausi <- function(kieli) kuvio_ika(kieli, kausitasoitettu, "kausi")
+```
+
+::: {.panel-tabset}
+
+### Trendi
+
+```{r}
+kuvio_ika_trendi("fi") |>
+  visu_interactive(subtitle = tekstit_ika$fi$selitteet[["trendi"]],
+                   caption = tekstit_ika$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_ika_trendi, "tyolliset-ikaryhmittain-trendi")
+```
+
+### Kausitasoitettu
+
+```{r}
+kuvio_ika_kausi("fi") |>
+  visu_interactive(subtitle = tekstit_ika$fi$selitteet[["kausi"]],
+                   caption = tekstit_ika$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_ika_kausi, "tyolliset-ikaryhmittain-kausi")
+```
+
+:::
+
+Ikärajaus siirtää tasoa mutta ei käännettä: kaikki kolme kääntyivät laskuun
+vuoden 2023 tienoilla, 15-64-vuotiaat muutamaa kuukautta muita aiemmin. Ero
+15-74- ja 20-69-vuotiaiden välillä on kasvanut 73 000:sta yli 100 000 henkeen
+vuodesta 2010; tuon eron muodostavat 15-19- ja 70-74-vuotiaat työlliset.
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  list(ika_asteet, vaesto),
+  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/")
+)
 ```
 
 ## Palkansaajat
