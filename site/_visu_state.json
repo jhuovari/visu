@@ -8,7 +8,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-08-28T11:57:42"
     },
     "code_hash": "4bc4fd1071fc38af1dd6dbdd29eb9ece45eb72fc637d74b405797f894361e1ae",
-    "built_at": "2026-09-14T05:13:06Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "julkinen-talous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"],
@@ -19,7 +19,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px": "2026-07-01T17:45:03"
     },
     "code_hash": "d7a163f0df472a36b07a2b7777bfc23a3f38cb2ec6efc76818e365fd2f77271c",
-    "built_at": "2026-09-18T05:54:17Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "kotitaloudet": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"],
@@ -29,7 +29,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px": "2026-07-01T18:01:20"
     },
     "code_hash": "8cb20de8d06b93f5642ee451a08ef8296ec093ec0c1945c9d14adc3639fec3eb",
-    "built_at": "2026-09-18T05:54:17Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "neljannesvuositilinpito": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
@@ -38,7 +38,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-09-17T13:47:40"
     },
     "code_hash": "df87841e467073df5a3d4cb79d20c48c9bfe453e12dee890d5f147d83574c1b7",
-    "built_at": "2026-09-18T05:54:17Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "rahoitusmarkkinat": {
     "table_url": ["https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A", "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU", "https://www.suomenpankki.fi/api/interestrates/euribor", "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT", "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"],
@@ -53,7 +53,7 @@
       "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-16T17:17:28Z"
     },
     "code_hash": "88394c321dd4c854505c103ebc684e51afd3fd08cc9e3bdacce0f550d4a006dd",
-    "built_at": "2026-09-22T11:52:14Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
@@ -63,7 +63,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px": "2026-08-27T11:48:32"
     },
     "code_hash": "7037d48290c48c0f7296171a9ebefcb60f7b9415bfd2ca4444724090c8f8515c",
-    "built_at": "2026-09-14T05:13:06Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "tyomarkkinat": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"],
@@ -74,7 +74,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px": "2026-09-21T12:34:15"
     },
     "code_hash": "e450e26978c94778d352133bf8b4f3e99032a188dcd2d14288d0b05a8c1efcb6",
-    "built_at": "2026-09-22T11:52:14Z"
+    "built_at": "2026-09-22T13:38:43Z"
   },
   "ulkomaantalous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"],
@@ -84,6 +84,6 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px": "2026-09-17T12:20:32"
     },
     "code_hash": "ad7e2d040adf5dbfd256cbf683fc3fc0cb097af5a2f1b405ed72ba189936e674",
-    "built_at": "2026-09-18T05:54:17Z"
+    "built_at": "2026-09-22T13:38:43Z"
   }
 }
