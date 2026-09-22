@@ -27,8 +27,8 @@ Taulut luetaan oletuksena renderöitävän tiedoston etulehdestä, joten
 osoitteita ei tarvitse toistaa. \code{visu_check_charts()} pitää huolen siitä,
 että etulehti ja koodilohkot hakevat samat taulut.
 
-Tarkoitettu koodilohkoon, jonka asetuksina ovat \code{#| output: asis} ja
-\code{#| echo: false}.
+Tarkoitettu koodilohkoon, jonka asetuksina ovat \verb{#| output: asis} ja
+\verb{#| echo: false}.
 }
 \examples{
 \dontrun{

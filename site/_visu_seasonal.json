@@ -1,0 +1,32 @@
+{
+  "tyti-135y-asteet|Tyovoimaosuus": {
+    "valittu": "2026-09-22",
+    "malli": "(3 1 1)(0 1 1)",
+    "muunnos": "log",
+    "regressorit": []
+  },
+  "tyti-135y-asteet|tyti-Tyollisyysaste": {
+    "valittu": "2026-09-22",
+    "malli": "(2 1 1)(0 1 1)",
+    "muunnos": "log",
+    "regressorit": []
+  },
+  "tyti-135y-tyolliset|15-64": {
+    "valittu": "2026-09-22",
+    "malli": "(2 1 1)(0 1 1)",
+    "muunnos": "log",
+    "regressorit": []
+  },
+  "tyti-135y-tyolliset|15-74": {
+    "valittu": "2026-09-22",
+    "malli": "(2 1 0)(0 1 1)",
+    "muunnos": "log",
+    "regressorit": []
+  },
+  "tyti-135y-tyolliset|20-69": {
+    "valittu": "2026-09-22",
+    "malli": "(2 1 1)(0 1 1)",
+    "muunnos": "log",
+    "regressorit": "ao2021.Sep"
+  }
+}
