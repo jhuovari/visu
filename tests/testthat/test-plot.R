@@ -90,3 +90,45 @@ test_that("suomi ja ruotsi saavat desimaalipilkun, englanti pisteen", {
 test_that("akselin puuttuva arvo muotoillaan tyhjaksi", {
   expect_equal(visu:::visu_axis_labels("fi")(c(1, NA)), c("1", ""))
 })
+
+# Nollaviiva lisataan omana layerinaan ennen varsinaista geomia, joten
+# paageom haetaan luokan eika indeksin perusteella.
+paageom <- function(p) {
+  Filter(function(l) !inherits(l$geom, "GeomHline"), p$layers)[[1]]
+}
+
+test_that("kartoittamaton vari annetaan kiinteana, jotta plotly nakee sen", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-02-01")), values = c(1, 2))
+
+  # ggplot2 4.0 hakisi varin teemasta, mutta ggplotly ei ratkaise sita.
+  expect_equal(paageom(visu_plot(d))$aes_params$colour, ggcustom::vm_pal(1))
+  expect_equal(paageom(visu_plot(d, type = "col"))$aes_params$fill, ggcustom::vm_pal(1))
+  expect_equal(paageom(visu_plot(d, type = "area"))$aes_params$fill, ggcustom::vm_pal(1))
+})
+
+test_that("kartoitettu vari jatetaan skaalan hoidettavaksi", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-02-01")), 2),
+    sarja = factor(rep(c("a", "b"), each = 2)),
+    values = c(1, 2, 3, 4)
+  )
+
+  expect_null(paageom(visu_plot(d, colour = "sarja"))$aes_params$colour)
+  expect_null(paageom(visu_plot(d, colour = "sarja", type = "col"))$aes_params$fill)
+})
+
+test_that("kartoitettu paksuus ei vie kiinteaa varia", {
+  # Suhdannekuvaajan tasokuvio kartoittaa paksuuden mutta ei varia.
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-02-01")), 2),
+    sarja = factor(rep(c("Alkuperäinen", "Trendi"), each = 2),
+                   levels = c("Alkuperäinen", "Trendi")),
+    values = c(1, 2, 1.5, 1.6)
+  )
+
+  p <- visu_plot(d, linewidth = "sarja")
+
+  expect_equal(paageom(p)$aes_params$colour, ggcustom::vm_pal(1))
+  # Paksuuden antaa skaala, ei kiintea arvo.
+  expect_null(paageom(p)$aes_params$linewidth)
+})
