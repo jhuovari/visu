@@ -76,11 +76,25 @@ visu_plot <- function(data,
     }
   }
 
+  # ggplot2 4.0:ssa geomin oletusvari tulee teemasta (element_geom), eika
+  # plotly osaa ratkaista sita: ggplotly piirtaa viivan mustana ja pylvaan
+  # harmaana. Kun varia ei ole kartoitettu, se annetaan siksi kiinteana
+  # arvona, jolloin se nakyy oikein seka staattisessa etta interaktiivisessa
+  # kuviossa. Kartoitetun varin hoitaa scale_*_vm.
+  vari <- if (is.null(colour)) ggcustom::vm_pal(1) else NULL
+
   geom <- switch(type,
     # Kun paksuus on kartoitettu, sen antaa skaala eika kiintea arvo.
-    line = if (is.null(linewidth)) ggplot2::geom_line(linewidth = 0.8) else ggplot2::geom_line(),
-    col  = ggplot2::geom_col(position = "dodge"),
-    area = ggplot2::geom_area(position = "stack")
+    line = do.call(ggplot2::geom_line, visu_compact(list(
+      colour = vari,
+      linewidth = if (is.null(linewidth)) 0.8 else NULL
+    ))),
+    col  = do.call(ggplot2::geom_col, visu_compact(list(
+      fill = vari, position = "dodge"
+    ))),
+    area = do.call(ggplot2::geom_area, visu_compact(list(
+      fill = vari, position = "stack"
+    )))
   )
 
   p <- ggplot2::ggplot(data, ggplot2::aes(x = .data[[x]], y = .data[[y]]))
@@ -235,3 +249,6 @@ visu_require_col <- function(data, col, arg) {
   }
   invisible(TRUE)
 }
+
+# Pudottaa NULL-alkiot pois, jotta niita ei valiteta geomille parametreina.
+visu_compact <- function(x) x[!vapply(x, is.null, logical(1))]
