@@ -1,0 +1,627 @@
+---
+title: "Ostovoima ja luottamus"
+visu:
+  table_url:
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/129h.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vq.px/"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vr.px/"
+    - "https://www.suomenpankki.fi/api/interestrates/euribor"
+---
+
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
+Kotitalouksien ostovoima kahdesta suunnasta: mitä tuloille on tapahtunut ja
+miten kuluttajat itse tilanteensa kokevat. Ostovoima on tässä kotitalouksien
+oikaistu käytettävissä oleva tulo reaalisena, eli hintojen nousu on poistettu.
+Oikaistu tulo sisältää rahatulojen lisäksi julkiset palvelut, joita
+kotitaloudet saavat käyttöönsä ilmaiseksi tai halvalla.
+
+## Ostovoima
+
+::: {.panel-tabset}
+
+### Taso
+
+```{r}
+library(visu)
+
+ostovoima <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "taloustoimi_1_20180101" = "B7N",
+    "contentscode" = "vol_ind_1999"
+  )
+)
+
+tekstit <- list(
+  fi = list(
+    otsikko = "Kotitalouksien reaalitulo, 1999 = 100",
+    selite = "Oikaistu käytettävissä oleva tulo, hintojen nousu poistettu",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+  ),
+  sv = list(
+    otsikko = "Hushållens realinkomst, 1999 = 100",
+    selite = "Justerad disponibel inkomst, prisförändringar borträknade",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+  ),
+  en = list(
+    otsikko = "Household real income, 1999 = 100",
+    selite = "Adjusted disposable income, price changes removed",
+    lahde = "Source: Statistics Finland, quarterly sector accounts"
+  )
+)
+
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  visu_plot(ostovoima, title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio("fi") |>
+  visu_interactive(subtitle = tekstit$fi$selite, caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio, "ostovoima-taso")
+```
+
+### Vuosimuutos
+
+```{r}
+muutos <- ostovoima
+muutos$values <- visu_change(muutos$values, lag = 4)
+muutos <- muutos[!is.na(muutos$values), ]
+
+tekstit_muutos <- list(
+  fi = list(
+    otsikko = "Kotitalouksien reaalitulon muutos vuodentakaisesta, %",
+    selite = "Positiivinen luku tarkoittaa ostovoiman kasvua",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+  ),
+  sv = list(
+    otsikko = "Förändring av hushållens realinkomst från året innan, %",
+    selite = "Ett positivt tal betyder ökad köpkraft",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+  ),
+  en = list(
+    otsikko = "Change in household real income from a year earlier, %",
+    selite = "A positive figure means purchasing power grew",
+    lahde = "Source: Statistics Finland, quarterly sector accounts"
+  )
+)
+
+kuvio_muutos <- function(kieli) {
+  t <- tekstit_muutos[[kieli]]
+  visu_plot(muutos, type = "col", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_muutos("fi") |>
+  visu_interactive(subtitle = tekstit_muutos$fi$selite,
+                   caption = tekstit_muutos$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_muutos, "ostovoima-muutos")
+```
+
+### Pitkä sarja
+
+```{r}
+pitka <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/",
+  query = list(
+    "timeperiod_y" = "*",
+    "taloustoimi_1_20180101" = "B6NS14",
+    "contentscode" = "ntp-vol_ind"
+  )
+)
+
+tekstit_pitka <- list(
+  fi = list(
+    otsikko = "Kotitalouksien reaalitulo henkeä kohden, 2015 = 100",
+    selite = "Käytettävissä oleva tulo, vuosittain",
+    lahde = "Lähde: Tilastokeskus, kansantalouden tilinpito"
+  ),
+  sv = list(
+    otsikko = "Hushållens realinkomst per capita, 2015 = 100",
+    selite = "Disponibel inkomst, årligen",
+    lahde = "Källa: Statistikcentralen, nationalräkenskaper"
+  ),
+  en = list(
+    otsikko = "Household real income per capita, 2015 = 100",
+    selite = "Disposable income, annual",
+    lahde = "Source: Statistics Finland, national accounts"
+  )
+)
+
+kuvio_pitka <- function(kieli) {
+  t <- tekstit_pitka[[kieli]]
+  visu_plot(pitka, title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_pitka("fi") |>
+  visu_interactive(subtitle = tekstit_pitka$fi$selite,
+                   caption = tekstit_pitka$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_pitka, "ostovoima-pitka")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  ostovoima,
+  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/")
+)
+```
+
+## Mistä tulojen muutos syntyy
+
+Käytettävissä olevan tulon kasvu puretaan tässä eriin: kuinka paljon
+palkkasumma, saadut etuudet, maksetut verot, sosiaaliturvamaksut ja korkomenot
+kukin kasvattivat tai vähensivät tuloa. Pylväät summautuvat tulon
+kokonaismuutokseen.
+
+Erittely kertoo, minkä erien kautta muutos tuli — se ei ole arvio siitä,
+mitä olisi tapahtunut toisenlaisella politiikalla. Verojen ja etuuksien erät
+sisältävät päätösten ohella myös työllisyyden, palkkojen ja väestörakenteen
+muutokset.
+
+```{r}
+erat <- c("B6N", "D1R", "D62R", "D5K", "D61K", "D41K")
+
+tulot <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "taloustoimi_1_20180101" = erat,
+    "contentscode" = "ntp-KAUSIT"
+  )
+)
+
+tekstit_erat <- list(
+  fi = list(
+    otsikko = "Käytettävissä olevan tulon muutos erittäin, %-yksikköä",
+    selite = "Kontribuutio vuodentakaiseen verrattuna, kausitasoitettu",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    jaannos = "Muut erät",
+    sarjat = c(D1R = "Palkat", D62R = "Saadut etuudet", D5K = "Verot",
+               D61K = "Sosiaaliturvamaksut", D41K = "Korkomenot")
+  ),
+  sv = list(
+    otsikko = "Förändring av disponibel inkomst per post, procentenheter",
+    selite = "Bidrag jämfört med året innan, säsongrensad",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper",
+    jaannos = "Övriga poster",
+    sarjat = c(D1R = "Löner", D62R = "Erhållna förmåner", D5K = "Skatter",
+               D61K = "Socialskyddsavgifter", D41K = "Ränteutgifter")
+  ),
+  en = list(
+    otsikko = "Change in disposable income by component, percentage points",
+    selite = "Contribution compared with a year earlier, seasonally adjusted",
+    lahde = "Source: Statistics Finland, quarterly sector accounts",
+    jaannos = "Other components",
+    sarjat = c(D1R = "Wages", D62R = "Benefits received", D5K = "Taxes",
+               D61K = "Social contributions", D41K = "Interest paid")
+  )
+)
+
+kuvio_erat <- function(kieli) {
+  t <- tekstit_erat[[kieli]]
+  # Menoerien kasvu pienentaa kaytettavissa olevaa tuloa, joten ne kaannetaan.
+  d <- visu_contributions(
+    tulot,
+    series = "taloustoimi_1_20180101",
+    total = "B6N",
+    lag = 4,
+    negate = c("D5K", "D61K", "D41K"),
+    residual = t$jaannos
+  )
+  nimet <- c(t$sarjat, stats::setNames(t$jaannos, t$jaannos))
+  d$era <- factor(d$taloustoimi_1_20180101, levels = names(nimet), labels = nimet)
+  visu_plot(d, colour = "era", type = "col", stack = TRUE, title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
+}
+
+kuvio_erat("fi") |>
+  visu_interactive(subtitle = tekstit_erat$fi$selite,
+                   caption = tekstit_erat$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_erat, "ostovoima-erat")
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(tulot, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/")
+```
+
+## Korot
+
+Suurin osa suomalaisista asuntolainoista on sidottu euriboriin, joten korkojen
+muutos näkyy kotitalouksien menoissa nopeasti. Alempi kuvio näyttää, paljonko
+kotitaloudet maksavat korkoja, ylempi mistä se johtuu.
+
+::: {.panel-tabset}
+
+### Euribor
+
+```{r}
+# Rajapinta antaa vain viimeisimmat viikot, joten havainnot yhdistetaan
+# aiemmin kertyneisiin. Asuntolainojen yleisimmat viitekorot riittavat tahan.
+euribor <- visu_get_bof("https://www.suomenpankki.fi/api/interestrates/euribor") |>
+  visu_accumulate("../data/euribor.csv")
+euribor <- euribor[euribor$sarja %in% c("euribor3kk", "euribor12kk"), ]
+
+tekstit_euribor <- list(
+  fi = list(
+    otsikko = "Euribor-korot, %",
+    selite = "Yleisimmät asuntolainojen viitekorot",
+    lahde = "Lähde: Suomen Pankki",
+    sarjat = c(euribor3kk = "3 kuukautta", euribor12kk = "12 kuukautta")
+  ),
+  sv = list(
+    otsikko = "Euriborräntor, %",
+    selite = "De vanligaste referensräntorna för bolån",
+    lahde = "Källa: Finlands Bank",
+    sarjat = c(euribor3kk = "3 månader", euribor12kk = "12 månader")
+  ),
+  en = list(
+    otsikko = "Euribor rates, %",
+    selite = "The most common mortgage reference rates",
+    lahde = "Source: Bank of Finland",
+    sarjat = c(euribor3kk = "3 months", euribor12kk = "12 months")
+  )
+)
+
+kuvio_euribor <- function(kieli) {
+  t <- tekstit_euribor[[kieli]]
+  d <- euribor
+  d$maturiteetti <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "maturiteetti", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
+}
+
+kuvio_euribor("fi") |>
+  visu_interactive(subtitle = tekstit_euribor$fi$selite,
+                   caption = tekstit_euribor$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_euribor, "ostovoima-euribor")
+```
+
+### Korkomenot
+
+```{r}
+korkomenot <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "taloustoimi_1_20180101" = "D41K",
+    "contentscode" = "ntp-KAUSIT"
+  )
+)
+
+tekstit_korot <- list(
+  fi = list(
+    otsikko = "Kotitalouksien korkomenot, miljoonaa euroa",
+    selite = "Kausitasoitettu, neljännesvuosittain",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+  ),
+  sv = list(
+    otsikko = "Hushållens ränteutgifter, miljoner euro",
+    selite = "Säsongrensad, kvartalsvis",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+  ),
+  en = list(
+    otsikko = "Household interest expenditure, EUR million",
+    selite = "Seasonally adjusted, quarterly",
+    lahde = "Source: Statistics Finland, quarterly sector accounts"
+  )
+)
+
+kuvio_korot <- function(kieli) {
+  t <- tekstit_korot[[kieli]]
+  visu_plot(korkomenot, title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_korot("fi") |>
+  visu_interactive(subtitle = tekstit_korot$fi$selite,
+                   caption = tekstit_korot$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_korot, "ostovoima-korkomenot")
+```
+
+:::
+
+## Kuluttajien luottamus
+
+```{r}
+osat <- c("CCI_A1", "CCI_B2", "CCI_B4", "CCI_E1")
+
+luottamus <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
+  query = list("timeperiod_m" = "*", "contentscode" = osat)
+)
+
+tekstit_luottamus <- list(
+  fi = list(
+    otsikko = "Kuluttajien luottamus, saldoluku",
+    selite = "Indikaattori ja sen osatekijöitä",
+    lahde = "Lähde: Tilastokeskus, kuluttajien luottamus",
+    sarjat = c(CCI_A1 = "Luottamusindikaattori",
+               CCI_B2 = "Oma talous 12 kk kuluttua",
+               CCI_B4 = "Suomen talous 12 kk kuluttua",
+               CCI_E1 = "Rahankäyttö kestotavaroihin")
+  ),
+  sv = list(
+    otsikko = "Konsumenternas förtroende, saldotal",
+    selite = "Indikatorn och dess delfaktorer",
+    lahde = "Källa: Statistikcentralen, konsumenternas förtroende",
+    sarjat = c(CCI_A1 = "Förtroendeindikator",
+               CCI_B2 = "Egen ekonomi om 12 mån",
+               CCI_B4 = "Finlands ekonomi om 12 mån",
+               CCI_E1 = "Penninganvändning på kapitalvaror")
+  ),
+  en = list(
+    otsikko = "Consumer confidence, balance figure",
+    selite = "The indicator and its components",
+    lahde = "Source: Statistics Finland, consumer confidence",
+    sarjat = c(CCI_A1 = "Confidence indicator",
+               CCI_B2 = "Own economy in 12 months",
+               CCI_B4 = "Finland's economy in 12 months",
+               CCI_E1 = "Spending on durables")
+  )
+)
+
+kuvio_luottamus <- function(kieli) {
+  t <- tekstit_luottamus[[kieli]]
+  d <- luottamus
+  d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "sarja", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli, start = "2007-01-01")
+}
+
+kuvio_luottamus("fi") |>
+  visu_interactive(subtitle = tekstit_luottamus$fi$selite,
+                   caption = tekstit_luottamus$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_luottamus, "luottamus")
+```
+
+## Luottamus väestöryhmittäin
+
+Sama indikaattori eri ryhmissä. Ryhmien väliset tasoerot ja se, liikkuvatko
+sarjat yhdessä vai eri tahtiin, kertovat kohdistuuko ostovoiman muutos
+tasaisesti vai painottuuko se joihinkin ryhmiin.
+
+Ryhmittäiset sarjat alkavat vuodesta 2019, eli ne kattavat pandemian,
+inflaatiopiikin ja korkojen nousun mutta eivät niitä edeltävää aikaa.
+
+::: {.panel-tabset}
+
+### Sosioekonominen asema
+
+```{r}
+ryhmat_asema <- c("1", "3", "4", "5", "7")
+
+asema <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/129h.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "sosioekon_asema_10_20180101" = ryhmat_asema,
+    "contentscode" = "CCI_A1"
+  )
+)
+
+tekstit_asema <- list(
+  fi = list(
+    otsikko = "Kuluttajien luottamus sosioekonomisen aseman mukaan",
+    selite = "Luottamusindikaattori, saldoluku",
+    lahde = "Lähde: Tilastokeskus, kuluttajien luottamus",
+    sarjat = c("1" = "Yrittäjät", "3" = "Ylemmät toimihenkilöt",
+               "4" = "Alemmat toimihenkilöt", "5" = "Työntekijät",
+               "7" = "Eläkeläiset")
+  ),
+  sv = list(
+    otsikko = "Konsumenternas förtroende efter socioekonomisk ställning",
+    selite = "Förtroendeindikator, saldotal",
+    lahde = "Källa: Statistikcentralen, konsumenternas förtroende",
+    sarjat = c("1" = "Företagare", "3" = "Högre tjänstemän",
+               "4" = "Lägre tjänstemän", "5" = "Arbetare",
+               "7" = "Pensionärer")
+  ),
+  en = list(
+    otsikko = "Consumer confidence by socio-economic status",
+    selite = "Confidence indicator, balance figure",
+    lahde = "Source: Statistics Finland, consumer confidence",
+    sarjat = c("1" = "Entrepreneurs", "3" = "Senior salaried employees",
+               "4" = "Junior salaried employees", "5" = "Manual workers",
+               "7" = "Pensioners")
+  )
+)
+
+kuvio_asema <- function(kieli) {
+  t <- tekstit_asema[[kieli]]
+  d <- asema
+  d$ryhma <- factor(d$sosioekon_asema_10_20180101,
+                    levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "ryhma", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_asema("fi") |>
+  visu_interactive(subtitle = tekstit_asema$fi$selite,
+                   caption = tekstit_asema$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_asema, "luottamus-asema")
+```
+
+### Ikäryhmä
+
+```{r}
+ika <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vq.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "ikaryhma_10_20180101" = c("18-29", "30-49", "50-64", "65-74"),
+    "contentscode" = "CCI_A1"
+  )
+)
+
+tekstit_ika <- list(
+  fi = list(
+    otsikko = "Kuluttajien luottamus ikäryhmittäin",
+    selite = "Luottamusindikaattori, saldoluku",
+    lahde = "Lähde: Tilastokeskus, kuluttajien luottamus"
+  ),
+  sv = list(
+    otsikko = "Konsumenternas förtroende efter åldersgrupp",
+    selite = "Förtroendeindikator, saldotal",
+    lahde = "Källa: Statistikcentralen, konsumenternas förtroende"
+  ),
+  en = list(
+    otsikko = "Consumer confidence by age group",
+    selite = "Confidence indicator, balance figure",
+    lahde = "Source: Statistics Finland, consumer confidence"
+  )
+)
+
+kuvio_ika <- function(kieli) {
+  t <- tekstit_ika[[kieli]]
+  d <- ika
+  # Ikaryhmien nimet ovat lukuvaleja, joten ne kelpaavat sellaisenaan.
+  d$ryhma <- factor(d$ikaryhma_10_20180101)
+  visu_plot(d, colour = "ryhma", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_ika("fi") |>
+  visu_interactive(subtitle = tekstit_ika$fi$selite,
+                   caption = tekstit_ika$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_ika, "luottamus-ika")
+```
+
+### Koulutusaste
+
+```{r}
+koulutus <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vr.px/",
+  query = list(
+    "timeperiod_m" = "*",
+    "koulutusaste_17_20180101" = c("0T2", "3_4", "5T8"),
+    "contentscode" = "CCI_A1"
+  )
+)
+
+tekstit_koulutus <- list(
+  fi = list(
+    otsikko = "Kuluttajien luottamus koulutusasteen mukaan",
+    selite = "Luottamusindikaattori, saldoluku",
+    lahde = "Lähde: Tilastokeskus, kuluttajien luottamus",
+    sarjat = c("0T2" = "Perusaste", "3_4" = "Toinen aste",
+               "5T8" = "Korkea-aste")
+  ),
+  sv = list(
+    otsikko = "Konsumenternas förtroende efter utbildningsnivå",
+    selite = "Förtroendeindikator, saldotal",
+    lahde = "Källa: Statistikcentralen, konsumenternas förtroende",
+    sarjat = c("0T2" = "Grundnivå", "3_4" = "Andra stadiet",
+               "5T8" = "Högre nivå")
+  ),
+  en = list(
+    otsikko = "Consumer confidence by level of education",
+    selite = "Confidence indicator, balance figure",
+    lahde = "Source: Statistics Finland, consumer confidence",
+    sarjat = c("0T2" = "Basic", "3_4" = "Upper secondary",
+               "5T8" = "Tertiary")
+  )
+)
+
+kuvio_koulutus <- function(kieli) {
+  t <- tekstit_koulutus[[kieli]]
+  d <- koulutus
+  d$ryhma <- factor(d$koulutusaste_17_20180101,
+                    levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "ryhma", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_koulutus("fi") |>
+  visu_interactive(subtitle = tekstit_koulutus$fi$selite,
+                   caption = tekstit_koulutus$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_koulutus, "luottamus-koulutus")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  asema,
+  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/129h.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vq.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vr.px/")
+)
+```
+
+Lähteet: [Sektoritilit](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/)
+(taulut 15a6, 15a7 ja 15ae), [Kuluttajien luottamus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__kbar/)
+(taulut 11cc, 129h, 11vq ja 11vr) ja [Suomen Pankki](https://www.suomenpankki.fi/fi/tilastot/korot/).

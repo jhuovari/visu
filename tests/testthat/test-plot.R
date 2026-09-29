@@ -132,3 +132,17 @@ test_that("kartoitettu paksuus ei vie kiinteaa varia", {
   # Paksuuden antaa skaala, ei kiintea arvo.
   expect_null(paageom(p)$aes_params$linewidth)
 })
+
+test_that("pylvaat pinotaan vain pyydettaessa", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), 2),
+    era = factor(rep(c("a", "b"), each = 2)),
+    values = c(1, 2, -1, 3)
+  )
+
+  vierekkain <- paageom(visu_plot(d, colour = "era", type = "col"))
+  pinottu <- paageom(visu_plot(d, colour = "era", type = "col", stack = TRUE))
+
+  expect_s3_class(vierekkain$position, "PositionDodge")
+  expect_s3_class(pinottu$position, "PositionStack")
+})
