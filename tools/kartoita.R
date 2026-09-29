@@ -1,33 +1,29 @@
-# Kertakaytto: valittujen taulujen muuttujat. Suuresta taloustoimi-listasta
-# naytetaan vain ostovoiman kannalta kiinnostavat koodit.
+# Kertakaytto: vain taustamuuttujat ja valitut taloustoimet.
 base <- "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/"
-kiinnostavat <- "^(B6N|B7N|D1|D11|D12|D4|D41|D42|D44|D5|D61|D62|D63|D7|P3|P31|B8)"
+meta <- function(t) jsonlite::fromJSON(paste0(base, t), simplifyDataFrame = FALSE)
 
-kuvaa <- function(taulu, maxv = 45) {
-  url <- paste0(base, taulu, "/")
-  cat("\n##### ", taulu, "\n")
-  m <- try(jsonlite::fromJSON(url, simplifyDataFrame = FALSE), silent = TRUE)
-  if (inherits(m, "try-error")) { cat("  EI SAATU\n"); return(invisible()) }
-  cat("  ", m$title, "\n")
+for (t in c("kbar/129h.px", "kbar/11vq.px", "kbar/11vr.px")) {
+  m <- try(meta(t), silent = TRUE)
+  cat("\n#####", t, "\n")
+  if (inherits(m, "try-error")) { cat("  EI SAATU\n"); next }
   for (v in m$variables) {
-    n <- length(v$values)
-    if (grepl("^timeperiod", v$code)) {
-      cat(sprintf("  AIKA %s (%s ... %s)\n", v$code, v$values[[1]], v$values[[n]]))
-      next
+    if (grepl("^timeperiod|^contentscode", v$code)) next
+    cat(sprintf("  %s -- %s (%d)\n", v$code, v$text, length(v$values)))
+    for (i in seq_along(v$values)) {
+      cat(sprintf("      %-16s %s\n", v$values[[i]], v$valueTexts[[i]]))
     }
-    koodit <- unlist(v$values); tekstit <- unlist(v$valueTexts)
-    if (grepl("taloustoimi", v$code) && n > maxv) {
-      pidä <- grepl(kiinnostavat, koodit)
-      cat(sprintf("  MUUTTUJA %s -- %s (%d arvoa, suodatettu %d)\n",
-                  v$code, v$text, n, sum(pidä)))
-      koodit <- koodit[pidä]; tekstit <- tekstit[pidä]
-    } else {
-      cat(sprintf("  MUUTTUJA %s -- %s (%d)\n", v$code, v$text, n))
-    }
-    k <- seq_len(min(length(koodit), maxv))
-    for (i in k) cat(sprintf("      %-14s %s\n", koodit[i], tekstit[i]))
-    if (length(koodit) > maxv) cat("      ...", length(koodit) - maxv, "muuta\n")
   }
 }
 
-for (t in c("kbar/129h.px", "kbar/11vq.px", "ntp/15a7.px", "ntp/15a6.px")) kuvaa(t)
+cat("\n##### ntp/15a6.px taloustoimet joita etsitaan\n")
+m <- try(meta("ntp/15a6.px"), silent = TRUE)
+if (!inherits(m, "try-error")) {
+  v <- Filter(function(x) grepl("taloustoimi", x$code), m$variables)[[1]]
+  koodit <- unlist(v$values); tekstit <- unlist(v$valueTexts)
+  etsi <- c("B6N", "B7N", "B8N", "D1R", "D5K", "D51K", "D61K", "D62R", "D63R",
+            "D41K", "D41R", "D42R", "D7K", "D7R", "P31K", "P3K")
+  for (k in etsi) {
+    i <- match(k, koodit)
+    cat(sprintf("  %-8s %s\n", k, if (is.na(i)) "-- EI OLE --" else tekstit[i]))
+  }
+}
