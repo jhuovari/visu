@@ -171,8 +171,10 @@ visu_downloads(kuvio_pitka, "ostovoima-pitka")
 ```{r}
 #| echo: false
 #| output: asis
+# Usean taulun kuviossa annetaan lista data frameja ja osoitteet samassa
+# jarjestyksessa.
 visu_metadata(
-  ostovoima,
+  list(ostovoima, pitka),
   c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/",
     "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/")
 )
@@ -614,7 +616,7 @@ visu_downloads(kuvio_koulutus, "luottamus-koulutus")
 #| echo: false
 #| output: asis
 visu_metadata(
-  asema,
+  list(luottamus, asema, ika, koulutus),
   c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/",
     "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/129h.px/",
     "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vq.px/",
