@@ -193,7 +193,7 @@ sisältävät päätösten ohella myös työllisyyden, palkkojen ja väestörake
 muutokset.
 
 ```{r}
-erat <- c("B6N", "D1R", "D62R", "D5K", "D61K", "D41K")
+erat <- c("B6N", "D1R", "D62R", "D5K", "D61K", "D4K")
 
 tulot <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
@@ -212,7 +212,7 @@ tekstit_erat <- list(
     lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
     jaannos = "Muut erät",
     sarjat = c(D1R = "Palkat", D62R = "Saadut etuudet", D5K = "Verot",
-               D61K = "Sosiaaliturvamaksut", D41K = "Korkomenot")
+               D61K = "Sosiaaliturvamaksut", D4K = "Omaisuusmenot")
   ),
   sv = list(
     otsikko = "Förändring av disponibel inkomst per post, procentenheter",
@@ -220,7 +220,7 @@ tekstit_erat <- list(
     lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper",
     jaannos = "Övriga poster",
     sarjat = c(D1R = "Löner", D62R = "Erhållna förmåner", D5K = "Skatter",
-               D61K = "Socialskyddsavgifter", D41K = "Ränteutgifter")
+               D61K = "Socialskyddsavgifter", D4K = "Kapitalutgifter")
   ),
   en = list(
     otsikko = "Change in disposable income by component, percentage points",
@@ -228,7 +228,7 @@ tekstit_erat <- list(
     lahde = "Source: Statistics Finland, quarterly sector accounts",
     jaannos = "Other components",
     sarjat = c(D1R = "Wages", D62R = "Benefits received", D5K = "Taxes",
-               D61K = "Social contributions", D41K = "Interest paid")
+               D61K = "Social contributions", D4K = "Property expenses")
   )
 )
 
@@ -240,7 +240,7 @@ kuvio_erat <- function(kieli) {
     series = "taloustoimi_1_20180101",
     total = "B6N",
     lag = 4,
-    negate = c("D5K", "D61K", "D41K"),
+    negate = c("D5K", "D61K", "D4K"),
     residual = t$jaannos
   )
   nimet <- c(t$sarjat, stats::setNames(t$jaannos, t$jaannos))
@@ -269,8 +269,11 @@ visu_metadata(tulot, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px
 ## Korot
 
 Suurin osa suomalaisista asuntolainoista on sidottu euriboriin, joten korkojen
-muutos näkyy kotitalouksien menoissa nopeasti. Alempi kuvio näyttää, paljonko
-kotitaloudet maksavat korkoja, ylempi mistä se johtuu.
+muutos näkyy kotitalouksien menoissa nopeasti.
+
+Neljännesvuosittaiset sektoritilit eivät julkaise kotitalouksien korkomenoja
+omana eränään, vaan osana omaisuusmenoja. Kotitalouksilla ne ovat käytännössä
+lähes kokonaan korkoja, joten sarja seuraa korkotasoa.
 
 ::: {.panel-tabset}
 
@@ -331,25 +334,25 @@ korkomenot <- visu_get_data(
   query = list(
     "timeperiod_q" = "*",
     "sektoriluokitus_7_20230101" = "S14",
-    "taloustoimi_1_20180101" = "D41K",
+    "taloustoimi_1_20180101" = "D4K",
     "contentscode" = "ntp-KAUSIT"
   )
 )
 
 tekstit_korot <- list(
   fi = list(
-    otsikko = "Kotitalouksien korkomenot, miljoonaa euroa",
-    selite = "Kausitasoitettu, neljännesvuosittain",
+    otsikko = "Kotitalouksien omaisuusmenot, miljoonaa euroa",
+    selite = "Pääosin asuntolainojen korkoja, kausitasoitettu",
     lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
   ),
   sv = list(
-    otsikko = "Hushållens ränteutgifter, miljoner euro",
-    selite = "Säsongrensad, kvartalsvis",
+    otsikko = "Hushållens kapitalutgifter, miljoner euro",
+    selite = "Huvudsakligen räntor på bolån, säsongrensad",
     lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
   ),
   en = list(
-    otsikko = "Household interest expenditure, EUR million",
-    selite = "Seasonally adjusted, quarterly",
+    otsikko = "Household property income paid, EUR million",
+    selite = "Mainly mortgage interest, seasonally adjusted",
     lahde = "Source: Statistics Finland, quarterly sector accounts"
   )
 )
@@ -368,7 +371,7 @@ kuvio_korot("fi") |>
 ```{r}
 #| echo: false
 #| output: asis
-visu_downloads(kuvio_korot, "ostovoima-korkomenot")
+visu_downloads(kuvio_korot, "ostovoima-omaisuusmenot")
 ```
 
 :::
