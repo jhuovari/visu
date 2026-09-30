@@ -40,6 +40,7 @@ data on muuttunut.
 
 ```{r}
 library(visu)
+library(dplyr)
 
 kurssit <- visu_get_ecb(
   "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A"
@@ -89,6 +90,7 @@ visu_downloads(kuvio_kurssit, "valuutta-usd-gbp")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 kruunu <- visu_get_ecb(
   "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A"
@@ -145,6 +147,7 @@ visu_metadata(
 
 ```{r}
 library(visu)
+library(dplyr)
 
 brent <- visu_get_fred(
   "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU"
@@ -193,6 +196,7 @@ visu_metadata(brent, "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBR
 
 ```{r}
 library(visu)
+library(dplyr)
 
 # Rajapinta antaa vain viimeisimmat noin kolme viikkoa, joten havainnot
 # yhdistetaan aiemmin kertyneisiin. Polku on sivun hakemistosta katsottuna.
@@ -249,6 +253,7 @@ visu_downloads(kuvio_euribor, "euribor")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 estr <- visu_get_ecb(
   "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT"
@@ -311,6 +316,7 @@ visu_downloads(kuvio_lyhyet, "korot-lyhyet")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 tuotot <- visu_get_ecb(
   "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y"
@@ -385,6 +391,7 @@ aikaa vaan maturiteetti vuosina.
 
 ```{r}
 library(visu)
+library(dplyr)
 
 forward <- visu_get_ecb(
   "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"
@@ -403,7 +410,8 @@ vuodet <- c(IF_3M = 0.25, IF_6M = 0.5, IF_1Y = 1, IF_2Y = 2, IF_3Y = 3,
 kayra$maturiteetti <- unname(vuodet[as.character(kayra$DATA_TYPE_FM)])
 kayra$paiva <- factor(format(kayra$time, "%-d.%-m.%Y"),
                       levels = format(c(vuosi_sitten, viimeisin), "%-d.%-m.%Y"))
-kayra <- kayra[order(kayra$paiva, kayra$maturiteetti), ]
+kayra <- kayra |>
+  arrange(paiva, maturiteetti)
 
 tekstit_forward <- list(
   fi = list(

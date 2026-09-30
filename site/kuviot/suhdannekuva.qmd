@@ -84,7 +84,12 @@ visu_downloads(kuvio, "tuotanto-taso")
 
 ```{r}
 library(visu)
+library(dplyr)
 
+# Tilasto julkaisee vuosimuutoksen alkuperaisesta ja tyopaivakorjatusta
+# sarjasta mutta ei trendista, joten muutos lasketaan indeksisarjoista. Samalla
+# kaikki kolme on laskettu samalla tavalla. Ero julkaistuun on enintaan 0,15
+# prosenttiyksikkoa, mika on julkaistun indeksin pyoristysta.
 tuotanto_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
   query = list(
@@ -92,33 +97,45 @@ tuotanto_muutos <- visu_get_data(
     "toimiala_79_20180101" = "SSS",
     "contentscode" = c("ind_tasm_2015", "ind_tyop_2015", "ind_trendi_2015")
   )
-) 
-  
+) |>
+  group_by(contentscode) |>
+  mutate(muutos = visu_change(values, time)) |>
+  ungroup()
 
 tekstit_muutos <- list(
   fi = list(
     otsikko = "Tuotannon volyymin muutos vuodentakaisesta, %",
-    selite = "Työpäiväkorjattu sarja",
-    lahde = "Lähde: Tilastokeskus, tuotannon suhdannekuvaaja"
+    selite = "Laskettu indeksisarjoista",
+    lahde = "Lähde: Tilastokeskus, tuotannon suhdannekuvaaja",
+    sarjat = c(ind_tasm_2015 = "Alkuperäinen",
+               ind_tyop_2015 = "Työpäiväkorjattu",
+               ind_trendi_2015 = "Trendi")
   ),
   sv = list(
     otsikko = "Förändring av produktionens volym från året innan, %",
-    selite = "Arbetsdagskorrigerad serie",
-    lahde = "Källa: Statistikcentralen, produktionens konjunkturindikator"
+    selite = "Beräknad från indexserierna",
+    lahde = "Källa: Statistikcentralen, produktionens konjunkturindikator",
+    sarjat = c(ind_tasm_2015 = "Ursprunglig",
+               ind_tyop_2015 = "Arbetsdagskorrigerad",
+               ind_trendi_2015 = "Trend")
   ),
   en = list(
     otsikko = "Change in the volume of output from a year earlier, %",
-    selite = "Working day adjusted series",
-    lahde = "Source: Statistics Finland, monthly indicator of total output"
+    selite = "Calculated from the index series",
+    lahde = "Source: Statistics Finland, monthly indicator of total output",
+    sarjat = c(ind_tasm_2015 = "Original",
+               ind_tyop_2015 = "Working day adjusted",
+               ind_trendi_2015 = "Trend")
   )
 )
 
 kuvio_muutos <- function(kieli) {
   t <- tekstit_muutos[[kieli]]
-  d <- tuotanto_muutos
   # Karkeimmasta siloitetuimpaan, jolloin viiva paksunee jarjestyksessa.
-  d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
-  visu_plot(d, linewidth = "sarja", type = "line", title = t$otsikko,
+  d <- tuotanto_muutos |>
+    mutate(sarja = factor(contentscode, levels = names(t$sarjat),
+                          labels = t$sarjat))
+  visu_plot(d, y = "muutos", linewidth = "sarja", title = t$otsikko,
             subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 

@@ -32,6 +32,7 @@ kotitaloudet saavat käyttöönsä ilmaiseksi tai halvalla.
 
 ```{r}
 library(visu)
+library(dplyr)
 
 ostovoima <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/",
@@ -80,9 +81,9 @@ visu_downloads(kuvio, "ostovoima-taso")
 ### Vuosimuutos
 
 ```{r}
-muutos <- ostovoima
-muutos$values <- visu_change(muutos$values, lag = 4)
-muutos <- muutos[!is.na(muutos$values), ]
+muutos <- ostovoima |>
+  mutate(values = visu_change(values, time)) |>
+  filter(!is.na(values))
 
 tekstit_muutos <- list(
   fi = list(

@@ -1,46 +1,99 @@
 #' Laske sarjan muutos vuodentakaisesta
 #'
-#' StatFin julkaisee vuosimuutoksen vain osalle sarjoista, joten se on usein
-#' laskettava itse. Muutos lasketaan `lag` havainnon takaiseen, eli
-#' kuukausisarjalla 12 ja neljännesvuosisarjalla 4 havaintoa taaksepäin.
-#' Kuukausi- ja neljännesvuosiaineiston vuosimuutos on samalla
-#' kausivaihtelusta riippumaton.
+#' StatFin julkaisee vuosimuutoksen vain osalle sarjoista — trendisarjoista ei
+#' lainkaan — joten se on usein laskettava itse indeksi- tai tasosarjasta.
 #'
-#' @param x Numeerinen vektori aikajärjestyksessä.
-#' @param lag Havaintojen määrä vuodessa: 12 kuukausi-, 4 neljännesvuosi- ja
-#'   1 vuosisarjalle.
+#' Tarkoitettu dplyr-putkeen, jossa ryhmittely erottaa sarjat toisistaan:
+#'
+#' ```
+#' data |>
+#'   dplyr::group_by(contentscode) |>
+#'   dplyr::mutate(muutos = visu_change(values, time)) |>
+#'   dplyr::ungroup()
+#' ```
+#'
+#' Kun `time` annetaan, muutos lasketaan ajan mukaan järjestettynä ja
+#' palautetaan alkuperäisessä rivijärjestyksessä. Se on putkessa olennaista:
+#' `group_by()` ei järjestä rivejä, ja väärässä järjestyksessä laskettu muutos
+#' olisi hiljaa väärin. Samalla havaintotiheys päätellään aikasarakkeesta,
+#' joten sitä ei tarvitse muistaa oikein sarjaa kohti.
+#'
+#' @param x Numeerinen vektori.
+#' @param time Aikasarake, josta havaintotiheys päätellään: 12 kuukausi-, 4
+#'   neljännesvuosi- ja 1 vuosisarjalle. Sarjassa ei saa olla aukkoja, koska
+#'   viive lasketaan havaintoina eikä päivämäärinä. Jätä pois vain, jos
+#'   aikasaraketta ei ole — silloin anna `lag` ja pidä rivit aikajärjestyksessä.
+#' @param lag Havaintojen määrä vuodessa. Oletuksena päätellään `time`:sta.
 #' @param type `"percent"` (oletus) antaa prosenttimuutoksen ja `"diff"`
 #'   erotuksen. Käytä erotusta, kun sarja on jo prosentti, kuten työttömyysaste
 #'   — silloin muutos on prosenttiyksikköjä.
-#' @param by Valinnainen ryhmittelevä vektori, kun `x` sisältää useita sarjoja
-#'   peräkkäin. Data pitää olla järjestetty ryhmittäin ja ajan mukaan.
-#' @return Numeerinen vektori, jonka `lag` ensimmäistä havaintoa ryhmää kohti
-#'   ovat `NA`.
+#' @return Numeerinen vektori samassa järjestyksessä kuin `x`. Vuoden
+#'   ensimmäiset havainnot ovat `NA`, koska niille ei ole vertailukohtaa.
 #' @examples
+#' kk <- seq(as.Date("2024-01-01"), by = "month", length.out = 24)
+#' visu_change(seq(100, 123), time = kk)
 #' visu_change(c(100, 102, 104, 103), lag = 1)
 #' visu_change(c(5.0, 5.4, 6.1), lag = 1, type = "diff")
 #' @export
-visu_change <- function(x, lag = 12, type = c("percent", "diff"), by = NULL) {
+visu_change <- function(x, time = NULL, lag = NULL, type = c("percent", "diff")) {
   type <- match.arg(type)
   if (!is.numeric(x)) {
     stop("`x` pit\u00e4\u00e4 olla numeerinen, ei ", class(x)[1], ".", call. = FALSE)
   }
+  if (is.null(time) && is.null(lag)) {
+    stop("Anna `time`, josta havaintotiheys p\u00e4\u00e4tell\u00e4\u00e4n, tai ",
+         "`lag` suoraan.", call. = FALSE)
+  }
+
+  if (!is.null(time)) {
+    if (length(time) != length(x)) {
+      stop("`time` ja `x` ovat eri pituisia: ", length(time), " ja ", length(x),
+           ".", call. = FALSE)
+    }
+    lag <- lag %||% visu_freq(time)
+    # Rivijarjestys ei saa vaikuttaa tulokseen, koska group_by() ei jarjesta.
+    jarjestys <- order(time)
+  } else {
+    jarjestys <- seq_along(x)
+  }
+
   if (!is.numeric(lag) || length(lag) != 1L || is.na(lag) || lag < 1) {
     stop("`lag` pit\u00e4\u00e4 olla v\u00e4hint\u00e4\u00e4n 1.", call. = FALSE)
   }
   lag <- as.integer(lag)
 
-  muutos <- function(v) {
-    # Lyhyt sarja jaa kokonaan NA:ksi sen sijaan etta pituus muuttuisi.
-    prev <- if (length(v) > lag) {
-      c(rep(NA_real_, lag), utils::head(v, -lag))
-    } else {
-      rep(NA_real_, length(v))
-    }
-    if (type == "percent") 100 * (v / prev - 1) else v - prev
+  arvot <- x[jarjestys]
+  # Lyhyt sarja jaa kokonaan NA:ksi sen sijaan etta pituus muuttuisi.
+  edellinen <- if (length(arvot) > lag) {
+    c(rep(NA_real_, lag), utils::head(arvot, -lag))
+  } else {
+    rep(NA_real_, length(arvot))
   }
+  muutos <- if (type == "percent") 100 * (arvot / edellinen - 1) else arvot - edellinen
 
-  if (is.null(by)) muutos(x) else stats::ave(x, by, FUN = muutos)
+  ulos <- rep(NA_real_, length(x))
+  ulos[jarjestys] <- muutos
+  ulos
+}
+
+# Havaintovalin tiheys vuodessa. Tasainen vali takaa samalla, ettei sarjassa
+# ole aukkoja: viive lasketaan havaintoina, joten puuttuva kuukausi siirtaisi
+# vertailukohdan hiljaa vaaraan kohtaan.
+visu_freq <- function(time, mita = "Sarjan") {
+  if (!inherits(time, c("Date", "POSIXct", "POSIXt"))) {
+    stop(mita, " aikasarake pit\u00e4\u00e4 olla Date tai POSIXct, ei ",
+         class(time)[1], ".", call. = FALSE)
+  }
+  if (length(time) < 2L) {
+    stop(mita, " havaintoja on liian v\u00e4h\u00e4n tiheyden p\u00e4\u00e4ttelyyn.",
+         call. = FALSE)
+  }
+  valit <- as.numeric(diff(sort(as.Date(time))))
+  if (all(valit >= 28 & valit <= 31)) return(12L)
+  if (all(valit >= 89 & valit <= 92)) return(4L)
+  if (all(valit >= 365 & valit <= 366)) return(1L)
+  stop(mita, " havaintov\u00e4li ei ole kuukausi, nelj\u00e4nnesvuosi eik\u00e4 ",
+       "vuosi, tai sarjassa on aukko.", call. = FALSE)
 }
 
 #' Erien kasvukontribuutiot
@@ -85,13 +138,13 @@ visu_contributions <- function(data, series, total, time = "time",
   }
   koodit <- unique(as.character(data[[series]]))
   if (!total %in% koodit) {
-    stop("Kokonaiserää '", total, "' ei ole sarakkeessa '", series,
+    stop("Kokonaiser\u00e4\u00e4 '", total, "' ei ole sarakkeessa '", series,
          "'. Tarjolla: ", paste(koodit, collapse = ", "), call. = FALSE)
   }
 
   ajat <- sort(unique(data[[time]]))
   if (length(ajat) <= lag) {
-    stop("Havaintoja on ", length(ajat), ", mikä ei riitä viiveelle ", lag, ".",
+    stop("Havaintoja on ", length(ajat), ", mik\u00e4 ei riit\u00e4 viiveelle ", lag, ".",
          call. = FALSE)
   }
 

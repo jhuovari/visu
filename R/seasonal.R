@@ -184,15 +184,15 @@ visu_seasonal_ts <- function(aika, arvot, tunnus) {
   )
 }
 
+# Kausitasoitus tarvitsee kausivaihtelun, joten vuosisarja ei kelpaa vaikka
+# tiheyden paattely sen tunnistaakin.
 visu_seasonal_freq <- function(aika, tunnus) {
-  if (length(aika) < 2L) {
-    stop("Sarjassa ", tunnus, " on liian v\u00e4h\u00e4n havaintoja.", call. = FALSE)
+  tiheys <- visu_freq(aika, paste0("Sarjan ", tunnus))
+  if (tiheys == 1L) {
+    stop("Sarja ", tunnus, " on vuosisarja, jossa ei ole kausivaihtelua.",
+         call. = FALSE)
   }
-  valit <- as.numeric(diff(aika))
-  if (all(valit >= 28 & valit <= 31)) return(12L)
-  if (all(valit >= 89 & valit <= 92)) return(4L)
-  stop("Sarjan ", tunnus, " havaintov\u00e4li ei ole kuukausi eik\u00e4 ",
-       "nelj\u00e4nnesvuosi, tai sarjassa on aukko.", call. = FALSE)
+  tiheys
 }
 
 # Mallitiedosto on sivuston juuressa _visu_state.jsonin rinnalla. Koodilohkot
