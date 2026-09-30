@@ -11,6 +11,7 @@ visu_plot(
   colour = NULL,
   linewidth = NULL,
   type = c("line", "col", "area"),
+  stack = FALSE,
   lang = "fi",
   start = NULL,
   zeroline = NULL,
@@ -41,6 +42,11 @@ alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
 Vain piirtotyypille \code{"line"}.}
 
 \item{type}{Piirtotyyppi: \code{"line"} (oletus), \code{"col"} tai \code{"area"}.}
+
+\item{stack}{Pinoaako pylväät päällekkäin vierekkäisten sijaan. Käytä kun
+erien on tarkoitus summautua kokonaisuuteen, kuten
+\code{\link[=visu_contributions]{visu_contributions()}}:n tuloksessa. Vaikuttaa vain tyyppiin \code{"col"};
+\code{"area"} on aina pinottu.}
 
 \item{lang}{Akselien lukumuotoilun kieli. Suomessa ja ruotsissa desimaalit
 erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan

@@ -18,6 +18,10 @@
 #'   alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
 #'   Vain piirtotyypille `"line"`.
 #' @param type Piirtotyyppi: `"line"` (oletus), `"col"` tai `"area"`.
+#' @param stack Pinoaako pylväät päällekkäin vierekkäisten sijaan. Käytä kun
+#'   erien on tarkoitus summautua kokonaisuuteen, kuten
+#'   [visu_contributions()]:n tuloksessa. Vaikuttaa vain tyyppiin `"col"`;
+#'   `"area"` on aina pinottu.
 #' @param lang Akselien lukumuotoilun kieli. Suomessa ja ruotsissa desimaalit
 #'   erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan
 #'   funktion kielikoodi, jolloin ladattavat käännökset saavat oman
@@ -46,6 +50,7 @@ visu_plot <- function(data,
                       colour = NULL,
                       linewidth = NULL,
                       type = c("line", "col", "area"),
+                      stack = FALSE,
                       lang = "fi",
                       start = NULL,
                       zeroline = NULL,
@@ -89,8 +94,10 @@ visu_plot <- function(data,
       colour = vari,
       linewidth = if (is.null(linewidth)) 0.8 else NULL
     ))),
+    # Pinotut pylvaat summautuvat kokonaisuuteen, mika on oikein esimerkiksi
+    # kasvukontribuutioille; muuten erat on helpompi lukea vierekkain.
     col  = do.call(ggplot2::geom_col, visu_compact(list(
-      fill = vari, position = "dodge"
+      fill = vari, position = if (stack) "stack" else "dodge"
     ))),
     area = do.call(ggplot2::geom_area, visu_compact(list(
       fill = vari, position = "stack"

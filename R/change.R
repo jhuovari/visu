@@ -42,3 +42,89 @@ visu_change <- function(x, lag = 12, type = c("percent", "diff"), by = NULL) {
 
   if (is.null(by)) muutos(x) else stats::ave(x, by, FUN = muutos)
 }
+
+#' Erien kasvukontribuutiot
+#'
+#' Purkaa kokonaiserän muutoksen osiensa kontribuutioihin. Kunkin erän
+#' kontribuutio on sen muutos suhteessa kokonaiserän viivästettyyn tasoon,
+#' joten kontribuutiot summautuvat kokonaiserän muutosprosenttiin.
+#'
+#' Menoerille annetaan `negate`, koska niiden kasvu pienentää kokonaiserää:
+#' esimerkiksi maksettujen verojen kasvu vähentää käytettävissä olevaa tuloa.
+#'
+#' Erittely ei ole täydellinen, jos kaikkia eriä ei anneta. `residual` nimeää
+#' jäännöserän, joka kattaa loput ja varmistaa että summa täsmää.
+#'
+#' @param data Pitkä data frame, jossa on aika-, sarja- ja arvosarake.
+#' @param series Sarjan koodit sisältävän sarakkeen nimi.
+#' @param total Kokonaiserän koodi sarakkeessa `series`.
+#' @param time Aikasarakkeen nimi. Oletuksena `"time"`.
+#' @param values Arvosarakkeen nimi. Oletuksena `"values"`.
+#' @param lag Havaintojen määrä vuodessa: 4 neljännesvuosi- ja 12
+#'   kuukausidatalle.
+#' @param negate Koodit, joiden kasvu pienentää kokonaiserää.
+#' @param residual Jäännöserän nimi, tai `NULL` jos jäännöstä ei haluta.
+#' @return Data frame sarakkeilla `time`, `series` ja `values`, jossa arvot
+#'   ovat prosenttiyksikköjä kokonaiserän muutoksesta.
+#' @examples
+#' d <- data.frame(
+#'   time = rep(1:8, each = 2),
+#'   era = rep(c("yht", "osa"), 8),
+#'   values = c(rbind(100 + (1:8), 60 + (1:8)))
+#' )
+#' visu_contributions(d, series = "era", total = "yht", lag = 4)
+#' @export
+visu_contributions <- function(data, series, total, time = "time",
+                               values = "values", lag = 4,
+                               negate = character(), residual = NULL) {
+  for (sarake in c(time, series, values)) {
+    if (!sarake %in% names(data)) {
+      stop("Saraketta '", sarake, "' ei ole datassa. Tarjolla: ",
+           paste(names(data), collapse = ", "), call. = FALSE)
+    }
+  }
+  koodit <- unique(as.character(data[[series]]))
+  if (!total %in% koodit) {
+    stop("Kokonaiserää '", total, "' ei ole sarakkeessa '", series,
+         "'. Tarjolla: ", paste(koodit, collapse = ", "), call. = FALSE)
+  }
+
+  ajat <- sort(unique(data[[time]]))
+  if (length(ajat) <= lag) {
+    stop("Havaintoja on ", length(ajat), ", mikä ei riitä viiveelle ", lag, ".",
+         call. = FALSE)
+  }
+
+  m <- matrix(NA_real_, nrow = length(ajat), ncol = length(koodit),
+              dimnames = list(NULL, koodit))
+  m[cbind(match(data[[time]], ajat), match(as.character(data[[series]]), koodit))] <-
+    as.numeric(data[[values]])
+
+  viivastetty <- function(x) c(rep(NA_real_, lag), utils::head(x, -lag))
+  pohja <- viivastetty(m[, total])
+
+  osat <- setdiff(koodit, total)
+  kontribuutiot <- vapply(osat, function(k) {
+    merkki <- if (k %in% negate) -1 else 1
+    merkki * (m[, k] - viivastetty(m[, k])) / pohja * 100
+  }, numeric(length(ajat)))
+  kontribuutiot <- matrix(kontribuutiot, nrow = length(ajat),
+                          dimnames = list(NULL, osat))
+
+  if (!is.null(residual)) {
+    kokonaismuutos <- (m[, total] - pohja) / pohja * 100
+    jaannos <- kokonaismuutos - rowSums(kontribuutiot)
+    kontribuutiot <- cbind(kontribuutiot, jaannos)
+    colnames(kontribuutiot)[ncol(kontribuutiot)] <- residual
+    osat <- c(osat, residual)
+  }
+
+  ulos <- data.frame(
+    time = rep(ajat, times = length(osat)),
+    series = rep(osat, each = length(ajat)),
+    values = as.vector(kontribuutiot),
+    stringsAsFactors = FALSE
+  )
+  names(ulos) <- c(time, series, values)
+  ulos[!is.na(ulos[[values]]), , drop = FALSE]
+}
