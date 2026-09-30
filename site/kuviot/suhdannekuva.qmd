@@ -20,6 +20,12 @@ kotitaloudet odottavat talouden kehittyvän.
 Alkuperäinen, kausitasoitettu ja trendi ovat samassa kuviossa samalla värillä
 eri paksuisin viivoin: kyse on samasta ilmiöstä eri tavalla siloitettuna.
 
+Toimialoittain tilasto julkaisee vain alkuperäisen ja työpäiväkorjatun sarjan,
+joten toimialakuvion trendi on kausitasoitettu sivustolla itse samalla
+X-13ARIMA-SEATS-menetelmällä kuin tilastossa. Kokonaistuotannossa, josta
+molemmat ovat olemassa, oma trendi poikkeaa julkaistusta keskimäärin 0,4
+indeksipistettä eli alle puoli prosenttia tasosta.
+
 ## Tuotannon suhdannekuvaaja
 
 ::: {.panel-tabset}
@@ -154,31 +160,41 @@ visu_downloads(kuvio_muutos, "tuotanto-muutos")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 toimialat <- c("A", "BTF", "GTT")
 
+# Tilasto julkaisee toimialoittain vain alkuperaisen ja tyopaivakorjatun
+# sarjan, ei kausitasoitettua eika trendia, joten trendi lasketaan itse
+# alkuperaisesta sarjasta. X-13 valitsee samalla tyopaiva- ja
+# paasiaiskorjauksen, eli kalenterivaihtelu tulee huomioiduksi.
 tuotanto_toimiala <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/",
   query = list(
     "timeperiod_m" = "*",
     "toimiala_79_20180101" = toimialat,
-    "contentscode" = "ind_trendi_2015"
+    "contentscode" = "ind_tasm_2015"
   )
-)
+) |>
+  filter(!is.na(values)) |>
+  visu_seasonal("ktkk-132f-toimiala", by = "toimiala_79_20180101")
 
 tekstit_toimiala <- list(
   fi = list(
-    otsikko = "Tuotannon suhdannekuvaaja toimialoittain, trendi, 2015 = 100",
+    otsikko = "Tuotannon suhdannekuvaaja toimialoittain, 2015 = 100",
+    selite = "Trendi, oma kausitasoitus",
     lahde = "Lähde: Tilastokeskus, tuotannon suhdannekuvaaja",
     sarjat = c(A = "Alkutuotanto", BTF = "Jalostus", GTT = "Palvelut")
   ),
   sv = list(
-    otsikko = "Produktionens konjunkturindikator efter näringsgren, trend, 2015 = 100",
+    otsikko = "Produktionens konjunkturindikator efter näringsgren, 2015 = 100",
+    selite = "Trend, egen säsongrensning",
     lahde = "Källa: Statistikcentralen, produktionens konjunkturindikator",
     sarjat = c(A = "Primärproduktion", BTF = "Förädling", GTT = "Tjänster")
   ),
   en = list(
-    otsikko = "Monthly indicator of output by industry, trend, 2015 = 100",
+    otsikko = "Monthly indicator of output by industry, 2015 = 100",
+    selite = "Trend, own seasonal adjustment",
     lahde = "Source: Statistics Finland, monthly indicator of total output",
     sarjat = c(A = "Primary production", BTF = "Secondary production", GTT = "Services")
   )
@@ -186,15 +202,17 @@ tekstit_toimiala <- list(
 
 kuvio_toimiala <- function(kieli) {
   t <- tekstit_toimiala[[kieli]]
-  d <- tuotanto_toimiala
   # Eri toimialat ovat eri joukkoja, joten ne erotetaan varilla.
-  d$toimiala <- factor(d$toimiala_79_20180101, levels = names(t$sarjat),
-                       labels = t$sarjat)
-  visu_plot(d, colour = "toimiala", title = t$otsikko, caption = t$lahde, lang = kieli)
+  d <- tuotanto_toimiala |>
+    mutate(toimiala = factor(toimiala_79_20180101, levels = names(t$sarjat),
+                             labels = t$sarjat))
+  visu_plot(d, y = "trendi", colour = "toimiala", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_toimiala("fi") |>
-  visu_interactive(caption = tekstit_toimiala$fi$lahde)
+  visu_interactive(subtitle = tekstit_toimiala$fi$selite,
+                   caption = tekstit_toimiala$fi$lahde)
 ```
 
 ```{r}

@@ -53,7 +53,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px": "2026-09-17T13:47:52"
     },
     "code_hash": "12b0d6076660010eb9fd432b85996c17015424196c5fe83a8c7824ae24800c65",
-    "built_at": "2026-09-30T12:47:34Z"
+    "built_at": "2026-09-30T13:10:38Z"
   },
   "rahoitusmarkkinat": {
     "table_url": ["https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A", "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU", "https://www.suomenpankki.fi/api/interestrates/euribor", "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT", "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"],
@@ -68,7 +68,7 @@
       "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-23T17:17:29Z"
     },
     "code_hash": "c6cb4455a490bba4c87a97446093e27fcca333713b9c5eb1793fbedca5a4e9e4",
-    "built_at": "2026-09-30T12:47:34Z"
+    "built_at": "2026-09-30T13:10:38Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
@@ -77,8 +77,8 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px": "2026-09-24T17:05:14",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px": "2026-09-29T09:59:22"
     },
-    "code_hash": "8e6c0b847383ddc127a7dec05c77e8d86a5d853ddaf74d350f480f5c41325042",
-    "built_at": "2026-09-30T12:47:34Z"
+    "code_hash": "9e58bb2c7b313e414f6e6e48dc605d2067a283598c5ba1b354c15f647b005247",
+    "built_at": "2026-09-30T13:10:38Z"
   },
   "tyomarkkinat": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"],
