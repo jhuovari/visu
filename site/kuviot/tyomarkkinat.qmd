@@ -41,6 +41,7 @@ Kuvion selitteessä lukee, milloin kausitasoitus on omaa laskentaa.
 
 ```{r}
 library(visu)
+library(dplyr)
 
 tyottomyys <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
@@ -90,6 +91,7 @@ visu_downloads(kuvio, "tyottomyysaste-taso")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 tyottomyys_muutos <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
@@ -100,12 +102,8 @@ tyottomyys_muutos <- visu_get_data(
 )
 
 # Aste on jo prosentti, joten muutos on prosenttiyksikkoja eli erotus.
-tyottomyys_muutos <- tyottomyys_muutos[order(tyottomyys_muutos$time), ]
-tyottomyys_muutos$muutos <- visu_change(
-  tyottomyys_muutos$values,
-  lag = 12,
-  type = "diff"
-)
+tyottomyys_muutos <- tyottomyys_muutos |>
+  mutate(muutos = visu_change(values, time, type = "diff"))
 
 tekstit_muutos <- list(
   fi = list(
@@ -150,6 +148,7 @@ visu_metadata(tyottomyys, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/1
 
 ```{r}
 library(visu)
+library(dplyr)
 
 tyollisyysaste <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
@@ -206,6 +205,7 @@ visu_metadata(tyollisyysaste, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ty
 
 ```{r}
 library(visu)
+library(dplyr)
 
 tyolliset <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
@@ -255,6 +255,7 @@ visu_downloads(kuvio_tyolliset, "tyolliset-taso")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 maarat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
@@ -267,9 +268,10 @@ maarat <- visu_get_data(
 # Muutos henkina eika prosentteina, koska tyottomien kanta on kymmenesosa
 # tyollisten kannasta: prosenttimuutokset eivat olisi samassa kuviossa
 # vertailukelpoisia.
-maarat <- maarat[order(maarat$contentscode, maarat$time), ]
-maarat$muutos <- visu_change(maarat$values, lag = 12, type = "diff",
-                             by = maarat$contentscode)
+maarat <- maarat |>
+  group_by(contentscode) |>
+  mutate(muutos = visu_change(values, time, type = "diff")) |>
+  ungroup()
 
 tekstit_maarat <- list(
   fi = list(
@@ -319,6 +321,7 @@ visu_metadata(maarat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.
 
 ```{r}
 library(visu)
+library(dplyr)
 
 tunnusluvut <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/",
@@ -341,36 +344,37 @@ vaesto_taulu <- visu_get_data(
   )
 )
 
-# Leveaksi, jotta tyolliset ja tyottomat osuvat varmasti samalle kuukaudelle.
-kausi <- stats::reshape(
-  as.data.frame(tunnusluvut[c("time", "contentscode", "values")]),
-  idvar = "time", timevar = "contentscode", direction = "wide"
-)
-names(kausi) <- sub("^values\\.", "", names(kausi))
-
-vaesto <- vaesto_taulu[vaesto_taulu$contentscode == "tyti-Vaesto" &
-                         vaesto_taulu$ikaryhma_19_20190101 == "15-64", ]
-
 # Tyovoima on maaritelmaltaan tyolliset ja tyottomat yhteensa, joten sen
 # kausitasoitettu sarja on osiensa summa. Vaesto ei kaipaa kausitasoitusta:
 # se on kannan suure, joka muuttuu muutamia tuhansia kuukaudessa.
-osat <- list(
-  vaesto = data.frame(time = vaesto$time, values = vaesto$values),
-  tyovoima = data.frame(time = kausi$time,
-                        values = kausi$Tyolliset_kausi + kausi$Tyottomat_kausi),
-  tyolliset = data.frame(time = kausi$time, values = kausi$Tyolliset_kausi),
-  tyottomat = data.frame(time = kausi$time, values = kausi$Tyottomat_kausi)
-)
+vaesto <- vaesto_taulu |>
+  filter(contentscode == "tyti-Vaesto", ikaryhma_19_20190101 == "15-64") |>
+  transmute(time, sarja = "vaesto", values)
 
-# Muutos yhteisesta lahtokohdasta, jotta eri kokoiset kannat ovat samassa
-# kuviossa vertailukelpoisia: tyollisia on kymmenkertaisesti tyottomiin nahden.
-perusta <- as.Date("2019-01-01")
-tarjonta <- do.call(rbind, lapply(names(osat), function(nimi) {
-  d <- osat[[nimi]]
-  d <- d[order(d$time), ]
-  d <- d[d$time >= perusta, ]
-  data.frame(time = d$time, sarja = nimi, values = d$values - d$values[1])
-}))
+sarja <- function(koodi) {
+  tunnusluvut |> filter(contentscode == koodi) |> select(time, values)
+}
+
+# Liitos varmistaa, etta tyolliset ja tyottomat ovat samalta kuukaudelta:
+# puuttuva havainto jattaa kuukauden pois eika paady vaaraan summaan.
+kausi <- inner_join(sarja("Tyolliset_kausi"), sarja("Tyottomat_kausi"),
+                    by = "time", suffix = c("_tyolliset", "_tyottomat"))
+
+tarjonta <- bind_rows(
+  vaesto,
+  transmute(kausi, time, sarja = "tyovoima",
+            values = values_tyolliset + values_tyottomat),
+  transmute(kausi, time, sarja = "tyolliset", values = values_tyolliset),
+  transmute(kausi, time, sarja = "tyottomat", values = values_tyottomat)
+) |>
+  # Muutos yhteisesta lahtokohdasta, jotta eri kokoiset kannat ovat samassa
+  # kuviossa vertailukelpoisia: tyollisia on kymmenkertaisesti tyottomiin
+  # nahden.
+  filter(time >= as.Date("2019-01-01")) |>
+  group_by(sarja) |>
+  arrange(time, .by_group = TRUE) |>
+  mutate(values = values - first(values)) |>
+  ungroup()
 
 tekstit_tarjonta <- list(
   fi = list(
@@ -430,14 +434,15 @@ visu_metadata(
 
 ```{r}
 library(visu)
+library(dplyr)
 
 # Vaestotaulussa tyolliset on jokaisesta ikarajauksesta, mutta vain
 # alkuperaisena sarjana. Kausitasoitus tehdaan siksi tassa, ja kaikki kolme
 # rajausta samalla menetelmalla — myos 15-74, josta tilasto julkaisee myos
 # oman tasoituksensa. Muuten kuvion viivat eivat olisi keskenaan vertailtavia.
-tyolliset_ika <- vaesto_taulu[vaesto_taulu$contentscode == "tyti-Tyolliset", ]
-tyolliset_ika <- visu_seasonal(tyolliset_ika, "tyti-135y-tyolliset",
-                               by = "ikaryhma_19_20190101")
+tyolliset_ika <- vaesto_taulu |>
+  filter(contentscode == "tyti-Tyolliset") |>
+  visu_seasonal("tyti-135y-tyolliset", by = "ikaryhma_19_20190101")
 
 tekstit_ika <- list(
   fi = list(
@@ -530,15 +535,16 @@ visu_metadata(vaesto_taulu,
 
 ```{r}
 library(visu)
+library(dplyr)
 
 # Tyovoimaosuudesta eli osallistumisasteesta tilasto ei julkaise
 # kausitasoitettua eika trendisarjaa, ja alkuperaisessa on kolmen
 # prosenttiyksikon kausiaalto. Kumpikin aste tasoitetaan siksi tassa samalla
 # menetelmalla, jotta niiden ero on luettavissa.
-asteet <- vaesto_taulu[vaesto_taulu$ikaryhma_19_20190101 == "15-64" &
-                         vaesto_taulu$contentscode %in%
-                           c("tyti-Tyollisyysaste", "Tyovoimaosuus"), ]
-asteet <- visu_seasonal(asteet, "tyti-135y-asteet", by = "contentscode")
+asteet <- vaesto_taulu |>
+  filter(ikaryhma_19_20190101 == "15-64",
+         contentscode %in% c("tyti-Tyollisyysaste", "Tyovoimaosuus")) |>
+  visu_seasonal("tyti-135y-asteet", by = "contentscode")
 
 tekstit_asteet <- list(
   fi = list(
@@ -631,6 +637,7 @@ visu_metadata(vaesto_taulu,
 
 ```{r}
 library(visu)
+library(dplyr)
 
 palkansaajat <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",
@@ -675,6 +682,7 @@ visu_downloads(kuvio_palkansaajat, "palkansaajat-yhteensa")
 
 ```{r}
 library(visu)
+library(dplyr)
 
 palkansaajat_sp <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/",

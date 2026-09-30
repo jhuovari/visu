@@ -54,7 +54,11 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           # pxwebtools ja ggcustom asentuvat DESCRIPTIONin Remotes-kentästä.
-          extra-packages: local::.
+          # dplyr on kuviosivujen eikä paketin riippuvuus, joten se nimetään
+          # tässä erikseen — DESCRIPTIONissa se on vain Suggests-kentässä.
+          extra-packages: |
+            local::.
+            any::dplyr
 
       - uses: quarto-dev/quarto-actions/setup@v2
 

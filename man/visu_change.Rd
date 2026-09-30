@@ -4,33 +4,48 @@
 \alias{visu_change}
 \title{Laske sarjan muutos vuodentakaisesta}
 \usage{
-visu_change(x, lag = 12, type = c("percent", "diff"), by = NULL)
+visu_change(x, time = NULL, lag = NULL, type = c("percent", "diff"))
 }
 \arguments{
-\item{x}{Numeerinen vektori aikajärjestyksessä.}
+\item{x}{Numeerinen vektori.}
 
-\item{lag}{Havaintojen määrä vuodessa: 12 kuukausi-, 4 neljännesvuosi- ja
-1 vuosisarjalle.}
+\item{time}{Aikasarake, josta havaintotiheys päätellään: 12 kuukausi-, 4
+neljännesvuosi- ja 1 vuosisarjalle. Sarjassa ei saa olla aukkoja, koska
+viive lasketaan havaintoina eikä päivämäärinä. Jätä pois vain, jos
+aikasaraketta ei ole — silloin anna \code{lag} ja pidä rivit aikajärjestyksessä.}
+
+\item{lag}{Havaintojen määrä vuodessa. Oletuksena päätellään \code{time}:sta.}
 
 \item{type}{\code{"percent"} (oletus) antaa prosenttimuutoksen ja \code{"diff"}
 erotuksen. Käytä erotusta, kun sarja on jo prosentti, kuten työttömyysaste
 — silloin muutos on prosenttiyksikköjä.}
-
-\item{by}{Valinnainen ryhmittelevä vektori, kun \code{x} sisältää useita sarjoja
-peräkkäin. Data pitää olla järjestetty ryhmittäin ja ajan mukaan.}
 }
 \value{
-Numeerinen vektori, jonka \code{lag} ensimmäistä havaintoa ryhmää kohti
-ovat \code{NA}.
+Numeerinen vektori samassa järjestyksessä kuin \code{x}. Vuoden
+ensimmäiset havainnot ovat \code{NA}, koska niille ei ole vertailukohtaa.
 }
 \description{
-StatFin julkaisee vuosimuutoksen vain osalle sarjoista, joten se on usein
-laskettava itse. Muutos lasketaan \code{lag} havainnon takaiseen, eli
-kuukausisarjalla 12 ja neljännesvuosisarjalla 4 havaintoa taaksepäin.
-Kuukausi- ja neljännesvuosiaineiston vuosimuutos on samalla
-kausivaihtelusta riippumaton.
+StatFin julkaisee vuosimuutoksen vain osalle sarjoista — trendisarjoista ei
+lainkaan — joten se on usein laskettava itse indeksi- tai tasosarjasta.
+}
+\details{
+Tarkoitettu dplyr-putkeen, jossa ryhmittely erottaa sarjat toisistaan:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{data |>
+  dplyr::group_by(contentscode) |>
+  dplyr::mutate(muutos = visu_change(values, time)) |>
+  dplyr::ungroup()
+}\if{html}{\out{</div>}}
+
+Kun \code{time} annetaan, muutos lasketaan ajan mukaan järjestettynä ja
+palautetaan alkuperäisessä rivijärjestyksessä. Se on putkessa olennaista:
+\code{group_by()} ei järjestä rivejä, ja väärässä järjestyksessä laskettu muutos
+olisi hiljaa väärin. Samalla havaintotiheys päätellään aikasarakkeesta,
+joten sitä ei tarvitse muistaa oikein sarjaa kohti.
 }
 \examples{
+kk <- seq(as.Date("2024-01-01"), by = "month", length.out = 24)
+visu_change(seq(100, 123), time = kk)
 visu_change(c(100, 102, 104, 103), lag = 1)
 visu_change(c(5.0, 5.4, 6.1), lag = 1, type = "diff")
 }
