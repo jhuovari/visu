@@ -90,9 +90,10 @@ tuotanto_muutos <- visu_get_data(
   query = list(
     "timeperiod_m" = "*",
     "toimiala_79_20180101" = "SSS",
-    "contentscode" = "vol_muutos_edvv_tyop"
+    "contentscode" = c("ind_tasm_2015", "ind_tyop_2015", "ind_trendi_2015")
   )
-)
+) 
+  
 
 tekstit_muutos <- list(
   fi = list(
@@ -114,7 +115,10 @@ tekstit_muutos <- list(
 
 kuvio_muutos <- function(kieli) {
   t <- tekstit_muutos[[kieli]]
-  visu_plot(tuotanto_muutos, type = "col", title = t$otsikko,
+  d <- tuotanto_muutos
+  # Karkeimmasta siloitetuimpaan, jolloin viiva paksunee jarjestyksessa.
+  d$sarja <- factor(d$contentscode, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, linewidth = "sarja", type = "line", title = t$otsikko,
             subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
 
