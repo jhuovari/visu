@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jhuovari.github.io/visu/kuviot/ulkomaantalous.html</loc>
-    <lastmod>2026-09-11T06:03:08.331Z</lastmod>
+    <lastmod>2026-10-01T18:00:04.773Z</lastmod>
   </url>
   <url>
     <loc>https://jhuovari.github.io/visu/kuviot/suhdannekuva.html</loc>
-    <lastmod>2026-09-30T13:08:18.515Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/neljannesvuositilinpito.html</loc>
-    <lastmod>2026-09-11T06:03:08.330Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/julkinen-talous.html</loc>
-    <lastmod>2026-09-30T12:41:48.211Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/index.html</loc>
-    <lastmod>2026-10-01T05:04:51.820Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/inflaatio.html</loc>
-    <lastmod>2026-09-30T12:41:48.208Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/kotitaloudet.html</loc>
-    <lastmod>2026-09-11T06:03:08.330Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/rahoitusmarkkinat.html</loc>
-    <lastmod>2026-10-01T05:04:51.861Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jhuovari.github.io/visu/kuviot/tyomarkkinat.html</loc>
-    <lastmod>2026-09-30T12:41:48.214Z</lastmod>
+    <lastmod>2026-10-01T18:00:04.773Z</lastmod>
   </url>
   <url>
     <loc>https://jhuovari.github.io/visu/kuviot/ostovoima.html</loc>
-    <lastmod>2026-10-01T05:04:51.861Z</lastmod>
+    <lastmod>2026-10-01T18:00:04.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/kotitaloudet.html</loc>
+    <lastmod>2026-10-01T18:00:04.735Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/inflaatio.html</loc>
+    <lastmod>2026-10-01T18:00:04.735Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/index.html</loc>
+    <lastmod>2026-10-01T18:00:04.735Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/julkinen-talous.html</loc>
+    <lastmod>2026-10-01T18:00:04.735Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/neljannesvuositilinpito.html</loc>
+    <lastmod>2026-10-01T18:00:04.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/rahoitusmarkkinat.html</loc>
+    <lastmod>2026-10-01T18:00:04.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jhuovari.github.io/visu/kuviot/tyomarkkinat.html</loc>
+    <lastmod>2026-10-01T18:00:04.773Z</lastmod>
   </url>
 </urlset>
