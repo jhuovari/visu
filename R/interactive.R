@@ -103,6 +103,14 @@ visu_time_axis <- function(w, p) {
 
   w$x$data <- lapply(w$x$data, function(tr) {
     if (!is.null(tr$x) && is.numeric(tr$x)) tr$x <- tr$x * kerroin
+    # Pylvaan leveys ja siirtyma ovat x-akselin datayksikoissa, joten ne on
+    # skaalattava x:n mukana. Ilman tata neljannesvuosipylvaan leveydeksi jaisi
+    # 81 millisekuntia 81 paivan sijaan, eli pylvaat olisivat nakymattomia.
+    for (kentta in c("width", "offset")) {
+      if (!is.null(tr[[kentta]]) && is.numeric(tr[[kentta]])) {
+        tr[[kentta]] <- tr[[kentta]] * kerroin
+      }
+    }
     tr
   })
   if (!is.null(w$x$layout$xaxis$range)) {

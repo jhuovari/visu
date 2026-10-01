@@ -17,6 +17,31 @@ test_that("aika-akselin kerroin tunnistaa paivat ja sekunnit", {
   expect_null(visu:::visu_time_scale(luokat))
 })
 
+test_that("pylvaan leveys skaalautuu aika-akselin mukana", {
+  # Leveys on x-akselin datayksikoissa. Jos sita ei skaalata x:n mukana,
+  # nelj.vuosipylvaan leveydeksi jaa 81 millisekuntia 81 paivan sijaan ja
+  # pylvaat ovat kuviossa nakymattomia.
+  d <- data.frame(
+    time = seq(as.Date("2020-01-01"), by = "3 months", length.out = 12),
+    values = seq_len(12)
+  )
+
+  b <- plotly::plotly_build(visu_interactive(visu_plot(d, type = "col")))
+
+  paivina <- b$x$data[[1]]$width[1] / 86400000
+  expect_gt(paivina, 60)
+  expect_lt(paivina, 95)
+})
+
+test_that("luokka-akselilla leveys jatetaan rauhaan", {
+  # Poikkileikkauskuviossa ei ole aika-akselia, joten leveys on jo oikein.
+  d <- data.frame(ryhma = c("a", "b", "c"), values = c(1, 2, 3))
+
+  b <- plotly::plotly_build(visu_interactive(visu_plot(d, type = "col")))
+
+  expect_lt(b$x$data[[1]]$width[1], 2)
+})
+
 test_that("aika-akselista tulee plotlyn date-akseli ja arvot skaalataan", {
   d <- data.frame(
     time = seq(as.Date("1990-01-01"), as.Date("2026-01-01"), by = "year"),
