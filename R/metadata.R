@@ -113,7 +113,27 @@ visu_table_link <- function(meta, url) {
   # PxWebin otsikko kertaa lopussa kyselyn muuttujat, mika ei kuulu erittelyyn.
   otsikko <- sub(" muuttujina .*$", "", otsikko)
   teksti <- if (is.null(tunnus)) otsikko else paste0(tunnus, " ", otsikko)
-  paste0("[", teksti, "](", sub("/+$", "", url), ")")
+  paste0("[", teksti, "](", sub("/+$", "", visu_browse_url(url)), ")")
+}
+
+# API-osoite PxWebin selausnakymaksi, jotta linkista paasee katsomaan taulua
+# eika JSON-rajapintaa. Polku /api/v1/{kieli}/{tietokanta}/{kansiot}/{taulu}
+# vastaa selauksessa muotoa
+# /pxweb/{kieli}/{tietokanta}/{tietokanta}__{kansiot}/{taulu}, jossa
+# kansiotasot erotetaan kahdella alaviivalla. Muut kuin PxWeb-osoitteet,
+# kuten EKP:n ja FREDin, palautetaan sellaisenaan.
+visu_browse_url <- function(url) {
+  osat <- regmatches(url, regexec(
+    "^(https?://[^/]+)/PxWeb/api/v[0-9]+/([^/]+)/([^/]+)/(.+\\.px)/?$", url
+  ))[[1]]
+  if (length(osat) != 5L) return(url)
+
+  polku <- strsplit(osat[5], "/", fixed = TRUE)[[1]]
+  paste0(
+    osat[2], "/PxWeb/pxweb/", osat[3], "/", osat[4], "/",
+    paste(c(osat[4], utils::head(polku, -1L)), collapse = "__"), "/",
+    utils::tail(polku, 1L), "/"
+  )
 }
 
 #' Muotoile aikaleima Suomen aikaan
