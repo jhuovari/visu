@@ -186,7 +186,7 @@ visu_metadata(
 Käytettävissä olevan tulon kasvu puretaan tässä eriin: kuinka paljon
 palkkasumma, saadut etuudet, maksetut verot, sosiaaliturvamaksut ja korkomenot
 kukin kasvattivat tai vähensivät tuloa. Pylväät summautuvat tulon
-kokonaismuutokseen.
+kokonaismuutokseen, joka näkyy kuviossa myös viivana.
 
 Erittely kertoo, minkä erien kautta muutos tuli — se ei ole arvio siitä,
 mitä olisi tapahtunut toisenlaisella politiikalla. Verojen ja etuuksien erät
@@ -212,6 +212,7 @@ tekstit_erat <- list(
     selite = "Kontribuutio vuodentakaiseen verrattuna, kausitasoitettu",
     lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
     jaannos = "Muut erät",
+    yhteensa = "Käytettävissä oleva tulo",
     sarjat = c(D1R = "Palkat", D62R = "Saadut etuudet", D5K = "Verot",
                D61K = "Sosiaaliturvamaksut", D4K = "Omaisuusmenot")
   ),
@@ -220,6 +221,7 @@ tekstit_erat <- list(
     selite = "Bidrag jämfört med året innan, säsongrensad",
     lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper",
     jaannos = "Övriga poster",
+    yhteensa = "Disponibel inkomst",
     sarjat = c(D1R = "Löner", D62R = "Erhållna förmåner", D5K = "Skatter",
                D61K = "Socialskyddsavgifter", D4K = "Kapitalutgifter")
   ),
@@ -228,6 +230,7 @@ tekstit_erat <- list(
     selite = "Contribution compared with a year earlier, seasonally adjusted",
     lahde = "Source: Statistics Finland, quarterly sector accounts",
     jaannos = "Other components",
+    yhteensa = "Disposable income",
     sarjat = c(D1R = "Wages", D62R = "Benefits received", D5K = "Taxes",
                D61K = "Social contributions", D4K = "Property expenses")
   )
@@ -245,8 +248,17 @@ kuvio_erat <- function(kieli) {
     residual = t$jaannos
   )
   nimet <- c(t$sarjat, stats::setNames(t$jaannos, t$jaannos))
-  d$era <- factor(d$taloustoimi_1_20180101, levels = names(nimet), labels = nimet)
-  visu_plot(d, colour = "era", type = "col", stack = TRUE, title = t$otsikko,
+  d <- mutate(d, era = factor(taloustoimi_1_20180101,
+                              levels = names(nimet), labels = nimet))
+  # Pylvaat summautuvat kaytettavissa olevan tulon muutokseen. Viivana se on
+  # helpompi lukea kuin pinon ylareunasta, jossa plus- ja miinuserat ovat
+  # vastakkaisilla puolilla nollaa.
+  yhteensa <- tulot |>
+    filter(taloustoimi_1_20180101 == "B6N") |>
+    transmute(time, values = visu_change(values, time)) |>
+    filter(!is.na(values))
+  visu_plot(d, colour = "era", type = "col", stack = TRUE,
+            line = yhteensa, line_label = t$yhteensa, title = t$otsikko,
             subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 

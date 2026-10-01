@@ -55,13 +55,51 @@ test_that("data jaa kuvioon kokonaan, vain koordinaatisto rajataan", {
 })
 
 test_that("y-akseli rajataan nakyvaan dataan", {
-  nakyva <- data.frame(values = c(5, 9))
+  nakyva <- data.frame(time = as.Date(c("2024-01-01", "2024-02-01")), values = c(5, 9))
 
-  expect_equal(visu:::visu_view_ylim(nakyva, "values", "line"), c(5, 9))
-  # Pylvaat lahtevat nollasta, joten nolla kuuluu aina mukaan.
-  expect_equal(visu:::visu_view_ylim(nakyva, "values", "col"), c(0, 9))
-  # Pinotun alueen summaa ei voi paatella riviarvoista.
-  expect_null(visu:::visu_view_ylim(nakyva, "values", "area"))
+  expect_equal(visu:::visu_view_ylim(nakyva, "time", "values", "line"), c(5, 9))
+  # Pylvaat ja alueet lahtevat nollasta, joten nolla kuuluu aina mukaan.
+  expect_equal(visu:::visu_view_ylim(nakyva, "time", "values", "col"), c(0, 9))
+  expect_equal(visu:::visu_view_ylim(nakyva, "time", "values", "area"), c(0, 9))
+})
+
+test_that("pinotun kuvion raja lasketaan pylvaan summasta eika riveista", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 3),
+    values = c(3, 4, -2, 1, 1, -5)
+  )
+
+  # Rivien raja olisi -5...4, mutta pylvaat yltavat 7:aan ja -5:een.
+  expect_equal(visu:::visu_view_ylim(d, "time", "values", "col", stack = TRUE),
+               c(-5, 7))
+  expect_equal(visu:::visu_view_ylim(d, "time", "values", "area", stack = FALSE),
+               c(-5, 7))
+  # Vierekkaiset pylvaat eivat summaudu, joten niille riittaa rivien raja.
+  expect_equal(visu:::visu_view_ylim(d, "time", "values", "col", stack = FALSE),
+               c(-5, 4))
+})
+
+test_that("paallysviiva mahtuu y-akselille", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+  viiva <- data.frame(time = d$time, values = c(1, 9))
+
+  expect_equal(visu:::visu_view_ylim(d, "time", "values", "col", line = viiva),
+               c(0, 9))
+})
+
+test_that("pinottu kuvio ei leikkaa pylvaita nakymassa", {
+  d <- data.frame(
+    time = rep(seq(as.Date("2020-01-01"), by = "quarter", length.out = 8), each = 2),
+    era = rep(c("a", "b"), 8),
+    values = rep(c(3, 4), 8)
+  )
+
+  p <- visu_plot(d, colour = "era", type = "col", stack = TRUE,
+                 start = as.Date("2020-01-01"))
+  rakennettu <- ggplot2::ggplot_build(p)
+
+  expect_equal(max(rakennettu$data[[1]]$ymax), 7)
+  expect_gte(rakennettu$layout$panel_params[[1]]$y.range[2], 7)
 })
 
 test_that("nollaviiva paatellaan nakyvasta datasta, ei koko historiasta", {

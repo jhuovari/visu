@@ -28,6 +28,8 @@ visu_interactive <- function(p,
 
   w <- plotly::ggplotly(p, tooltip = tooltip, ...)
 
+  w <- visu_legend_names(w)
+
   # ggplotly kiinnittaa akselimerkinnat alkunakymaan ja piirtaa nollaviivan
   # sen levyisena janana. Kumpikin loppuu kesken heti kun kuviota zoomataan
   # ulospain, joten ne puretaan plotlyn omiksi.
@@ -62,6 +64,35 @@ visu_interactive <- function(p,
     locale = locale,
     modeBarButtonsToRemove = c("select2d", "lasso2d", "autoScale2d")
   )
+}
+
+# ggplotly nimeaa jaljen kaikkien selitteellisten aestetiikkojen yhdistelmana
+# heti kun niita on useampi kuin yksi. Kun pinottujen pylvaiden paalle tulee
+# kokonaissarja omalla variskaalallaan, pylvaan nimesta "Palkat" tulee
+# "(Palkat,1)", jossa ykkonen on tyhjan toisen aestetiikan tasonumero. Se
+# nakyisi sellaisenaan selitteessa ja vihjelaatikossa.
+visu_legend_names <- function(w) {
+  w$x$data <- lapply(w$x$data, function(tr) {
+    nimi <- visu_plain_name(tr$name)
+    if (!is.null(nimi)) {
+      if (!is.null(tr$legendgroup)) tr$legendgroup <- nimi
+      tr$name <- nimi
+    }
+    tr
+  })
+  w
+}
+
+# Yhdistelmanimen oikea osa, tai NULL jos nimi ei ole yhdistelma tai jos
+# kumpikaan osa ei ole tasonumero. Jalkimmaisessa tapauksessa selitteessa on
+# aidosti kaksi aestetiikkaa eika nimea saa karsia.
+visu_plain_name <- function(nimi) {
+  if (is.null(nimi) || length(nimi) != 1L || is.na(nimi)) return(NULL)
+  osat <- regmatches(nimi, regexec("^\\((.+),([^,]+)\\)$", nimi))[[1]]
+  if (length(osat) != 3L) return(NULL)
+  numero <- grepl("^[0-9]+$", osat[-1L])
+  if (sum(numero) != 1L) return(NULL)
+  osat[-1L][!numero]
 }
 
 # Vasempaan reunaan ankkuroitu kuvion ulkopuolinen tekstiselite.

@@ -115,3 +115,37 @@ test_that("poikkileikkauskuvioon ei liiteta y-akselin zoomiskriptia", {
   expect_null(visu_interactive(luokat)$jsHooks$render)
   expect_length(visu_interactive(aika)$jsHooks$render, 1L)
 })
+
+test_that("yhdistelmanimesta jaa selitteeseen vain oikea nimi", {
+  f <- visu:::visu_plain_name
+
+  expect_equal(f("(Palkat,1)"), "Palkat")
+  expect_equal(f("(1,Palkat)"), "Palkat")
+  # Pilkku nimen sisalla ei saa katketa nimea.
+  expect_equal(f("(Verot, netto,1)"), "Verot, netto")
+})
+
+test_that("tavallinen ja aidosti kaksiosainen nimi jaavat rauhaan", {
+  f <- visu:::visu_plain_name
+
+  expect_null(f("Palkat"))
+  expect_null(f("(a,b)"))
+  expect_null(f("(1,2)"))
+  expect_null(f(NULL))
+})
+
+test_that("paallysviiva ei sotke pylvaiden nimia selitteessa", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 2),
+    era = rep(c("Palkat", "Verot"), 2),
+    values = c(1, 2, 2, 1)
+  )
+  viiva <- data.frame(time = unique(d$time), values = c(3, 3))
+
+  w <- visu_interactive(visu_plot(d, colour = "era", type = "col", stack = TRUE,
+                                  line = viiva, line_label = "Yhteensä"))
+  nimet <- vapply(w$x$data, function(tr) tr$name %||% "", character(1))
+
+  expect_equal(nimet, c("Palkat", "Verot", "Yhteensä"))
+  expect_equal(w$x$data[[1]]$legendgroup, "Palkat")
+})
