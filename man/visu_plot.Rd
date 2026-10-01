@@ -12,6 +12,8 @@ visu_plot(
   linewidth = NULL,
   type = c("line", "col", "area"),
   stack = FALSE,
+  line = NULL,
+  line_label = NULL,
   lang = "fi",
   start = NULL,
   zeroline = NULL,
@@ -47,6 +49,14 @@ Vain piirtotyypille \code{"line"}.}
 erien on tarkoitus summautua kokonaisuuteen, kuten
 \code{\link[=visu_contributions]{visu_contributions()}}:n tuloksessa. Vaikuttaa vain tyyppiin \code{"col"};
 \code{"area"} on aina pinottu.}
+
+\item{line}{Valinnainen data frame, jonka sarja piirretään kuvion päälle
+viivana. Tarkoitettu pinotuille pylväille: erien summa on jokin
+kokonaissarja, jonka kulku on helpompi lukea yhtenä viivana kuin pinon
+reunasta. Sarakkeiden \code{x} ja \code{y} pitää olla samat kuin \code{data}:ssa.}
+
+\item{line_label}{Viivan nimi selitteessä. \code{NULL} (oletus) jättää viivan
+pois selitteestä; anna nimi aina kun kuviossa on muitakin sarjoja.}
 
 \item{lang}{Akselien lukumuotoilun kieli. Suomessa ja ruotsissa desimaalit
 erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan

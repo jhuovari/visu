@@ -146,3 +146,39 @@ test_that("pylvaat pinotaan vain pyydettaessa", {
   expect_s3_class(vierekkain$position, "PositionDodge")
   expect_s3_class(pinottu$position, "PositionStack")
 })
+
+test_that("paallysviiva piirtyy pylvaiden paalle ja saa nimen selitteeseen", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 2),
+    era = rep(c("a", "b"), 2),
+    values = c(1, 2, 2, 1)
+  )
+  viiva <- data.frame(time = unique(d$time), values = c(3, 3))
+
+  p <- visu_plot(d, colour = "era", type = "col", stack = TRUE,
+                 line = viiva, line_label = "Yhteens\u00e4")
+  kerrokset <- vapply(p$layers, function(l) class(l$geom)[1], character(1))
+
+  # Viiva viimeisena, jotta pylvaat eivat peita sita.
+  expect_equal(unname(utils::tail(kerrokset, 1L)), "GeomLine")
+  expect_equal(p$scales$get_scales("colour")$palette(1),
+               stats::setNames("grey15", "Yhteens\u00e4"))
+})
+
+test_that("nimeton paallysviiva jaa selitteesta pois", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+  viiva <- data.frame(time = d$time, values = c(3, 3))
+
+  p <- visu_plot(d, type = "col", line = viiva)
+
+  expect_null(p$scales$get_scales("colour"))
+})
+
+test_that("paallysviiva ei sovi viivakuvioon eika vaaraan dataan", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+  viiva <- data.frame(time = d$time, values = c(3, 3))
+
+  expect_error(visu_plot(d, line = viiva), "line")
+  expect_error(visu_plot(d, type = "col", line = viiva$values), "data frame")
+  expect_error(visu_plot(d, type = "col", line = data.frame(time = d$time)), "values")
+})

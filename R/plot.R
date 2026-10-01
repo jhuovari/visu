@@ -22,6 +22,12 @@
 #'   erien on tarkoitus summautua kokonaisuuteen, kuten
 #'   [visu_contributions()]:n tuloksessa. Vaikuttaa vain tyyppiin `"col"`;
 #'   `"area"` on aina pinottu.
+#' @param line Valinnainen data frame, jonka sarja piirretään kuvion päälle
+#'   viivana. Tarkoitettu pinotuille pylväille: erien summa on jokin
+#'   kokonaissarja, jonka kulku on helpompi lukea yhtenä viivana kuin pinon
+#'   reunasta. Sarakkeiden `x` ja `y` pitää olla samat kuin `data`:ssa.
+#' @param line_label Viivan nimi selitteessä. `NULL` (oletus) jättää viivan
+#'   pois selitteestä; anna nimi aina kun kuviossa on muitakin sarjoja.
 #' @param lang Akselien lukumuotoilun kieli. Suomessa ja ruotsissa desimaalit
 #'   erotetaan pilkulla, englannissa pisteellä. Anna kuvion rakentavan
 #'   funktion kielikoodi, jolloin ladattavat käännökset saavat oman
@@ -51,6 +57,8 @@ visu_plot <- function(data,
                       linewidth = NULL,
                       type = c("line", "col", "area"),
                       stack = FALSE,
+                      line = NULL,
+                      line_label = NULL,
                       lang = "fi",
                       start = NULL,
                       zeroline = NULL,
@@ -79,6 +87,20 @@ visu_plot <- function(data,
       stop("`linewidth` toimii vain piirtotyypill\u00e4 \"line\", ei tyypill\u00e4 \"",
            type, "\".", call. = FALSE)
     }
+  }
+  if (!is.null(line)) {
+    if (!is.data.frame(line)) {
+      stop("`line` pit\u00e4\u00e4 olla data frame, ei ", class(line)[1], ".",
+           call. = FALSE)
+    }
+    # Viivakuviossa variskaala on jo sarjojen kaytossa, eika paallysviiva
+    # erottuisi niista.
+    if (type == "line") {
+      stop("`line` toimii vain piirtotyypeill\u00e4 \"col\" ja \"area\", ",
+           "ei tyypill\u00e4 \"line\".", call. = FALSE)
+    }
+    visu_require_col(line, x, "line")
+    visu_require_col(line, y, "line")
   }
 
   # ggplot2 4.0:ssa geomin oletusvari tulee teemasta (element_geom), eika
@@ -121,14 +143,16 @@ visu_plot <- function(data,
   # kokonaan ja interaktiivisessa kuviossa voi zoomata vanhempaan.
   raja <- visu_view_start(data, x, start)
   nakyva <- visu_visible_rows(data, x, raja)
+  nakyva_viiva <- if (is.null(line)) NULL else visu_visible_rows(line, x, raja)
 
   # Nollaviiva geomin alle, jotta se ei peita dataa.
-  if (visu_needs_zeroline(nakyva, y, zeroline)) {
+  if (visu_needs_zeroline(nakyva, y, zeroline, nakyva_viiva)) {
     p <- p + ggplot2::geom_hline(yintercept = 0, colour = "grey35", linewidth = 0.3)
   }
 
   p <- p +
     geom +
+    visu_line_layer(line, x, y, line_label) +
     ggplot2::scale_y_continuous(labels = visu_axis_labels(lang)) +
     ggplot2::labs(
       title = title, subtitle = subtitle, caption = caption,
@@ -147,7 +171,7 @@ visu_plot <- function(data,
   if (!is.null(raja)) {
     p <- p + ggplot2::coord_cartesian(
       xlim = c(raja, max(data[[x]], na.rm = TRUE)),
-      ylim = visu_view_ylim(nakyva, y, type)
+      ylim = visu_view_ylim(nakyva, x, y, type, stack, nakyva_viiva)
     )
   }
 
@@ -183,27 +207,72 @@ visu_visible_rows <- function(data, x, raja) {
   data[!is.na(arvot) & arvot >= raja, , drop = FALSE]
 }
 
+# Kokonaissarja pylvaiden paalle. Tummana neutraalina varina se erottuu
+# palettiin kuuluvista erista eika sekoitu niihin.
+visu_line_layer <- function(line, x, y, label) {
+  if (is.null(line)) return(NULL)
+  if (is.null(label)) {
+    return(ggplot2::geom_line(
+      data = line,
+      mapping = ggplot2::aes(x = .data[[x]], y = .data[[y]]),
+      inherit.aes = FALSE, colour = "grey15", linewidth = 0.8
+    ))
+  }
+  list(
+    ggplot2::geom_line(
+      data = line,
+      # .env, jotta nimeksi tulee varmasti argumentti eika samanniminen sarake.
+      mapping = ggplot2::aes(x = .data[[x]], y = .data[[y]], colour = .env$label),
+      inherit.aes = FALSE, linewidth = 0.8
+    ),
+    ggplot2::scale_colour_manual(values = stats::setNames("grey15", label))
+  )
+}
+
 # Y-akseli rajataan nakyvaan dataan, koska coord_cartesian ei laske sita
-# uudelleen ja koko historian vaihteluvali litistaisi nakyman. Pylvaat
-# lahtevat nollasta, joten nolla kuuluu aina mukaan. Pinotun alueen summaa ei
-# voi paatella riviarvoista, joten se jatetaan ggplotin laskettavaksi.
-visu_view_ylim <- function(data, y, type) {
-  if (identical(type, "area")) return(NULL)
-  arvot <- suppressWarnings(as.numeric(data[[y]]))
-  arvot <- arvot[is.finite(arvot)]
+# uudelleen ja koko historian vaihteluvali litistaisi nakyman. Pylvaat ja
+# alueet lahtevat nollasta, joten nolla kuuluu aina mukaan. Paallysviiva
+# otetaan mukaan, koska se voi yltaa pinon ulkopuolelle.
+visu_view_ylim <- function(data, x, y, type, stack = FALSE, line = NULL) {
+  arvot <- visu_stack_range(data, x, y, type, stack)
+  if (!is.null(line)) arvot <- c(arvot, visu_finite(line[[y]]))
   if (length(arvot) == 0L) return(NULL)
-  if (identical(type, "col")) arvot <- c(arvot, 0)
+  if (!identical(type, "line")) arvot <- c(arvot, 0)
   range(arvot)
+}
+
+# Pinotussa kuviossa pylvaan korkeus on saman x:n arvojen summa eika yksittainen
+# rivi, joten riviarvoista laskettu raja jattaisi pylvaiden paat kuvion
+# ulkopuolelle. Positiiviset ja negatiiviset pinotaan nollan eri puolille, joten
+# ne summataan erikseen.
+visu_stack_range <- function(data, x, y, type, stack) {
+  arvot <- suppressWarnings(as.numeric(data[[y]]))
+  kelpaa <- is.finite(arvot)
+  arvot <- arvot[kelpaa]
+  if (!visu_is_stacked(type, stack) || length(arvot) == 0L) return(arvot)
+  ryhma <- as.character(data[[x]])[kelpaa]
+  visu_finite(c(tapply(pmax(arvot, 0), ryhma, sum),
+                tapply(pmin(arvot, 0), ryhma, sum)))
+}
+
+# Alue on aina pinottu, pylvaat vain kun niin pyydetaan.
+visu_is_stacked <- function(type, stack) {
+  identical(type, "area") || (identical(type, "col") && isTRUE(stack))
+}
+
+visu_finite <- function(x) {
+  arvot <- suppressWarnings(as.numeric(x))
+  arvot[is.finite(arvot)]
 }
 
 # Nollaviiva piirretaan kun arvot ylittavat nollan kumpaankin suuntaan. Jos
 # sarja on kokonaan nollan yhdella puolella, nolla on akselin reunassa eika
 # erillinen viiva kerro mitaan.
-visu_needs_zeroline <- function(data, y, zeroline) {
+visu_needs_zeroline <- function(data, y, zeroline, line = NULL) {
   if (isTRUE(zeroline)) return(TRUE)
   if (isFALSE(zeroline)) return(FALSE)
-  arvot <- suppressWarnings(as.numeric(data[[y]]))
-  arvot <- arvot[is.finite(arvot)]
+  arvot <- visu_finite(data[[y]])
+  if (!is.null(line)) arvot <- c(arvot, visu_finite(line[[y]]))
   length(arvot) > 0L && min(arvot) < 0 && max(arvot) > 0
 }
 
