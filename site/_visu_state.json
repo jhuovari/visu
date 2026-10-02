@@ -5,10 +5,10 @@
     "source_updated": {
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px": "2026-09-11T09:18:11",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px": "2026-09-11T09:18:12",
-      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-08-28T11:57:42"
+      "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-09-30T14:10:30"
     },
     "code_hash": "7a5089c9c39452d5b165078c38c75814c3007538436e97cf4e95e3224ffd17e7",
-    "built_at": "2026-10-01T19:55:51Z"
+    "built_at": "2026-10-02T05:10:05Z"
   },
   "julkinen-talous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"],
@@ -53,7 +53,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px": "2026-09-17T13:47:52"
     },
     "code_hash": "412422b57d986d1632a64d500f0289017a76d6a984e16be7c4f6713be968a8c8",
-    "built_at": "2026-10-01T19:55:51Z"
+    "built_at": "2026-10-02T05:10:05Z"
   },
   "rahoitusmarkkinat": {
     "table_url": ["https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A", "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU", "https://www.suomenpankki.fi/api/interestrates/euribor", "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT", "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"],
@@ -68,7 +68,7 @@
       "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-09-30T17:18:30Z"
     },
     "code_hash": "c6cb4455a490bba4c87a97446093e27fcca333713b9c5eb1793fbedca5a4e9e4",
-    "built_at": "2026-10-01T19:55:51Z"
+    "built_at": "2026-10-02T05:10:05Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
