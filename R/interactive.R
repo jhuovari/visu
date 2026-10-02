@@ -25,6 +25,9 @@ visu_interactive <- function(p,
   if (!inherits(p, "ggplot")) {
     stop("`p` pit\u00e4\u00e4 olla ggplot-objekti, ei ", class(p)[1], ".", call. = FALSE)
   }
+  # Hiljaisessa tilassa sivu ajetaan vain kuvion hakemiseksi; widgettia ei
+  # nayteta kenellekaan, joten sita ei kannata rakentaa.
+  if (isTRUE(the$quiet)) return(invisible(p))
 
   w <- plotly::ggplotly(p, tooltip = tooltip, ...)
 

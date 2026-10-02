@@ -5,3 +5,8 @@
 .quarto/
 .Rcheck/
 *.tar.gz
+
+# Esityksiin renderoidut kuviot ja kootut esitykset
+esitys/kuvat/
+esitys/*.pptx
+!esitys/pohja.pptx

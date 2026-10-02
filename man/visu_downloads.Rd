@@ -7,7 +7,7 @@
 visu_downloads(
   builder,
   id,
-  langs = c("sv", "en"),
+  langs = c("fi", "sv", "en"),
   dir = "kuvat",
   width = 8,
   height = 4.5,
@@ -20,8 +20,9 @@ ggplot-kuvion.}
 
 \item{id}{Tiedostonimen runko, esimerkiksi \code{"inflaatio-vuosimuutos"}.}
 
-\item{langs}{Kielet, joista kuva tallennetaan. Oletuksena ruotsi ja
-englanti.}
+\item{langs}{Kielet, joista kuva tallennetaan. Oletuksena kaikki kolme.
+Suomenkielinen kuva on sivulla interaktiivisena, mutta esitykseen ja
+julkaisuun tarvitaan sekin kuvana.}
 
 \item{dir}{Hakemisto kuville, suhteessa sivuun. Oletuksena \code{"kuvat"}.}
 

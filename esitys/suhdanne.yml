@@ -1,0 +1,27 @@
+# Esimerkkimaarittely. Aja: python3 esitys/kokoa.py esitys/suhdanne.yml
+kieli: fi
+
+diat:
+  - kansi: "Talouden tilannekuva"
+    alaotsikko: "Janne Huovari\nKansantalousosasto\n2.10.2026"
+
+  - kuvio: tuotanto-muutos
+    otsikko: "Tuotanto kääntyi kasvuun vuoden 2024 lopulla"
+    teksti:
+      - "Trendi on ollut nousussa reilun vuoden."
+      - "Alkuperäinen sarja heiluu kuukausittain, joten käännettä kannattaa lukea trendistä."
+
+  - kuvio: ostovoima-erat
+    otsikko: "Tulojen kasvu tulee palkkasummasta"
+    alkaen: 2019-01-01
+    teksti:
+      - "Palkkasumma on kasvattanut käytettävissä olevaa tuloa koko jakson."
+      - "Verot ja sosiaaliturvamaksut ovat vieneet kasvusta osan."
+    muistiinpanot: "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit."
+
+  - kuvio: tyottomyysaste-taso
+    otsikko: "Työttömyys on yhä korkealla"
+    alkaen: 2015-01-01
+
+  - lopetus: "Kiitos"
+    alaotsikko: "jhuovari.github.io/visu"

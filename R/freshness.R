@@ -5,6 +5,13 @@ the$folder_listing <- list()
 the$table_meta <- list()
 # Rajapintapyyntojen aikaleimat tahdinpitoa varten (R/data.R).
 the$px_calls <- numeric()
+# Ajon aikana kirjatut kuviot, ks. R/catalog.R.
+the$charts <- list()
+# Ajetut sivut kuvioineen, ks. R/chart.R.
+the$pages <- list()
+# Hiljainen tila: sivu ajetaan vain kuvion hakemiseksi, jolloin sivun
+# apufunktiot eivat kirjoita tiedostoja eivatka hae metatietoja.
+the$quiet <- FALSE
 
 #' Tyhjennä kansiolistausten välimuisti
 #'
