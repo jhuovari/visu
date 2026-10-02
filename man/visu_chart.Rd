@@ -12,6 +12,7 @@ visu_chart(
   titles = TRUE,
   legend = NULL,
   scale = 1,
+  width = 6.28,
   site_dir = NULL
 )
 }

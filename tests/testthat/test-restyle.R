@@ -51,18 +51,41 @@ test_that("otsikko lahtee mutta lahde jaa", {
   expect_equal(r$labels$caption, "Lähde: X")
 })
 
-test_that("selite siirtyy alas vain kun sarjoja on vahan", {
-  vahan <- data.frame(
-    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 2),
-    sarja = rep(c("a", "b"), 2), values = c(1, 2, 2, 1)
+test_that("nelja pitkaa nimea ei mahdu alareunaan, kuusi lyhytta mahtuu", {
+  pitkat <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 4),
+    sarja = rep(c("Ty\u00f6ik\u00e4inen v\u00e4est\u00f6 15-64", "Ty\u00f6voima 15-74",
+                  "Ty\u00f6lliset 15-74", "Ty\u00f6tt\u00f6m\u00e4t"), 2),
+    values = seq_len(8)
   )
-  monta <- data.frame(
+  lyhyet <- data.frame(
     time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 6),
-    sarja = rep(letters[1:6], 2), values = seq_len(12)
+    sarja = rep(c("a", "b", "c", "d", "e", "f"), 2), values = seq_len(12)
   )
 
-  expect_equal(visu:::visu_legend_side(visu_plot(vahan, colour = "sarja")), "bottom")
-  expect_equal(visu:::visu_legend_side(visu_plot(monta, colour = "sarja")), "right")
+  # Lukumaara kertoisi vaarin: nelja sarjaa on vahemman kuin kuusi, mutta
+  # nimet ovat pitkia ja rivi leikkautuisi.
+  expect_equal(visu:::visu_legend_side(visu_plot(pitkat, colour = "sarja"),
+                                       width = 6.28, scale = 1.15), "right")
+  expect_equal(visu:::visu_legend_side(visu_plot(lyhyet, colour = "sarja"),
+                                       width = 6.28, scale = 1.15), "bottom")
+  # Levealla kuviolla samat pitkat nimet mahtuvat.
+  expect_equal(visu:::visu_legend_side(visu_plot(pitkat, colour = "sarja"),
+                                       width = 11.89, scale = 1.15), "bottom")
+})
+
+test_that("paallysviivan nimi lasketaan selitteen leveyteen", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 2),
+    era = rep(c("a", "b"), 2), values = c(1, 2, 2, 1)
+  )
+  viiva <- data.frame(time = unique(d$time), values = c(3, 3))
+
+  p <- visu_plot(d, colour = "era", type = "col", stack = TRUE,
+                 line = viiva, line_label = "K\u00e4ytett\u00e4viss\u00e4 oleva tulo")
+
+  expect_true("K\u00e4ytett\u00e4viss\u00e4 oleva tulo" %in% visu:::visu_legend_labels(p))
+  expect_equal(visu:::visu_legend_entries(p), 3L)
 })
 
 test_that("paallysviiva lasketaan selitteen sarjoihin", {

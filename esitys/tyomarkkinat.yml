@@ -1,0 +1,45 @@
+# Työmarkkinoiden tilanne. Aja: python3 esitys/kokoa.py esitys/tyomarkkinat.yml
+kieli: fi
+
+diat:
+  - kansi: "Työmarkkinoiden tilanne"
+    alaotsikko: "Janne Huovari\nKansantalousosasto\n2.10.2026"
+
+  - kuvio: tyottomyysaste-taso
+    otsikko: "Työttömyyden nousu on taittunut"
+    alkaen: 2019-01-01
+    teksti:
+      - "Trendi kääntyi laskuun keväällä: huhtikuun 10,6 prosentista elokuun 10,1 prosenttiin."
+      - "Kuukausiluvut heiluvat voimakkaasti, joten käännettä kannattaa lukea trendistä."
+    muistiinpanot: "Elokuun 2026 alkuperäinen luku 9,1 %, trendi 10,1 %. Lähde: Tilastokeskus, työvoimatutkimus."
+
+  - kuvio: tyollisyysaste
+    otsikko: "Työllisyysaste on yhä selvästi huippunsa alapuolella"
+    alkaen: 2019-01-01
+    teksti:
+      - "15–64-vuotiaiden työllisyysaste on 70,9 prosenttia, 3,3 prosenttiyksikköä alle lokakuun 2022 huipun."
+      - "Ikärajaus nostaa tasoa: 20–64-vuotiailla aste on 75,9 prosenttia."
+
+  - kuvio: tyolliset-muutos
+    otsikko: "Työllisten määrä kasvaa taas"
+    alkaen: 2019-01-01
+    teksti:
+      - "Työllisiä oli elokuussa 34 000 enemmän kuin vuotta aiemmin."
+      - "Työttömiä oli 5 000 vähemmän, eli käänne näkyy molemmilla puolilla."
+
+  - kuvio: tyovoiman-tarjonta
+    otsikko: "Työvoima on kasvanut enemmän kuin työllisyys"
+    teksti:
+      - "Työvoima on kasvanut tammikuusta 2019 noin 170 000 hengellä, työllisten määrä 59 000:lla."
+      - "Erotus näkyy työttömyytenä: työttömiä on 111 000 enemmän kuin vuoden 2019 alussa."
+    muistiinpanot: "Työikäinen väestö 15-64 on kasvanut samassa ajassa 62 000 hengellä, eli työvoiman kasvu tulee myös osallistumisasteen noususta."
+
+  - kuvio: tyolliset-ikaryhmittain-trendi
+    otsikko: "Ikärajaus vaikuttaa siihen, miltä lasku näyttää"
+    teksti:
+      - "15–74-vuotiaiden työllisten trendi on laskenut kesäkuun 2023 huipusta noin 37 000 hengellä."
+      - "Kun rajaus seuraa ikääntyvää väestöä, 20–69-vuotiailla lasku on noin 20 000."
+    muistiinpanot: "Kausitasoitus on tässä omaa laskentaa, koska Tilastokeskus ei julkaise näitä rajauksia tasoitettuna."
+
+  - lopetus: "Kiitos"
+    alaotsikko: "jhuovari.github.io/visu"

@@ -19,7 +19,7 @@
 #' @return ggplot-objekti.
 #' @export
 visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
-                       titles = TRUE, legend = NULL, scale = 1,
+                       titles = TRUE, legend = NULL, scale = 1, width = 6.28,
                        site_dir = NULL) {
   if (!is.character(id) || length(id) != 1L) {
     stop("`id` pitää olla yksi kuvion tunniste merkkijonona.", call. = FALSE)
@@ -31,7 +31,7 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
          "'.", call. = FALSE)
   }
   visu_restyle(p, start = start, end = end, titles = titles,
-               legend = legend, scale = scale)
+               legend = legend, scale = scale, width = width)
 }
 
 #' Tallenna sivuston kuvio kuvaksi
@@ -52,7 +52,8 @@ visu_chart_png <- function(id, file, lang = "fi", start = NULL, end = NULL,
                            width = 6.28, height = 4.49, dpi = 300,
                            site_dir = NULL) {
   p <- visu_chart(id, lang = lang, start = start, end = end, titles = titles,
-                  legend = legend, scale = scale, site_dir = site_dir)
+                  legend = legend, scale = scale, width = width,
+                  site_dir = site_dir)
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   ggplot2::ggsave(file, p, width = width, height = height, dpi = dpi, bg = "white")
   invisible(file)

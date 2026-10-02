@@ -23,17 +23,19 @@
 #'   korkeutta — `"auto"` siirtää selitteen alas vain kun sarjoja on vähän.
 #' @param scale Tekstien kokokerroin. Esityksessä kuvio on pienempänä ja
 #'   katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.
+#' @param width Kuvion leveys tuumina. Vaikuttaa vain siihen, mahtuuko selite
+#'   alareunaan, kun `legend = "auto"`.
 #' @return ggplot-objekti.
 #' @export
 visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
-                         legend = NULL, scale = 1) {
+                         legend = NULL, scale = 1, width = 6.28) {
   if (!inherits(p, "ggplot")) {
     stop("`p` pitää olla ggplot-objekti, ei ", class(p)[1], ".", call. = FALSE)
   }
   if (isFALSE(titles)) {
     p <- p + ggplot2::labs(title = NULL, subtitle = NULL)
   }
-  if (identical(legend, "auto")) legend <- visu_legend_side(p)
+  if (identical(legend, "auto")) legend <- visu_legend_side(p, width, scale)
   if (!is.null(legend)) {
     p <- p + ggplot2::theme(legend.position = legend)
     # Alareunassa selitteet asettuvat oletuksena vierekkain, jolloin kahden
@@ -90,29 +92,48 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
   ))
 }
 
-# Alareuna vai oikea reuna. Alareunassa selite vie korkeutta rivi kerrallaan,
-# joten se kannattaa vain kun sarjoja on vahan; muuten piirtoala jaa matalaksi.
-# Raja on neljassa, koska siihen asti selite mahtuu dian palstassa yhdelle
-# tai kahdelle riville.
-visu_legend_side <- function(p, max_entries = 4L) {
-  if (visu_legend_entries(p) > max_entries) "right" else "bottom"
+# Alareuna vai oikea reuna. Alareunassa selite latoutuu yhdelle riville, joka
+# leikkautuu jos se ei mahdu kuvion leveyteen: pelkka sarjojen lukumaara ei
+# siis riita, koska nelja pitkaa nimea vie enemman tilaa kuin kuusi lyhytta.
+# Siksi verrataan arvioitua rivin leveytta kuvion leveyteen.
+visu_legend_side <- function(p, width = 6.28, scale = 1) {
+  nimet <- visu_legend_labels(p)
+  if (length(nimet) == 0L) return("bottom")
+  if (visu_legend_width(nimet, scale) > width) "right" else "bottom"
 }
 
-visu_legend_entries <- function(p) {
+# Selitelivin leveys tuumina. Merkin keskileveys on noin puolet fonttikoosta,
+# ja jokainen avain vie lisaksi noin kolmanneksen tuumasta.
+visu_legend_width <- function(nimet, scale = 1, base_size = 12) {
+  merkkia <- sum(nchar(nimet))
+  merkkia * 0.5 * base_size * scale / 72 + length(nimet) * 0.35
+}
+
+# Selitteeseen tulevat nimet. Paageomin nimet tulevat kuvion datasta, ja
+# omalla datallaan piirretyt kerrokset - kuten pylvaiden paallysviiva - omasta
+# kartoituksestaan.
+visu_legend_labels <- function(p) {
   sarakkeet <- c(visu_mapping_col(p$mapping$colour),
                  visu_mapping_col(p$mapping$fill),
                  visu_mapping_col(p$mapping$linewidth))
-  maarat <- vapply(sarakkeet, function(s) {
-    if (is.null(s) || !s %in% names(p$data)) return(0L)
-    visu_level_count(p$data, s)
-  }, integer(1))
-  # Paallysviiva on oma kerroksensa omalla variskaalallaan, eli yksi
-  # selitemerkinta lisaa.
+  nimet <- unlist(lapply(sarakkeet, function(s) {
+    if (is.null(s) || !s %in% names(p$data)) return(NULL)
+    arvot <- p$data[[s]]
+    if (is.factor(arvot)) levels(droplevels(arvot)) else as.character(unique(arvot))
+  }))
+
   kerrokset <- Filter(function(l) !inherits(l$geom, "GeomHline"), p$layers)
-  viiva <- length(kerrokset) > 1L &&
-    is.data.frame(kerrokset[[length(kerrokset)]]$data)
-  sum(maarat) + as.integer(viiva)
+  omat <- Filter(function(l) is.data.frame(l$data), utils::tail(kerrokset, -1L))
+  lisat <- unlist(lapply(omat, function(l) {
+    q <- l$mapping$colour %||% l$mapping$fill
+    if (is.null(q)) return(NULL)
+    as.character(tryCatch(rlang::eval_tidy(q, l$data), error = function(e) NULL))
+  }))
+
+  unique(c(nimet, lisat))
 }
+
+visu_legend_entries <- function(p) length(visu_legend_labels(p))
 
 # Mita kuviosta pitaa tietaa y-rajan laskemiseksi uudelleen: aika- ja
 # arvosarake, piirtotyyppi, pinotaanko, ja mahdollinen paallysviivan data.
