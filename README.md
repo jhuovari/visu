@@ -77,7 +77,9 @@ muutoksen sarjoittain niin ettei se vuoda sarjarajan yli.
 ## Kieliversiot ladattavina kuvina
 
 Sivusto on suomenkielinen. Ruotsi ja englanti tulevat ladattavina PNG-kuvina
-kuvion alla, eikä sivuja siis monisteta kolmeksi.
+kuvion alla, eikä sivuja siis monisteta kolmeksi. Myös suomenkielinen kuvio
+tallennetaan kuvana: sivulla se on interaktiivisena, mutta esitykseen ja
+julkaisuun tarvitaan sekin kuvatiedostona.
 
 Koodilohko määrittelee funktion, joka rakentaa kuvion annetulla kielellä.
 Sama funktio piirtää sekä sivulla näkyvän suomenkielisen kuvion että
@@ -117,6 +119,31 @@ Sarjojen selitteet kannattaa kääntää StatFinin omilla termeillä: sama taulu
 löytyy rajapinnasta myös ruotsiksi ja englanniksi vaihtamalla URL:n
 kielisegmentti (`/fi/` → `/sv/`), ja muuttuja- ja arvokoodit ovat kaikilla
 kielillä samat.
+
+## Kuviot esitykseen
+
+Jokainen kuvio on `visu_downloads()`-kutsussa sidottu pysyvään tunnisteeseen,
+ja sivuston rakentaminen kirjaa tunnisteet luetteloon `site/_visu_charts.json`
+otsikoineen ja lähteineen. Luettelosta kuvion löytää nimellä, ja
+`visu_chart()` hakee sen ggplot-oliona ajamalla kuvion oman sivun koodin —
+kuvio on siis edelleen määritelty vain yhdessä paikassa:
+
+```r
+p <- visu_chart("tyottomyysaste-taso", lang = "en", start = "2019-01-01")
+visu_chart_png("ostovoima-erat", "kuva.png", width = 6.28, height = 4.49)
+```
+
+Aikarajaus laskee y-akselin uudelleen näkyvästä datasta, pinotut pylväät
+mukaan lukien; pelkkä `coord_cartesian(xlim = ...)` jättäisi akselin koko
+historian mukaiseksi.
+
+Kansio `esitys/` kokoaa näistä PowerPoint-esityksen VM:n pohjaan:
+
+```
+python3 esitys/kokoa.py esitys/suhdanne.yml
+```
+
+Ohjeet ovat tiedostossa [esitys/README.md](esitys/README.md).
 
 ## Kuvion tiedot
 

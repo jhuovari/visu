@@ -18,6 +18,9 @@
 #' @return Metatiedot merkkijonona näkymättömänä; kutsutaan tulosteen vuoksi.
 #' @export
 visu_metadata <- function(data, url, contents = "contentscode") {
+  # Hiljaisessa tilassa sivu ajetaan vain kuvion hakemiseksi, eika taulujen
+  # metatietoja kannata hakea rajapinnasta.
+  if (isTRUE(the$quiet)) return(invisible(""))
   if (is.list(data) && !is.data.frame(data)) {
     if (length(data) != length(url)) {
       stop("`data`-listassa ja `url`-vektorissa pit\u00e4\u00e4 olla yht\u00e4 monta ",

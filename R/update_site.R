@@ -156,6 +156,10 @@ visu_update_site <- function(site_dir = NULL,
   # Epaonnistuneet kuviot eivat saa tilamerkintaa, jotta ne yritetaan
   # uudelleen seuraavalla ajolla. Tila kirjoitetaan ennen etusivua, koska
   # etusivu lukee paivitysajat siita.
+  # Kuvioluettelo taydentyy renderoinnin aikana kuvio kerrallaan; tassa siita
+  # poistetaan kuviot, joita ei enaa ole.
+  visu_catalog_prune(site_dir)
+
   visu_state_write(visu_new_state(registry, updated, state, decisions, failed), site_dir)
 
   if (full) {
