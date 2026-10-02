@@ -17,6 +17,22 @@ python3 esitys/kokoa.py esitys/suhdanne.yml
 | `suhdanne.yml` | Esimerkkimäärittely. |
 | `kuvat/` | Renderöidyt kuviot. Ei versionhallinnassa. |
 
+## Asennus
+
+Pilvi-istunnossa (Claude Code webissä) riippuvuudet asentuvat itsestään:
+`.claude/hooks/session-start.sh` hoitaa R:n, visun ja Python-kirjastot
+istunnon alkaessa. Mitään ei tarvitse tehdä.
+
+Omalla koneella asennus on kerran käsin:
+
+```
+R CMD INSTALL .                                   # visu riippuvuuksineen
+pip install -r esitys/requirements.txt            # python-pptx, PyYAML
+```
+
+Esityksen tarkistamiseen kuvina tarvitaan lisäksi `libreoffice-impress` ja
+`poppler-utils`.
+
 ## Määrittely
 
 ```yaml
