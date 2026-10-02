@@ -10,7 +10,8 @@ visu_restyle(
   end = NULL,
   titles = TRUE,
   legend = NULL,
-  scale = 1
+  scale = 1,
+  width = 6.28
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ korkeutta — \code{"auto"} siirtää selitteen alas vain kun sarjoja on vähän
 
 \item{scale}{Tekstien kokokerroin. Esityksessä kuvio on pienempänä ja
 katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.}
+
+\item{width}{Kuvion leveys tuumina. Vaikuttaa vain siihen, mahtuuko selite
+alareunaan, kun \code{legend = "auto"}.}
 }
 \value{
 ggplot-objekti.
