@@ -2,7 +2,6 @@
 title: "Ostovoima ja luottamus"
 visu:
   table_url:
-    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"
@@ -20,9 +19,14 @@ visu::visu_updated_note()
 ```
 
 Kotitalouksien ostovoima kahdesta suunnasta: mitä tuloille on tapahtunut ja
-miten kuluttajat itse tilanteensa kokevat. Ostovoima on tässä kotitalouksien
-oikaistu käytettävissä oleva tulo reaalisena, eli hintojen nousu on poistettu.
-Oikaistu tulo sisältää rahatulojen lisäksi julkiset palvelut, joita
+miten kuluttajat itse tilanteensa kokevat. Tulo on tässä kotitalouksien
+käytettävissä oleva tulo kausitasoitettuna, sama sarja jonka erittely on
+jäljempänä. Reaalinen sarja on deflatoitu yksityisen kulutuksen
+implisiittisellä hinnalla, joten se on vuoden 2015 hinnoin ja ero nimelliseen
+on hintojen nousu.
+
+Pitkä sarja on eri käsite: se on oikaistu käytettävissä oleva tulo henkeä
+kohden, ja oikaistu tulo sisältää rahatulojen lisäksi julkiset palvelut, joita
 kotitaloudet saavat käyttöönsä ilmaiseksi tai halvalla.
 
 ## Ostovoima
@@ -35,38 +39,81 @@ kotitaloudet saavat käyttöönsä ilmaiseksi tai halvalla.
 library(visu)
 library(dplyr)
 
-ostovoima <- visu_get_data(
-  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/",
+# Sivun yhteinen aineisto. Sama kausitasoitettu kaytettavissa oleva tulo on
+# seka taman osion ostovoimana etta myohemman kontribuutiokuvion kokonaiserana.
+erat <- c("B6N", "B13N", "D1R", "D4R", "D62R", "D5K", "D61K", "D4K")
+
+tulot <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
   query = list(
     "timeperiod_q" = "*",
     "sektoriluokitus_7_20230101" = "S14",
-    "taloustoimi_1_20180101" = "B7N",
-    "contentscode" = "vol_ind_1999"
+    "taloustoimi_1_20180101" = erat,
+    "contentscode" = "ntp-KAUSIT"
   )
 )
 
+kulutus <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = "P3KS14_S15",
+    "contentscode" = c("kausitcp", "kausitvv2015")
+  )
+)
+
+# Yksityisen kulutuksen implisiittinen hinta: kayvin hinnoin jaettuna
+# volyymilla. Sarjat on tasoitettu samalla tavalla, joten kausi- ja
+# tyopaivavaikutus kumoutuu osamaarassa. Viitevuosi on 2015, joten jakolasku
+# antaa euromaaran vuoden 2015 hinnoin.
+hinta <- kulutus |>
+  group_by(time) |>
+  summarise(hinta = values[contentscode == "kausitcp"] /
+                    values[contentscode == "kausitvv2015"], .groups = "drop")
+
+# Sarja kahtena: euroina ja hinnalla deflatoituna.
+reaalistettu <- function(d) {
+  d <- inner_join(select(d, time, values), hinta, by = "time")
+  bind_rows(
+    transmute(d, time, sarja = "nimellinen", values),
+    transmute(d, time, sarja = "reaalinen", values = values / hinta)
+  )
+}
+
+# Sarjojen nimet kielen mukaan, jarjestys nimellinen ennen reaalista.
+merkitse <- function(d, t) {
+  mutate(d, sarja = factor(sarja, levels = names(t$sarjat), labels = t$sarjat))
+}
+
+ostovoima <- tulot |>
+  filter(taloustoimi_1_20180101 == "B6N") |>
+  reaalistettu()
+
 tekstit <- list(
   fi = list(
-    otsikko = "Kotitalouksien reaalitulo, 1999 = 100",
-    selite = "Oikaistu käytettävissä oleva tulo, hintojen nousu poistettu",
-    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+    otsikko = "Kotitalouksien käytettävissä oleva tulo, miljoonaa euroa",
+    selite = "Kausitasoitettu, reaalinen vuoden 2015 hinnoin",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
+    sarjat = c(nimellinen = "Nimellinen", reaalinen = "Reaalinen")
   ),
   sv = list(
-    otsikko = "Hushållens realinkomst, 1999 = 100",
-    selite = "Justerad disponibel inkomst, prisförändringar borträknade",
-    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+    otsikko = "Hushållens disponibla inkomst, miljoner euro",
+    selite = "Säsongrensad, real i 2015 års priser",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper och nationalräkenskaper",
+    sarjat = c(nimellinen = "Nominell", reaalinen = "Real")
   ),
   en = list(
-    otsikko = "Household real income, 1999 = 100",
-    selite = "Adjusted disposable income, price changes removed",
-    lahde = "Source: Statistics Finland, quarterly sector accounts"
+    otsikko = "Household disposable income, EUR million",
+    selite = "Seasonally adjusted, real in 2015 prices",
+    lahde = "Source: Statistics Finland, quarterly sector and national accounts",
+    sarjat = c(nimellinen = "Nominal", reaalinen = "Real")
   )
 )
 
 kuvio <- function(kieli) {
   t <- tekstit[[kieli]]
-  visu_plot(ostovoima, title = t$otsikko, subtitle = t$selite,
-            caption = t$lahde, lang = kieli)
+  visu_plot(merkitse(ostovoima, t), colour = "sarja", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio("fi") |>
@@ -83,31 +130,36 @@ visu_downloads(kuvio, "ostovoima-taso")
 
 ```{r}
 muutos <- ostovoima |>
+  group_by(sarja) |>
   mutate(values = visu_change(values, time)) |>
+  ungroup() |>
   filter(!is.na(values))
 
 tekstit_muutos <- list(
   fi = list(
-    otsikko = "Kotitalouksien reaalitulon muutos vuodentakaisesta, %",
-    selite = "Positiivinen luku tarkoittaa ostovoiman kasvua",
-    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+    otsikko = "Käytettävissä olevan tulon muutos vuodentakaisesta, %",
+    selite = "Reaalisen ja nimellisen ero on hintojen nousu",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
+    sarjat = c(nimellinen = "Nimellinen", reaalinen = "Reaalinen")
   ),
   sv = list(
-    otsikko = "Förändring av hushållens realinkomst från året innan, %",
-    selite = "Ett positivt tal betyder ökad köpkraft",
-    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+    otsikko = "Förändring av disponibel inkomst från året innan, %",
+    selite = "Skillnaden mellan real och nominell är prisuppgången",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper och nationalräkenskaper",
+    sarjat = c(nimellinen = "Nominell", reaalinen = "Real")
   ),
   en = list(
-    otsikko = "Change in household real income from a year earlier, %",
-    selite = "A positive figure means purchasing power grew",
-    lahde = "Source: Statistics Finland, quarterly sector accounts"
+    otsikko = "Change in disposable income from a year earlier, %",
+    selite = "The gap between real and nominal is the rise in prices",
+    lahde = "Source: Statistics Finland, quarterly sector and national accounts",
+    sarjat = c(nimellinen = "Nominal", reaalinen = "Real")
   )
 )
 
 kuvio_muutos <- function(kieli) {
   t <- tekstit_muutos[[kieli]]
-  visu_plot(muutos, type = "col", title = t$otsikko, subtitle = t$selite,
-            caption = t$lahde, lang = kieli)
+  visu_plot(merkitse(muutos, t), colour = "sarja", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_muutos("fi") |>
@@ -176,8 +228,9 @@ visu_downloads(kuvio_pitka, "ostovoima-pitka")
 # Usean taulun kuviossa annetaan lista data frameja ja osoitteet samassa
 # jarjestyksessa.
 visu_metadata(
-  list(ostovoima, pitka),
-  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a7.px/",
+  list(tulot, kulutus, pitka),
+  c("https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
+    "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
     "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/")
 )
 ```
@@ -207,18 +260,6 @@ pääosin omistusasumisen laskennallista asuntotuloa ja yrittäjätuloa.
 ### Pääerät
 
 ```{r}
-erat <- c("B6N", "B13N", "D1R", "D4R", "D62R", "D5K", "D61K", "D4K")
-
-tulot <- visu_get_data(
-  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
-  query = list(
-    "timeperiod_q" = "*",
-    "sektoriluokitus_7_20230101" = "S14",
-    "taloustoimi_1_20180101" = erat,
-    "contentscode" = "ntp-KAUSIT"
-  )
-)
-
 # Omaisuustulot, asunto- ja yrittajatulo yhdeksi netoksi. Omaisuusmenot
 # vahennetaan, joten era on jo netto eika sita kaanneta kontribuutioissa.
 # Verot ja maksut jaavat pois ja tulevat jaannosterana.
@@ -358,23 +399,6 @@ visu_downloads(kuvio_erat, "ostovoima-erat")
 ### Reaalinen
 
 ```{r}
-kulutus <- visu_get_data(
-  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
-  query = list(
-    "timeperiod_q" = "*",
-    "taloustoimi_1_20180101" = "P3KS14_S15",
-    "contentscode" = c("kausitcp", "kausitvv2015")
-  )
-)
-
-# Yksityisen kulutuksen implisiittinen hinta: kayvin hinnoin jaettuna
-# volyymilla. Sarjat on tasoitettu samalla tavalla, joten kausi- ja
-# tyopaivavaikutus kumoutuu osamaarassa.
-hinta <- kulutus |>
-  group_by(time) |>
-  summarise(hinta = values[contentscode == "kausitcp"] /
-                    values[contentscode == "kausitvv2015"], .groups = "drop")
-
 # Reaalitulo on kaytettavissa oleva tulo jaettuna hinnalla. Hinnan
 # kontribuutio lasketaan erotuksena reaalisen ja nimellisen muutoksen valilla,
 # jolloin pylvaat summautuvat tasan reaalimuutokseen: pelkka hinnan muutos
@@ -469,6 +493,11 @@ Neljännesvuosittaiset sektoritilit eivät julkaise kotitalouksien korkomenoja
 omana eränään, vaan osana omaisuusmenoja. Kotitalouksilla ne ovat käytännössä
 lähes kokonaan korkoja, joten sarja seuraa korkotasoa.
 
+Menot näkyvät kolmella tavalla: euroina, reaalisena vuoden 2015 hinnoin ja
+osuutena käytettävissä olevasta tulosta. Viimeinen kertoo, kuinka suuren osan
+tuloista korot vievät — siinä hinnat kumoutuvat itsestään, koska osoittaja ja
+nimittäjä ovat saman ajankohdan euroja.
+
 ::: {.panel-tabset}
 
 ### Euribor
@@ -523,38 +552,36 @@ visu_downloads(kuvio_euribor, "ostovoima-euribor")
 ### Korkomenot
 
 ```{r}
-korkomenot <- visu_get_data(
-  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
-  query = list(
-    "timeperiod_q" = "*",
-    "sektoriluokitus_7_20230101" = "S14",
-    "taloustoimi_1_20180101" = "D4K",
-    "contentscode" = "ntp-KAUSIT"
-  )
-)
+# D4K on jo haettu sivun alussa muiden erien kanssa.
+korkomenot <- tulot |>
+  filter(taloustoimi_1_20180101 == "D4K") |>
+  reaalistettu()
 
 tekstit_korot <- list(
   fi = list(
     otsikko = "Kotitalouksien omaisuusmenot, miljoonaa euroa",
-    selite = "Pääosin asuntolainojen korkoja, kausitasoitettu",
-    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+    selite = "Pääosin asuntolainojen korkoja, kausitasoitettu; reaalinen vuoden 2015 hinnoin",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
+    sarjat = c(nimellinen = "Nimellinen", reaalinen = "Reaalinen")
   ),
   sv = list(
     otsikko = "Hushållens kapitalutgifter, miljoner euro",
-    selite = "Huvudsakligen räntor på bolån, säsongrensad",
-    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+    selite = "Huvudsakligen räntor på bolån, säsongrensad; real i 2015 års priser",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper och nationalräkenskaper",
+    sarjat = c(nimellinen = "Nominell", reaalinen = "Real")
   ),
   en = list(
     otsikko = "Household property income paid, EUR million",
-    selite = "Mainly mortgage interest, seasonally adjusted",
-    lahde = "Source: Statistics Finland, quarterly sector accounts"
+    selite = "Mainly mortgage interest, seasonally adjusted; real in 2015 prices",
+    lahde = "Source: Statistics Finland, quarterly sector and national accounts",
+    sarjat = c(nimellinen = "Nominal", reaalinen = "Real")
   )
 )
 
 kuvio_korot <- function(kieli) {
   t <- tekstit_korot[[kieli]]
-  visu_plot(korkomenot, title = t$otsikko, subtitle = t$selite,
-            caption = t$lahde, lang = kieli)
+  visu_plot(merkitse(korkomenot, t), colour = "sarja", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
 kuvio_korot("fi") |>
@@ -566,6 +593,52 @@ kuvio_korot("fi") |>
 #| echo: false
 #| output: asis
 visu_downloads(kuvio_korot, "ostovoima-omaisuusmenot")
+```
+
+### Osuus tuloista
+
+```{r}
+# Suhdeluku ei tarvitse deflatointia: osoittaja ja nimittaja ovat saman
+# ajankohdan euroja, joten hinnat kumoutuvat.
+korkojen_osuus <- tulot |>
+  filter(taloustoimi_1_20180101 %in% c("D4K", "B6N")) |>
+  group_by(time) |>
+  summarise(values = 100 * values[taloustoimi_1_20180101 == "D4K"] /
+                           values[taloustoimi_1_20180101 == "B6N"], .groups = "drop")
+
+tekstit_osuus <- list(
+  fi = list(
+    otsikko = "Omaisuusmenot suhteessa käytettävissä olevaan tuloon, %",
+    selite = "Kausitasoitettu",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit"
+  ),
+  sv = list(
+    otsikko = "Kapitalutgifter i förhållande till disponibel inkomst, %",
+    selite = "Säsongrensad",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper"
+  ),
+  en = list(
+    otsikko = "Property income paid relative to disposable income, %",
+    selite = "Seasonally adjusted",
+    lahde = "Source: Statistics Finland, quarterly sector accounts"
+  )
+)
+
+kuvio_osuus <- function(kieli) {
+  t <- tekstit_osuus[[kieli]]
+  visu_plot(korkojen_osuus, title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_osuus("fi") |>
+  visu_interactive(subtitle = tekstit_osuus$fi$selite,
+                   caption = tekstit_osuus$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_osuus, "ostovoima-omaisuusmenot-osuus")
 ```
 
 :::
@@ -822,5 +895,5 @@ visu_metadata(
 ```
 
 Lähteet: [Sektoritilit](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/)
-(taulut 15a6, 15a7 ja 15ae), [Kuluttajien luottamus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__kbar/)
+(taulut 15a6, 15ae ja 132h), [Kuluttajien luottamus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__kbar/)
 (taulut 11cc, 129h, 11vq ja 11vr) ja [Suomen Pankki](https://www.suomenpankki.fi/fi/tilastot/korot/).
