@@ -275,6 +275,28 @@
     "png_en": "kuviot/kuvat/ostovoima-erat-en.png"
   },
   {
+    "id": "ostovoima-erat-paaerat",
+    "page": "ostovoima",
+    "title_fi": "Käytettävissä olevan tulon muutos pääerittäin, %-yksikköä",
+    "title_sv": "Förändring av disponibel inkomst per huvudpost, procentenheter",
+    "title_en": "Change in disposable income by main component, percentage points",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    "png_fi": "kuviot/kuvat/ostovoima-erat-paaerat-fi.png",
+    "png_sv": "kuviot/kuvat/ostovoima-erat-paaerat-sv.png",
+    "png_en": "kuviot/kuvat/ostovoima-erat-paaerat-en.png"
+  },
+  {
+    "id": "ostovoima-erat-reaalinen",
+    "page": "ostovoima",
+    "title_fi": "Käytettävissä olevan tulon reaalimuutos erittäin, %-yksikköä",
+    "title_sv": "Real förändring av disponibel inkomst per post, procentenheter",
+    "title_en": "Real change in disposable income by component, percentage points",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
+    "png_fi": "kuviot/kuvat/ostovoima-erat-reaalinen-fi.png",
+    "png_sv": "kuviot/kuvat/ostovoima-erat-reaalinen-sv.png",
+    "png_en": "kuviot/kuvat/ostovoima-erat-reaalinen-en.png"
+  },
+  {
     "id": "ostovoima-euribor",
     "page": "ostovoima",
     "title_fi": "Euribor-korot, %",
@@ -288,10 +310,10 @@
   {
     "id": "ostovoima-muutos",
     "page": "ostovoima",
-    "title_fi": "Kotitalouksien reaalitulon muutos vuodentakaisesta, %",
-    "title_sv": "Förändring av hushållens realinkomst från året innan, %",
-    "title_en": "Change in household real income from a year earlier, %",
-    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    "title_fi": "Käytettävissä olevan tulon muutos vuodentakaisesta, %",
+    "title_sv": "Förändring av disponibel inkomst från året innan, %",
+    "title_en": "Change in disposable income from a year earlier, %",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
     "png_fi": "kuviot/kuvat/ostovoima-muutos-fi.png",
     "png_sv": "kuviot/kuvat/ostovoima-muutos-sv.png",
     "png_en": "kuviot/kuvat/ostovoima-muutos-en.png"
@@ -302,10 +324,21 @@
     "title_fi": "Kotitalouksien omaisuusmenot, miljoonaa euroa",
     "title_sv": "Hushållens kapitalutgifter, miljoner euro",
     "title_en": "Household property income paid, EUR million",
-    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
     "png_fi": "kuviot/kuvat/ostovoima-omaisuusmenot-fi.png",
     "png_sv": "kuviot/kuvat/ostovoima-omaisuusmenot-sv.png",
     "png_en": "kuviot/kuvat/ostovoima-omaisuusmenot-en.png"
+  },
+  {
+    "id": "ostovoima-omaisuusmenot-osuus",
+    "page": "ostovoima",
+    "title_fi": "Omaisuusmenot suhteessa käytettävissä olevaan tuloon, %",
+    "title_sv": "Kapitalutgifter i förhållande till disponibel inkomst, %",
+    "title_en": "Property income paid relative to disposable income, %",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    "png_fi": "kuviot/kuvat/ostovoima-omaisuusmenot-osuus-fi.png",
+    "png_sv": "kuviot/kuvat/ostovoima-omaisuusmenot-osuus-sv.png",
+    "png_en": "kuviot/kuvat/ostovoima-omaisuusmenot-osuus-en.png"
   },
   {
     "id": "ostovoima-pitka",
@@ -321,10 +354,10 @@
   {
     "id": "ostovoima-taso",
     "page": "ostovoima",
-    "title_fi": "Kotitalouksien reaalitulo, 1999 = 100",
-    "title_sv": "Hushållens realinkomst, 1999 = 100",
-    "title_en": "Household real income, 1999 = 100",
-    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    "title_fi": "Kotitalouksien käytettävissä oleva tulo, miljoonaa euroa",
+    "title_sv": "Hushållens disponibla inkomst, miljoner euro",
+    "title_en": "Household disposable income, EUR million",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
     "png_fi": "kuviot/kuvat/ostovoima-taso-fi.png",
     "png_sv": "kuviot/kuvat/ostovoima-taso-sv.png",
     "png_en": "kuviot/kuvat/ostovoima-taso-en.png"
