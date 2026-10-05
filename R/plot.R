@@ -118,11 +118,16 @@ visu_plot <- function(data,
     ))),
     # Pinotut pylvaat summautuvat kokonaisuuteen, mika on oikein esimerkiksi
     # kasvukontribuutioille; muuten erat on helpompi lukea vierekkain.
+    #
+    # colour = NA poistaa reunaviivan. ggplot2 4.0:ssa pylvaan reunavari tulee
+    # teemasta (from_theme(colour %||% NA)), ja ggcustom antaa sille korostus-
+    # varin, joten jokaisen pylvaan ymparille piirtyi viiva. Plotly ei kayta
+    # sita, joten staattinen ja interaktiivinen kuvio nayttivat erilaisilta.
     col  = do.call(ggplot2::geom_col, visu_compact(list(
-      fill = vari, position = if (stack) "stack" else "dodge"
+      fill = vari, colour = NA, position = if (stack) "stack" else "dodge"
     ))),
     area = do.call(ggplot2::geom_area, visu_compact(list(
-      fill = vari, position = "stack"
+      fill = vari, colour = NA, position = "stack"
     )))
   )
 
@@ -225,7 +230,12 @@ visu_line_layer <- function(line, x, y, label) {
       mapping = ggplot2::aes(x = .data[[x]], y = .data[[y]], colour = .env$label),
       inherit.aes = FALSE, linewidth = 0.8
     ),
-    ggplot2::scale_colour_manual(values = stats::setNames("grey15", label))
+    ggplot2::scale_colour_manual(values = stats::setNames("grey15", label)),
+    # Erat ensin ja kokonaissarja viimeisena. Ilman nimenomaista jarjestysta
+    # se maaraytyy ggplotin sisaisesta saannosta ja voi vaihtua kuviosta
+    # toiseen.
+    ggplot2::guides(fill = ggplot2::guide_legend(order = 1),
+                    colour = ggplot2::guide_legend(order = 2))
   )
 }
 
