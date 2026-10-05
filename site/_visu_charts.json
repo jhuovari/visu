@@ -275,6 +275,28 @@
     "png_en": "kuviot/kuvat/ostovoima-erat-en.png"
   },
   {
+    "id": "ostovoima-erat-paaerat",
+    "page": "ostovoima",
+    "title_fi": "Käytettävissä olevan tulon muutos pääerittäin, %-yksikköä",
+    "title_sv": "Förändring av disponibel inkomst per huvudpost, procentenheter",
+    "title_en": "Change in disposable income by main component, percentage points",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    "png_fi": "kuviot/kuvat/ostovoima-erat-paaerat-fi.png",
+    "png_sv": "kuviot/kuvat/ostovoima-erat-paaerat-sv.png",
+    "png_en": "kuviot/kuvat/ostovoima-erat-paaerat-en.png"
+  },
+  {
+    "id": "ostovoima-erat-reaalinen",
+    "page": "ostovoima",
+    "title_fi": "Käytettävissä olevan tulon reaalimuutos erittäin, %-yksikköä",
+    "title_sv": "Real förändring av disponibel inkomst per post, procentenheter",
+    "title_en": "Real change in disposable income by component, percentage points",
+    "source": "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito",
+    "png_fi": "kuviot/kuvat/ostovoima-erat-reaalinen-fi.png",
+    "png_sv": "kuviot/kuvat/ostovoima-erat-reaalinen-sv.png",
+    "png_en": "kuviot/kuvat/ostovoima-erat-reaalinen-en.png"
+  },
+  {
     "id": "ostovoima-euribor",
     "page": "ostovoima",
     "title_fi": "Euribor-korot, %",
