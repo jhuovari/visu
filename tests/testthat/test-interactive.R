@@ -149,3 +149,34 @@ test_that("paallysviiva ei sotke pylvaiden nimia selitteessa", {
   expect_equal(nimet, c("Palkat", "Verot", "Yhteensä"))
   expect_equal(w$x$data[[1]]$legendgroup, "Palkat")
 })
+
+test_that("lahde ankkuroidaan pikseleina ja merkitaan tunnistettavaksi", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+
+  # plotly::layout() jättää asettelun rakennusvaiheeseen, joten annotaatiot
+  # löytyvät vasta rakennetusta widgetistä.
+  w <- plotly::plotly_build(visu_interactive(visu_plot(d), caption = "Lähde: X"))
+  lahde <- Filter(function(a) identical(a$name, "visu-caption"), w$x$layout$annotations)
+
+  expect_length(lahde, 1L)
+  # Paperiyksikko on osuus piirtoalan korkeudesta ja kutistuu selitteen
+  # kasvaessa, joten paikka annetaan pikseleina piirtoalan alareunasta.
+  expect_equal(lahde[[1]]$y, 0)
+  expect_true(lahde[[1]]$yshift < 0)
+})
+
+test_that("alaotsikko ei saa lahteen ankkurointia", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+
+  w <- plotly::plotly_build(visu_interactive(visu_plot(d), subtitle = "Alaotsikko"))
+  nimet <- vapply(w$x$layout$annotations, function(a) if (is.null(a$name)) "" else a$name, character(1))
+
+  expect_false("visu-caption" %in% nimet)
+})
+
+test_that("widgetille annetaan korkeus, jotta selite ja lahde mahtuvat", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+
+  expect_equal(visu_interactive(visu_plot(d))$height, 450)
+  expect_equal(visu_interactive(visu_plot(d), height = 600)$height, 600)
+})
