@@ -194,7 +194,7 @@ sisältävät päätösten ohella myös työllisyyden, palkkojen ja väestörake
 muutokset.
 
 ```{r}
-erat <- c("B6N", "D1R", "D62R", "D5K", "D61K", "D4K")
+erat <- c("B6N", "B13N", "D1R", "D4R", "D62R", "D5K", "D61K", "D4K")
 
 tulot <- visu_get_data(
   url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
@@ -213,7 +213,8 @@ tekstit_erat <- list(
     lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
     jaannos = "Muut erät",
     yhteensa = "Käytettävissä oleva tulo",
-    sarjat = c(D1R = "Palkat", D62R = "Saadut etuudet", D5K = "Verot",
+    sarjat = c(B13N = "Muut tulot", D1R = "Palkat", "D4R" = "Omaisuustulot", 
+               D62R = "Saadut etuudet", D5K = "Verot",
                D61K = "Sosiaaliturvamaksut", D4K = "Omaisuusmenot")
   ),
   sv = list(
@@ -245,6 +246,89 @@ kuvio_erat <- function(kieli) {
     total = "B6N",
     lag = 4,
     negate = c("D5K", "D61K", "D4K"),
+    residual = t$jaannos
+  )
+  nimet <- c(t$sarjat, stats::setNames(t$jaannos, t$jaannos))
+  d <- mutate(d, era = factor(taloustoimi_1_20180101,
+                              levels = names(nimet), labels = nimet))
+  # Pylvaat summautuvat kaytettavissa olevan tulon muutokseen. Viivana se on
+  # helpompi lukea kuin pinon ylareunasta, jossa plus- ja miinuserat ovat
+  # vastakkaisilla puolilla nollaa.
+  yhteensa <- tulot |>
+    filter(taloustoimi_1_20180101 == "B6N") |>
+    transmute(time, values = visu_change(values, time)) |>
+    filter(!is.na(values))
+  visu_plot(d, colour = "era", type = "col", stack = TRUE,
+            line = yhteensa, line_label = t$yhteensa, title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
+}
+
+kuvio_erat("fi") |>
+  visu_interactive(subtitle = tekstit_erat$fi$selite,
+                   caption = tekstit_erat$fi$lahde)
+```
+
+```{r}
+erat <- c("B6N", "B13N", "D1R", "D4R", "D62R", "D5K", "D61K", "D4K")
+
+tulot <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "sektoriluokitus_7_20230101" = "S14",
+    "taloustoimi_1_20180101" = erat,
+    "contentscode" = "ntp-KAUSIT"
+  )
+) |> 
+pivot_wider(names_from = "taloustoimi_1_20180101", values_from = "values") |> 
+  mutate(
+    D4 = D4R + B13N - D4K,
+    D4R = NULL, D4K = NULL, B13N = NULL,
+    D5K = NULL, D61K = NULL  # Lasketaan yhdessä muiden tulonsiirtojen kanssa residuaalina myöhemmin
+    
+  ) |> 
+  pivot_longer(cols = where(is.numeric), 
+               names_to = "taloustoimi_1_20180101", values_to = "values")
+
+tekstit_erat <- list(
+  fi = list(
+    otsikko = "Käytettävissä olevan tulon muutos erittäin, %-yksikköä",
+    selite = "Kontribuutio vuodentakaiseen verrattuna, kausitasoitettu",
+    lahde = "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit",
+    jaannos = "Verot ja maksut, netto",
+    yhteensa = "Käytettävissä oleva tulo",
+    sarjat = c(D1R = "Palkat", "D4" = "Omaisuus- ja muut tulot, netto", 
+               D62R = "Saadut etuudet")
+  ),
+  sv = list(
+    otsikko = "Förändring av disponibel inkomst per post, procentenheter",
+    selite = "Bidrag jämfört med året innan, säsongrensad",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa sektorräkenskaper",
+    jaannos = "Övriga poster",
+    yhteensa = "Disponibel inkomst",
+    sarjat = c(D1R = "Löner", D62R = "Erhållna förmåner", D5K = "Skatter",
+               D61K = "Socialskyddsavgifter", D4K = "Kapitalutgifter")
+  ),
+  en = list(
+    otsikko = "Change in disposable income by component, percentage points",
+    selite = "Contribution compared with a year earlier, seasonally adjusted",
+    lahde = "Source: Statistics Finland, quarterly sector accounts",
+    jaannos = "Other components",
+    yhteensa = "Disposable income",
+    sarjat = c(D1R = "Wages", D62R = "Benefits received", D5K = "Taxes",
+               D61K = "Social contributions", D4K = "Property expenses")
+  )
+)
+
+kuvio_erat <- function(kieli) {
+  t <- tekstit_erat[[kieli]]
+  # Menoerien kasvu pienentaa kaytettavissa olevaa tuloa, joten ne kaannetaan.
+  d <- visu_contributions(
+    tulot,
+    series = "taloustoimi_1_20180101",
+    total = "B6N",
+    lag = 4,
+    negate = c("D61K"),
     residual = t$jaannos
   )
   nimet <- c(t$sarjat, stats::setNames(t$jaannos, t$jaannos))
