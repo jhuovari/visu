@@ -10,6 +10,9 @@
 #' @param p ggplot-objekti, tyypillisesti `visu_plot()`:n tulos.
 #' @param tooltip Vihjelaatikossa näytettävät aestetiikat.
 #' @param subtitle,caption Valinnaiset tekstit, jotka ggplotly muuten pudottaisi.
+#' @param height Widgetin korkeus pikseleinä. Oletus on hieman korkeampi kuin
+#'   plotlyn oma, jotta monirivinen selite ja lähde mahtuvat kuvion alle
+#'   ilman että piirtoala kutistuu.
 #' @param locale Plotlyn työkalupalkin ja lukumuotoilun kieli. Plotlyn mukana
 #'   tulevat muun muassa `"fi"` ja `"sv"`; englanti on sen oletus. Ohjaa myös
 #'   desimaalierottimen: suomessa ja ruotsissa pilkku.
@@ -20,6 +23,7 @@ visu_interactive <- function(p,
                              tooltip = c("x", "y", "colour", "fill"),
                              subtitle = NULL,
                              caption = NULL,
+                             height = 450,
                              locale = "fi",
                              ...) {
   if (!inherits(p, "ggplot")) {
@@ -46,7 +50,11 @@ visu_interactive <- function(p,
     annotations <- c(annotations, list(visu_annotation(subtitle, y = 1.06, size = 12)))
   }
   if (!is.null(caption)) {
-    annotations <- c(annotations, list(visu_annotation(caption, y = -0.28, size = 10)))
+    # Lahde ankkuroidaan piirtoalan alareunaan ja siirretaan pikseleina
+    # alaspain. Lopullisen siirtyman asettaa visu_caption_js() vasta kun
+    # selitteen korkeus on mitattavissa; tama on alkuarvo yhdelle riville.
+    annotations <- c(annotations, list(visu_annotation(
+      caption, y = 0, size = 10, yshift = -40, name = "visu-caption")))
   }
 
   w <- plotly::layout(
@@ -60,6 +68,9 @@ visu_interactive <- function(p,
   # Y-akseli seuraa aika-akselin zoomia, jotta nakyva sarja tayttaa kuvion.
   # Vain aikasarjoissa: poikkileikkauskuviossa x-akselia ei zoomata.
   if (aika) w <- htmlwidgets::onRender(w, visu_autoscale_js())
+  if (!is.null(caption)) w <- htmlwidgets::onRender(w, visu_caption_js())
+
+  w$height <- height
 
   plotly::config(
     w,
@@ -99,14 +110,15 @@ visu_plain_name <- function(nimi) {
 }
 
 # Vasempaan reunaan ankkuroitu kuvion ulkopuolinen tekstiselite.
-visu_annotation <- function(text, y, size) {
-  list(
+visu_annotation <- function(text, y, size, yshift = NULL, name = NULL) {
+  visu_compact(list(
     text = text, x = 0, y = y,
     xref = "paper", yref = "paper",
     xanchor = "left", yanchor = "top",
+    yshift = yshift, name = name,
     showarrow = FALSE,
     font = list(size = size)
-  )
+  ))
 }
 
 # Nollaviiva jaljesta muodoksi. ggplotly piirtaa geom_hlinen kahden pisteen
@@ -204,6 +216,68 @@ visu_numeric_ticks <- function(ticktext) {
 # Desimaali- ja tuhaterotin plotlyn omille merkinnoille ja vihjelaatikolle.
 visu_separators <- function(locale) {
   if (locale %in% c("fi", "sv")) ", " else ".,"
+}
+
+# Lahde selitteen alle. Selite latoutuu alareunaan niin monelle riville kuin
+# nimet vaativat, ja riveja tulee lisaa kun ikkuna kapenee. Paperiyksikoissa
+# annettu paikka ei kesta sita: yksikko on osuus piirtoalan korkeudesta, ja
+# kun selite kasvaa, piirtoala kutistuu ja sama osuus on pienempi matka
+# pikseleina - lahde siis nousee selitteen paalle juuri silloin kun tilaa on
+# vahiten. Mitattuna kaksirivinen selite toi lahteen 36 pikselia selitteen
+# sisaan. Siksi paikka asetetaan pikseleina vasta kun selite on piirretty.
+visu_caption_js <- function() {
+  "function(el) {
+  var gd = el;
+  var VALI = 10, RIVI = 16, REUNA = 8, KIERROKSIA = 6;
+  var kesken = false, kierros = 0;
+  function sovita() {
+    if (kesken || !gd.layout || !gd._fullLayout) return;
+    var ann = gd.layout.annotations || [];
+    var i = -1;
+    for (var k = 0; k < ann.length; k++) if (ann[k].name === 'visu-caption') i = k;
+    if (i < 0) return;
+
+    // Selitteen alareuna mitataan suhteessa piirtoalan alareunaan. Selite ei
+    // ala piirtoalan alareunasta vaan sen alapuolelta, ja etaisyys riippuu
+    // piirtoalan korkeudesta, joten se on luettava piirretysta kuviosta.
+    var leg = gd.querySelector('.legend');
+    var alaosa = 0;
+    if (leg) {
+      var pohja = gd._fullLayout.height - gd._fullLayout.margin.b;
+      alaosa = Math.max(leg.getBoundingClientRect().bottom -
+                        gd.getBoundingClientRect().top - pohja, 0);
+    }
+    var siirto = -(alaosa + VALI);
+    var marginaali = alaosa + VALI + RIVI + REUNA;
+
+    var muutos = {};
+    if (Math.abs((ann[i].yshift || 0) - siirto) > 1) {
+      muutos['annotations[' + i + '].yshift'] = siirto;
+    }
+    if (Math.abs((gd._fullLayout.margin.b || 0) - marginaali) > 1) {
+      muutos['margin.b'] = marginaali;
+    }
+    // Marginaalin kasvu kutistaa piirtoalaa ja siirtaa selitetta, joten tulos
+    // haetaan muutamalla kierroksella. Seuraava kierros ajetaan suoraan
+    // relayoutin jalkeen eika plotly_afterplot-tapahtumasta: tapahtuma osuu
+    // relayoutin sisaan, jolloin kesken-vartija nielaisee juuri sen kutsun
+    // joka jatkaisi iteraatiota, ja tulos jaa puolitiehen. Askel pienenee
+    // joka kierroksella, joten raja tayttyy nopeasti; laskuri on varmistus.
+    if (Object.keys(muutos).length === 0 || ++kierros > KIERROKSIA) return;
+    kesken = true;
+    Plotly.relayout(gd, muutos).then(function() {
+      kesken = false;
+      sovita();
+    });
+  }
+  function aja() {
+    kierros = 0;
+    sovita();
+  }
+  gd.on('plotly_afterplot', aja);
+  window.addEventListener('resize', function() { setTimeout(aja, 150); });
+  aja();
+}"
 }
 
 # Y-akseli sovitetaan nakyvaan aikavaliin aina kun x-akselia zoomataan.

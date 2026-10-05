@@ -9,6 +9,7 @@ visu_interactive(
   tooltip = c("x", "y", "colour", "fill"),
   subtitle = NULL,
   caption = NULL,
+  height = 450,
   locale = "fi",
   ...
 )
@@ -19,6 +20,10 @@ visu_interactive(
 \item{tooltip}{Vihjelaatikossa näytettävät aestetiikat.}
 
 \item{subtitle, caption}{Valinnaiset tekstit, jotka ggplotly muuten pudottaisi.}
+
+\item{height}{Widgetin korkeus pikseleinä. Oletus on hieman korkeampi kuin
+plotlyn oma, jotta monirivinen selite ja lähde mahtuvat kuvion alle
+ilman että piirtoala kutistuu.}
 
 \item{locale}{Plotlyn työkalupalkin ja lukumuotoilun kieli. Plotlyn mukana
 tulevat muun muassa \code{"fi"} ja \code{"sv"}; englanti on sen oletus. Ohjaa myös

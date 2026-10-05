@@ -182,3 +182,46 @@ test_that("paallysviiva ei sovi viivakuvioon eika vaaraan dataan", {
   expect_error(visu_plot(d, type = "col", line = viiva$values), "data frame")
   expect_error(visu_plot(d, type = "col", line = data.frame(time = d$time)), "values")
 })
+
+test_that("pylvaissa ja alueissa ei ole reunaviivaa", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 2),
+    era = rep(c("a", "b"), 2), values = c(1, 2, 2, 1)
+  )
+
+  # ggplot2 4.0:ssa pylvaan reunavari tulee teemasta, ja ggcustom antaa sille
+  # korostusvarin: ilman nimenomaista NA:ta jokaisen pylvaan ymparille piirtyy
+  # viiva, jota plotly-versiossa ei ole.
+  for (tyyppi in c("col", "area")) {
+    p <- visu_plot(d, colour = "era", type = tyyppi, stack = TRUE)
+    rakennettu <- ggplot2::ggplot_build(p)
+    kerros <- which(vapply(p$layers, function(l) !inherits(l$geom, "GeomHline"),
+                           logical(1)))[1]
+
+    expect_true(all(is.na(rakennettu$data[[kerros]]$colour)),
+                info = paste("tyyppi", tyyppi))
+  }
+})
+
+test_that("viivakuvion vari ei muutu", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+
+  rakennettu <- ggplot2::ggplot_build(visu_plot(d))
+  kerros <- rakennettu$data[[length(rakennettu$data)]]
+
+  expect_false(any(is.na(kerros$colour)))
+})
+
+test_that("erat ovat selitteessa ennen kokonaissarjaa", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-04-01")), each = 2),
+    era = rep(c("a", "b"), 2), values = c(1, 2, 2, 1)
+  )
+  viiva <- data.frame(time = unique(d$time), values = c(3, 3))
+
+  p <- visu_plot(d, colour = "era", type = "col", stack = TRUE,
+                 line = viiva, line_label = "Yhteensä")
+
+  expect_equal(p$guides$guides$fill$params$order, 1)
+  expect_equal(p$guides$guides$colour$params$order, 2)
+})
