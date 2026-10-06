@@ -25,6 +25,11 @@ tiedostoon eikä katkea.
 Päällekkäisissä havainnoissa uusi arvo voittaa, jotta lähteen korjaukset
 menevät läpi. Tiedosto kirjoitetaan aina järjestyksessä, jotta git-diff
 näyttää vain uudet rivit.
+
+Jos haku epäonnistuu, funktio palauttaa aiemmin kertyneen sarjan ja
+varoittaa. Näin yhden rajapinnan hetkellinen katko jättää kuvion
+edellisiin havaintoihin sen sijaan että se kaataisi koko renderöinnin.
+Tiedosto kirjoitetaan vain kun uusia havaintoja saatiin.
 }
 \examples{
 \dontrun{

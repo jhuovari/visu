@@ -78,3 +78,39 @@ test_that("odottamaton vastaus kaataa selvalla viestilla", {
   testthat::local_mocked_bindings(visu_px_json = function(...) NULL)
   expect_error(visu_get_bof("https://example.org/x"), "ei saatu")
 })
+
+test_that("haun katketessa kaytetaan aiemmin kertynytta tiedostoa", {
+  path <- tempfile(fileext = ".csv")
+  on.exit(unlink(path), add = TRUE)
+  visu_accumulate(data.frame(time = as.Date(c("2026-09-01", "2026-09-02")),
+                             sarja = "a", values = c(1, 2)), path)
+
+  expect_warning(
+    kaikki <- visu_accumulate(stop("rajapinta ei vastaa"), path),
+    "aiemmin kertynytt"
+  )
+
+  expect_equal(nrow(kaikki), 2L)
+  expect_equal(kaikki$values, c(1, 2))
+  expect_s3_class(kaikki$time, "Date")
+})
+
+test_that("katkos ilman tiedostoa kaataa, koska sarjaa ei ole mista lukea", {
+  path <- tempfile(fileext = ".csv")
+  expect_error(
+    suppressWarnings(visu_accumulate(stop("rajapinta ei vastaa"), path)),
+    "ei ole mist"
+  )
+  expect_false(file.exists(path))
+})
+
+test_that("katkos ei kirjoita tiedostoa uusiksi", {
+  path <- tempfile(fileext = ".csv")
+  on.exit(unlink(path), add = TRUE)
+  visu_accumulate(data.frame(time = as.Date("2026-09-01"), sarja = "a", values = 1), path)
+  ennen <- readLines(path)
+
+  suppressWarnings(visu_accumulate(stop("rajapinta ei vastaa"), path))
+
+  expect_equal(readLines(path), ennen)
+})
