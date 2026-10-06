@@ -225,13 +225,18 @@ visu_separators <- function(locale) {
   if (locale %in% c("fi", "sv")) ", " else ".,"
 }
 
-# Lahde selitteen alle. Selite latoutuu alareunaan niin monelle riville kuin
-# nimet vaativat, ja riveja tulee lisaa kun ikkuna kapenee. Paperiyksikoissa
-# annettu paikka ei kesta sita: yksikko on osuus piirtoalan korkeudesta, ja
-# kun selite kasvaa, piirtoala kutistuu ja sama osuus on pienempi matka
-# pikseleina - lahde siis nousee selitteen paalle juuri silloin kun tilaa on
-# vahiten. Mitattuna kaksirivinen selite toi lahteen 36 pikselia selitteen
-# sisaan. Siksi paikka asetetaan pikseleina vasta kun selite on piirretty.
+# Lahde piirtoalan alapuolisen sisallon alle. Selite latoutuu alareunaan niin
+# monelle riville kuin nimet vaativat, ja riveja tulee lisaa kun ikkuna
+# kapenee. Paperiyksikoissa annettu paikka ei kesta sita: yksikko on osuus
+# piirtoalan korkeudesta, ja kun selite kasvaa, piirtoala kutistuu ja sama
+# osuus on pienempi matka pikseleina - lahde siis nousee selitteen paalle
+# juuri silloin kun tilaa on vahiten. Mitattuna kaksirivinen selite toi
+# lahteen 36 pikselia selitteen sisaan. Siksi paikka asetetaan pikseleina
+# vasta kun kuvio on piirretty.
+#
+# Selite ei ole ainoa este: kun sita ei ole lainkaan, alin sisalto on
+# x-akselin lukurivi, ja pelkka piirtoalan alareunaan sidottu lahde osui sen
+# paalle. Siksi mitataan kaikki piirtoalan alapuolinen.
 visu_caption_js <- function() {
   "function(el) {
   var gd = el;
@@ -244,15 +249,19 @@ visu_caption_js <- function() {
     for (var k = 0; k < ann.length; k++) if (ann[k].name === 'visu-caption') i = k;
     if (i < 0) return;
 
-    // Selitteen alareuna mitataan suhteessa piirtoalan alareunaan. Selite ei
-    // ala piirtoalan alareunasta vaan sen alapuolelta, ja etaisyys riippuu
-    // piirtoalan korkeudesta, joten se on luettava piirretysta kuviosta.
-    var leg = gd.querySelector('.legend');
+    // Piirtoalan alapuolelle jaa muutakin kuin selite: x-akselin luvut ja
+    // mahdollinen akselin otsikko. Niiden alareunat mitataan suhteessa
+    // piirtoalan alareunaan ja lahde asetetaan alimman alle. Mittaus on
+    // luettava piirretysta kuviosta, koska etaisyydet riippuvat piirtoalan
+    // korkeudesta eivatka ole tiedossa ennen piirtoa.
+    var pohja = gd._fullLayout.height - gd._fullLayout.margin.b;
+    var ylareuna = gd.getBoundingClientRect().top;
     var alaosa = 0;
-    if (leg) {
-      var pohja = gd._fullLayout.height - gd._fullLayout.margin.b;
-      alaosa = Math.max(leg.getBoundingClientRect().bottom -
-                        gd.getBoundingClientRect().top - pohja, 0);
+    var alapuoliset = gd.querySelectorAll('.legend, .xtick, .g-xtitle');
+    for (var n = 0; n < alapuoliset.length; n++) {
+      var r = alapuoliset[n].getBoundingClientRect();
+      if (r.height === 0) continue;
+      alaosa = Math.max(alaosa, r.bottom - ylareuna - pohja);
     }
     var siirto = -(alaosa + VALI);
     var marginaali = alaosa + VALI + RIVI + REUNA;
