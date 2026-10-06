@@ -70,7 +70,14 @@ visu_interactive <- function(p,
   if (aika) w <- htmlwidgets::onRender(w, visu_autoscale_js())
   if (!is.null(caption)) w <- htmlwidgets::onRender(w, visu_caption_js())
 
+  # Quarton fig-responsive korvaa htmlwidgetsin kokolaskennan ja tulkitsee
+  # korkeuden kuvasuhteeksi: se skaalaa korkeuden leveyden suhteessa 650
+  # pikselin oletusleveyteen ja asettaa leveydeksi 100 %. Numeerinen leveys
+  # laukaisee skaalauksen, joten 450 kutistui 380 pikseliin (450 / 768 * 650).
+  # Kun leveys annetaan valmiiksi prosentteina, skaalaus jaa valiin ja korkeus
+  # on se mita pyydettiin -- lopputulos on leveyden osalta sama.
   w$height <- height
+  w$width <- "100%"
 
   plotly::config(
     w,

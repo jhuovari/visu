@@ -180,3 +180,11 @@ test_that("widgetille annetaan korkeus, jotta selite ja lahde mahtuvat", {
   expect_equal(visu_interactive(visu_plot(d))$height, 450)
   expect_equal(visu_interactive(visu_plot(d), height = 600)$height, 600)
 })
+
+test_that("leveys on prosentteina, jotta korkeus on pikseleita eika kuvasuhde", {
+  d <- data.frame(time = as.Date(c("2024-01-01", "2024-04-01")), values = c(1, 2))
+
+  # Quarton fig-responsive skaalaa korkeuden leveyden suhteessa, jos molemmat
+  # ovat numeerisia. Prosenttileveys jattaa korkeuden rauhaan.
+  expect_equal(visu_interactive(visu_plot(d))$width, "100%")
+})
