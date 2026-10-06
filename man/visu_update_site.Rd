@@ -35,3 +35,13 @@ vain ne kuviot, joiden data on muuttunut. Kun mikään ei ole muuttunut, ajo
 ei tee yhtään Quarto-renderöintiä eikä kirjoita yhtään tiedostoa, jolloin
 GitHub Actions -ajo päättyy ilman committia.
 }
+\details{
+Jokainen kuvio rakennetaan omana renderöintinään, jotta yhden lähteen katko
+ei vie muita mukanaan. Myös \code{full = TRUE} tekee näin ensin: koko sivuston
+renderöinti on yksi Quarto-kutsu, joka kaatuisi kokonaan yhteen virheeseen.
+Epäonnistunut kuvio palautetaan edelliseen versioonsa freeze-välimuistista,
+jolloin sivustorenderöinti ei aja sitä uudelleen. Jos kuviosta ei ole
+edellistä versiota tai sen qmd on muuttunut, sivustorenderöinti jätetään
+väliin ja vain etusivu päivitetään — rakennetut sivut jäävät voimaan.
+Ajo päättyy silti virheeseen, jotta hajonnut kuvio huomataan.
+}

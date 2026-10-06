@@ -188,6 +188,11 @@ visu_get_bof <- function(url) {
 #' menevät läpi. Tiedosto kirjoitetaan aina järjestyksessä, jotta git-diff
 #' näyttää vain uudet rivit.
 #'
+#' Jos haku epäonnistuu, funktio palauttaa aiemmin kertyneen sarjan ja
+#' varoittaa. Näin yhden rajapinnan hetkellinen katko jättää kuvion
+#' edellisiin havaintoihin sen sijaan että se kaataisi koko renderöinnin.
+#' Tiedosto kirjoitetaan vain kun uusia havaintoja saatiin.
+#'
 #' @param data Uudet havainnot. Sarake `values` on arvo, muut sarakkeet
 #'   yhdessä yksilöivät havainnon.
 #' @param path Csv-tiedoston polku. Luodaan jos sitä ei vielä ole.
@@ -199,8 +204,19 @@ visu_get_bof <- function(url) {
 #' }
 #' @export
 visu_accumulate <- function(data, path) {
+  # Argumentti on viela lupaus, joten haun virhe syntyy vasta tassa ja saadaan
+  # kiinni. Lyhyen ikkunan lahteessa katkos ei vie mitaan: kertynyt tiedosto
+  # on jo levylla, joten kuvio piirtyy edellisilla havainnoilla sen sijaan
+  # etta yhden rajapinnan hetkellinen katko kaataisi koko renderoinnin.
+  data <- tryCatch(force(data), error = function(e) {
+    visu_note("L\u00e4hteen haku ep\u00e4onnistui (", conditionMessage(e),
+              "), k\u00e4ytet\u00e4\u00e4n aiemmin kertynytt\u00e4 tiedostoa ", path, ".")
+    NULL
+  })
+  if (is.null(data)) return(visu_stored_series(path))
+
   if (!"values" %in% names(data)) {
-    stop("Datassa pitää olla sarake `values`.", call. = FALSE)
+    stop("Datassa pit\u00e4\u00e4 olla sarake `values`.", call. = FALSE)
   }
   avaimet <- setdiff(names(data), "values")
 
@@ -224,7 +240,17 @@ visu_read_accumulated <- function(path, sarakkeet) {
     return(as.data.frame(stats::setNames(tyhja, sarakkeet),
                          stringsAsFactors = FALSE)[0, , drop = FALSE])
   }
+  visu_stored_series(path)[sarakkeet]
+}
+
+# Kertynyt sarja sellaisenaan, kun uutta ei saatu. Ilman tiedostoa ei ole
+# mitaan nayttaa, joten silloin virhe on oikea lopputulos.
+visu_stored_series <- function(path) {
+  if (!file.exists(path)) {
+    stop("L\u00e4hteen haku ep\u00e4onnistui eik\u00e4 tiedostoa ", path,
+         " ole, joten sarjaa ei ole mist\u00e4 lukea.", call. = FALSE)
+  }
   vanha <- utils::read.csv(path, stringsAsFactors = FALSE)
   if ("time" %in% names(vanha)) vanha$time <- as.Date(vanha$time)
-  vanha[sarakkeet]
+  vanha
 }

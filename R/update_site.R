@@ -28,7 +28,7 @@ visu_stale_charts <- function(registry, state, updated, force = NULL) {
       "pakotettu"
     } else if (is.null(prev) || is.null(prev$built_at)) {
       "uusi kuvio"
-    } else if (!identical(as.character(prev$code_hash %||% NA_character_), registry$code_hash[i])) {
+    } else if (!visu_code_unchanged(id, registry, state)) {
       "koodi muuttunut"
     } else if (!identical(sort(prev_urls), sort(urls))) {
       "l\u00e4hdetaulu vaihtunut"
@@ -47,6 +47,15 @@ visu_stale_charts <- function(registry, state, updated, force = NULL) {
     reason = reason,
     stringsAsFactors = FALSE
   )
+}
+
+# Onko sivun lahdekoodi sama kuin viimeisimmassa onnistuneessa rakennuksessa.
+# Sama vertailu ratkaisee kaksi asiaa: kuvion vanhentumisen ja sen, kelpaako
+# talteen otettu freeze-valimuisti Quartolle.
+visu_code_unchanged <- function(id, registry, state) {
+  prev <- state[[id]]
+  identical(as.character(prev$code_hash %||% NA_character_),
+            registry$code_hash[match(id, registry$id)])
 }
 
 # Kuvion taulujen aikaleimat vertailukelpoisessa muodossa: osoitteella nimetty
@@ -71,6 +80,15 @@ visu_source_stamps <- function(stamps, urls) {
 #' vain ne kuviot, joiden data on muuttunut. Kun mikään ei ole muuttunut, ajo
 #' ei tee yhtään Quarto-renderöintiä eikä kirjoita yhtään tiedostoa, jolloin
 #' GitHub Actions -ajo päättyy ilman committia.
+#'
+#' Jokainen kuvio rakennetaan omana renderöintinään, jotta yhden lähteen katko
+#' ei vie muita mukanaan. Myös `full = TRUE` tekee näin ensin: koko sivuston
+#' renderöinti on yksi Quarto-kutsu, joka kaatuisi kokonaan yhteen virheeseen.
+#' Epäonnistunut kuvio palautetaan edelliseen versioonsa freeze-välimuistista,
+#' jolloin sivustorenderöinti ei aja sitä uudelleen. Jos kuviosta ei ole
+#' edellistä versiota tai sen qmd on muuttunut, sivustorenderöinti jätetään
+#' väliin ja vain etusivu päivitetään — rakennetut sivut jäävät voimaan.
+#' Ajo päättyy silti virheeseen, jotta hajonnut kuvio huomataan.
 #'
 #' @param site_dir Sivuston hakemisto, ks. [visu_site_dir()].
 #' @param force `TRUE` pakottaa kaikki kuviot, tunnisteiden vektori vain osan.
@@ -134,24 +152,37 @@ visu_update_site <- function(site_dir = NULL,
   quarto <- visu_quarto_bin()
 
   # Freeze-valimuisti pitaisi kuvion vanhassa datassa, joten se puretaan
-  # nimenomaan niilta kuvioilta, joiden data halutaan hakea uudelleen.
-  unlink(file.path(site_dir, "_freeze", "kuviot", stale), recursive = TRUE)
+  # nimenomaan niilta kuvioilta, joiden data halutaan hakea uudelleen. Vanha
+  # valimuisti otetaan talteen, jotta epaonnistunut kuvio voidaan palauttaa
+  # edelliseen versioonsa.
+  stash <- visu_freeze_stash(site_dir, stale)
+  on.exit(unlink(stash, recursive = TRUE), add = TRUE)
+  unlink(file.path(visu_freeze_dir(site_dir), stale), recursive = TRUE)
 
   # Yksi hajonnut kuvio ei saa pysayttaa koko paivittaista ajoa, joten virheet
-  # kerataan talteen ja silmukkaa jatketaan.
+  # kerataan talteen ja silmukkaa jatketaan. Nain on myos taydessa ajossa:
+  # koko sivuston renderointi on yksi Quarto-kutsu, joka kaatuisi kokonaan
+  # yhden lahteen katkoon, joten lohkot ajetaan ensin sivu kerrallaan.
   failed <- character()
-  if (!full) {
-    for (id in stale) {
-      ok <- tryCatch({
-        visu_quarto_render(quarto, registry$path[match(id, registry$id)], quiet)
-        TRUE
-      }, error = function(e) {
-        message("Kuvion '", id, "' render\u00f6inti ep\u00e4onnistui: ", conditionMessage(e))
-        FALSE
-      })
-      if (!ok) failed <- c(failed, id)
-    }
+  for (id in stale) {
+    ok <- tryCatch({
+      visu_quarto_render(quarto, registry$path[match(id, registry$id)], quiet)
+      TRUE
+    }, error = function(e) {
+      message("Kuvion '", id, "' render\u00f6inti ep\u00e4onnistui: ", conditionMessage(e))
+      FALSE
+    })
+    if (!ok) failed <- c(failed, id)
   }
+
+  # Epaonnistuneen kuvion valimuisti palautetaan, jotta koko sivuston
+  # renderointi kayttaa kuvion edellista versiota eika aja rikkinaista lohkoa
+  # uudelleen. Palautus ei auta, jos kuviota ei ole kertaakaan rakennettu tai
+  # jos sen qmd on muuttunut: Quarto ajaa muuttuneen sivun joka tapauksessa.
+  estavat <- union(
+    visu_freeze_restore(site_dir, stash, failed),
+    failed[!vapply(failed, visu_code_unchanged, logical(1), registry, state)]
+  )
 
   # Epaonnistuneet kuviot eivat saa tilamerkintaa, jotta ne yritetaan
   # uudelleen seuraavalla ajolla. Tila kirjoitetaan ennen etusivua, koska
@@ -162,11 +193,17 @@ visu_update_site <- function(site_dir = NULL,
 
   visu_state_write(visu_new_state(registry, updated, state, decisions, failed), site_dir)
 
-  if (full) {
-    visu_quarto_render(quarto, site_dir, quiet)
-  } else {
-    visu_quarto_render(quarto, file.path(site_dir, "index.qmd"), quiet)
+  # Taysi renderointi kayttaa freeze-valimuistia, joten se ei aja lohkoja
+  # uudelleen. Se jaa kuitenkin valiin, jos jokin kuvio kaatuisi siina taas:
+  # silloin jo rakennetut sivut jaavat voimaan ja vain navigaatio jaa
+  # paivittamatta.
+  taysi <- full && length(estavat) == 0L
+  if (full && !taysi) {
+    message("Koko sivustoa ei render\u00f6ity, koska kuvio ",
+            paste(estavat, collapse = ", "),
+            " ajettaisiin uudelleen ja kaatuisi samaan virheeseen.")
   }
+  visu_quarto_render(quarto, if (taysi) site_dir else file.path(site_dir, "index.qmd"), quiet)
 
   visu_prune_output(registry, site_dir)
 
@@ -215,6 +252,38 @@ visu_new_state <- function(registry, updated, state, decisions, failed = charact
 
   names(new) <- registry$id
   new[!vapply(new, is.null, logical(1))]
+}
+
+visu_freeze_dir <- function(site_dir) file.path(site_dir, "_freeze", "kuviot")
+
+# Kopioi kuvioiden freeze-valimuistin tilapaishakemistoon ja palauttaa sen
+# polun, jotta epaonnistunut kuvio voidaan palauttaa entiselleen.
+visu_freeze_stash <- function(site_dir, ids) {
+  stash <- tempfile("visu-freeze-")
+  dir.create(stash, recursive = TRUE)
+  for (id in ids) {
+    from <- file.path(visu_freeze_dir(site_dir), id)
+    if (dir.exists(from)) file.copy(from, stash, recursive = TRUE)
+  }
+  stash
+}
+
+# Palauttaa talteen otetun valimuistin ja kertoo ne tunnukset, joilta sita ei
+# ollut.
+visu_freeze_restore <- function(site_dir, stash, ids) {
+  if (length(ids) == 0L) return(character())
+  dir.create(visu_freeze_dir(site_dir), showWarnings = FALSE, recursive = TRUE)
+  puuttuu <- character()
+  for (id in ids) {
+    from <- file.path(stash, id)
+    if (!dir.exists(from)) {
+      puuttuu <- c(puuttuu, id)
+      next
+    }
+    unlink(file.path(visu_freeze_dir(site_dir), id), recursive = TRUE)
+    file.copy(from, visu_freeze_dir(site_dir), recursive = TRUE)
+  }
+  puuttuu
 }
 
 # Poistaa poistuneiden kuvioiden jaljet: sivun, sen resurssihakemiston ja
