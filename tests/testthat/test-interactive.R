@@ -188,3 +188,12 @@ test_that("leveys on prosentteina, jotta korkeus on pikseleita eika kuvasuhde", 
   # ovat numeerisia. Prosenttileveys jattaa korkeuden rauhaan.
   expect_equal(visu_interactive(visu_plot(d))$width, "100%")
 })
+
+test_that("lahde vaistaa myos x-akselin lukuja, ei vain selitetta", {
+  # Varsinainen varmistus on selainmittaus: ilman selitetta lahde osui
+  # x-akselin lukurivin paalle, koska mittaus katsoi vain selitetta. Tama
+  # testi pitaa mittauksen laajennettuna.
+  js <- visu_caption_js()
+
+  expect_match(js, ".legend, .xtick, .g-xtitle", fixed = TRUE)
+})
