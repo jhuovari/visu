@@ -59,7 +59,7 @@ test_that("aika-akselista tulee plotlyn date-akseli ja arvot skaalataan", {
   expect_equal(b$x$data[[1]]$x[1], 631152000000)
 })
 
-test_that("nollaviivasta tulee koko leveyden muoto eika jaljesta", {
+test_that("nollaviivasta tulee piirtoalan levyinen muoto eika jaljesta", {
   d <- data.frame(
     time = seq(as.Date("1990-01-01"), as.Date("2026-01-01"), by = "year"),
     values = rep(c(-1, 2), length.out = 37)
@@ -71,7 +71,51 @@ test_that("nollaviivasta tulee koko leveyden muoto eika jaljesta", {
   expect_length(ilman$x$data, 2L)
   expect_length(kanssa$x$data, 1L)
   expect_length(kanssa$x$layout$shapes, 1L)
-  expect_equal(kanssa$x$layout$shapes[[1]]$xref, "paper")
+  # Ruudun oma koordinaatisto eika paperi: muoto osuu piirtoalaan ja
+  # pienruutukuviossa oikean ruudun nollaan.
+  expect_equal(kanssa$x$layout$shapes[[1]]$xref, "x domain")
+  expect_equal(kanssa$x$layout$shapes[[1]]$yref, "y")
+})
+
+test_that("pienruutukuvio saa nollaviivan jokaiseen ruutuun", {
+  d <- data.frame(
+    time = rep(seq(as.Date("2020-01-01"), as.Date("2026-01-01"), by = "year"), 4),
+    ryhma = rep(c("a", "b", "c", "d"), each = 7),
+    values = rep(c(-1, 2), length.out = 28)
+  )
+
+  b <- plotly::plotly_build(visu_interactive(visu_plot(d, facet = "ryhma")))
+
+  # Muodoissa on myos ruutujen otsikkopalkit, joten nollaviivat erotetaan
+  # tyypin mukaan.
+  viivat <- Filter(function(m) identical(m$type, "line"), b$x$layout$shapes)
+
+  # Nelja ruutua, nelja nollaviivaa, eika yhtakaan nollaviivaa jaljissa.
+  expect_length(viivat, 4L)
+  expect_length(b$x$data, 4L)
+  expect_setequal(
+    vapply(viivat, function(m) paste(m$xref, m$yref), character(1)),
+    c("x domain y", "x2 domain y", "x domain y2", "x2 domain y2")
+  )
+})
+
+test_that("pienruutukuvion kaikki aika-akselit skaalataan", {
+  d <- data.frame(
+    time = rep(seq(as.Date("2020-01-01"), as.Date("2026-01-01"), by = "year"), 4),
+    ryhma = rep(c("a", "b", "c", "d"), each = 7),
+    values = seq_len(28)
+  )
+
+  b <- plotly::plotly_build(visu_interactive(visu_plot(d, facet = "ryhma")))
+  akselit <- grep("^xaxis[0-9]*$", names(b$x$layout), value = TRUE)
+
+  expect_gt(length(akselit), 1L)
+  for (a in akselit) {
+    expect_equal(b$x$layout[[a]]$type, "date")
+    # Paivat millisekunteina: skaalaamaton akseli jaisi alle miljoonan ja
+    # sen ruutu nayttaisi tyhjalta.
+    expect_gt(min(as.numeric(b$x$layout[[a]]$range)), 1e9)
+  }
 })
 
 test_that("kuvio ilman nollaviivaa sailyttaa kaikki jalkensa", {

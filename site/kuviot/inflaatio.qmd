@@ -5,6 +5,8 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/"
+    - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_manr/M.RCH_A.CP00+TOT_X_NRG_FOOD.FI+EA20"
+    - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_manr/M.RCH_A.CP01+CP02+CP03+CP04+CP05+CP06+CP07+CP08+CP09+CP10+CP11+CP12.FI+EA20"
 ---
 
 ```{r}
@@ -417,4 +419,219 @@ visu_downloads(kuvio_vaikutus, "hyodykeryhmat-vaikutus")
 visu_metadata(ryhma_muutos, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/")
 ```
 
-Lähde: [Tilastokeskus, kuluttajahintaindeksi](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__khi/), taulut 15b5, 15b7 ja 15b9.
+## Suomi ja euroalue
+
+Vertailu euroalueeseen tulee Eurostatin yhdenmukaistetusta indeksistä, jolloin
+molemmat alueet on laskettu samalla menetelmällä. Sarja on sama YKHI kuin
+sivun alussa, mutta Eurostatin oma julkaisuaikataulu on hitaampi kuin
+Tilastokeskuksen, joten vertailu voi päättyä kuukausia aiemmin kuin sivun muut
+kuviot.
+
+Pohjainflaatio on indeksi ilman energiaa, elintarvikkeita, alkoholia ja
+tupakkaa. Nämä erät heiluvat eniten ja usein muusta hintakehityksestä
+riippumattomista syistä, joten pohjainflaatio kertoo paremmin siitä, mihin
+hinnat ovat laaja-alaisesti menossa.
+
+::: {.panel-tabset}
+
+### Kokonaisinflaatio
+
+```{r}
+library(visu)
+library(dplyr)
+
+euroalue <- visu_get_eurostat(
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_manr/M.RCH_A.CP00+TOT_X_NRG_FOOD.FI+EA20"
+)
+
+# Suomi ensin, jotta se saa paletin ensimmaisen varin kuten sivun muissakin
+# kuvioissa.
+alueet <- list(
+  fi = c(FI = "Suomi", EA20 = "Euroalue"),
+  sv = c(FI = "Finland", EA20 = "Euroområdet"),
+  en = c(FI = "Finland", EA20 = "Euro area")
+)
+
+merkitse_alue <- function(d, kieli) {
+  d$alue <- factor(as.character(d$geo), levels = names(alueet[[kieli]]),
+                   labels = alueet[[kieli]])
+  d
+}
+
+tekstit_vertailu <- list(
+  fi = list(
+    otsikko = "Yhdenmukaistetun kuluttajahintaindeksin vuosimuutos, %",
+    selite = "Sama menetelmä molemmilla alueilla",
+    lahde = "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi"
+  ),
+  sv = list(
+    otsikko = "Det harmoniserade konsumentprisindexets årsförändring, %",
+    selite = "Samma metod för båda områdena",
+    lahde = "Källa: Eurostat, harmoniserat konsumentprisindex"
+  ),
+  en = list(
+    otsikko = "Annual change in the harmonised index of consumer prices, %",
+    selite = "The same method for both areas",
+    lahde = "Source: Eurostat, Harmonised Index of Consumer Prices"
+  )
+)
+
+kuvio_vertailu <- function(kieli) {
+  t <- tekstit_vertailu[[kieli]]
+  d <- merkitse_alue(filter(euroalue, coicop == "CP00"), kieli)
+  visu_plot(d, colour = "alue", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
+}
+
+kuvio_vertailu("fi") |>
+  visu_interactive(
+    subtitle = tekstit_vertailu$fi$selite,
+    caption = tekstit_vertailu$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_vertailu, "inflaatio-euroalue")
+```
+
+### Pohjainflaatio
+
+```{r}
+library(visu)
+library(dplyr)
+
+tekstit_pohja <- list(
+  fi = list(
+    otsikko = "Pohjainflaation vuosimuutos, %",
+    selite = "Ilman energiaa, elintarvikkeita, alkoholia ja tupakkaa",
+    lahde = "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi"
+  ),
+  sv = list(
+    otsikko = "Den underliggande inflationens årsförändring, %",
+    selite = "Utan energi, livsmedel, alkohol och tobak",
+    lahde = "Källa: Eurostat, harmoniserat konsumentprisindex"
+  ),
+  en = list(
+    otsikko = "Annual change in core inflation, %",
+    selite = "Excluding energy, food, alcohol and tobacco",
+    lahde = "Source: Eurostat, Harmonised Index of Consumer Prices"
+  )
+)
+
+kuvio_pohja <- function(kieli) {
+  t <- tekstit_pohja[[kieli]]
+  d <- merkitse_alue(filter(euroalue, coicop == "TOT_X_NRG_FOOD"), kieli)
+  visu_plot(d, colour = "alue", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
+}
+
+kuvio_pohja("fi") |>
+  visu_interactive(
+    subtitle = tekstit_pohja$fi$selite,
+    caption = tekstit_pohja$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_pohja, "inflaatio-euroalue-pohja")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(
+  euroalue,
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_manr/M.RCH_A.CP00+TOT_X_NRG_FOOD.FI+EA20"
+)
+```
+
+## Pääryhmät Suomessa ja euroalueella
+
+Sama vertailu pääryhmittäin, ryhmä kerrallaan omassa ruudussaan. Asteikko on
+kaikissa ruuduissa sama, jotta ruudut ovat keskenään vertailukelpoisia: siitä
+näkee yhdellä silmäyksellä, mitkä ryhmät heiluvat ja mitkä eivät. Eurostatin
+luokituksessa pääryhmiä on 12, kansallisessa indeksissä sivun yllä 13.
+
+```{r}
+#| fig-height: 6.5
+
+library(visu)
+library(dplyr)
+
+paaryhmat <- visu_get_eurostat(
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_manr/M.RCH_A.CP01+CP02+CP03+CP04+CP05+CP06+CP07+CP08+CP09+CP10+CP11+CP12.FI+EA20"
+)
+
+ryhmanimet <- list(
+  fi = c(CP01 = "Elintarvikkeet", CP02 = "Alkoholi ja tupakka",
+         CP03 = "Vaatetus ja jalkineet", CP04 = "Asuminen ja energia",
+         CP05 = "Kalusteet ja kodinhoito", CP06 = "Terveys", CP07 = "Liikenne",
+         CP08 = "Tietoliikenne", CP09 = "Kulttuuri ja vapaa-aika",
+         CP10 = "Koulutus", CP11 = "Ravintolat ja hotellit",
+         CP12 = "Muut tavarat ja palvelut"),
+  sv = c(CP01 = "Livsmedel", CP02 = "Alkohol och tobak",
+         CP03 = "Kläder och skor", CP04 = "Boende och energi",
+         CP05 = "Inventarier och hushållsvård", CP06 = "Hälsovård",
+         CP07 = "Transport", CP08 = "Kommunikation", CP09 = "Kultur och fritid",
+         CP10 = "Utbildning", CP11 = "Restauranger och hotell",
+         CP12 = "Övriga varor och tjänster"),
+  en = c(CP01 = "Food", CP02 = "Alcohol and tobacco",
+         CP03 = "Clothing and footwear", CP04 = "Housing and energy",
+         CP05 = "Furnishings and household", CP06 = "Health", CP07 = "Transport",
+         CP08 = "Communications", CP09 = "Recreation and culture",
+         CP10 = "Education", CP11 = "Restaurants and hotels",
+         CP12 = "Miscellaneous goods and services")
+)
+
+tekstit_paaryhmat <- list(
+  fi = list(
+    otsikko = "Inflaatio pääryhmittäin, %",
+    selite = "Yhdenmukaistetun indeksin vuosimuutos, yhteinen asteikko",
+    lahde = "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi"
+  ),
+  sv = list(
+    otsikko = "Inflationen efter huvudgrupp, %",
+    selite = "Det harmoniserade indexets årsförändring, gemensam skala",
+    lahde = "Källa: Eurostat, harmoniserat konsumentprisindex"
+  ),
+  en = list(
+    otsikko = "Inflation by main group, %",
+    selite = "Annual change in the harmonised index, shared scale",
+    lahde = "Source: Eurostat, Harmonised Index of Consumer Prices"
+  )
+)
+
+kuvio_paaryhmat <- function(kieli) {
+  t <- tekstit_paaryhmat[[kieli]]
+  nimet <- ryhmanimet[[kieli]]
+  d <- merkitse_alue(paaryhmat, kieli)
+  d$ryhma <- factor(nimet[as.character(d$coicop)], levels = nimet)
+  visu_plot(d, colour = "alue", facet = "ryhma", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
+}
+
+kuvio_paaryhmat("fi") |>
+  visu_interactive(
+    subtitle = tekstit_paaryhmat$fi$selite,
+    caption = tekstit_paaryhmat$fi$lahde,
+    height = 650
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_paaryhmat, "inflaatio-euroalue-paaryhmat", height = 6.5)
+visu_metadata(
+  paaryhmat,
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_manr/M.RCH_A.CP01+CP02+CP03+CP04+CP05+CP06+CP07+CP08+CP09+CP10+CP11+CP12.FI+EA20"
+)
+```
+
+Lähteet: [Tilastokeskus, kuluttajahintaindeksi](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__khi/), taulut 15b5, 15b7 ja 15b9, sekä [Eurostat, yhdenmukaistettu kuluttajahintaindeksi](https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_manr/), aineisto prc_hicp_manr.

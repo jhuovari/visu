@@ -10,6 +10,7 @@ visu_plot(
   y = NULL,
   colour = NULL,
   linewidth = NULL,
+  facet = NULL,
   type = c("line", "col", "area"),
   stack = FALSE,
   line = NULL,
@@ -42,6 +43,12 @@ tavalla siloitettuna — eri värit antaisivat ymmärtää, että kyse on eri
 sarjoista. Järjestä luokat karkeimmasta siloitetuimpaan, eli
 alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
 Vain piirtotyypille \code{"line"}.}
+
+\item{facet}{Valinnainen luokittelusarake merkkijonona, joka jakaa kuvion
+pienruutuihin. Tarkoitettu vertailuun: sama sarja samalla asteikolla
+ryhmä kerrallaan, jolloin ruudut ovat keskenään vertailukelpoisia.
+Asteikko on tahallaan yhteinen, koska pienruutujen koko pointti on, että
+poikkeava ryhmä erottuu muista.}
 
 \item{type}{Piirtotyyppi: \code{"line"} (oletus), \code{"col"} tai \code{"area"}.}
 
