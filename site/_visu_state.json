@@ -1,14 +1,16 @@
 {
   "inflaatio": {
-    "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/"],
+    "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px/", "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.TOTAL+TOT_X_NRG_FOOD.FI+EA20", "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.CP01+CP02+CP03+CP04+CP05+CP06+CP07+CP08+CP09+CP10+CP11+CP12+CP13.FI+EA20"],
     "title": "Inflaatio",
     "source_updated": {
+      "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.CP01+CP02+CP03+CP04+CP05+CP06+CP07+CP08+CP09+CP10+CP11+CP12+CP13.FI+EA20": "2026-10-02T09:00:00Z",
+      "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.TOTAL+TOT_X_NRG_FOOD.FI+EA20": "2026-10-02T09:00:00Z",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px": "2026-09-11T09:18:11",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b7.px": "2026-09-11T09:18:12",
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b9.px": "2026-09-30T14:10:30"
     },
-    "code_hash": "7a5089c9c39452d5b165078c38c75814c3007538436e97cf4e95e3224ffd17e7",
-    "built_at": "2026-10-06T08:09:25Z"
+    "code_hash": "bb8cb9393e698c6670fe094eb8bdb26944f76e4f7a6ad7c3ceddab61b4e3fe87",
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "julkinen-talous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jali/122g.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jtume/11zf.px/"],
@@ -19,7 +21,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/jyev/11yv.px": "2026-09-25T12:46:00"
     },
     "code_hash": "9688d9b91cb776918508b5ac82d15ffee28ab982a60301457a8791ca5459ef95",
-    "built_at": "2026-10-06T08:09:25Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "kotitaloudet": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a8.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px/"],
@@ -29,7 +31,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/rtp/129g.px": "2026-09-25T12:45:43"
     },
     "code_hash": "8cb20de8d06b93f5642ee451a08ef8296ec093ec0c1945c9d14adc3639fec3eb",
-    "built_at": "2026-10-06T08:09:25Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "neljannesvuositilinpito": {
     "table_url": "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
@@ -38,7 +40,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px": "2026-09-17T13:47:40"
     },
     "code_hash": "df87841e467073df5a3d4cb79d20c48c9bfe453e12dee890d5f147d83574c1b7",
-    "built_at": "2026-10-06T08:09:25Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "ostovoima": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15a6.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/129h.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vq.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11vr.px/", "https://www.suomenpankki.fi/api/interestrates/euribor"],
@@ -53,22 +55,22 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/15ae.px": "2026-09-17T13:47:52"
     },
     "code_hash": "07d53b3e6a6b8a1d93b0f83b5fea3010d74018dc97755ed6e7222459b594ecc2",
-    "built_at": "2026-10-08T05:08:58Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "rahoitusmarkkinat": {
     "table_url": ["https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A", "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A", "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU", "https://www.suomenpankki.fi/api/interestrates/euribor", "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT", "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y", "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y"],
     "title": "Rahoitusmarkkinat",
     "source_updated": {
-      "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT": "2026-10-07T06:05:08Z",
-      "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A": "2026-10-07T13:57:01Z",
-      "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A": "2026-10-07T13:57:01Z",
+      "https://data-api.ecb.europa.eu/service/data/EST/B.EU000A2X2A25.WT": "2026-10-08T06:05:13Z",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A": "2026-10-08T13:57:03Z",
+      "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+GBP.EUR.SP00.A": "2026-10-08T13:57:03Z",
       "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR+MRR_FR.LEV": "2026-10-07T23:37:10Z",
-      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y": "2026-10-07T10:00:00Z",
-      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y": "2026-10-07T10:00:00Z",
+      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.IF_3M+IF_6M+IF_1Y+IF_2Y+IF_3Y+IF_5Y+IF_7Y+IF_10Y+IF_15Y+IF_20Y+IF_30Y": "2026-10-08T10:00:00Z",
+      "https://data-api.ecb.europa.eu/service/data/YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_2Y+SR_10Y": "2026-10-08T10:00:00Z",
       "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU": "2026-10-07T17:17:23Z"
     },
     "code_hash": "c6cb4455a490bba4c87a97446093e27fcca333713b9c5eb1793fbedca5a4e9e4",
-    "built_at": "2026-10-08T05:08:58Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "suhdannekuva": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"],
@@ -78,7 +80,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px": "2026-09-29T09:59:22"
     },
     "code_hash": "9e58bb2c7b313e414f6e6e48dc605d2067a283598c5ba1b354c15f647b005247",
-    "built_at": "2026-10-06T08:09:25Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "tyomarkkinat": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135y.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/11pk.px/"],
@@ -89,7 +91,7 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tyti/135z.px": "2026-09-21T12:34:15"
     },
     "code_hash": "98418b1dd010c41554dc1762bf78410a18b69394819b40b29c65f70a074233f2",
-    "built_at": "2026-10-06T08:09:25Z"
+    "built_at": "2026-10-08T20:28:40Z"
   },
   "ulkomaantalous": {
     "table_url": ["https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/", "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"],
@@ -99,6 +101,6 @@
       "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px": "2026-09-17T12:20:32"
     },
     "code_hash": "ad7e2d040adf5dbfd256cbf683fc3fc0cb097af5a2f1b405ed72ba189936e674",
-    "built_at": "2026-10-06T08:09:25Z"
+    "built_at": "2026-10-08T20:28:40Z"
   }
 }
