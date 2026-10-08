@@ -3,6 +3,8 @@
 the <- new.env(parent = emptyenv())
 the$folder_listing <- list()
 the$table_meta <- list()
+# Eurostatin paivitysleimat osoitteittain, ks. R/csv.R.
+the$eurostat <- list()
 # Rajapintapyyntojen aikaleimat tahdinpitoa varten (R/data.R).
 the$px_calls <- numeric()
 # Ajon aikana kirjatut kuviot, ks. R/catalog.R.
@@ -20,6 +22,7 @@ the$quiet <- FALSE
 visu_clear_cache <- function() {
   the$folder_listing <- list()
   the$table_meta <- list()
+  the$eurostat <- list()
   the$px_calls <- numeric()
   invisible(NULL)
 }
@@ -39,8 +42,13 @@ visu_clear_cache <- function() {
 #' @export
 visu_table_updated <- function(url) {
   # Muut kuin PxWeb-osoitteet kertovat tuoreutensa Last-Modified-otsakkeessa.
+  # Eurostat ei laheta sita, joten silta leima luetaan datan mukana tulevasta
+  # LAST UPDATE -sarakkeesta.
   parts <- visu_split_table_url(url)
-  if (is.null(parts)) return(visu_http_updated(url))
+  if (is.null(parts)) {
+    return(if (visu_is_eurostat(url)) visu_eurostat_updated(url)
+           else visu_http_updated(url))
+  }
 
   listing <- visu_folder_listing(parts$folder)
   if (is.null(listing) || !all(c("id", "updated") %in% names(listing))) {

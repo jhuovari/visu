@@ -22,6 +22,50 @@
     "png_en": "kuviot/kuvat/hyodykeryhmat-vuosimuutos-en.png"
   },
   {
+    "id": "inflaatio-euroalue",
+    "page": "inflaatio",
+    "title_fi": "Yhdenmukaistetun kuluttajahintaindeksin vuosimuutos, %",
+    "title_sv": "Det harmoniserade konsumentprisindexets årsförändring, %",
+    "title_en": "Annual change in the harmonised index of consumer prices, %",
+    "source": "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi",
+    "png_fi": "kuviot/kuvat/inflaatio-euroalue-fi.png",
+    "png_sv": "kuviot/kuvat/inflaatio-euroalue-sv.png",
+    "png_en": "kuviot/kuvat/inflaatio-euroalue-en.png"
+  },
+  {
+    "id": "inflaatio-euroalue-paaryhmat",
+    "page": "inflaatio",
+    "title_fi": "Inflaatio pääryhmittäin, %",
+    "title_sv": "Inflationen efter huvudgrupp, %",
+    "title_en": "Inflation by main group, %",
+    "source": "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi",
+    "png_fi": "kuviot/kuvat/inflaatio-euroalue-paaryhmat-fi.png",
+    "png_sv": "kuviot/kuvat/inflaatio-euroalue-paaryhmat-sv.png",
+    "png_en": "kuviot/kuvat/inflaatio-euroalue-paaryhmat-en.png"
+  },
+  {
+    "id": "inflaatio-euroalue-pohja",
+    "page": "inflaatio",
+    "title_fi": "Pohjainflaation vuosimuutos, %",
+    "title_sv": "Den underliggande inflationens årsförändring, %",
+    "title_en": "Annual change in core inflation, %",
+    "source": "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi",
+    "png_fi": "kuviot/kuvat/inflaatio-euroalue-pohja-fi.png",
+    "png_sv": "kuviot/kuvat/inflaatio-euroalue-pohja-sv.png",
+    "png_en": "kuviot/kuvat/inflaatio-euroalue-pohja-en.png"
+  },
+  {
+    "id": "inflaatio-euroalue-taso",
+    "page": "inflaatio",
+    "title_fi": "Yhdenmukaistettu kuluttajahintaindeksi, 2025 = 100",
+    "title_sv": "Harmoniserat konsumentprisindex, 2025 = 100",
+    "title_en": "Harmonised index of consumer prices, 2025 = 100",
+    "source": "Lähde: Eurostat, yhdenmukaistettu kuluttajahintaindeksi",
+    "png_fi": "kuviot/kuvat/inflaatio-euroalue-taso-fi.png",
+    "png_sv": "kuviot/kuvat/inflaatio-euroalue-taso-sv.png",
+    "png_en": "kuviot/kuvat/inflaatio-euroalue-taso-en.png"
+  },
+  {
     "id": "kuluttajahinnat-taso",
     "page": "inflaatio",
     "title_fi": "Kuluttajahintojen indeksipisteluku, 2025 = 100",

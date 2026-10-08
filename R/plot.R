@@ -17,6 +17,11 @@
 #'   sarjoista. Järjestä luokat karkeimmasta siloitetuimpaan, eli
 #'   alkuperäinen ensin ja trendi viimeisenä; viiva paksunee järjestyksessä.
 #'   Vain piirtotyypille `"line"`.
+#' @param facet Valinnainen luokittelusarake merkkijonona, joka jakaa kuvion
+#'   pienruutuihin. Tarkoitettu vertailuun: sama sarja samalla asteikolla
+#'   ryhmä kerrallaan, jolloin ruudut ovat keskenään vertailukelpoisia.
+#'   Asteikko on tahallaan yhteinen, koska pienruutujen koko pointti on, että
+#'   poikkeava ryhmä erottuu muista.
 #' @param type Piirtotyyppi: `"line"` (oletus), `"col"` tai `"area"`.
 #' @param stack Pinoaako pylväät päällekkäin vierekkäisten sijaan. Käytä kun
 #'   erien on tarkoitus summautua kokonaisuuteen, kuten
@@ -55,6 +60,7 @@ visu_plot <- function(data,
                       y = NULL,
                       colour = NULL,
                       linewidth = NULL,
+                      facet = NULL,
                       type = c("line", "col", "area"),
                       stack = FALSE,
                       line = NULL,
@@ -81,6 +87,7 @@ visu_plot <- function(data,
   visu_require_col(data, x, "x")
   visu_require_col(data, y, "y")
   if (!is.null(colour)) visu_require_col(data, colour, "colour")
+  if (!is.null(facet)) visu_require_col(data, facet, "facet")
   if (!is.null(linewidth)) {
     visu_require_col(data, linewidth, "linewidth")
     if (type != "line") {
@@ -167,6 +174,9 @@ visu_plot <- function(data,
 
   if (!is.null(colour)) {
     p <- p + if (type == "line") ggcustom::scale_colour_vm() else ggcustom::scale_fill_vm()
+  }
+  if (!is.null(facet)) {
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[facet]]))
   }
   if (!is.null(linewidth)) {
     p <- p + ggplot2::scale_linewidth_manual(

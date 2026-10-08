@@ -45,9 +45,37 @@ visu_interactive <- function(p,
   w <- visu_time_axis(w, p)
   w <- visu_dynamic_ticks(w, aika)
 
+  # Pienruutukuviossa ruutujen otsikot vievat juuri sen kaistan piirtoalan
+  # ylapuolelta, johon alaotsikko muuten asettuu: mitattuna ruutujen otsikot
+  # ovat -18..0 pikselia ja alaotsikko -16..+1 pikselia piirtoalan
+  # ylareunasta. Alaotsikko nostetaan siksi ruutujen otsikoiden yli, ja
+  # ylamarginaali kasvaa saman verran, jottei se puolestaan osu otsikkoon.
+  ruutuja <- length(visu_panels(w))
+  nosto <- if (ruutuja > 1L) 22 else 0
+  if (nosto > 0) {
+    # Plotly keskittaa otsikon ylamarginaaliin, joten kasvanut marginaali
+    # toisi senkin alemmas ja alaotsikko osuisi siihen. Otsikko ankkuroidaan
+    # siksi kuvan ylareunaan, jolloin se pysyy paikallaan marginaalin kasvaessa.
+    w$x$layout$title$yref <- "container"
+    w$x$layout$title$yanchor <- "top"
+    w$x$layout$title$y <- 1
+    w$x$layout$title$pad <- list(t = 17)
+  }
+
   annotations <- list()
   if (!is.null(subtitle)) {
-    annotations <- c(annotations, list(visu_annotation(subtitle, y = 1.06, size = 12)))
+    # Yhden ruudun kuviossa alaotsikko on osuutena piirtoalan korkeudesta
+    # kuten ennenkin. Pienruuduissa paikka annetaan pikseleina piirtoalan
+    # ylareunasta, jotta se asettuu ruutujen otsikoiden ylapuolelle kuvion
+    # korkeudesta riippumatta: 38 pikselia yloaspain jattaa ruutujen
+    # 18-pikseliselle otsikkoriville kolme pikselia ilmaa.
+    annotations <- c(annotations, list(
+      if (ruutuja > 1L) {
+        visu_annotation(subtitle, y = 1, size = 12, yshift = 38)
+      } else {
+        visu_annotation(subtitle, y = 1.06, size = 12)
+      }
+    ))
   }
   if (!is.null(caption)) {
     # Lahde ankkuroidaan piirtoalan alareunaan ja siirretaan pikseleina
@@ -60,14 +88,18 @@ visu_interactive <- function(p,
   w <- plotly::layout(
     w,
     legend = list(orientation = "h", x = 0, y = -0.15, title = list(text = "")),
-    margin = list(t = 60, b = 80),
+    margin = list(t = 60 + nosto, b = 80),
     annotations = annotations,
     separators = visu_separators(locale)
   )
 
   # Y-akseli seuraa aika-akselin zoomia, jotta nakyva sarja tayttaa kuvion.
-  # Vain aikasarjoissa: poikkileikkauskuviossa x-akselia ei zoomata.
-  if (aika) w <- htmlwidgets::onRender(w, visu_autoscale_js())
+  # Vain aikasarjoissa: poikkileikkauskuviossa x-akselia ei zoomata. Ei
+  # myoskaan pienruuduissa: niiden yhteinen asteikko on koko pointti, ja
+  # ruutukohtainen skaalaus veisi ruuduilta vertailukelpoisuuden.
+  if (aika && ruutuja == 1L) {
+    w <- htmlwidgets::onRender(w, visu_autoscale_js())
+  }
   if (!is.null(caption)) w <- htmlwidgets::onRender(w, visu_caption_js())
 
   # Quarton fig-responsive korvaa htmlwidgetsin kokolaskennan ja tulkitsee
@@ -135,16 +167,41 @@ visu_hline_shape <- function(w, p) {
   if (length(p$layers) == 0L || !inherits(p$layers[[1]]$geom, "GeomHline")) return(w)
   if (length(w$x$data) == 0L) return(w)
 
-  w$x$data <- w$x$data[-1L]
+  # Pienruutukuviossa ggplotly tekee jokaisesta kerroksesta yhden jaljen
+  # ruutua kohti, joten nollaviivalta poistetaan ne kaikki eika vain
+  # ensimmaista.
+  w$x$data <- w$x$data[-seq_len(min(visu_panel_count(p), length(w$x$data)))]
+
   # Suoraan asetteluun eika plotly::layout():lla, joka pudottaa ggplotly-
-  # objektin muodot rakennusvaiheessa.
-  w$x$layout$shapes <- c(w$x$layout$shapes, list(list(
-    type = "line", layer = "below",
-    xref = "paper", x0 = 0, x1 = 1,
-    yref = "y", y0 = 0, y1 = 0,
-    line = list(color = "grey35", width = 1)
-  )))
+  # objektin muodot rakennusvaiheessa. Viiva piirretaan ruudun omaan
+  # koordinaatistoon, jotta se osuu oikealle nollalle myos silloin kun
+  # ruutuja on useita.
+  w$x$layout$shapes <- c(w$x$layout$shapes, lapply(visu_panels(w), function(ruutu) {
+    list(
+      type = "line", layer = "below",
+      xref = paste0(ruutu[["x"]], " domain"), x0 = 0, x1 = 1,
+      yref = ruutu[["y"]], y0 = 0, y1 = 0,
+      line = list(color = "grey35", width = 1)
+    )
+  }))
   w
+}
+
+# Kuvion pienruudut. ggplotly nimeaa ruudun akseliparilla, jossa sarakkeet
+# jakavat x-akselin ja rivit y-akselin, joten ruudut loytyvat jaljille
+# merkittyjen parien joukosta.
+visu_panels <- function(w) {
+  parit <- lapply(w$x$data, function(tr) {
+    c(x = tr$xaxis %||% "x", y = tr$yaxis %||% "y")
+  })
+  if (length(parit) == 0L) return(list(c(x = "x", y = "y")))
+  parit[!duplicated(vapply(parit, paste, character(1), collapse = " "))]
+}
+
+visu_panel_count <- function(p) {
+  ruudut <- tryCatch(nrow(ggplot2::ggplot_build(p)$layout$layout),
+                     error = function(e) NULL)
+  if (is.null(ruudut) || is.na(ruudut) || ruudut < 1L) 1L else as.integer(ruudut)
 }
 
 # Aika-akseli plotlyn omaksi date-akseliksi. ggplotly antaa paivat lukuina
@@ -166,11 +223,22 @@ visu_time_axis <- function(w, p) {
     }
     tr
   })
-  if (!is.null(w$x$layout$xaxis$range)) {
-    w$x$layout$xaxis$range <- as.numeric(w$x$layout$xaxis$range) * kerroin
+  # Pienruutukuviossa sarakkeilla on omat akselinsa (xaxis, xaxis2, ...), ja
+  # skaalaamatta jaanyt akseli nayttaisi ruutunsa tyhjana: data olisi
+  # miljoonia kertoja akselin vasemmalla puolella.
+  for (akseli in visu_axis_names(w, "xaxis")) {
+    if (!is.null(w$x$layout[[akseli]]$range)) {
+      w$x$layout[[akseli]]$range <- as.numeric(w$x$layout[[akseli]]$range) * kerroin
+    }
+    w$x$layout[[akseli]]$type <- "date"
   }
-  w$x$layout$xaxis$type <- "date"
   w
+}
+
+# Asettelun akselit nimen alkuosan mukaan: xaxis, xaxis2, ... Jarjestys on
+# sama kuin asettelussa, ja yhden ruudun kuviossa osumia on tasan yksi.
+visu_axis_names <- function(w, alku) {
+  grep(paste0("^", alku, "[0-9]*$"), names(w$x$layout), value = TRUE)
 }
 
 # Kuinka monella millisekunnilla ggplotlyn x-luvut kerrotaan. NULL kun x ei
@@ -191,11 +259,15 @@ visu_time_scale <- function(p) {
 # aika-akseli. Numeeriselle akselille annetaan ryhmitelty muoto, koska
 # plotlyn oletus lyhentaisi tuhannet muotoon "35k".
 visu_dynamic_ticks <- function(w, aika = FALSE) {
-  if (aika || visu_numeric_ticks(w$x$layout$xaxis$ticktext)) {
-    w <- visu_clear_ticks(w, "xaxis", muoto = !aika)
+  for (akseli in visu_axis_names(w, "xaxis")) {
+    if (aika || visu_numeric_ticks(w$x$layout[[akseli]]$ticktext)) {
+      w <- visu_clear_ticks(w, akseli, muoto = !aika)
+    }
   }
-  if (visu_numeric_ticks(w$x$layout$yaxis$ticktext)) {
-    w <- visu_clear_ticks(w, "yaxis", muoto = TRUE)
+  for (akseli in visu_axis_names(w, "yaxis")) {
+    if (visu_numeric_ticks(w$x$layout[[akseli]]$ticktext)) {
+      w <- visu_clear_ticks(w, akseli, muoto = TRUE)
+    }
   }
   w
 }
