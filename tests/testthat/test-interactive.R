@@ -241,3 +241,17 @@ test_that("lahde vaistaa myos x-akselin lukuja, ei vain selitetta", {
 
   expect_match(js, ".legend, .xtick, .g-xtitle", fixed = TRUE)
 })
+
+test_that("lahdetta ei sijoiteta piilossa olevasta kuviosta mitaten", {
+  # Mitattu selaimessa: valilehden takana jokainen getBoundingClientRect()
+  # palauttaa nollia, jolloin mittaus paatteli ettei piirtoalan alapuolella
+  # ole mitaan ja lahde asettui x-akselin lukujen paalle (yshift -10 kaikissa
+  # piilossa olevissa kuvioissa). Sovitus odottaa siis nakyviin, ja
+  # ResizeObserver herattaa sen kun valilehti avataan.
+  js <- visu_caption_js()
+
+  expect_match(js, "gd.offsetParent === null", fixed = TRUE)
+  expect_match(js, "ResizeObserver", fixed = TRUE)
+  # Fontti voi vaihtua lataamisen jalkeen ilman plotlyn omaa tapahtumaa.
+  expect_match(js, "document.fonts.ready", fixed = TRUE)
+})

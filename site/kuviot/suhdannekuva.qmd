@@ -4,7 +4,7 @@ visu:
   table_url:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"
-    - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA20"
+    - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA21"
     - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bsin_m_r2/M.BS-IOB+BS-IEOB+BS-ISFP+BS-IPE.SA.BAL.FI"
 ---
 
@@ -382,15 +382,15 @@ library(visu)
 # Yhdella haulla seka ESI etta toimialojen luottamusindikaattorit: ne ovat
 # samassa aineistossa, ja kahdesta kuviosta tulee yksi haku.
 komissio <- visu_get_eurostat(
-  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA20"
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA21"
 )
 
 # Suomi ensin, jotta se saa paletin ensimmaisen varin kuten sivun muissakin
 # kuvioissa.
 komission_alueet <- list(
-  fi = c(FI = "Suomi", EA20 = "Euroalue"),
-  sv = c(FI = "Finland", EA20 = "Euroområdet"),
-  en = c(FI = "Finland", EA20 = "Euro area")
+  fi = c(FI = "Suomi", EA21 = "Euroalue"),
+  sv = c(FI = "Finland", EA21 = "Euroområdet"),
+  en = c(FI = "Finland", EA21 = "Euro area")
 )
 
 merkitse_alue <- function(d, kieli) {
@@ -566,7 +566,7 @@ visu_downloads(kuvio_teollisuus, "teollisuuden-kysely")
 ```{r}
 #| echo: false
 #| output: asis
-visu_metadata(komissio, "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA20")
+visu_metadata(komissio, "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA21")
 ```
 
 
