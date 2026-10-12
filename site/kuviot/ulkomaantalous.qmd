@@ -4,6 +4,9 @@ visu:
   table_url:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"
+    - "https://www.cpb.nl/en/worldtrademonitor/latest"
+    - "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC"
+    - "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC2"
 ---
 
 ```{r}
@@ -14,7 +17,9 @@ visu::visu_updated_note()
 
 Suomen talouden suhde ulkomaihin. Vaihtotase kertoo, ansaitseeko Suomi
 ulkomailta enemmän kuin maksaa sinne, ja tavaroiden ja palveluiden
-ulkomaankauppa erittelee, mistä virta syntyy.
+ulkomaankauppa erittelee, mistä virta syntyy. Tullin tavarakauppatilasto
+tarkentaa tavaroiden osuuden kuukausitasolle ja tavararyhmiin, ja lopuksi
+maailmankauppa kertoo, millaisessa kysyntäympäristössä Suomen vienti on.
 
 Vaihtotase on kuukausisarjana hyvin heiluva, joten oletusnäkymä on 12
 kuukauden liukuva summa. Yksittäiset kuukaudet ovat omalla välilehdellään.
@@ -241,4 +246,590 @@ visu_downloads(kuvio_erat, "ulkomaankauppa-tavarat-palvelut")
 visu_metadata(kauppa, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/")
 ```
 
-Lähteet: [Maksutase ja ulkomainen varallisuusasema](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__mata/) (114s) ja [Tavaroiden ja palveluiden ulkomaankauppa](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tpulk/) (12gq).
+## Tavarakauppa
+
+Tullin tavarakauppatilasto on tavaravirran tarkin ja nopein lähde: se
+ilmestyy kuukausittain ja erittelee kaupan tavararyhmiin, kun sivun ylempi
+maksutasepohjainen kuvio on neljännesvuosittainen ja kokonaisuus. Luvut ovat
+tilastoarvoja, eli tuonti sisältää rahdin Suomen rajalle ja vienti rahdin
+rajalle asti.
+
+Kuukausiarvot heiluvat voimakkaasti, joten molemmissa kuvioissa näytetään 12
+kuukauden liukuva summa.
+
+```{r}
+library(visu)
+library(dplyr)
+
+# Tulli uudisti kuutiot 30.3.2026: nykyinen kuutio alkaa vuodesta 2025 ja
+# pidempi historia on rinnakkaisessa kuutiossa. Kumpikin haetaan ja sarjat
+# yhdistetaan; paallekkaisilla kuukausilla nykyinen kuutio voittaa, jotta
+# myohemmat korjaukset menevat lapi.
+kauppa_kysely <- list(
+  `SITC Products` = "=ALL", `Time period` = "=ALL", Flow = c(1, 2),
+  `Continents and groups` = "00", Indicators = "V1"
+)
+
+tulli_uusi <- visu_get_uljas(
+  "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
+  classifiers = kauppa_kysely
+)
+tulli_vanha <- visu_get_uljas(
+  "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC2",
+  classifiers = kauppa_kysely
+)
+
+tavarakauppa <- bind_rows(tulli_vanha, tulli_uusi) |>
+  distinct(time, `SITC Products`, Flow, .keep_all = TRUE)
+attr(tavarakauppa, "codes_names") <- attr(tulli_uusi, "codes_names")
+
+# Kuukausiarvoista 12 kuukauden liukuva summa. Vuoden ensimmaiset yksitoista
+# kuukautta jaavat NA:ksi, koska niille ei ole taytta ikkunaa.
+liukuva_summa <- function(x) as.numeric(stats::filter(x, rep(1, 12), sides = 1))
+
+tekstit_tavarakauppa <- list(
+  fi = list(
+    otsikko = "Tavaravienti ja -tuonti, mrd. euroa",
+    selite = "12 kuukauden liukuva summa",
+    lahde = "Lähde: Tulli, tavaroiden ulkomaankauppa",
+    sarjat = c(`2` = "Vienti", `1` = "Tuonti")
+  ),
+  sv = list(
+    otsikko = "Varuexport och -import, md euro",
+    selite = "Glidande summa för 12 månader",
+    lahde = "Källa: Tullen, utrikeshandel med varor",
+    sarjat = c(`2` = "Export", `1` = "Import")
+  ),
+  en = list(
+    otsikko = "Goods exports and imports, EUR bn",
+    selite = "12-month rolling sum",
+    lahde = "Source: Finnish Customs, international trade in goods",
+    sarjat = c(`2` = "Exports", `1` = "Imports")
+  )
+)
+
+kauppa_yhteensa <- tavarakauppa |>
+  filter(`SITC Products` == "") |>
+  arrange(Flow, time) |>
+  group_by(Flow) |>
+  mutate(summa = liukuva_summa(values) / 1e9) |>
+  ungroup() |>
+  filter(!is.na(summa))
+
+kuvio_tavarakauppa <- function(kieli) {
+  t <- tekstit_tavarakauppa[[kieli]]
+  d <- kauppa_yhteensa
+  d$virta <- factor(as.character(d$Flow), levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, y = "summa", colour = "virta", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
+}
+
+kuvio_tavarakauppa("fi") |>
+  visu_interactive(
+    subtitle = tekstit_tavarakauppa$fi$selite,
+    caption = tekstit_tavarakauppa$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tavarakauppa, "tavarakauppa-kuukausittain")
+```
+
+### Vienti tavararyhmittäin
+
+```{r}
+library(visu)
+library(dplyr)
+
+# SITC-paaryhmat summautuvat kokonaisvientiin. Pienimmat kolme -- elintarvikkeet,
+# oljyt ja luokittelemattomat -- yhdistetaan muiksi, jotta pinossa on luettava
+# maara eria.
+ryhmat <- c("7", "6", "5", "2", "3", "8")
+muut <- c("0+1", "4", "9")
+
+vienti_ryhmat <- tavarakauppa |>
+  filter(Flow == "2", `SITC Products` %in% c(ryhmat, muut)) |>
+  mutate(ryhma = ifelse(`SITC Products` %in% muut, "muut",
+                        as.character(`SITC Products`))) |>
+  group_by(ryhma, time) |>
+  summarise(values = sum(values), .groups = "drop") |>
+  arrange(ryhma, time) |>
+  group_by(ryhma) |>
+  mutate(summa = liukuva_summa(values) / 1e9) |>
+  ungroup() |>
+  filter(!is.na(summa))
+
+tekstit_vienti_ryhmat <- list(
+  fi = list(
+    otsikko = "Tavaravienti tavararyhmittäin, mrd. euroa",
+    selite = "12 kuukauden liukuva summa",
+    lahde = "Lähde: Tulli, tavaroiden ulkomaankauppa",
+    sarjat = c(`7` = "Koneet ja kuljetusvälineet", `6` = "Valmistetut tavarat",
+               `5` = "Kemian tuotteet", `2` = "Raaka-aineet",
+               `3` = "Energiatuotteet", `8` = "Muut valmiit tavarat",
+               muut = "Muut")
+  ),
+  sv = list(
+    otsikko = "Varuexporten efter varugrupp, md euro",
+    selite = "Glidande summa för 12 månader",
+    lahde = "Källa: Tullen, utrikeshandel med varor",
+    sarjat = c(`7` = "Maskiner och transportmedel", `6` = "Bearbetade varor",
+               `5` = "Kemiska produkter", `2` = "Råvaror",
+               `3` = "Energiprodukter", `8` = "Övriga färdiga varor",
+               muut = "Övriga")
+  ),
+  en = list(
+    otsikko = "Goods exports by commodity group, EUR bn",
+    selite = "12-month rolling sum",
+    lahde = "Source: Finnish Customs, international trade in goods",
+    sarjat = c(`7` = "Machinery and transport equipment", `6` = "Basic manufactures",
+               `5` = "Chemicals", `2` = "Crude materials",
+               `3` = "Mineral fuels", `8` = "Miscellaneous manufactures",
+               muut = "Other")
+  )
+)
+
+kuvio_vienti_ryhmat <- function(kieli) {
+  t <- tekstit_vienti_ryhmat[[kieli]]
+  d <- vienti_ryhmat
+  d$ryhma <- factor(d$ryhma, levels = names(t$sarjat), labels = t$sarjat)
+  # x annetaan nimella: summarise() siirsi ryhmasarakkeen ensimmaiseksi, ja
+  # oletuksena x on datan ensimmainen sarake.
+  visu_plot(d, x = "time", y = "summa", colour = "ryhma", type = "area",
+            title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
+}
+
+kuvio_vienti_ryhmat("fi") |>
+  visu_interactive(
+    subtitle = tekstit_vienti_ryhmat$fi$selite,
+    caption = tekstit_vienti_ryhmat$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_vienti_ryhmat, "tavarakauppa-vienti-ryhmittain")
+visu_metadata(
+  tavarakauppa,
+  "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC"
+)
+```
+
+## Maailmankauppa
+
+Maailmankaupan volyymi CPB:n World Trade Monitorista. Se on nopein laajasti
+vertailukelpoinen mittari maailmankaupasta: kuukausisarja ilmestyy noin kahden
+kuukauden viiveellä, kun kansalliset tilastot ovat hitaampia. Tuonti on
+jaettu kehittyneisiin ja kehittyviin talouksiin, koska ne ovat vetäneet
+kauppaa eri suuntiin finanssikriisin jälkeen.
+
+Maailmankauppa ja maailman tuonti ovat lähes sama sarja — ero syntyy siitä,
+että kauppa lasketaan viennin ja tuonnin keskiarvona. Molemmat ovat mukana,
+koska ryhmäjako on tuonnin puolella.
+
+::: {.panel-tabset}
+
+### Taso
+
+```{r}
+library(visu)
+library(dplyr)
+
+# Koko tyokirja haetaan kerran valilehtea kohti ja kuviot poimivat siita
+# omansa, jottei sama Excel lataudu joka kuviolle uudelleen.
+kauppa_koodit <- c("tgz_w1_qnmi_sn", "mgz_w1_qnmi_sn", "mgz_i1_qnmi_sn",
+                   "mgz_d1_qnmi_sn", "mgz_e6_qnmi_sn", "mgz_us_qnmi_sn",
+                   "mgz_jp_qnmi_sn", "mgz_t1_qnmi_sn", "mgz_l1_qnmi_sn",
+                   "mgz_f3_qnmi_sn", "mgz_w1_pdmi_sn", "hfl_w1_pdmi_nn")
+
+cpb_kauppa <- visu_get_cpb("https://www.cpb.nl/en/worldtrademonitor/latest", codes = kauppa_koodit)
+
+# Osajoukko selitteineen: data.frame-indeksointi pudottaa omat attribuutit,
+# joten codes_names siirretaan erikseen. visu_metadata() lukee nimet siita.
+poimi <- function(d, koodit) {
+  osa <- d[as.character(d$sarja) %in% koodit, , drop = FALSE]
+  osa$sarja <- factor(as.character(osa$sarja), levels = koodit)
+  attr(osa, "codes_names") <- list(sarja = attr(d, "codes_names")$sarja[koodit])
+  osa
+}
+
+# Sarjan koodi kuvion selitteeksi annetulla kielella.
+merkitse_sarja <- function(d, nimet) {
+  d$alue <- factor(as.character(d$sarja), levels = names(nimet), labels = nimet)
+  d
+}
+
+maailmankauppa <- poimi(cpb_kauppa, c("tgz_w1_qnmi_sn", "mgz_w1_qnmi_sn",
+                                      "mgz_i1_qnmi_sn", "mgz_d1_qnmi_sn"))
+
+maailmankauppa_vm <- maailmankauppa |>
+  group_by(sarja) |>
+  mutate(vuosimuutos = visu_change(values, time)) |>
+  ungroup()
+
+tekstit_maailma <- list(
+  fi = list(
+    otsikko = "Maailmankaupan volyymi, 2021 = 100",
+    selite = "Kausitasoitettu",
+    lahde = "Lähde: CPB World Trade Monitor",
+    sarjat = c(tgz_w1_qnmi_sn = "Maailmankauppa",
+               mgz_w1_qnmi_sn = "Maailman tuonti",
+               mgz_i1_qnmi_sn = "Kehittyneet taloudet",
+               mgz_d1_qnmi_sn = "Kehittyvät taloudet")
+  ),
+  sv = list(
+    otsikko = "Världshandelns volym, 2021 = 100",
+    selite = "Säsongrensad",
+    lahde = "Källa: CPB World Trade Monitor",
+    sarjat = c(tgz_w1_qnmi_sn = "Världshandeln",
+               mgz_w1_qnmi_sn = "Världens import",
+               mgz_i1_qnmi_sn = "Utvecklade ekonomier",
+               mgz_d1_qnmi_sn = "Tillväxtekonomier")
+  ),
+  en = list(
+    otsikko = "World trade volume, 2021 = 100",
+    selite = "Seasonally adjusted",
+    lahde = "Source: CPB World Trade Monitor",
+    sarjat = c(tgz_w1_qnmi_sn = "World trade",
+               mgz_w1_qnmi_sn = "World imports",
+               mgz_i1_qnmi_sn = "Advanced economies",
+               mgz_d1_qnmi_sn = "Emerging economies")
+  )
+)
+
+kuvio_maailma <- function(kieli) {
+  t <- tekstit_maailma[[kieli]]
+  visu_plot(merkitse_sarja(maailmankauppa, t$sarjat), colour = "alue",
+            title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
+}
+
+kuvio_maailma("fi") |>
+  visu_interactive(
+    subtitle = tekstit_maailma$fi$selite,
+    caption = tekstit_maailma$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_maailma, "maailmankauppa-taso")
+```
+
+### Vuosimuutos
+
+```{r}
+library(visu)
+library(dplyr)
+
+tekstit_maailma_muutos <- list(
+  fi = list(
+    otsikko = "Maailmankaupan volyymin vuosimuutos, %",
+    selite = "Kausitasoitetusta sarjasta laskettu",
+    lahde = "Lähde: CPB World Trade Monitor"
+  ),
+  sv = list(
+    otsikko = "Världshandelsvolymens årsförändring, %",
+    selite = "Beräknad från den säsongrensade serien",
+    lahde = "Källa: CPB World Trade Monitor"
+  ),
+  en = list(
+    otsikko = "Annual change in world trade volume, %",
+    selite = "Derived from the seasonally adjusted series",
+    lahde = "Source: CPB World Trade Monitor"
+  )
+)
+
+kuvio_maailma_muutos <- function(kieli) {
+  t <- tekstit_maailma_muutos[[kieli]]
+  d <- merkitse_sarja(maailmankauppa_vm, tekstit_maailma[[kieli]]$sarjat)
+  visu_plot(d, y = "vuosimuutos", colour = "alue", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli,
+            zeroline = TRUE)
+}
+
+kuvio_maailma_muutos("fi") |>
+  visu_interactive(
+    subtitle = tekstit_maailma_muutos$fi$selite,
+    caption = tekstit_maailma_muutos$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_maailma_muutos, "maailmankauppa-vuosimuutos")
+```
+
+### Alueittain
+
+```{r}
+#| fig-height: 6
+
+library(visu)
+library(dplyr)
+
+tuonti_alueet <- poimi(cpb_kauppa, c("mgz_e6_qnmi_sn", "mgz_us_qnmi_sn",
+                                     "mgz_jp_qnmi_sn", "mgz_t1_qnmi_sn",
+                                     "mgz_l1_qnmi_sn", "mgz_f3_qnmi_sn"))
+
+# Samat aluenimet tuonnissa ja teollisuustuotannossa, joten ne maaritellaan
+# kerran koodin loppuosan mukaan.
+aluenimet <- list(
+  fi = c(e6 = "Euroalue", us = "Yhdysvallat", jp = "Japani",
+         t1 = "Itä-Eurooppa ja IVY", l1 = "Latinalainen Amerikka",
+         f3 = "Afrikka ja Lähi-itä"),
+  sv = c(e6 = "Euroområdet", us = "USA", jp = "Japan",
+         t1 = "Östeuropa och OSS", l1 = "Latinamerika",
+         f3 = "Afrika och Mellanöstern"),
+  en = c(e6 = "Euro area", us = "United States", jp = "Japan",
+         t1 = "Eastern Europe and CIS", l1 = "Latin America",
+         f3 = "Africa and Middle East")
+)
+
+merkitse_alue <- function(d, kieli, etuliite) {
+  nimet <- stats::setNames(aluenimet[[kieli]],
+                           paste0(etuliite, names(aluenimet[[kieli]]), "_qnmi_sn"))
+  d$alue <- factor(as.character(d$sarja), levels = names(nimet), labels = nimet)
+  d
+}
+
+tekstit_tuonti_alueet <- list(
+  fi = list(
+    otsikko = "Tuonnin volyymi alueittain, 2021 = 100",
+    selite = "Yhteinen asteikko, kausitasoitettu",
+    lahde = "Lähde: CPB World Trade Monitor"
+  ),
+  sv = list(
+    otsikko = "Importvolymen efter område, 2021 = 100",
+    selite = "Gemensam skala, säsongrensad",
+    lahde = "Källa: CPB World Trade Monitor"
+  ),
+  en = list(
+    otsikko = "Import volume by area, 2021 = 100",
+    selite = "Shared scale, seasonally adjusted",
+    lahde = "Source: CPB World Trade Monitor"
+  )
+)
+
+kuvio_tuonti_alueet <- function(kieli) {
+  t <- tekstit_tuonti_alueet[[kieli]]
+  d <- merkitse_alue(tuonti_alueet, kieli, "mgz_")
+  visu_plot(d, facet = "alue", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_tuonti_alueet("fi") |>
+  visu_interactive(
+    subtitle = tekstit_tuonti_alueet$fi$selite,
+    caption = tekstit_tuonti_alueet$fi$lahde,
+    height = 620
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tuonti_alueet, "maailmankauppa-alueittain", height = 6)
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(cpb_kauppa, "https://www.cpb.nl/en/worldtrademonitor/latest")
+```
+
+## Maailman teollisuustuotanto
+
+Teollisuustuotanto on saman työkirjan toinen puoli. CPB painottaa maiden
+tuotannon niiden tuontiosuuksilla, joten sarja kertoo nimenomaan sitä
+tuotantoa, joka on maailmankaupan takana. Tuotanto reagoi kauppaa hitaammin,
+joten näiden kahden ero kertoo varastojen ja tilauskantojen liikkeestä.
+
+::: {.panel-tabset}
+
+### Taso
+
+```{r}
+library(visu)
+library(dplyr)
+
+tuotanto_koodit <- paste0("ipz_", c("w1", "i1", "d1", "e6", "us", "jp",
+                                    "t1", "l1", "f3"), "_qnmi_sm")
+
+cpb_tuotanto <- visu_get_cpb("https://www.cpb.nl/en/worldtrademonitor/latest", codes = tuotanto_koodit,
+                             sheet = "inpro_out")
+
+tekstit_tuotanto <- list(
+  fi = list(
+    otsikko = "Teollisuustuotannon volyymi, 2021 = 100",
+    selite = "Tuontipainoin, kausi- ja kalenteritasoitettu",
+    lahde = "Lähde: CPB World Trade Monitor",
+    sarjat = c(ipz_w1_qnmi_sm = "Maailma",
+               ipz_i1_qnmi_sm = "Kehittyneet taloudet",
+               ipz_d1_qnmi_sm = "Kehittyvät taloudet")
+  ),
+  sv = list(
+    otsikko = "Industriproduktionens volym, 2021 = 100",
+    selite = "Med importvikter, säsong- och kalenderrensad",
+    lahde = "Källa: CPB World Trade Monitor",
+    sarjat = c(ipz_w1_qnmi_sm = "Världen",
+               ipz_i1_qnmi_sm = "Utvecklade ekonomier",
+               ipz_d1_qnmi_sm = "Tillväxtekonomier")
+  ),
+  en = list(
+    otsikko = "Industrial production volume, 2021 = 100",
+    selite = "Import weighted, seasonally and calendar adjusted",
+    lahde = "Source: CPB World Trade Monitor",
+    sarjat = c(ipz_w1_qnmi_sm = "World",
+               ipz_i1_qnmi_sm = "Advanced economies",
+               ipz_d1_qnmi_sm = "Emerging economies")
+  )
+)
+
+tuotanto_paa <- poimi(cpb_tuotanto, names(tekstit_tuotanto$fi$sarjat))
+
+kuvio_tuotanto <- function(kieli) {
+  t <- tekstit_tuotanto[[kieli]]
+  visu_plot(merkitse_sarja(tuotanto_paa, t$sarjat), colour = "alue",
+            title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
+}
+
+kuvio_tuotanto("fi") |>
+  visu_interactive(
+    subtitle = tekstit_tuotanto$fi$selite,
+    caption = tekstit_tuotanto$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tuotanto, "maailman-teollisuustuotanto")
+```
+
+### Alueittain
+
+```{r}
+#| fig-height: 6
+
+library(visu)
+library(dplyr)
+
+tuotanto_alueet <- poimi(cpb_tuotanto,
+                         paste0("ipz_", names(aluenimet$fi), "_qnmi_sm"))
+
+tekstit_tuotanto_alueet <- list(
+  fi = list(
+    otsikko = "Teollisuustuotannon volyymi alueittain, 2021 = 100",
+    selite = "Yhteinen asteikko, tuontipainoin",
+    lahde = "Lähde: CPB World Trade Monitor"
+  ),
+  sv = list(
+    otsikko = "Industriproduktionens volym efter område, 2021 = 100",
+    selite = "Gemensam skala, med importvikter",
+    lahde = "Källa: CPB World Trade Monitor"
+  ),
+  en = list(
+    otsikko = "Industrial production volume by area, 2021 = 100",
+    selite = "Shared scale, import weighted",
+    lahde = "Source: CPB World Trade Monitor"
+  )
+)
+
+kuvio_tuotanto_alueet <- function(kieli) {
+  t <- tekstit_tuotanto_alueet[[kieli]]
+  nimet <- stats::setNames(aluenimet[[kieli]],
+                           paste0("ipz_", names(aluenimet[[kieli]]), "_qnmi_sm"))
+  d <- tuotanto_alueet
+  d$alue <- factor(as.character(d$sarja), levels = names(nimet), labels = nimet)
+  visu_plot(d, facet = "alue", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_tuotanto_alueet("fi") |>
+  visu_interactive(
+    subtitle = tekstit_tuotanto_alueet$fi$selite,
+    caption = tekstit_tuotanto_alueet$fi$lahde,
+    height = 620
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tuotanto_alueet, "maailman-teollisuustuotanto-alueittain",
+               height = 6)
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(cpb_tuotanto, "https://www.cpb.nl/en/worldtrademonitor/latest")
+```
+
+## Maailmankaupan hinnat
+
+Tuonnin yksikköarvo dollareissa kertoo, paljonko maailmankaupassa liikkuvista
+tavaroista maksetaan. Energian hinta on mukana, koska se on sen heiluvin osa
+ja vetää koko tuontihintaa mukanaan: ero sarjojen välillä on se, mitä muille
+tavaroille on tapahtunut.
+
+```{r}
+library(visu)
+library(dplyr)
+
+hinnat <- poimi(cpb_kauppa, c("mgz_w1_pdmi_sn", "hfl_w1_pdmi_nn"))
+
+tekstit_hinnat <- list(
+  fi = list(
+    otsikko = "Maailmankaupan hinnat, 2021 = 100",
+    selite = "Tuonnin yksikköarvo dollareissa ja energian hinta",
+    lahde = "Lähde: CPB World Trade Monitor, energian hinta HWWI",
+    sarjat = c(mgz_w1_pdmi_sn = "Tuontihinta", hfl_w1_pdmi_nn = "Energia")
+  ),
+  sv = list(
+    otsikko = "Världshandelns priser, 2021 = 100",
+    selite = "Importens enhetsvärde i dollar och energipriset",
+    lahde = "Källa: CPB World Trade Monitor, energipriset HWWI",
+    sarjat = c(mgz_w1_pdmi_sn = "Importpris", hfl_w1_pdmi_nn = "Energi")
+  ),
+  en = list(
+    otsikko = "World trade prices, 2021 = 100",
+    selite = "Import unit value in dollars and the price of energy",
+    lahde = "Source: CPB World Trade Monitor, energy price HWWI",
+    sarjat = c(mgz_w1_pdmi_sn = "Import price", hfl_w1_pdmi_nn = "Energy")
+  )
+)
+
+kuvio_hinnat <- function(kieli) {
+  t <- tekstit_hinnat[[kieli]]
+  visu_plot(merkitse_sarja(hinnat, t$sarjat), colour = "alue",
+            title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
+}
+
+kuvio_hinnat("fi") |>
+  visu_interactive(
+    subtitle = tekstit_hinnat$fi$selite,
+    caption = tekstit_hinnat$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_hinnat, "maailmankaupan-hinnat")
+```
+
+Lähteet: [Maksutase ja ulkomainen varallisuusasema](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__mata/) (114s), [Tavaroiden ja palveluiden ulkomaankauppa](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tpulk/) (12gq), [Tulli, tavaroiden ulkomaankauppa](https://tilastot.tulli.fi/uljas-tilastotietokanta/) (ULJAS_SITC) ja [CPB World Trade Monitor](https://www.cpb.nl/en/worldtrademonitor/latest).

@@ -61,9 +61,16 @@ visu_metadata_one <- function(data, url, contents = "contentscode") {
     rivit <- c(rivit, visu_def("P\u00e4ivitetty", visu_format_stamp(updated)))
   }
 
+  # Luokittelusarakkeet tulevat ensisijaisesti haun codes_names-attribuutista,
+  # jossa on myos selitteet. Attribuutti voi kadota matkalla -- dplyr ei
+  # sailyta sita -- ja silloin otetaan datan omat luokittelusarakkeet, jolloin
+  # metatiedoissa nakyvat ainakin koodit eika rivi jaa kokonaan pois.
+  muuttujat <- names(codes)
+  if (length(muuttujat) == 0L) muuttujat <- visu_class_cols(data)
+
   # Sarjat ensin ja muut rajaukset perassa taulun jarjestyksessa: sarjat ovat
   # se mita kuviossa nakyy, rajaus vain tarkennus.
-  jarjestys <- c(intersect(contents, names(codes)), setdiff(names(codes), contents))
+  jarjestys <- c(intersect(contents, muuttujat), setdiff(muuttujat, contents))
   for (muuttuja in jarjestys) {
     arvot <- visu_value_labels(data, codes, muuttuja)
     if (length(arvot) == 0L) next
@@ -81,6 +88,12 @@ visu_metadata_one <- function(data, url, contents = "contentscode") {
 # Pandocin maaritelmalista: otsikkorivi ja sisennetty selitysrivi.
 visu_def <- function(otsikko, arvo) {
   paste0(otsikko, "\n:   ", arvo, "\n")
+}
+
+# Datan luokittelusarakkeet: tekstia tai luokkia, eivat arvoja.
+visu_class_cols <- function(data) {
+  luokka <- vapply(data, function(x) is.factor(x) || is.character(x), logical(1))
+  setdiff(names(data)[luokka], "values")
 }
 
 # Datassa esiintyvien arvojen selitteet taulun jarjestyksessa.
@@ -112,6 +125,11 @@ visu_url_title <- function(url) {
 visu_table_link <- function(meta, url) {
   parts <- visu_split_table_url(url)
   tunnus <- if (is.null(parts)) NULL else sub("\\.px$", "", parts$table)
+  # Uljaksen kuutio nimetaan polulla, ei osoitteella, joten tunnus on polun
+  # viimeinen osa ja linkki tietokannan selausnakymaan.
+  if (visu_is_uljas(url)) {
+    tunnus <- utils::tail(strsplit(url, "/", fixed = TRUE)[[1]], 1L)
+  }
   otsikko <- meta$title %||% tunnus %||% url
   # PxWebin otsikko kertaa lopussa kyselyn muuttujat, mika ei kuulu erittelyyn.
   otsikko <- sub(" muuttujina .*$", "", otsikko)
@@ -126,6 +144,8 @@ visu_table_link <- function(meta, url) {
 # kansiotasot erotetaan kahdella alaviivalla. Muut kuin PxWeb-osoitteet,
 # kuten EKP:n ja FREDin, palautetaan sellaisenaan.
 visu_browse_url <- function(url) {
+  if (visu_is_uljas(url)) return(visu_uljas_browse_url())
+
   osat <- regmatches(url, regexec(
     "^(https?://[^/]+)/PxWeb/api/v[0-9]+/([^/]+)/([^/]+)/(.+\\.px)/?$", url
   ))[[1]]
@@ -137,6 +157,12 @@ visu_browse_url <- function(url) {
     paste(c(osat[4], utils::head(polku, -1L)), collapse = "__"), "/",
     utils::tail(polku, 1L), "/"
   )
+}
+
+# Uljaksen selausnakyma. Kuutioon ei paase suoralla linkilla, joten linkki
+# osoittaa tietokannan etusivulle.
+visu_uljas_browse_url <- function() {
+  "https://tilastot.tulli.fi/uljas-tilastotietokanta/"
 }
 
 #' Muotoile aikaleima Suomen aikaan

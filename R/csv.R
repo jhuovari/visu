@@ -208,15 +208,13 @@ visu_codes_names <- function(data, muuttujat) {
   stats::setNames(koodit, muuttujat)
 }
 
-# Csv-haku uudelleenyrityksin. Verkkovirhe yhden aamun ajossa ei saa kaataa
-# koko sivustoa, mutta pysyva virhe pitaa nakya.
-visu_fetch_csv <- function(url) {
+# Haku uudelleenyrityksin. Verkkovirhe yhden aamun ajossa ei saa kaataa koko
+# sivustoa, mutta pysyva virhe pitaa nakya. Lukija kertoo mita osoitteesta
+# tehdaan: csv-taulu, tekstirivit tai tiedosto levylle.
+visu_fetch <- function(url, lukija) {
   yritykset <- visu_px_tries()
   for (yritys in seq_len(yritykset)) {
-    tulos <- tryCatch(
-      utils::read.csv(url, stringsAsFactors = FALSE, check.names = FALSE),
-      error = function(e) e
-    )
+    tulos <- tryCatch(lukija(url), error = function(e) e)
     if (!inherits(tulos, "error")) return(tulos)
     if (yritys >= yritykset) stop(tulos)
     odota <- visu_csv_backoff(yritys)
@@ -226,6 +224,27 @@ visu_fetch_csv <- function(url) {
             yritykset, ").")
     Sys.sleep(odota)
   }
+}
+
+visu_fetch_csv <- function(url) {
+  visu_fetch(url, function(u) {
+    utils::read.csv(u, stringsAsFactors = FALSE, check.names = FALSE)
+  })
+}
+
+visu_fetch_text <- function(url) {
+  visu_fetch(url, function(u) readLines(u, warn = FALSE))
+}
+
+# Tiedosto levylle. Binaarimuoto, koska kutsuja lukee Excel-tyokirjan.
+visu_fetch_file <- function(url, path) {
+  visu_fetch(url, function(u) {
+    status <- utils::download.file(u, path, mode = "wb", quiet = TRUE)
+    if (!identical(status, 0L) || !file.exists(path) || file.size(path) == 0L) {
+      stop("Tiedostoa ei saatu osoitteesta ", u, ".", call. = FALSE)
+    }
+    path
+  })
 }
 
 visu_csv_backoff <- function(yritys) {
