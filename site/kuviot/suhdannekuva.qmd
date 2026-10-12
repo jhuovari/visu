@@ -4,6 +4,8 @@ visu:
   table_url:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ktkk/132f.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/"
+    - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA20"
+    - "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bsin_m_r2/M.BS-IOB+BS-IEOB+BS-ISFP+BS-IPE.SA.BAL.FI"
 ---
 
 ```{r}
@@ -12,10 +14,12 @@ visu:
 visu::visu_updated_note()
 ```
 
-Kaksi kuukausittain julkaistavaa mittaria, jotka kertovat talouden käänteestä
+Kuukausittain julkaistavia mittareita, jotka kertovat talouden käänteestä
 ennen neljännesvuositilinpitoa. Tuotannon suhdannekuvaaja on kansantalouden
-tuotannon kuukausikuva, ja kuluttajien luottamusindikaattori kertoo miten
-kotitaloudet odottavat talouden kehittyvän.
+tuotannon kuukausikuva, kuluttajien luottamusindikaattori kertoo miten
+kotitaloudet odottavat talouden kehittyvän, ja Euroopan komission
+suhdannekyselyt laajentavat saman kysymyksen yrityksiin ja euroalueen
+vertailuun.
 
 Alkuperäinen, kausitasoitettu ja trendi ovat samassa kuviossa samalla värillä
 eri paksuisin viivoin: kyse on samasta ilmiöstä eri tavalla siloitettuna.
@@ -349,4 +353,221 @@ visu_downloads(kuvio_osat, "luottamus-osatekijat")
 visu_metadata(luottamus_osat, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/kbar/11cc.px/")
 ```
 
-Lähteet: [Tuotannon suhdannekuvaaja](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ktkk/) (taulu 132f) ja [Kuluttajien luottamus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__kbar/) (taulu 11cc).
+## Euroopan komission suhdannekyselyt
+
+Euroopan komissio kysyy kuukausittain samat kysymykset yrityksiltä ja
+kuluttajilta kaikissa jäsenmaissa, joten vastaukset ovat vertailukelpoisia
+maasta toiseen. Suomen osuuden kerää Tilastokeskus ja Elinkeinoelämän
+keskusliitto, ja komissio julkaisee tulokset Eurostatin kautta.
+
+Vastaus on saldoluku: myönteisten ja kielteisten vastausten erotus
+prosenttiyksikköinä, eli nolla tarkoittaa että arviot jakautuvat tasan.
+Talousluottamusindikaattori (ESI) on näistä koottu yhdistelmä, joka on
+normeerattu pitkän aikavälin keskiarvoon 100 — sadan yläpuolella luottamus on
+tavanomaista vahvempaa.
+
+Komission kuluttajaluottamus ei ole sama luku kuin sivun edellinen
+Tilastokeskuksen indikaattori. Osatekijät ovat eri: komission mittarissa on
+oman talouden ja maan talouden odotusten lisäksi työttömyysodotus, kun
+Tilastokeskuksen mittarissa on rahankäyttö kestotavaroihin. Myös tasot
+poikkeavat, joten vain suunta on vertailukelpoinen.
+
+::: {.panel-tabset}
+
+### Talousluottamus
+
+```{r}
+library(visu)
+
+# Yhdella haulla seka ESI etta toimialojen luottamusindikaattorit: ne ovat
+# samassa aineistossa, ja kahdesta kuviosta tulee yksi haku.
+komissio <- visu_get_eurostat(
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA20"
+)
+
+# Suomi ensin, jotta se saa paletin ensimmaisen varin kuten sivun muissakin
+# kuvioissa.
+komission_alueet <- list(
+  fi = c(FI = "Suomi", EA20 = "Euroalue"),
+  sv = c(FI = "Finland", EA20 = "Euroområdet"),
+  en = c(FI = "Finland", EA20 = "Euro area")
+)
+
+merkitse_alue <- function(d, kieli) {
+  nimet <- komission_alueet[[kieli]]
+  d$alue <- factor(as.character(d$geo), levels = names(nimet), labels = nimet)
+  d
+}
+
+tekstit_esi <- list(
+  fi = list(
+    otsikko = "Talousluottamusindikaattori (ESI)",
+    selite = "Pitkän aikavälin keskiarvo = 100, kausitasoitettu",
+    lahde = "Lähde: Euroopan komissio, suhdannekyselyt"
+  ),
+  sv = list(
+    otsikko = "Ekonomiskt sentimentindikator (ESI)",
+    selite = "Långtidsgenomsnitt = 100, säsongrensad",
+    lahde = "Källa: Europeiska kommissionen, konjunkturbarometrar"
+  ),
+  en = list(
+    otsikko = "Economic sentiment indicator (ESI)",
+    selite = "Long-term average = 100, seasonally adjusted",
+    lahde = "Source: European Commission, business and consumer surveys"
+  )
+)
+
+kuvio_esi <- function(kieli) {
+  t <- tekstit_esi[[kieli]]
+  d <- merkitse_alue(komissio[komissio$indic == "BS-ESI-I", , drop = FALSE], kieli)
+  visu_plot(d, colour = "alue", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli)
+}
+
+kuvio_esi("fi") |>
+  visu_interactive(subtitle = tekstit_esi$fi$selite,
+                   caption = tekstit_esi$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_esi, "talousluottamus-esi")
+```
+
+### Toimialoittain
+
+```{r}
+#| fig-height: 6
+
+library(visu)
+
+# Pienruudut eivat viisi viivaa samassa kuviossa: sarjat ovat saldolukuja
+# mutta eri toimialojen tavanomainen taso poikkeaa toisistaan, ja Suomen ja
+# euroalueen vertailu on helpointa ruutu kerrallaan.
+toimialat <- list(
+  fi = c(`BS-ICI-BAL` = "Teollisuus", `BS-SCI-BAL` = "Palvelut",
+         `BS-RCI-BAL` = "Vähittäiskauppa", `BS-CCI-BAL` = "Rakentaminen",
+         `BS-CSMCI-BAL` = "Kuluttajat"),
+  sv = c(`BS-ICI-BAL` = "Industri", `BS-SCI-BAL` = "Tjänster",
+         `BS-RCI-BAL` = "Detaljhandel", `BS-CCI-BAL` = "Byggverksamhet",
+         `BS-CSMCI-BAL` = "Konsumenter"),
+  en = c(`BS-ICI-BAL` = "Industry", `BS-SCI-BAL` = "Services",
+         `BS-RCI-BAL` = "Retail trade", `BS-CCI-BAL` = "Construction",
+         `BS-CSMCI-BAL` = "Consumers")
+)
+
+tekstit_toimialat <- list(
+  fi = list(
+    otsikko = "Luottamusindikaattorit toimialoittain, saldoluku",
+    selite = "Yhteinen asteikko, kausitasoitettu",
+    lahde = "Lähde: Euroopan komissio, suhdannekyselyt"
+  ),
+  sv = list(
+    otsikko = "Förtroendeindikatorer efter näringsgren, saldotal",
+    selite = "Gemensam skala, säsongrensad",
+    lahde = "Källa: Europeiska kommissionen, konjunkturbarometrar"
+  ),
+  en = list(
+    otsikko = "Confidence indicators by sector, balance figure",
+    selite = "Shared scale, seasonally adjusted",
+    lahde = "Source: European Commission, business and consumer surveys"
+  )
+)
+
+kuvio_toimialat <- function(kieli) {
+  t <- tekstit_toimialat[[kieli]]
+  nimet <- toimialat[[kieli]]
+  d <- komissio[komissio$indic %in% names(nimet), , drop = FALSE]
+  d <- merkitse_alue(d, kieli)
+  d$toimiala <- factor(as.character(d$indic), levels = names(nimet),
+                       labels = nimet)
+  visu_plot(d, colour = "alue", facet = "toimiala", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli,
+            zeroline = TRUE)
+}
+
+kuvio_toimialat("fi") |>
+  visu_interactive(subtitle = tekstit_toimialat$fi$selite,
+                   caption = tekstit_toimialat$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_toimialat, "luottamus-toimialoittain", height = 6)
+```
+
+### Teollisuuden kysely
+
+```{r}
+library(visu)
+
+# Teollisuuden luottamusindikaattori on kolmen kysymyksen keskiarvo:
+# tilauskanta, valmiiden tuotteiden varastot kaanteisena ja
+# tuotanto-odotukset. Vientitilaukset eivat ole mukana indikaattorissa mutta
+# kertovat Suomen kannalta olennaisimman osan kysynnasta.
+teollisuus <- visu_get_eurostat(
+  "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bsin_m_r2/M.BS-IOB+BS-IEOB+BS-ISFP+BS-IPE.SA.BAL.FI"
+)
+
+tekstit_teollisuus <- list(
+  fi = list(
+    otsikko = "Teollisuuden suhdannekyselyn vastaukset, saldoluku",
+    selite = "Kausitasoitettu",
+    lahde = "Lähde: Euroopan komissio, suhdannekyselyt",
+    sarjat = c(`BS-IOB` = "Tilauskanta",
+               `BS-IEOB` = "Vientitilaukset",
+               `BS-IPE` = "Tuotanto-odotukset",
+               `BS-ISFP` = "Valmiiden tuotteiden varastot")
+  ),
+  sv = list(
+    otsikko = "Svaren i industrins konjunkturbarometer, saldotal",
+    selite = "Säsongrensad",
+    lahde = "Källa: Europeiska kommissionen, konjunkturbarometrar",
+    sarjat = c(`BS-IOB` = "Orderstock",
+               `BS-IEOB` = "Exportorder",
+               `BS-IPE` = "Produktionsförväntningar",
+               `BS-ISFP` = "Lager av färdiga varor")
+  ),
+  en = list(
+    otsikko = "Industry survey responses, balance figure",
+    selite = "Seasonally adjusted",
+    lahde = "Source: European Commission, business and consumer surveys",
+    sarjat = c(`BS-IOB` = "Order books",
+               `BS-IEOB` = "Export order books",
+               `BS-IPE` = "Production expectations",
+               `BS-ISFP` = "Stocks of finished products")
+  )
+)
+
+kuvio_teollisuus <- function(kieli) {
+  t <- tekstit_teollisuus[[kieli]]
+  d <- teollisuus
+  d$kysymys <- factor(as.character(d$indic), levels = names(t$sarjat),
+                      labels = t$sarjat)
+  visu_plot(d, colour = "kysymys", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli, zeroline = TRUE)
+}
+
+kuvio_teollisuus("fi") |>
+  visu_interactive(subtitle = tekstit_teollisuus$fi$selite,
+                   caption = tekstit_teollisuus$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_teollisuus, "teollisuuden-kysely")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(komissio, "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ei_bssi_m_r2/M.BS-ESI-I+BS-ICI-BAL+BS-SCI-BAL+BS-RCI-BAL+BS-CCI-BAL+BS-CSMCI-BAL.SA.FI+EA20")
+```
+
+
+Lähteet: [Tuotannon suhdannekuvaaja](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ktkk/) (taulu 132f), [Kuluttajien luottamus](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__kbar/) (taulu 11cc) sekä Eurostatin kautta julkaistavat Euroopan komission suhdannekyselyt, aineistot [ei_bssi_m_r2](https://ec.europa.eu/eurostat/databrowser/view/ei_bssi_m_r2/) ja [ei_bsin_m_r2](https://ec.europa.eu/eurostat/databrowser/view/ei_bsin_m_r2/).

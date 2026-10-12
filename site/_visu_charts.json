@@ -506,6 +506,39 @@
     "png_en": "kuviot/kuvat/luottamus-osatekijat-en.png"
   },
   {
+    "id": "luottamus-toimialoittain",
+    "page": "suhdannekuva",
+    "title_fi": "Luottamusindikaattorit toimialoittain, saldoluku",
+    "title_sv": "Förtroendeindikatorer efter näringsgren, saldotal",
+    "title_en": "Confidence indicators by sector, balance figure",
+    "source": "Lähde: Euroopan komissio, suhdannekyselyt",
+    "png_fi": "kuviot/kuvat/luottamus-toimialoittain-fi.png",
+    "png_sv": "kuviot/kuvat/luottamus-toimialoittain-sv.png",
+    "png_en": "kuviot/kuvat/luottamus-toimialoittain-en.png"
+  },
+  {
+    "id": "talousluottamus-esi",
+    "page": "suhdannekuva",
+    "title_fi": "Talousluottamusindikaattori (ESI)",
+    "title_sv": "Ekonomiskt sentimentindikator (ESI)",
+    "title_en": "Economic sentiment indicator (ESI)",
+    "source": "Lähde: Euroopan komissio, suhdannekyselyt",
+    "png_fi": "kuviot/kuvat/talousluottamus-esi-fi.png",
+    "png_sv": "kuviot/kuvat/talousluottamus-esi-sv.png",
+    "png_en": "kuviot/kuvat/talousluottamus-esi-en.png"
+  },
+  {
+    "id": "teollisuuden-kysely",
+    "page": "suhdannekuva",
+    "title_fi": "Teollisuuden suhdannekyselyn vastaukset, saldoluku",
+    "title_sv": "Svaren i industrins konjunkturbarometer, saldotal",
+    "title_en": "Industry survey responses, balance figure",
+    "source": "Lähde: Euroopan komissio, suhdannekyselyt",
+    "png_fi": "kuviot/kuvat/teollisuuden-kysely-fi.png",
+    "png_sv": "kuviot/kuvat/teollisuuden-kysely-sv.png",
+    "png_en": "kuviot/kuvat/teollisuuden-kysely-en.png"
+  },
+  {
     "id": "tuotanto-muutos",
     "page": "suhdannekuva",
     "title_fi": "Tuotannon volyymin muutos vuodentakaisesta, %",
