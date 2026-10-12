@@ -279,8 +279,12 @@ tulli_vanha <- visu_get_uljas(
   classifiers = kauppa_kysely
 )
 
-tavarakauppa <- bind_rows(tulli_vanha, tulli_uusi) |>
-  distinct(time, `SITC Products`, Flow, .keep_all = TRUE)
+# Nykyinen kuutio ensin, koska distinct() sailyttaa ensimmaisen osuman:
+# paallekkaisilla kuukausilla voittaa silloin se, jossa myohemmat korjaukset
+# ovat. Jarjestys palautetaan lopuksi, koska yhdistaminen sekoitti sen.
+tavarakauppa <- bind_rows(tulli_uusi, tulli_vanha) |>
+  distinct(time, `SITC Products`, Flow, .keep_all = TRUE) |>
+  arrange(`SITC Products`, Flow, time)
 attr(tavarakauppa, "codes_names") <- attr(tulli_uusi, "codes_names")
 
 # Kuukausiarvoista 12 kuukauden liukuva summa. Vuoden ensimmaiset yksitoista
