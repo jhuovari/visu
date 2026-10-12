@@ -48,3 +48,42 @@ test_that("linkin teksti on taulun tunnus ja otsikko, osoite selausnakyma", {
     "[11tj Bruttokansantuote](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__ntp/11tj.px)"
   )
 })
+
+test_that("luokittelusarakkeet nakyvat vaikka codes_names olisi kadonnut", {
+  # dplyr ei sailyta attribuutteja, joten putken jalkeen selitteita ei ole.
+  # Metatiedot kertovat silloin koodit eivatka jata rivia kokonaan pois.
+  d <- data.frame(
+    time = as.Date(c("2026-01-01", "2026-01-01")),
+    sarja = factor(c("tgz_w1_qnmi_sn", "mgz_i1_qnmi_sn")),
+    values = c(116.8, 110.5)
+  )
+
+  expect_equal(visu_class_cols(d), "sarja")
+
+  testthat::local_mocked_bindings(
+    visu_table_meta = function(...) NULL,
+    visu_table_updated = function(...) NA_character_
+  )
+  ulos <- visu_metadata_one(d, "https://www.cpb.nl/en/worldtrademonitor/latest")
+
+  expect_match(ulos, "tgz_w1_qnmi_sn")
+  expect_match(ulos, "mgz_i1_qnmi_sn")
+})
+
+test_that("selitteet voittavat koodit kun codes_names on tallella", {
+  d <- data.frame(
+    time = as.Date("2026-01-01"),
+    sarja = factor("tgz_w1_qnmi_sn"),
+    values = 116.8
+  )
+  attr(d, "codes_names") <- list(sarja = c(tgz_w1_qnmi_sn = "World trade"))
+
+  testthat::local_mocked_bindings(
+    visu_table_meta = function(...) NULL,
+    visu_table_updated = function(...) NA_character_
+  )
+  ulos <- visu_metadata_one(d, "https://www.cpb.nl/en/worldtrademonitor/latest")
+
+  expect_match(ulos, "World trade")
+  expect_no_match(ulos, "tgz_w1_qnmi_sn")
+})

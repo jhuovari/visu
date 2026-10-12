@@ -61,9 +61,16 @@ visu_metadata_one <- function(data, url, contents = "contentscode") {
     rivit <- c(rivit, visu_def("P\u00e4ivitetty", visu_format_stamp(updated)))
   }
 
+  # Luokittelusarakkeet tulevat ensisijaisesti haun codes_names-attribuutista,
+  # jossa on myos selitteet. Attribuutti voi kadota matkalla -- dplyr ei
+  # sailyta sita -- ja silloin otetaan datan omat luokittelusarakkeet, jolloin
+  # metatiedoissa nakyvat ainakin koodit eika rivi jaa kokonaan pois.
+  muuttujat <- names(codes)
+  if (length(muuttujat) == 0L) muuttujat <- visu_class_cols(data)
+
   # Sarjat ensin ja muut rajaukset perassa taulun jarjestyksessa: sarjat ovat
   # se mita kuviossa nakyy, rajaus vain tarkennus.
-  jarjestys <- c(intersect(contents, names(codes)), setdiff(names(codes), contents))
+  jarjestys <- c(intersect(contents, muuttujat), setdiff(muuttujat, contents))
   for (muuttuja in jarjestys) {
     arvot <- visu_value_labels(data, codes, muuttuja)
     if (length(arvot) == 0L) next
@@ -81,6 +88,12 @@ visu_metadata_one <- function(data, url, contents = "contentscode") {
 # Pandocin maaritelmalista: otsikkorivi ja sisennetty selitysrivi.
 visu_def <- function(otsikko, arvo) {
   paste0(otsikko, "\n:   ", arvo, "\n")
+}
+
+# Datan luokittelusarakkeet: tekstia tai luokkia, eivat arvoja.
+visu_class_cols <- function(data) {
+  luokka <- vapply(data, function(x) is.factor(x) || is.character(x), logical(1))
+  setdiff(names(data)[luokka], "values")
 }
 
 # Datassa esiintyvien arvojen selitteet taulun jarjestyksessa.

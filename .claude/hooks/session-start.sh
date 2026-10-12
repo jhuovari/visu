@@ -78,7 +78,7 @@ asenna_github() {
 # Pelkan visun tarkistus ei riita: visu kayttaa riippuvuuksiaan ggcustom::
 # -tyylisilla kutsuilla, joten sen nimiavaruus latautuu vaikka ggcustom
 # puuttuisi. Vika nakyisi vasta kuviota piirrettaessa.
-TARPEET='c("visu", "ggcustom", "pxwebtools", "dplyr")'
+TARPEET='c("visu", "ggcustom", "pxwebtools", "dplyr", "readxl")'
 if ! Rscript -e "quit(status = !all(vapply($TARPEET, requireNamespace, logical(1), quietly = TRUE)))" 2>/dev/null; then
   echo "Asennetaan R-riippuvuudet..."
   Rscript -e '

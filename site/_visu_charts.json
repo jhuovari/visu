@@ -671,6 +671,28 @@
     "png_en": "kuviot/kuvat/tyovoiman-tarjonta-en.png"
   },
   {
+    "id": "maailmankauppa-taso",
+    "page": "ulkomaantalous",
+    "title_fi": "Maailmankaupan volyymi, 2021 = 100",
+    "title_sv": "Världshandelns volym, 2021 = 100",
+    "title_en": "World trade volume, 2021 = 100",
+    "source": "Lähde: CPB World Trade Monitor",
+    "png_fi": "kuviot/kuvat/maailmankauppa-taso-fi.png",
+    "png_sv": "kuviot/kuvat/maailmankauppa-taso-sv.png",
+    "png_en": "kuviot/kuvat/maailmankauppa-taso-en.png"
+  },
+  {
+    "id": "maailmankauppa-vuosimuutos",
+    "page": "ulkomaantalous",
+    "title_fi": "Maailmankaupan volyymin vuosimuutos, %",
+    "title_sv": "Världshandelsvolymens årsförändring, %",
+    "title_en": "Annual change in world trade volume, %",
+    "source": "Lähde: CPB World Trade Monitor",
+    "png_fi": "kuviot/kuvat/maailmankauppa-vuosimuutos-fi.png",
+    "png_sv": "kuviot/kuvat/maailmankauppa-vuosimuutos-sv.png",
+    "png_en": "kuviot/kuvat/maailmankauppa-vuosimuutos-en.png"
+  },
+  {
     "id": "ulkomaankauppa-tavarat-palvelut",
     "page": "ulkomaantalous",
     "title_fi": "Vienti tavaroihin ja palveluihin jaettuna, miljoonaa euroa",

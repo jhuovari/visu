@@ -54,11 +54,13 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           # pxwebtools ja ggcustom asentuvat DESCRIPTIONin Remotes-kentästä.
-          # dplyr on kuviosivujen eikä paketin riippuvuus, joten se nimetään
-          # tässä erikseen — DESCRIPTIONissa se on vain Suggests-kentässä.
+          # dplyr on kuviosivujen eikä paketin riippuvuus, ja readxl tarvitaan
+          # vain CPB:n Excel-työkirjan lukemiseen, joten kumpikin nimetään
+          # tässä erikseen — DESCRIPTIONissa ne ovat vain Suggests-kentässä.
           extra-packages: |
             local::.
             any::dplyr
+            any::readxl
 
       - uses: quarto-dev/quarto-actions/setup@v2
 

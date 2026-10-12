@@ -5,6 +5,8 @@ the$folder_listing <- list()
 the$table_meta <- list()
 # Eurostatin paivitysleimat osoitteittain, ks. R/csv.R.
 the$eurostat <- list()
+# CPB:n tyokirjan julkaisuleimat osoitteittain, ks. R/cpb.R.
+the$cpb <- list()
 # Rajapintapyyntojen aikaleimat tahdinpitoa varten (R/data.R).
 the$px_calls <- numeric()
 # Ajon aikana kirjatut kuviot, ks. R/catalog.R.
@@ -23,6 +25,7 @@ visu_clear_cache <- function() {
   the$folder_listing <- list()
   the$table_meta <- list()
   the$eurostat <- list()
+  the$cpb <- list()
   the$px_calls <- numeric()
   invisible(NULL)
 }
@@ -46,8 +49,9 @@ visu_table_updated <- function(url) {
   # LAST UPDATE -sarakkeesta.
   parts <- visu_split_table_url(url)
   if (is.null(parts)) {
-    return(if (visu_is_eurostat(url)) visu_eurostat_updated(url)
-           else visu_http_updated(url))
+    if (visu_is_eurostat(url)) return(visu_eurostat_updated(url))
+    if (visu_is_cpb(url)) return(visu_cpb_updated(url))
+    return(visu_http_updated(url))
   }
 
   listing <- visu_folder_listing(parts$folder)

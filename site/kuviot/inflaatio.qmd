@@ -444,7 +444,11 @@ library(dplyr)
 
 euroalue <- visu_get_eurostat(
   "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.TOTAL+TOT_X_NRG_FOOD.FI+EA20"
-) |>
+)
+
+# Muutos omaan kehykseensa, jotta haettuun jaa koodien selitteet: dplyr ei
+# sailyta attribuutteja, ja visu_metadata() lukee ne juuri niista.
+euroalue_vm <- euroalue |>
   group_by(coicop18, geo) |>
   mutate(vuosimuutos = visu_change(values, time)) |>
   ungroup()
@@ -483,7 +487,7 @@ tekstit_vertailu <- list(
 
 kuvio_vertailu <- function(kieli) {
   t <- tekstit_vertailu[[kieli]]
-  d <- merkitse_alue(filter(euroalue, coicop18 == "TOTAL"), kieli)
+  d <- merkitse_alue(filter(euroalue_vm, coicop18 == "TOTAL"), kieli)
   visu_plot(d, y = "vuosimuutos", colour = "alue", title = t$otsikko,
             subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
@@ -527,7 +531,7 @@ tekstit_pohja <- list(
 
 kuvio_pohja <- function(kieli) {
   t <- tekstit_pohja[[kieli]]
-  d <- merkitse_alue(filter(euroalue, coicop18 == "TOT_X_NRG_FOOD"), kieli)
+  d <- merkitse_alue(filter(euroalue_vm, coicop18 == "TOT_X_NRG_FOOD"), kieli)
   visu_plot(d, y = "vuosimuutos", colour = "alue", title = t$otsikko,
             subtitle = t$selite, caption = t$lahde, lang = kieli, zeroline = TRUE)
 }
@@ -616,7 +620,9 @@ library(dplyr)
 
 paaryhmat <- visu_get_eurostat(
   "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.CP01+CP02+CP03+CP04+CP05+CP06+CP07+CP08+CP09+CP10+CP11+CP12+CP13.FI+EA20"
-) |>
+)
+
+paaryhmat_vm <- paaryhmat |>
   group_by(coicop18, geo) |>
   mutate(vuosimuutos = visu_change(values, time)) |>
   ungroup()
@@ -645,7 +651,7 @@ kuvio_paaryhmat <- function(kieli) {
   # samaa luokitusta; Eurostatin koodit ovat CP-alkuisia, kansalliset
   # pelkkia numeroita.
   ryhmat <- stats::setNames(nimet[[kieli]], paste0("CP", names(nimet[[kieli]])))
-  d <- merkitse_alue(paaryhmat, kieli)
+  d <- merkitse_alue(paaryhmat_vm, kieli)
   d$ryhma <- factor(ryhmat[as.character(d$coicop18)], levels = ryhmat)
   visu_plot(d, y = "vuosimuutos", colour = "alue", facet = "ryhma",
             title = t$otsikko, subtitle = t$selite, caption = t$lahde,
