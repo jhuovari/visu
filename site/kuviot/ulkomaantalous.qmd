@@ -5,6 +5,8 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"
     - "https://www.cpb.nl/en/worldtrademonitor/latest"
+    - "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC"
+    - "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC2"
 ---
 
 ```{r}
@@ -15,8 +17,9 @@ visu::visu_updated_note()
 
 Suomen talouden suhde ulkomaihin. Vaihtotase kertoo, ansaitseeko Suomi
 ulkomailta enemmän kuin maksaa sinne, ja tavaroiden ja palveluiden
-ulkomaankauppa erittelee, mistä virta syntyy. Lopuksi maailmankauppa kertoo,
-millaisessa kysyntäympäristössä Suomen vienti on.
+ulkomaankauppa erittelee, mistä virta syntyy. Tullin tavarakauppatilasto
+tarkentaa tavaroiden osuuden kuukausitasolle ja tavararyhmiin, ja lopuksi
+maailmankauppa kertoo, millaisessa kysyntäympäristössä Suomen vienti on.
 
 Vaihtotase on kuukausisarjana hyvin heiluva, joten oletusnäkymä on 12
 kuukauden liukuva summa. Yksittäiset kuukaudet ovat omalla välilehdellään.
@@ -241,6 +244,179 @@ visu_downloads(kuvio_erat, "ulkomaankauppa-tavarat-palvelut")
 #| echo: false
 #| output: asis
 visu_metadata(kauppa, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/")
+```
+
+## Tavarakauppa
+
+Tullin tavarakauppatilasto on tavaravirran tarkin ja nopein lähde: se
+ilmestyy kuukausittain ja erittelee kaupan tavararyhmiin, kun sivun ylempi
+maksutasepohjainen kuvio on neljännesvuosittainen ja kokonaisuus. Luvut ovat
+tilastoarvoja, eli tuonti sisältää rahdin Suomen rajalle ja vienti rahdin
+rajalle asti.
+
+Kuukausiarvot heiluvat voimakkaasti, joten molemmissa kuvioissa näytetään 12
+kuukauden liukuva summa.
+
+```{r}
+library(visu)
+library(dplyr)
+
+# Tulli uudisti kuutiot 30.3.2026: nykyinen kuutio alkaa vuodesta 2025 ja
+# pidempi historia on rinnakkaisessa kuutiossa. Kumpikin haetaan ja sarjat
+# yhdistetaan; paallekkaisilla kuukausilla nykyinen kuutio voittaa, jotta
+# myohemmat korjaukset menevat lapi.
+kauppa_kysely <- list(
+  `SITC Products` = "=ALL", `Time period` = "=ALL", Flow = c(1, 2),
+  `Continents and groups` = "00", Indicators = "V1"
+)
+
+tulli_uusi <- visu_get_uljas(
+  "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
+  classifiers = kauppa_kysely
+)
+tulli_vanha <- visu_get_uljas(
+  "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC2",
+  classifiers = kauppa_kysely
+)
+
+tavarakauppa <- bind_rows(tulli_vanha, tulli_uusi) |>
+  distinct(time, `SITC Products`, Flow, .keep_all = TRUE)
+attr(tavarakauppa, "codes_names") <- attr(tulli_uusi, "codes_names")
+
+# Kuukausiarvoista 12 kuukauden liukuva summa. Vuoden ensimmaiset yksitoista
+# kuukautta jaavat NA:ksi, koska niille ei ole taytta ikkunaa.
+liukuva_summa <- function(x) as.numeric(stats::filter(x, rep(1, 12), sides = 1))
+
+tekstit_tavarakauppa <- list(
+  fi = list(
+    otsikko = "Tavaravienti ja -tuonti, mrd. euroa",
+    selite = "12 kuukauden liukuva summa",
+    lahde = "Lähde: Tulli, tavaroiden ulkomaankauppa",
+    sarjat = c(`2` = "Vienti", `1` = "Tuonti")
+  ),
+  sv = list(
+    otsikko = "Varuexport och -import, md euro",
+    selite = "Glidande summa för 12 månader",
+    lahde = "Källa: Tullen, utrikeshandel med varor",
+    sarjat = c(`2` = "Export", `1` = "Import")
+  ),
+  en = list(
+    otsikko = "Goods exports and imports, EUR bn",
+    selite = "12-month rolling sum",
+    lahde = "Source: Finnish Customs, international trade in goods",
+    sarjat = c(`2` = "Exports", `1` = "Imports")
+  )
+)
+
+kauppa_yhteensa <- tavarakauppa |>
+  filter(`SITC Products` == "") |>
+  arrange(Flow, time) |>
+  group_by(Flow) |>
+  mutate(summa = liukuva_summa(values) / 1e9) |>
+  ungroup() |>
+  filter(!is.na(summa))
+
+kuvio_tavarakauppa <- function(kieli) {
+  t <- tekstit_tavarakauppa[[kieli]]
+  d <- kauppa_yhteensa
+  d$virta <- factor(as.character(d$Flow), levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, y = "summa", colour = "virta", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
+}
+
+kuvio_tavarakauppa("fi") |>
+  visu_interactive(
+    subtitle = tekstit_tavarakauppa$fi$selite,
+    caption = tekstit_tavarakauppa$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_tavarakauppa, "tavarakauppa-kuukausittain")
+```
+
+### Vienti tavararyhmittäin
+
+```{r}
+library(visu)
+library(dplyr)
+
+# SITC-paaryhmat summautuvat kokonaisvientiin. Pienimmat kolme -- elintarvikkeet,
+# oljyt ja luokittelemattomat -- yhdistetaan muiksi, jotta pinossa on luettava
+# maara eria.
+ryhmat <- c("7", "6", "5", "2", "3", "8")
+muut <- c("0+1", "4", "9")
+
+vienti_ryhmat <- tavarakauppa |>
+  filter(Flow == "2", `SITC Products` %in% c(ryhmat, muut)) |>
+  mutate(ryhma = ifelse(`SITC Products` %in% muut, "muut",
+                        as.character(`SITC Products`))) |>
+  group_by(ryhma, time) |>
+  summarise(values = sum(values), .groups = "drop") |>
+  arrange(ryhma, time) |>
+  group_by(ryhma) |>
+  mutate(summa = liukuva_summa(values) / 1e9) |>
+  ungroup() |>
+  filter(!is.na(summa))
+
+tekstit_vienti_ryhmat <- list(
+  fi = list(
+    otsikko = "Tavaravienti tavararyhmittäin, mrd. euroa",
+    selite = "12 kuukauden liukuva summa",
+    lahde = "Lähde: Tulli, tavaroiden ulkomaankauppa",
+    sarjat = c(`7` = "Koneet ja kuljetusvälineet", `6` = "Valmistetut tavarat",
+               `5` = "Kemian tuotteet", `2` = "Raaka-aineet",
+               `3` = "Energiatuotteet", `8` = "Muut valmiit tavarat",
+               muut = "Muut")
+  ),
+  sv = list(
+    otsikko = "Varuexporten efter varugrupp, md euro",
+    selite = "Glidande summa för 12 månader",
+    lahde = "Källa: Tullen, utrikeshandel med varor",
+    sarjat = c(`7` = "Maskiner och transportmedel", `6` = "Bearbetade varor",
+               `5` = "Kemiska produkter", `2` = "Råvaror",
+               `3` = "Energiprodukter", `8` = "Övriga färdiga varor",
+               muut = "Övriga")
+  ),
+  en = list(
+    otsikko = "Goods exports by commodity group, EUR bn",
+    selite = "12-month rolling sum",
+    lahde = "Source: Finnish Customs, international trade in goods",
+    sarjat = c(`7` = "Machinery and transport equipment", `6` = "Basic manufactures",
+               `5` = "Chemicals", `2` = "Crude materials",
+               `3` = "Mineral fuels", `8` = "Miscellaneous manufactures",
+               muut = "Other")
+  )
+)
+
+kuvio_vienti_ryhmat <- function(kieli) {
+  t <- tekstit_vienti_ryhmat[[kieli]]
+  d <- vienti_ryhmat
+  d$ryhma <- factor(d$ryhma, levels = names(t$sarjat), labels = t$sarjat)
+  # x annetaan nimella: summarise() siirsi ryhmasarakkeen ensimmaiseksi, ja
+  # oletuksena x on datan ensimmainen sarake.
+  visu_plot(d, x = "time", y = "summa", colour = "ryhma", type = "area",
+            title = t$otsikko, subtitle = t$selite, caption = t$lahde,
+            lang = kieli)
+}
+
+kuvio_vienti_ryhmat("fi") |>
+  visu_interactive(
+    subtitle = tekstit_vienti_ryhmat$fi$selite,
+    caption = tekstit_vienti_ryhmat$fi$lahde
+  )
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_vienti_ryhmat, "tavarakauppa-vienti-ryhmittain")
+visu_metadata(
+  tavarakauppa,
+  "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC"
+)
 ```
 
 ## Maailmankauppa
@@ -656,4 +832,4 @@ kuvio_hinnat("fi") |>
 visu_downloads(kuvio_hinnat, "maailmankaupan-hinnat")
 ```
 
-Lähteet: [Maksutase ja ulkomainen varallisuusasema](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__mata/) (114s), [Tavaroiden ja palveluiden ulkomaankauppa](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tpulk/) (12gq) ja [CPB World Trade Monitor](https://www.cpb.nl/en/worldtrademonitor/latest).
+Lähteet: [Maksutase ja ulkomainen varallisuusasema](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__mata/) (114s), [Tavaroiden ja palveluiden ulkomaankauppa](https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__tpulk/) (12gq), [Tulli, tavaroiden ulkomaankauppa](https://tilastot.tulli.fi/uljas-tilastotietokanta/) (ULJAS_SITC) ja [CPB World Trade Monitor](https://www.cpb.nl/en/worldtrademonitor/latest).

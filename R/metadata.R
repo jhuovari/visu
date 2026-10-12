@@ -125,6 +125,11 @@ visu_url_title <- function(url) {
 visu_table_link <- function(meta, url) {
   parts <- visu_split_table_url(url)
   tunnus <- if (is.null(parts)) NULL else sub("\\.px$", "", parts$table)
+  # Uljaksen kuutio nimetaan polulla, ei osoitteella, joten tunnus on polun
+  # viimeinen osa ja linkki tietokannan selausnakymaan.
+  if (visu_is_uljas(url)) {
+    tunnus <- utils::tail(strsplit(url, "/", fixed = TRUE)[[1]], 1L)
+  }
   otsikko <- meta$title %||% tunnus %||% url
   # PxWebin otsikko kertaa lopussa kyselyn muuttujat, mika ei kuulu erittelyyn.
   otsikko <- sub(" muuttujina .*$", "", otsikko)
@@ -139,6 +144,8 @@ visu_table_link <- function(meta, url) {
 # kansiotasot erotetaan kahdella alaviivalla. Muut kuin PxWeb-osoitteet,
 # kuten EKP:n ja FREDin, palautetaan sellaisenaan.
 visu_browse_url <- function(url) {
+  if (visu_is_uljas(url)) return(visu_uljas_browse_url())
+
   osat <- regmatches(url, regexec(
     "^(https?://[^/]+)/PxWeb/api/v[0-9]+/([^/]+)/([^/]+)/(.+\\.px)/?$", url
   ))[[1]]
@@ -150,6 +157,12 @@ visu_browse_url <- function(url) {
     paste(c(osat[4], utils::head(polku, -1L)), collapse = "__"), "/",
     utils::tail(polku, 1L), "/"
   )
+}
+
+# Uljaksen selausnakyma. Kuutioon ei paase suoralla linkilla, joten linkki
+# osoittaa tietokannan etusivulle.
+visu_uljas_browse_url <- function() {
+  "https://tilastot.tulli.fi/uljas-tilastotietokanta/"
 }
 
 #' Muotoile aikaleima Suomen aikaan

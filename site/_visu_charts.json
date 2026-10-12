@@ -737,6 +737,28 @@
     "png_en": "kuviot/kuvat/maailmankauppa-vuosimuutos-en.png"
   },
   {
+    "id": "tavarakauppa-kuukausittain",
+    "page": "ulkomaantalous",
+    "title_fi": "Tavaravienti ja -tuonti, mrd. euroa",
+    "title_sv": "Varuexport och -import, md euro",
+    "title_en": "Goods exports and imports, EUR bn",
+    "source": "Lähde: Tulli, tavaroiden ulkomaankauppa",
+    "png_fi": "kuviot/kuvat/tavarakauppa-kuukausittain-fi.png",
+    "png_sv": "kuviot/kuvat/tavarakauppa-kuukausittain-sv.png",
+    "png_en": "kuviot/kuvat/tavarakauppa-kuukausittain-en.png"
+  },
+  {
+    "id": "tavarakauppa-vienti-ryhmittain",
+    "page": "ulkomaantalous",
+    "title_fi": "Tavaravienti tavararyhmittäin, mrd. euroa",
+    "title_sv": "Varuexporten efter varugrupp, md euro",
+    "title_en": "Goods exports by commodity group, EUR bn",
+    "source": "Lähde: Tulli, tavaroiden ulkomaankauppa",
+    "png_fi": "kuviot/kuvat/tavarakauppa-vienti-ryhmittain-fi.png",
+    "png_sv": "kuviot/kuvat/tavarakauppa-vienti-ryhmittain-sv.png",
+    "png_en": "kuviot/kuvat/tavarakauppa-vienti-ryhmittain-en.png"
+  },
+  {
     "id": "ulkomaankauppa-tavarat-palvelut",
     "page": "ulkomaantalous",
     "title_fi": "Vienti tavaroihin ja palveluihin jaettuna, miljoonaa euroa",

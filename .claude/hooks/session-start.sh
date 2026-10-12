@@ -55,7 +55,7 @@ fi
 export R_REPOS="https://packagemanager.posit.co/cran/__linux__/noble/latest"
 
 asenna_github() {
-  # ggcustom ja pxwebtools tulevat GitHubista. Niita ei haeta
+  # ggcustom, pxwebtools ja uljas tulevat GitHubista. Niita ei haeta
   # remotes::install_github():lla, koska se kysyy GitHubin rajapinnalta - ja
   # rajapinta on istunnon valityspalvelimen takana usein suljettu (403),
   # vaikka git clone samaan repoon toimii. Kloonaus on siis luotettavampi.
@@ -78,17 +78,18 @@ asenna_github() {
 # Pelkan visun tarkistus ei riita: visu kayttaa riippuvuuksiaan ggcustom::
 # -tyylisilla kutsuilla, joten sen nimiavaruus latautuu vaikka ggcustom
 # puuttuisi. Vika nakyisi vasta kuviota piirrettaessa.
-TARPEET='c("visu", "ggcustom", "pxwebtools", "dplyr", "readxl")'
+TARPEET='c("visu", "ggcustom", "pxwebtools", "uljas", "dplyr", "readxl")'
 if ! Rscript -e "quit(status = !all(vapply($TARPEET, requireNamespace, logical(1), quietly = TRUE)))" 2>/dev/null; then
   echo "Asennetaan R-riippuvuudet..."
   Rscript -e '
     options(repos = c(CRAN = Sys.getenv("R_REPOS")), Ncpus = max(1L, parallel::detectCores()))
     if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
   '
-  # Jarjestys on tassa olennainen: kun nama kaksi ovat jo paikallaan,
+  # Jarjestys on tassa olennainen: kun nama ovat jo paikallaan,
   # visun oma riippuvuusasennus ei yrita hakea niita GitHubista.
   asenna_github ggcustom
   asenna_github pxwebtools
+  asenna_github uljas
   # Loput riippuvuudet luetaan DESCRIPTIONista ja asennetaan CRANista.
   # remotes::install_deps() ei kay tahan: se selvittaa Remotes-kentan
   # paketit GitHubin rajapinnasta myos silloin kun ne ovat jo asennettuina,

@@ -7,6 +7,8 @@ the$table_meta <- list()
 the$eurostat <- list()
 # CPB:n tyokirjan julkaisuleimat osoitteittain, ks. R/cpb.R.
 the$cpb <- list()
+# Uljaksen paivitysleimat ja luokitusten selitteet, ks. R/uljas.R.
+the$uljas <- list()
 # Rajapintapyyntojen aikaleimat tahdinpitoa varten (R/data.R).
 the$px_calls <- numeric()
 # Ajon aikana kirjatut kuviot, ks. R/catalog.R.
@@ -26,6 +28,7 @@ visu_clear_cache <- function() {
   the$table_meta <- list()
   the$eurostat <- list()
   the$cpb <- list()
+  the$uljas <- list()
   the$px_calls <- numeric()
   invisible(NULL)
 }
@@ -51,6 +54,7 @@ visu_table_updated <- function(url) {
   if (is.null(parts)) {
     if (visu_is_eurostat(url)) return(visu_eurostat_updated(url))
     if (visu_is_cpb(url)) return(visu_cpb_updated(url))
+    if (visu_is_uljas(url)) return(visu_uljas_updated(url))
     return(visu_http_updated(url))
   }
 
