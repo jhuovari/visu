@@ -671,6 +671,50 @@
     "png_en": "kuviot/kuvat/tyovoiman-tarjonta-en.png"
   },
   {
+    "id": "maailman-teollisuustuotanto",
+    "page": "ulkomaantalous",
+    "title_fi": "Teollisuustuotannon volyymi, 2021 = 100",
+    "title_sv": "Industriproduktionens volym, 2021 = 100",
+    "title_en": "Industrial production volume, 2021 = 100",
+    "source": "Lähde: CPB World Trade Monitor",
+    "png_fi": "kuviot/kuvat/maailman-teollisuustuotanto-fi.png",
+    "png_sv": "kuviot/kuvat/maailman-teollisuustuotanto-sv.png",
+    "png_en": "kuviot/kuvat/maailman-teollisuustuotanto-en.png"
+  },
+  {
+    "id": "maailman-teollisuustuotanto-alueittain",
+    "page": "ulkomaantalous",
+    "title_fi": "Teollisuustuotannon volyymi alueittain, 2021 = 100",
+    "title_sv": "Industriproduktionens volym efter område, 2021 = 100",
+    "title_en": "Industrial production volume by area, 2021 = 100",
+    "source": "Lähde: CPB World Trade Monitor",
+    "png_fi": "kuviot/kuvat/maailman-teollisuustuotanto-alueittain-fi.png",
+    "png_sv": "kuviot/kuvat/maailman-teollisuustuotanto-alueittain-sv.png",
+    "png_en": "kuviot/kuvat/maailman-teollisuustuotanto-alueittain-en.png"
+  },
+  {
+    "id": "maailmankaupan-hinnat",
+    "page": "ulkomaantalous",
+    "title_fi": "Maailmankaupan hinnat, 2021 = 100",
+    "title_sv": "Världshandelns priser, 2021 = 100",
+    "title_en": "World trade prices, 2021 = 100",
+    "source": "Lähde: CPB World Trade Monitor, energian hinta HWWI",
+    "png_fi": "kuviot/kuvat/maailmankaupan-hinnat-fi.png",
+    "png_sv": "kuviot/kuvat/maailmankaupan-hinnat-sv.png",
+    "png_en": "kuviot/kuvat/maailmankaupan-hinnat-en.png"
+  },
+  {
+    "id": "maailmankauppa-alueittain",
+    "page": "ulkomaantalous",
+    "title_fi": "Tuonnin volyymi alueittain, 2021 = 100",
+    "title_sv": "Importvolymen efter område, 2021 = 100",
+    "title_en": "Import volume by area, 2021 = 100",
+    "source": "Lähde: CPB World Trade Monitor",
+    "png_fi": "kuviot/kuvat/maailmankauppa-alueittain-fi.png",
+    "png_sv": "kuviot/kuvat/maailmankauppa-alueittain-sv.png",
+    "png_en": "kuviot/kuvat/maailmankauppa-alueittain-en.png"
+  },
+  {
     "id": "maailmankauppa-taso",
     "page": "ulkomaantalous",
     "title_fi": "Maailmankaupan volyymi, 2021 = 100",
