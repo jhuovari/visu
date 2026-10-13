@@ -1,7 +1,7 @@
 Package: visu
 Type: Package
 Title: StatFin Datan Haku ja Visualisointi
-Version: 0.18.0
+Version: 0.18.1
 Authors@R: c(
     person(
       "Janne", "Huovari",

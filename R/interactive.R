@@ -316,6 +316,11 @@ visu_caption_js <- function() {
   var kesken = false, kierros = 0;
   function sovita() {
     if (kesken || !gd.layout || !gd._fullLayout) return;
+    // Piilotetussa valilehdessa jokainen getBoundingClientRect() on nollia,
+    // jolloin mittaus kertoisi ettei piirtoalan alapuolella ole mitaan ja
+    // lahde asettuisi x-akselin lukujen paalle. Odotetaan nakyviin: alla
+    // oleva ResizeObserver herattaa sovituksen, kun valilehti avataan.
+    if (gd.offsetParent === null || gd.getBoundingClientRect().height === 0) return;
     var ann = gd.layout.annotations || [];
     var i = -1;
     for (var k = 0; k < ann.length; k++) if (ann[k].name === 'visu-caption') i = k;
@@ -364,6 +369,29 @@ visu_caption_js <- function() {
   }
   gd.on('plotly_afterplot', aja);
   window.addEventListener('resize', function() { setTimeout(aja, 150); });
+
+  // plotly_afterplot ei kata kaikkea. Valilehden avaaminen voi paljastaa
+  // kuvion ilman uudelleenpiirtoa, ja kayttajan koneelle asennettu teemafontti
+  // muuttaa selitteen rivimaaraa vasta kun fontti on ladattu. Kummassakin
+  // kuvion laatikko muuttuu, joten sita tarkkaillaan suoraan. Sovitus ajetaan
+  // vasta kun edellinen relayout on valmis, jottei havainto huku kesken-
+  // vartijaan; sovita() palaa heti kun muutettavaa ei ole, joten silmukkaa ei
+  // synny.
+  if (typeof ResizeObserver === 'function') {
+    var odottaa = false;
+    var varmista = function() {
+      if (odottaa) return;
+      odottaa = true;
+      requestAnimationFrame(function jatka() {
+        if (kesken) { requestAnimationFrame(jatka); return; }
+        odottaa = false;
+        aja();
+      });
+    };
+    new ResizeObserver(varmista).observe(gd);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(aja);
+
   aja();
 }"
 }
