@@ -4,8 +4,8 @@
 # Tilastokeskuksen trendisarjat. Myos deflaattorina kaytettava yksityisen
 # kulutuksen hinta lasketaan trendisarjoista.
 #
-# Viivan paksuus on ggcustomin VM-maarittelyn mukainen 1.5 (theme_vm ja
-# set_vm), visu_plot():n oletus 0.8 on sita ohuempi.
+# Ulkoasu kuten visu_chart_png():lla: ggcustomin VM-teema, tekstit 1.15-
+# kertaisina ja viivan paksuus VM-maarittelyn 1.5.
 #
 # Ajo: Rscript esitys/kuviot/ostovoima-erat-reaalinen-trendi.R [tiedosto.png]
 
@@ -88,24 +88,16 @@ p <- visu_plot(d, colour = "era", type = "col", stack = TRUE,
                line = viiva, line_label = t$yhteensa, title = t$otsikko,
                subtitle = t$selite, caption = t$lahde, lang = "fi")
 
-# VM-maarittelyn viivanpaksuus.
-for (i in seq_along(p$layers)) {
-  if (inherits(p$layers[[i]]$geom, "GeomLine")) {
-    p$layers[[i]]$aes_params$linewidth <- 1.5
-  }
-}
-
 # Samat mitat ja tyyli kuin visu_chart_png():n oletuksilla.
 leveys <- 6.28
 korkeus <- 4.49
-p <- visu_restyle(p, legend = "bottom", scale = 1.15, width = leveys) +
-  # Kuusi selitetta oikeassa reunassa veisi puolet piirtoalasta, joten ne
-  # ladotaan alas kahteen sarakkeeseen ja lahde tasataan koko kuvion leveyteen.
+p <- visu_restyle(p, legend = "bottom", scale = 1.15, width = leveys,
+                  linewidth = 1.5) +
+  # Kuusi selitetta oikeassa reunassa veisi puolet piirtoalasta, joten erat
+  # ladotaan alas kahteen sarakkeeseen ja reaalitulon viiva niiden alle.
   ggplot2::guides(fill = ggplot2::guide_legend(order = 1, ncol = 2),
                   colour = ggplot2::guide_legend(order = 2)) +
-  ggplot2::theme(legend.box = "horizontal", legend.title = ggplot2::element_blank(),
-                 legend.margin = ggplot2::margin(0, 0, 0, 0),
-                 legend.key.size = ggplot2::unit(0.9, "lines"),
-                 plot.title.position = "plot", plot.caption.position = "plot")
+  ggplot2::theme(legend.margin = ggplot2::margin(0, 0, 0, 0),
+                 legend.spacing.y = ggplot2::unit(4, "pt"))
 ggplot2::ggsave(tiedosto, p, width = leveys, height = korkeus, dpi = 300, bg = "white")
 cat("Tallennettu:", tiedosto, "\n")

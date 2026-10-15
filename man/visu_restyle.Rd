@@ -11,7 +11,8 @@ visu_restyle(
   titles = TRUE,
   legend = NULL,
   scale = 1,
-  width = 6.28
+  width = 6.28,
+  linewidth = NULL
 )
 }
 \arguments{
@@ -35,6 +36,11 @@ katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.}
 
 \item{width}{Kuvion leveys tuumina. Vaikuttaa vain siihen, mahtuuko selite
 alareunaan, kun \code{legend = "auto"}.}
+
+\item{linewidth}{Viivojen paksuus. \code{NULL} jättää \code{\link[=visu_plot]{visu_plot()}}:n
+paksuuden (0.8). Esityksessä käytetään ggcustomin VM-teeman paksuutta
+1.5. Jos paksuus on kartoitettu sarjaan, kaikki sarjat paksunevat samassa
+suhteessa, jolloin niiden järjestys säilyy. Nollaviiva ei muutu.}
 }
 \value{
 ggplot-objekti.

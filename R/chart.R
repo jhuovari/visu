@@ -15,12 +15,13 @@
 #' @param start,end Valinnainen aikarajaus. Oletuksena kuvio on sellaisenaan.
 #' @param titles Pidätäänkö kuvion omat otsikot. `FALSE` poistaa otsikon ja
 #'   alaotsikon mutta jättää lähteen; käytä kun otsikko tulee dian tekstiksi.
+#' @inheritParams visu_restyle
 #' @param site_dir Sivuston hakemisto.
 #' @return ggplot-objekti.
 #' @export
 visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
                        titles = TRUE, legend = NULL, scale = 1, width = 6.28,
-                       site_dir = NULL) {
+                       linewidth = NULL, site_dir = NULL) {
   if (!is.character(id) || length(id) != 1L) {
     stop("`id` pitää olla yksi kuvion tunniste merkkijonona.", call. = FALSE)
   }
@@ -31,7 +32,8 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
          "'.", call. = FALSE)
   }
   visu_restyle(p, start = start, end = end, titles = titles,
-               legend = legend, scale = scale, width = width)
+               legend = legend, scale = scale, width = width,
+               linewidth = linewidth)
 }
 
 #' Tallenna sivuston kuvio kuvaksi
@@ -45,15 +47,17 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
 #' @param file Tiedostopolku.
 #' @param width,height Kuvan mitat tuumina.
 #' @param dpi Tarkkuus. Oletus 300 riittää myös tulostukseen.
+#' @param linewidth Viivojen paksuus, oletuksena ggcustomin VM-teeman 1.5.
+#'   Sivuston kuvioissa viiva on ohuempi; katso [visu_restyle()].
 #' @return Tiedostopolku näkymättömänä.
 #' @export
 visu_chart_png <- function(id, file, lang = "fi", start = NULL, end = NULL,
                            titles = TRUE, legend = "auto", scale = 1.15,
                            width = 6.28, height = 4.49, dpi = 300,
-                           site_dir = NULL) {
+                           linewidth = 1.5, site_dir = NULL) {
   p <- visu_chart(id, lang = lang, start = start, end = end, titles = titles,
                   legend = legend, scale = scale, width = width,
-                  site_dir = site_dir)
+                  linewidth = linewidth, site_dir = site_dir)
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   ggplot2::ggsave(file, p, width = width, height = height, dpi = dpi, bg = "white")
   invisible(file)

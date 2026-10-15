@@ -25,10 +25,15 @@
 #'   katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.
 #' @param width Kuvion leveys tuumina. Vaikuttaa vain siihen, mahtuuko selite
 #'   alareunaan, kun `legend = "auto"`.
+#' @param linewidth Viivojen paksuus. `NULL` jättää [visu_plot()]:n
+#'   paksuuden (0.8). Esityksessä käytetään ggcustomin VM-teeman paksuutta
+#'   1.5. Jos paksuus on kartoitettu sarjaan, kaikki sarjat paksunevat samassa
+#'   suhteessa, jolloin niiden järjestys säilyy. Nollaviiva ei muutu.
 #' @return ggplot-objekti.
 #' @export
 visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
-                         legend = NULL, scale = 1, width = 6.28) {
+                         legend = NULL, scale = 1, width = 6.28,
+                         linewidth = NULL) {
   if (!inherits(p, "ggplot")) {
     stop("`p` pitää olla ggplot-objekti, ei ", class(p)[1], ".", call. = FALSE)
   }
@@ -56,6 +61,7 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
     # suhteessa eika yksittaisia elementteja tarvitse luetella.
     p <- p + ggplot2::theme(text = ggplot2::element_text(size = 12 * scale))
   }
+  if (!is.null(linewidth)) p <- visu_restyle_linewidth(p, linewidth)
   if (is.null(start) && is.null(end)) return(p)
 
   tiedot <- visu_plot_spec(p)
@@ -90,6 +96,35 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
     ylim = visu_view_ylim(nakyva, tiedot$x_col, tiedot$y_col, tiedot$type,
                           tiedot$stack, viiva)
   ))
+}
+
+# Viivat paksummiksi. Kerrokset ja skaalat ovat ggproto-olioita eli
+# viittauksia, joten ne kopioidaan ennen muokkausta: muuten muutos nakyisi myos
+# alkuperaisessa kuviossa, joka voi olla sivun muistissa.
+visu_restyle_linewidth <- function(p, linewidth) {
+  if (!is.numeric(linewidth) || length(linewidth) != 1L || linewidth <= 0) {
+    stop("`linewidth` pit\u00e4\u00e4 olla yksi positiivinen luku.", call. = FALSE)
+  }
+  kerroin <- linewidth / visu_linewidths(1)
+  p$layers <- lapply(p$layers, function(l) {
+    if (!inherits(l$geom, "GeomLine") || is.null(l$aes_params$linewidth)) return(l)
+    uusi <- ggplot2::ggproto(NULL, l)
+    uusi$aes_params$linewidth <- l$aes_params$linewidth * kerroin
+    uusi
+  })
+  skaala <- p$scales$get_scales("linewidth")
+  if (!is.null(skaala)) {
+    uusi <- skaala$clone()
+    vanha <- skaala$palette
+    uusi$palette <- function(n) vanha(n) * kerroin
+    skaalat <- p$scales$clone()
+    # Kloonaus kopioi myos skaalat, joten oikea tunnistetaan estetiikasta.
+    skaalat$scales <- lapply(skaalat$scales, function(s) {
+      if ("linewidth" %in% s$aesthetics) uusi else s
+    })
+    p$scales <- skaalat
+  }
+  p
 }
 
 # Alareuna vai oikea reuna. Alareunassa selite latoutuu yhdelle riville, joka

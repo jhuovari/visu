@@ -13,6 +13,7 @@ visu_chart(
   legend = NULL,
   scale = 1,
   width = 6.28,
+  linewidth = NULL,
   site_dir = NULL
 )
 }
@@ -26,6 +27,24 @@ tunnisteet saa \code{\link[=visu_catalog_read]{visu_catalog_read()}}:llä.}
 
 \item{titles}{Pidätäänkö kuvion omat otsikot. \code{FALSE} poistaa otsikon ja
 alaotsikon mutta jättää lähteen; käytä kun otsikko tulee dian tekstiksi.}
+
+\item{legend}{Selitteen paikka. \code{NULL} jättää teeman mukaisen oikean
+reunan, \code{"auto"} valitsee paikan sarjojen määrän mukaan, ja ggplotin omat
+arvot (\code{"bottom"}, \code{"right"}, \code{"none"}) kelpaavat sellaisenaan. Dian
+kapeassa palstassa oikean reunan selite vie neljänneksen leveydestä
+piirtoalalta, mutta alareunassa monen sarjan selite vie saman verran
+korkeutta — \code{"auto"} siirtää selitteen alas vain kun sarjoja on vähän.}
+
+\item{scale}{Tekstien kokokerroin. Esityksessä kuvio on pienempänä ja
+katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.}
+
+\item{width}{Kuvion leveys tuumina. Vaikuttaa vain siihen, mahtuuko selite
+alareunaan, kun \code{legend = "auto"}.}
+
+\item{linewidth}{Viivojen paksuus. \code{NULL} jättää \code{\link[=visu_plot]{visu_plot()}}:n
+paksuuden (0.8). Esityksessä käytetään ggcustomin VM-teeman paksuutta
+1.5. Jos paksuus on kartoitettu sarjaan, kaikki sarjat paksunevat samassa
+suhteessa, jolloin niiden järjestys säilyy. Nollaviiva ei muutu.}
 
 \item{site_dir}{Sivuston hakemisto.}
 }

@@ -123,3 +123,28 @@ test_that("kokokerroin kasvattaa teeman tekstit", {
   expect_equal(p$theme$text$size, 18)
   expect_error(visu_restyle(visu_plot(aikasarja()), scale = -1), "positiivinen")
 })
+
+test_that("viivan paksuus muuttuu esitykseen mutta alkuperainen kuvio ei", {
+  p <- visu_plot(aikasarja(), type = "col", line = aikasarja(), line_label = "Yhteensä")
+  viiva <- function(k) Filter(function(l) inherits(l$geom, "GeomLine"), k$layers)[[1]]
+
+  q <- visu_restyle(p, linewidth = 1.5)
+
+  expect_equal(viiva(q)$aes_params$linewidth, 1.5)
+  expect_equal(viiva(p)$aes_params$linewidth, 0.8)
+  expect_error(visu_restyle(p, linewidth = 0), "positiivinen")
+})
+
+test_that("kartoitettu paksuus kasvaa suhteessa ja jarjestys sailyy", {
+  d <- data.frame(
+    time = rep(as.Date(c("2024-01-01", "2024-02-01")), 2),
+    sarja = factor(rep(c("Alkuperäinen", "Trendi"), each = 2)),
+    values = c(1, 2, 1.5, 1.6)
+  )
+  p <- visu_plot(d, linewidth = "sarja")
+
+  q <- visu_restyle(p, linewidth = 1.6)
+
+  expect_equal(q$scales$get_scales("linewidth")$palette(2), c(0.9, 1.6))
+  expect_equal(p$scales$get_scales("linewidth")$palette(2), c(0.45, 0.8))
+})
