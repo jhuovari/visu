@@ -76,8 +76,12 @@ päivittyy itsestään.
   kaikkien kuvioiden data haetaan rajapinnasta. Saman sivun seuraavat kuviot
   ovat ilmaisia samassa ajossa, joten `kokoa.py` renderöi kaikki kuviot
   yhdellä R-ajolla.
-- **Selite** menee automaattisesti alas kun sarjoja on enintään neljä, muuten
-  oikeaan reunaan. Alareunassa monen sarjan selite veisi liikaa korkeutta.
+- **Selite** menee automaattisesti alas, jos sen rivi mahtuu kuvion
+  leveyteen, muuten oikeaan reunaan. Pitkät nimet vievät oikeassa reunassa
+  helposti puolet piirtoalasta; silloin `legend = "bottom"` ja
+  `guides(colour = guide_legend(nrow = 2))` ladovat ne alas kahdelle
+  riville. Alareunan selite on esityksessä tiiviimpi kuin sivustolla: väli
+  x-akseliin on kolmanneksen pienempi ja sarjojen välit kapeammat.
 - **Ulkoasu on ggcustomin VM-teema** (`theme_vm()`), kuten sivustolla, mutta
   tekstit ovat 1.15-kertaisia ja viivat VM-määrittelyn paksuisia (1.5).
   Sivustolla viiva on ohuempi (0.8), eikä sitä muuteta. `visu_chart_png()`

@@ -59,10 +59,18 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
     # selitteen kuviossa (pinotut erat ja paallysviiva) rivi ei mahdu kuvion
     # leveyteen ja oikea reuna leikkautuu. Pystyyn ladottuna kumpikin saa
     # koko leveyden ja katkeaa riveille itse.
+    # Valit ovat teemassa kiinteita pisteita eivatka kasva tekstien mukana.
+    # Esityksessa kolmanneksen pienempi vali x-akseliin ja tiiviimmat sarjat
+    # jattavat enemman korkeutta piirtoalueelle. Vali akseliin on
+    # box.spacing + selitteen ylareunus: teemassa 12 + 6 pt, tassa 8 + 2 pt.
     if (identical(legend, "bottom")) {
       p <- p + ggplot2::theme(legend.box = "vertical",
                               legend.justification = "left",
-                              legend.box.just = "left")
+                              legend.box.just = "left",
+                              legend.box.spacing = ggplot2::unit(8, "pt"),
+                              legend.margin = ggplot2::margin(2, 6, 6, 6),
+                              legend.key.spacing.x = ggplot2::unit(4, "pt"),
+                              legend.key.spacing.y = ggplot2::unit(2, "pt"))
     }
   }
   if (!identical(scale, 1)) {
