@@ -16,6 +16,7 @@ visu_chart_png(
   width = 6.28,
   height = 4.49,
   dpi = 300,
+  linewidth = 1.5,
   site_dir = NULL
 )
 }
@@ -32,9 +33,23 @@ tunnisteet saa \code{\link[=visu_catalog_read]{visu_catalog_read()}}:llä.}
 \item{titles}{Pidätäänkö kuvion omat otsikot. \code{FALSE} poistaa otsikon ja
 alaotsikon mutta jättää lähteen; käytä kun otsikko tulee dian tekstiksi.}
 
-\item{width, height}{Kuvan mitat tuumina.}
+\item{legend}{Selitteen paikka. \code{NULL} jättää teeman mukaisen oikean
+reunan, \code{"auto"} valitsee paikan sarjojen määrän mukaan, ja ggplotin omat
+arvot (\code{"bottom"}, \code{"right"}, \code{"none"}) kelpaavat sellaisenaan. Dian
+kapeassa palstassa oikean reunan selite vie neljänneksen leveydestä
+piirtoalalta, mutta alareunassa monen sarjan selite vie saman verran
+korkeutta — \code{"auto"} siirtää selitteen alas vain kun sarjoja on vähän.}
+
+\item{scale}{Tekstien kokokerroin. Esityksessä kuvio on pienempänä ja
+katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.}
+
+\item{width, height}{Kuvan mitat tuumina. Otsikko ja lähde sovitetaan
+näihin mittoihin; katso \code{\link[=visu_restyle]{visu_restyle()}}.}
 
 \item{dpi}{Tarkkuus. Oletus 300 riittää myös tulostukseen.}
+
+\item{linewidth}{Viivojen paksuus, oletuksena ggcustomin VM-teeman 1.5.
+Sivuston kuvioissa viiva on ohuempi; katso \code{\link[=visu_restyle]{visu_restyle()}}.}
 
 \item{site_dir}{Sivuston hakemisto.}
 }
