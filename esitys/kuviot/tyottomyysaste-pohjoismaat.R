@@ -1,5 +1,6 @@
-# Tyottomyysaste Suomessa, euroalueella ja muissa Pohjoismaissa, esityskoossa.
-# Kaikki maat Eurostatin kausitasoitetusta kuukausisarjasta, jolloin ne on
+# Tyottomyysaste Suomessa, euroalueella ja muissa Pohjoismaissa, esityskoossa
+# ja englanniksi. Kaikki maat Eurostatin kuukausittaisesta trendisarjasta
+# (TC), jolloin ne on
 # laskettu samalla menetelmalla. Suomi ja euroalue paksulla viivalla, Ruotsi,
 # Tanska, Norja ja Islanti ohuella.
 #
@@ -15,11 +16,11 @@ tiedosto <- if (length(args)) args[[1]] else
   "esitys/kuviot/tyottomyysaste-pohjoismaat.png"
 
 # Suomi ensin: se saa paletin ensimmaisen varin ja piirtyy paallimmaiseksi.
-maat <- c(FI = "Suomi", EA21 = "Euroalue", SE = "Ruotsi", DK = "Tanska",
-          NO = "Norja", IS = "Islanti")
+maat <- c(FI = "Finland", EA21 = "Euro area", SE = "Sweden", DK = "Denmark",
+          NO = "Norway", IS = "Iceland")
 
 tyottomyys <- visu_get_eurostat(
-  paste0("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/une_rt_m/M.SA.TOTAL.PC_ACT.T.",
+  paste0("https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/une_rt_m/M.TC.TOTAL.PC_ACT.T.",
          paste(names(maat), collapse = "+"))
 ) |>
   filter(!is.na(values)) |>
@@ -35,9 +36,9 @@ varit <- stats::setNames(c("#006475", "#c48903", "#365ABD", "#0098e8",
                            "#1B396D", "#4E8E7C"), maat)
 
 p <- visu_plot(tyottomyys, colour = "maa", linewidth = "maa",
-               title = "Työttömyysaste, 15–74-vuotiaat, %",
-               subtitle = "Kausitasoitettu",
-               caption = "Lähde: Eurostat", lang = "fi")
+               title = "Unemployment rate, aged 15–74, %",
+               subtitle = "Trend",
+               caption = "Source: Eurostat", lang = "en")
 # Sama sarake varina ja paksuutena, joten selite yhdistyy yhdeksi.
 p <- suppressMessages(
   p +
