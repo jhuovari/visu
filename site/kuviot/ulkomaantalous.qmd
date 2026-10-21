@@ -5,6 +5,7 @@ visu:
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/mata/114s.px/"
     - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/tpulk/12gq.px/"
     - "https://www.cpb.nl/en/worldtrademonitor/latest"
+    - "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/"
     - "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC"
     - "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC2"
 ---
@@ -570,6 +571,96 @@ kuvio_maailma_muutos("fi") |>
 visu_downloads(kuvio_maailma_muutos, "maailmankauppa-vuosimuutos")
 ```
 
+### Vienti ja maailmankysyntä
+
+```{r}
+library(visu)
+library(dplyr)
+
+# Suomen tavaroiden ja palveluiden viennin volyymi neljannesvuositilinpidosta,
+# kausitasoitettuna viitevuoden 2015 hinnoin.
+vienti <- visu_get_data(
+  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/",
+  query = list(
+    "timeperiod_q" = "*",
+    "taloustoimi_1_20180101" = "P6K",
+    "contentscode" = "kausitvv2015"
+  )
+)
+
+# Maailmankysynta on CPB:n maailman tuonnin volyymi. Kuukausisarja muutetaan
+# neljannesvuosikeskiarvoiksi, jotta se on samalla tiheydella kuin vienti.
+# Mukaan vain taydet neljannekset: kesken olevan neljanneksen keskiarvo
+# yhdesta tai kahdesta kuukaudesta ei olisi vertailukelpoinen.
+maailman_tuonti <- poimi(cpb_kauppa, "mgz_w1_qnmi_sn") |>
+  mutate(time = as.Date(sprintf("%s-%02d-01", format(time, "%Y"),
+                                (as.integer(format(time, "%m")) - 1L) %/% 3L * 3L + 1L))) |>
+  group_by(time) |>
+  filter(n() == 3L) |>
+  summarise(values = mean(values), .groups = "drop")
+
+# Vuosimuutos lasketaan molemmille samalla tavalla kausitasoitetusta
+# tasosta.
+vienti_kysynta <- bind_rows(
+  transmute(vienti, time, sarja = "vienti", values),
+  transmute(maailman_tuonti, time, sarja = "maailma", values)
+) |>
+  group_by(sarja) |>
+  arrange(time, .by_group = TRUE) |>
+  mutate(values = visu_change(values, time)) |>
+  ungroup() |>
+  filter(!is.na(values))
+
+tekstit_vienti_kysynta <- list(
+  fi = list(
+    otsikko = "Vienti ja maailmankysyntä, volyymin vuosimuutos, %",
+    selite = "Neljännesvuosittain, kausitasoitettu",
+    lahde = "Lähde: Tilastokeskus, neljännesvuositilinpito; CPB World Trade Monitor",
+    sarjat = c(vienti = "Tavaroiden ja palveluiden vienti, Suomi",
+               maailma = "Maailman tuonti (CPB)")
+  ),
+  sv = list(
+    otsikko = "Export och världsefterfrågan, volymens årsförändring, %",
+    selite = "Kvartalsvis, säsongrensad",
+    lahde = "Källa: Statistikcentralen, kvartalsvisa nationalräkenskaper; CPB World Trade Monitor",
+    sarjat = c(vienti = "Export av varor och tjänster, Finland",
+               maailma = "Världens import (CPB)")
+  ),
+  en = list(
+    otsikko = "Exports and world demand, annual change in volume, %",
+    selite = "Quarterly, seasonally adjusted",
+    lahde = "Source: Statistics Finland, quarterly national accounts; CPB World Trade Monitor",
+    sarjat = c(vienti = "Exports of goods and services, Finland",
+               maailma = "World imports (CPB)")
+  )
+)
+
+kuvio_vienti_kysynta <- function(kieli) {
+  t <- tekstit_vienti_kysynta[[kieli]]
+  d <- vienti_kysynta
+  d$erittely <- factor(d$sarja, levels = names(t$sarjat), labels = t$sarjat)
+  visu_plot(d, colour = "erittely", title = t$otsikko, subtitle = t$selite,
+            caption = t$lahde, lang = kieli, zeroline = TRUE)
+}
+
+kuvio_vienti_kysynta("fi") |>
+  visu_interactive(
+    subtitle = tekstit_vienti_kysynta$fi$selite,
+    caption = tekstit_vienti_kysynta$fi$lahde
+  )
+```
+
+Maailman tuonti kuvaa Suomen viennin kysyntäympäristöä: kun maailmankauppa
+kasvaa, Suomen vientikin yleensä kasvaa. Vienti heiluu kuitenkin enemmän,
+koska Suomen vienti painottuu investointitavaroihin ja raaka-aineisiin, joiden
+kysyntä reagoi suhdanteisiin voimakkaasti.
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_vienti_kysynta, "vienti-maailmankysynta")
+```
+
 ### Alueittain
 
 ```{r}
@@ -648,6 +739,7 @@ visu_downloads(kuvio_tuonti_alueet, "maailmankauppa-alueittain", height = 6)
 #| echo: false
 #| output: asis
 visu_metadata(cpb_kauppa, "https://www.cpb.nl/en/worldtrademonitor/latest")
+visu_metadata(vienti, "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/ntp/132h.px/")
 ```
 
 ## Maailman teollisuustuotanto
