@@ -5,8 +5,9 @@
 # Euroalue ja Suomi ovat Eurostatin yhdenmukaistettua indeksia, josta
 # vuosimuutos lasketaan kuten sivuston inflaatiosivulla. Ensimmaisessa
 # kuviossa on lisaksi Tilastokeskuksen kansallisen kuluttajahintaindeksin
-# vuosimuutos. Energiainflaation kuviossa ovat vertailuna myos Ruotsi,
-# Tanska, Norja ja Islanti ohuemmalla viivalla.
+# vuosimuutos. Energiainflaation kuviossa on vertailuna muiden Pohjoismaiden
+# (Ruotsi, Tanska, Norja, Islanti) yksinkertainen keskiarvo ohuemmalla
+# viivalla.
 #
 # Ajo: Rscript esitys/kuviot/inflaatio-vertailu-en.R [kansio]
 
@@ -34,19 +35,29 @@ khi <- visu_get_data(
   )
 )
 
+# Muiden Pohjoismaiden energiainflaatio yksinkertaisena keskiarvona. Vain
+# kuukaudet, joilta kaikkien nelja maan luku on, jotta keskiarvon koostumus
+# ei vaihtele.
+pohjoismaat <- c("SE", "DK", "NO", "IS")
+nordic <- hicp |>
+  filter(coicop18 == "NRG", sarja %in% pohjoismaat) |>
+  group_by(time, coicop18) |>
+  filter(n() == length(pohjoismaat)) |>
+  summarise(values = mean(values), .groups = "drop") |>
+  mutate(sarja = "NORD")
+
 # Suomi ensin, jolloin se saa paletin ensimmaisen varin kuten sivustolla.
 sarjat <- c(FI = "Finland", EA20 = "Euro area", CPI = "CPI, Finland",
-            SE = "Sweden", DK = "Denmark", NO = "Norway", IS = "Iceland")
+            NORD = "Other Nordics")
 paa <- c("FI", "EA20")
 
 # Viivan paksuus ennen esitysskaalausta: visu_restyle() kertoo sen niin, etta
-# perusviiva 0.8 on esityksessa 1.5. Pohjoismaat ovat taustalla ohuina.
-paksuus <- c(FI = 0.8, EA20 = 0.8, SE = 0.35, DK = 0.35, NO = 0.35, IS = 0.35)
+# perusviiva 0.8 on esityksessa 1.5. Vertailusarja on ohuempi.
+paksuus <- c(FI = 0.8, EA20 = 0.8, NORD = 0.45)
 
-# VM-paletin varit kiinnitettyina maihin. Islannille ei anneta paletin
-# kuudetta turkoosia, joka on lahes Suomen vari.
-varit <- c(FI = "#006475", EA20 = "#c48903", SE = "#365ABD", DK = "#0098e8",
-           NO = "#1B396D", IS = "#4E8E7C")
+# VM-paletin varit kiinnitettyina sarjoihin, koska piirtojarjestys (alla)
+# poikkeaa selitteen jarjestyksesta.
+varit <- c(FI = "#006475", EA20 = "#c48903", NORD = "#365ABD")
 
 kuviot <- list(
   inflation = list(
@@ -66,10 +77,10 @@ kuviot <- list(
     caption = "Source: Eurostat"
   ),
   energy = list(
-    data = filter(hicp, coicop18 == "NRG"),
+    data = bind_rows(filter(hicp, coicop18 == "NRG", sarja %in% paa), nordic),
     title = "Energy inflation, %",
     subtitle = "Annual change, HICP energy",
-    caption = "Source: Eurostat",
+    caption = "Source: Eurostat. Other Nordics: simple average\nof Sweden, Denmark, Norway and Iceland",
     ohuet = TRUE
   )
 )
@@ -93,24 +104,21 @@ for (nimi in names(kuviot)) {
                  caption = k$caption, lang = "en", zeroline = TRUE,
                  start = "2020-01-01", linewidth = if (ohuet) "sarja" else NULL)
   if (ohuet) {
-    # Sama sarake varina ja paksuutena, joten selite yhdistyy yhdeksi; kuusi
-    # sarjaa ei mahdu kapean kuvion alareunaan yhdelle riville.
+    # Sama sarake varina ja paksuutena, joten selite yhdistyy yhdeksi.
     nimet <- unname(sarjat[names(paksuus)])
     p <- suppressMessages(
       p +
         ggplot2::scale_linewidth_manual(values = stats::setNames(paksuus, nimet),
                                         breaks = nimet) +
         ggplot2::scale_colour_manual(values = stats::setNames(varit[names(paksuus)], nimet),
-                                     breaks = nimet) +
-        # Norjan huippu venyttaa asteikon, ja oletuksena akselille jaisi vain
-        # 0 ja 50.
-        ggplot2::scale_y_continuous(breaks = seq(-50, 150, 25))
-    ) +
-      ggplot2::guides(colour = ggplot2::guide_legend(nrow = 2),
-                      linewidth = ggplot2::guide_legend(nrow = 2))
+                                     breaks = nimet)
+    )
   }
   p <- visu_restyle(p, legend = "bottom", scale = 1.15, width = leveys,
                     linewidth = 1.5, height = korkeus)
+  # Selite koko kuvion vasemmasta reunasta eika piirtoalueen: kapeassa
+  # kuviossa y-akselin levyinen tila ratkaisee, mahtuuko kolmas sarja.
+  if (ohuet) p <- p + ggplot2::theme(legend.location = "plot")
   tiedosto <- file.path(kansio, paste0("inflaatio-", nimi, "-en.png"))
   ggplot2::ggsave(tiedosto, p, width = leveys, height = korkeus, dpi = 300, bg = "white")
   cat("Tallennettu:", tiedosto, "\n")
