@@ -148,3 +148,33 @@ test_that("kartoitettu paksuus kasvaa suhteessa ja jarjestys sailyy", {
   expect_equal(q$scales$get_scales("linewidth")$palette(2), c(0.9, 1.6))
   expect_equal(p$scales$get_scales("linewidth")$palette(2), c(0.45, 0.8))
 })
+
+test_that("pitka otsikko jaetaan riveille ja lyhyt jaa ennalleen", {
+  pitka <- paste(rep("Käytettävissä olevan tulon reaalimuutos", 3), collapse = " ")
+  p <- visu_plot(aikasarja(), title = pitka, caption = "Lähde: testi")
+
+  q <- visu_restyle(p, scale = 1.15, height = 4.49)
+  lyhyt <- visu_restyle(visu_plot(aikasarja(), title = "Lyhyt"), height = 4.49)
+
+  expect_match(q$labels$title, "\n")
+  expect_equal(gsub("\n", " ", q$labels$title), pitka)
+  expect_equal(lyhyt$labels$title, "Lyhyt")
+  expect_equal(visu_restyle(p)$theme$plot.caption.position, "panel")
+})
+
+test_that("lahde siirtyy kuvion reunaan kun oikean reunan selite kaventaa paneelin", {
+  d <- data.frame(
+    time = rep(seq(as.Date("2020-01-01"), by = "quarter", length.out = 8), 2),
+    sarja = factor(rep(c("Hyvin pitkä sarjan nimi tässä", "Toinen pitkä sarjan nimi"), each = 8)),
+    values = c(1:8, 8:1)
+  )
+  lahde <- "Lähde: Tilastokeskus, neljännesvuosittaiset sektoritilit ja neljännesvuositilinpito"
+  p <- visu_plot(d, colour = "sarja", caption = lahde)
+
+  q <- visu_restyle(p, legend = "right", scale = 1.15, height = 4.49)
+  alas <- visu_restyle(p, legend = "bottom", scale = 1.15, height = 4.49)
+
+  expect_equal(q$theme$plot.caption.position, "plot")
+  expect_equal(gsub("\n", " ", q$labels$caption), lahde)
+  expect_equal(alas$theme$plot.caption.position, "panel")
+})

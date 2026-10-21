@@ -92,7 +92,7 @@ p <- visu_plot(d, colour = "era", type = "col", stack = TRUE,
 leveys <- 6.28
 korkeus <- 4.49
 p <- visu_restyle(p, legend = "bottom", scale = 1.15, width = leveys,
-                  linewidth = 1.5) +
+                  linewidth = 1.5, height = korkeus) +
   # Kuusi selitetta oikeassa reunassa veisi puolet piirtoalasta, joten erat
   # ladotaan alas kahteen sarakkeeseen ja reaalitulon viiva niiden alle.
   ggplot2::guides(fill = ggplot2::guide_legend(order = 1, ncol = 2),

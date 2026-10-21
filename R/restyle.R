@@ -29,11 +29,17 @@
 #'   paksuuden (0.8). Esityksessä käytetään ggcustomin VM-teeman paksuutta
 #'   1.5. Jos paksuus on kartoitettu sarjaan, kaikki sarjat paksunevat samassa
 #'   suhteessa, jolloin niiden järjestys säilyy. Nollaviiva ei muutu.
+#' @param height Kuvion korkeus tuumina. Kun se annetaan, otsikko, alaotsikko
+#'   ja lähde sovitetaan kuvion leveyteen: liian pitkä otsikko jaetaan
+#'   riveille, ja lähde, joka ei mahdu piirtoalueen levyiseksi, tasataan koko
+#'   kuvion oikeaan reunaan ja tarvittaessa jaetaan riveille. Tekstit mitataan
+#'   samalla PNG-laitteella, jolla [ggplot2::ggsave()] kuvan piirtää. `NULL`
+#'   jättää tekstit ennalleen.
 #' @return ggplot-objekti.
 #' @export
 visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
                          legend = NULL, scale = 1, width = 6.28,
-                         linewidth = NULL) {
+                         linewidth = NULL, height = NULL) {
   if (!inherits(p, "ggplot")) {
     stop("`p` pitää olla ggplot-objekti, ei ", class(p)[1], ".", call. = FALSE)
   }
@@ -62,8 +68,15 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
     p <- p + ggplot2::theme(text = ggplot2::element_text(size = 12 * scale))
   }
   if (!is.null(linewidth)) p <- visu_restyle_linewidth(p, linewidth)
-  if (is.null(start) && is.null(end)) return(p)
+  if (!is.null(start) || !is.null(end)) p <- visu_restyle_range(p, start, end)
+  # Viimeisena, koska selitteen paikka, tekstikoko ja akselin rajat vaikuttavat
+  # kaikki siihen, paljonko tilaa teksteille jaa.
+  if (!is.null(height)) p <- visu_fit_text(p, width, height)
+  p
+}
 
+# Aikarajaus. Y-raja lasketaan uudelleen nakyvasta datasta.
+visu_restyle_range <- function(p, start, end) {
   tiedot <- visu_plot_spec(p)
   if (is.null(tiedot)) {
     stop("Kuvion aikarajausta ei voi muuttaa: x-akseli ei ole aikaa.",
@@ -96,6 +109,82 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
     ylim = visu_view_ylim(nakyva, tiedot$x_col, tiedot$y_col, tiedot$type,
                           tiedot$stack, viiva)
   ))
+}
+
+# Otsikot ja lahde kuvion leveyteen. Kuvio rakennetaan gtableksi samalla
+# laitteella ja mitoilla kuin ggsave sen piirtaa, jolloin seka tekstien etta
+# akselin ja selitteen leveydet ovat todellisia eika arvioita merkkimaarasta.
+#
+# Otsikko alkaa piirtoalueen vasemmasta reunasta (VM-teeman
+# plot.title.position = "panel") ja voi jatkua selitteen ylle, joten sille
+# jaa tilaa kuvion oikeaan reunaan asti. Lahde taas tasataan piirtoalueen
+# oikeaan reunaan ja kasvaa vasemmalle: jos selite on oikealla, lahde
+# leikkautuu vasemmasta reunasta. Silloin se tasataan koko kuvion oikeaan
+# reunaan, mika on pienin poikkeama teemasta.
+visu_fit_text <- function(p, width, height) {
+  tiedosto <- tempfile(fileext = ".png")
+  grDevices::png(tiedosto, width = width, height = height, units = "in", res = 72)
+  on.exit({
+    grDevices::dev.off()
+    unlink(tiedosto)
+  }, add = TRUE)
+
+  tila <- visu_text_room(p, width)
+  for (osa in c("title", "subtitle")) {
+    p <- visu_wrap_label(p, osa, tila[[osa]], tila$tarve[[osa]])
+  }
+  if (tila$tarve$caption > tila$caption) {
+    p <- p + ggplot2::theme(plot.caption.position = "plot")
+    tila <- visu_text_room(p, width)
+    p <- visu_wrap_label(p, "caption", tila$caption, tila$tarve$caption)
+  }
+  p
+}
+
+# Kunkin tekstin tarvitsema ja kaytettavissa oleva leveys tuumina.
+visu_text_room <- function(p, width) {
+  g <- ggplot2::ggplotGrob(p)
+  tuumina <- function(u) grid::convertWidth(u, "in", valueOnly = TRUE)
+  leveydet <- vapply(seq_along(g$widths), function(i) tuumina(g$widths[i]), numeric(1))
+  # Piirtoalueen sarakkeet ovat null-yksikoita, jotka muuntuvat nollaksi;
+  # niiden yhteisleveys on se mita kiinteilta sarakkeilta jaa.
+  paneelit <- g$layout[grepl("^panel", g$layout$name), , drop = FALSE]
+  vasen <- min(paneelit$l)
+  oikea <- max(paneelit$r)
+  vapaa <- width - sum(leveydet)
+  reunus <- ggplot2::calc_element("plot.margin", ggplot2:::plot_theme(p))
+  reunus <- vapply(seq_along(reunus), function(i) tuumina(reunus[i]), numeric(1))
+
+  paneelin_alku <- sum(leveydet[seq_len(vasen - 1L)])
+  paneelin_loppu <- paneelin_alku + sum(leveydet[vasen:oikea]) + vapaa
+  tarve <- lapply(c(title = "title", subtitle = "subtitle", caption = "caption"),
+                  function(nimi) {
+    i <- which(g$layout$name == nimi)
+    if (length(i) == 0L) return(0)
+    tuumina(grid::grobWidth(g$grobs[[i[1]]]))
+  })
+  lahde_paneelissa <- !identical(
+    ggplot2::calc_element("plot.caption.position", ggplot2:::plot_theme(p)), "plot")
+  list(
+    title = width - paneelin_alku - reunus[2],
+    subtitle = width - paneelin_alku - reunus[2],
+    caption = if (lahde_paneelissa) paneelin_loppu - reunus[4] else width - reunus[2] - reunus[4],
+    tarve = tarve
+  )
+}
+
+# Jaa teksti riveille niin, etta pisin rivi mahtuu tilaan. Rivin pituus
+# merkkeina arvioidaan mitatusta leveydesta, ja pieni vara kattaa sen, etta
+# merkit ovat eri levyisia.
+visu_wrap_label <- function(p, osa, tila, tarve) {
+  teksti <- p$labels[[osa]]
+  if (is.null(teksti) || !is.character(teksti) || tarve <= tila) return(p)
+  merkkeja <- max(nchar(strsplit(teksti, "\n")[[1]]))
+  rivi <- max(10L, floor(merkkeja * tila / tarve * 0.95))
+  rivit <- vapply(strsplit(teksti, "\n")[[1]], function(r) {
+    paste(strwrap(r, width = rivi), collapse = "\n")
+  }, character(1))
+  p + do.call(ggplot2::labs, stats::setNames(list(paste(rivit, collapse = "\n")), osa))
 }
 
 # Viivat paksummiksi. Kerrokset ja skaalat ovat ggproto-olioita eli

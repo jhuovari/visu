@@ -43,7 +43,8 @@ korkeutta — \code{"auto"} siirtää selitteen alas vain kun sarjoja on vähän
 \item{scale}{Tekstien kokokerroin. Esityksessä kuvio on pienempänä ja
 katsotaan kauempaa kuin näytöllä, joten tekstit tarvitsevat kokoa lisää.}
 
-\item{width, height}{Kuvan mitat tuumina.}
+\item{width, height}{Kuvan mitat tuumina. Otsikko ja lähde sovitetaan
+näihin mittoihin; katso \code{\link[=visu_restyle]{visu_restyle()}}.}
 
 \item{dpi}{Tarkkuus. Oletus 300 riittää myös tulostukseen.}
 

@@ -12,7 +12,8 @@ visu_restyle(
   legend = NULL,
   scale = 1,
   width = 6.28,
-  linewidth = NULL
+  linewidth = NULL,
+  height = NULL
 )
 }
 \arguments{
@@ -41,6 +42,13 @@ alareunaan, kun \code{legend = "auto"}.}
 paksuuden (0.8). Esityksessä käytetään ggcustomin VM-teeman paksuutta
 1.5. Jos paksuus on kartoitettu sarjaan, kaikki sarjat paksunevat samassa
 suhteessa, jolloin niiden järjestys säilyy. Nollaviiva ei muutu.}
+
+\item{height}{Kuvion korkeus tuumina. Kun se annetaan, otsikko, alaotsikko
+ja lähde sovitetaan kuvion leveyteen: liian pitkä otsikko jaetaan
+riveille, ja lähde, joka ei mahdu piirtoalueen levyiseksi, tasataan koko
+kuvion oikeaan reunaan ja tarvittaessa jaetaan riveille. Tekstit mitataan
+samalla PNG-laitteella, jolla \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} kuvan piirtää. \code{NULL}
+jättää tekstit ennalleen.}
 }
 \value{
 ggplot-objekti.

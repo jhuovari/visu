@@ -82,7 +82,11 @@ päivittyy itsestään.
   tekstit ovat 1.15-kertaisia ja viivat VM-määrittelyn paksuisia (1.5).
   Sivustolla viiva on ohuempi (0.8), eikä sitä muuteta. `visu_chart_png()`
   tekee tämän itse; omassa kuviossa käytä samoja asetuksia:
-  `visu_restyle(p, legend = "auto", scale = 1.15, linewidth = 1.5)`.
+  `visu_restyle(p, legend = "auto", scale = 1.15, linewidth = 1.5, height = 4.49)`.
+- **Pitkät tekstit sovitetaan** kuvion mittoihin, kun `visu_restyle()` saa
+  korkeuden (`visu_chart_png()` antaa sen aina): liian pitkä otsikko jaetaan
+  riveille, ja lähde, joka leikkautuisi oikean reunan selitteen takia,
+  tasataan kuvion oikeaan reunaan. Sivuston kuvioihin tämä ei vaikuta.
   Älä muuta teeman muita asetuksia (otsikon paikka, fonttikoot) ilman syytä.
 - **Lähde on kuvion sisällä** (ggplotin caption), joten dialle ei tarvita
   erillistä lähderiviä.

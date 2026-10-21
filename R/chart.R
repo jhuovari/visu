@@ -21,7 +21,7 @@
 #' @export
 visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
                        titles = TRUE, legend = NULL, scale = 1, width = 6.28,
-                       linewidth = NULL, site_dir = NULL) {
+                       linewidth = NULL, height = NULL, site_dir = NULL) {
   if (!is.character(id) || length(id) != 1L) {
     stop("`id` pitää olla yksi kuvion tunniste merkkijonona.", call. = FALSE)
   }
@@ -33,7 +33,7 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
   }
   visu_restyle(p, start = start, end = end, titles = titles,
                legend = legend, scale = scale, width = width,
-               linewidth = linewidth)
+               linewidth = linewidth, height = height)
 }
 
 #' Tallenna sivuston kuvio kuvaksi
@@ -45,7 +45,8 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
 #'
 #' @inheritParams visu_chart
 #' @param file Tiedostopolku.
-#' @param width,height Kuvan mitat tuumina.
+#' @param width,height Kuvan mitat tuumina. Otsikko ja lähde sovitetaan
+#'   näihin mittoihin; katso [visu_restyle()].
 #' @param dpi Tarkkuus. Oletus 300 riittää myös tulostukseen.
 #' @param linewidth Viivojen paksuus, oletuksena ggcustomin VM-teeman 1.5.
 #'   Sivuston kuvioissa viiva on ohuempi; katso [visu_restyle()].
@@ -57,7 +58,7 @@ visu_chart_png <- function(id, file, lang = "fi", start = NULL, end = NULL,
                            linewidth = 1.5, site_dir = NULL) {
   p <- visu_chart(id, lang = lang, start = start, end = end, titles = titles,
                   legend = legend, scale = scale, width = width,
-                  linewidth = linewidth, site_dir = site_dir)
+                  linewidth = linewidth, height = height, site_dir = site_dir)
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   ggplot2::ggsave(file, p, width = width, height = height, dpi = dpi, bg = "white")
   invisible(file)
