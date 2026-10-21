@@ -1,13 +1,10 @@
-# Inflaatio, pohjainflaatio ja energiainflaatio Suomessa ja euroalueella,
-# brittienglanniksi. Kolme kuviota rinnakkain samalle dialle: kunkin leveys on
-# kolmannes pohjan sisaltoalueesta (11.89 tuumaa).
+# Inflaatio, pohjainflaatio ja energiainflaatio Suomessa, euroalueella ja
+# muissa Pohjoismaissa, brittienglanniksi. Kolme kuviota rinnakkain samalle
+# dialle: kunkin leveys on kolmannes pohjan sisaltoalueesta (11.89 tuumaa).
 #
-# Euroalue ja Suomi ovat Eurostatin yhdenmukaistettua indeksia, josta
-# vuosimuutos lasketaan kuten sivuston inflaatiosivulla. Ensimmaisessa
-# kuviossa on lisaksi Tilastokeskuksen kansallisen kuluttajahintaindeksin
-# vuosimuutos. Energiainflaation kuviossa on vertailuna muiden Pohjoismaiden
-# (Ruotsi, Tanska, Norja, Islanti) yksinkertainen keskiarvo ohuemmalla
-# viivalla.
+# Kaikki sarjat ovat Eurostatin yhdenmukaistettua indeksia, josta vuosimuutos
+# lasketaan kuten sivuston inflaatiosivulla. Muut Pohjoismaat on Ruotsin,
+# Tanskan, Norjan ja Islannin vuosimuutosten yksinkertainen keskiarvo.
 #
 # Ajo: Rscript esitys/kuviot/inflaatio-vertailu-en.R [kansio]
 
@@ -16,6 +13,8 @@ library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
 kansio <- if (length(args)) args[[1]] else "esitys/kuviot"
+
+pohjoismaat <- c("SE", "DK", "NO", "IS")
 
 hicp <- visu_get_eurostat(
   "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_minr/M.I25.TOTAL+TOT_X_NRG_FOOD+NRG.FI+EA20+SE+DK+NO+IS"
@@ -26,62 +25,38 @@ hicp <- visu_get_eurostat(
   filter(!is.na(values)) |>
   transmute(time, coicop18 = as.character(coicop18), sarja = as.character(geo), values)
 
-khi <- visu_get_data(
-  url = "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/khi/15b5.px/",
-  query = list(
-    "timeperiod_m" = "*",
-    "coicop_46_20231201" = "SSS",
-    "contentscode" = "vm_khi"
-  )
-)
-
-# Muiden Pohjoismaiden energiainflaatio yksinkertaisena keskiarvona. Vain
-# kuukaudet, joilta kaikkien nelja maan luku on, jotta keskiarvon koostumus
-# ei vaihtele.
-pohjoismaat <- c("SE", "DK", "NO", "IS")
+# Keskiarvo vain kuukausilta, joilta kaikkien neljan maan luku on, jotta sen
+# koostumus ei vaihtele.
 nordic <- hicp |>
-  filter(coicop18 == "NRG", sarja %in% pohjoismaat) |>
+  filter(sarja %in% pohjoismaat) |>
   group_by(time, coicop18) |>
   filter(n() == length(pohjoismaat)) |>
   summarise(values = mean(values), .groups = "drop") |>
   mutate(sarja = "NORD")
 
 # Suomi ensin, jolloin se saa paletin ensimmaisen varin kuten sivustolla.
-sarjat <- c(FI = "Finland", EA20 = "Euro area", CPI = "CPI, Finland",
-            NORD = "Other Nordics")
-paa <- c("FI", "EA20")
+sarjat <- c(FI = "Finland", EA20 = "Euro area", NORD = "Other Nordics")
+d_kaikki <- bind_rows(filter(hicp, sarja %in% c("FI", "EA20")), nordic) |>
+  mutate(sarja = factor(sarja, levels = names(sarjat), labels = sarjat))
 
-# Viivan paksuus ennen esitysskaalausta: visu_restyle() kertoo sen niin, etta
-# perusviiva 0.8 on esityksessa 1.5. Vertailusarja on ohuempi.
-paksuus <- c(FI = 0.8, EA20 = 0.8, NORD = 0.45)
-
-# VM-paletin varit kiinnitettyina sarjoihin, koska piirtojarjestys (alla)
-# poikkeaa selitteen jarjestyksesta.
-varit <- c(FI = "#006475", EA20 = "#c48903", NORD = "#365ABD")
+lahde <- "Source: Eurostat. Other Nordics: simple average\nof Sweden, Denmark, Norway and Iceland"
 
 kuviot <- list(
   inflation = list(
-    data = bind_rows(
-      filter(hicp, coicop18 == "TOTAL", sarja %in% paa),
-      transmute(filter(khi, !is.na(values)), time, sarja = "CPI", values)
-    ),
+    coicop = "TOTAL",
     title = "Inflation, %",
-    subtitle = "Annual change, HICP and CPI",
-    caption = "Source: Eurostat, Statistics Finland"
+    subtitle = "Annual change, HICP"
   ),
   core = list(
-    data = filter(hicp, coicop18 == "TOT_X_NRG_FOOD", sarja %in% paa),
+    coicop = "TOT_X_NRG_FOOD",
     title = "Core inflation, %",
     # Eurostatin luokituksessa elintarvikkeisiin kuuluvat alkoholi ja tupakka.
-    subtitle = "HICP excl. energy and food",
-    caption = "Source: Eurostat"
+    subtitle = "HICP excl. energy and food"
   ),
   energy = list(
-    data = bind_rows(filter(hicp, coicop18 == "NRG", sarja %in% paa), nordic),
+    coicop = "NRG",
     title = "Energy inflation, %",
-    subtitle = "Annual change, HICP energy",
-    caption = "Source: Eurostat. Other Nordics: simple average\nof Sweden, Denmark, Norway and Iceland",
-    ohuet = TRUE
+    subtitle = "Annual change, HICP energy"
   )
 )
 
@@ -90,35 +65,14 @@ korkeus <- 4.6
 
 for (nimi in names(kuviot)) {
   k <- kuviot[[nimi]]
-  d <- mutate(k$data, sarja = factor(sarja, levels = intersect(names(sarjat), sarja),
-                                     labels = sarjat[intersect(names(sarjat), sarja)]))
-  ohuet <- isTRUE(k$ohuet)
-  if (ohuet) {
-    # ggplot piirtaa ryhmat tasojen jarjestyksessa, joten ohuet ensin ja
-    # korostetut niiden paalle. Selitteen jarjestys annetaan erikseen.
-    jarjestys <- c(setdiff(names(paksuus), paa), paa)
-    d <- mutate(k$data, sarja = factor(sarja, levels = jarjestys,
-                                       labels = sarjat[jarjestys]))
-  }
-  p <- visu_plot(d, colour = "sarja", title = k$title, subtitle = k$subtitle,
-                 caption = k$caption, lang = "en", zeroline = TRUE,
-                 start = "2020-01-01", linewidth = if (ohuet) "sarja" else NULL)
-  if (ohuet) {
-    # Sama sarake varina ja paksuutena, joten selite yhdistyy yhdeksi.
-    nimet <- unname(sarjat[names(paksuus)])
-    p <- suppressMessages(
-      p +
-        ggplot2::scale_linewidth_manual(values = stats::setNames(paksuus, nimet),
-                                        breaks = nimet) +
-        ggplot2::scale_colour_manual(values = stats::setNames(varit[names(paksuus)], nimet),
-                                     breaks = nimet)
-    )
-  }
+  p <- visu_plot(filter(d_kaikki, coicop18 == k$coicop), colour = "sarja",
+                 title = k$title, subtitle = k$subtitle, caption = lahde,
+                 lang = "en", zeroline = TRUE, start = "2020-01-01")
   p <- visu_restyle(p, legend = "bottom", scale = 1.15, width = leveys,
-                    linewidth = 1.5, height = korkeus)
-  # Selite koko kuvion vasemmasta reunasta eika piirtoalueen: kapeassa
-  # kuviossa y-akselin levyinen tila ratkaisee, mahtuuko kolmas sarja.
-  if (ohuet) p <- p + ggplot2::theme(legend.location = "plot")
+                    linewidth = 1.5, height = korkeus) +
+    # Selite koko kuvion vasemmasta reunasta eika piirtoalueen: kapeassa
+    # kuviossa y-akselin levyinen tila ratkaisee, mahtuuko kolmas sarja.
+    ggplot2::theme(legend.location = "plot")
   tiedosto <- file.path(kansio, paste0("inflaatio-", nimi, "-en.png"))
   ggplot2::ggsave(tiedosto, p, width = leveys, height = korkeus, dpi = 300, bg = "white")
   cat("Tallennettu:", tiedosto, "\n")
