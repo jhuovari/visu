@@ -178,3 +178,40 @@ test_that("lahde siirtyy kuvion reunaan kun oikean reunan selite kaventaa paneel
   expect_equal(gsub("\n", " ", q$labels$caption), lahde)
   expect_equal(alas$theme$plot.caption.position, "panel")
 })
+
+test_that("top_first piirtaa selitteen ensimmaisen sarjan viimeisena", {
+  d <- data.frame(
+    time = rep(seq(as.Date("2020-01-01"), by = "month", length.out = 3), 3),
+    values = c(1, 2, 3, 1.1, 2.1, 3.1, 1.2, 2.2, 3.2),
+    sarja = factor(rep(c("Suomi", "Euroalue", "Ruotsi"), each = 3),
+                   levels = c("Suomi", "Euroalue", "Ruotsi"))
+  )
+  p <- visu_plot(d, colour = "sarja", start = NA)
+  viiva <- function(k) which(vapply(k$layers, function(l) inherits(l$geom, "GeomLine"), logical(1)))
+  jarjestys <- function(k) {
+    ld <- ggplot2::layer_data(k, viiva(k))
+    unique(ld$colour[order(ld$group)])
+  }
+
+  q <- visu_restyle(p, top_first = TRUE)
+
+  expect_equal(jarjestys(q), rev(jarjestys(p)))
+  expect_equal(ggplot2::get_guide_data(q, "colour")$.label, levels(d$sarja))
+  expect_null(p$layers[[viiva(p)]]$mapping$group)
+})
+
+test_that("top_first ei kaanna pinottujen pylvaiden jarjestysta", {
+  d <- data.frame(
+    time = rep(seq(as.Date("2020-01-01"), by = "quarter", length.out = 4), 2),
+    era = factor(rep(c("Palkat", "Etuudet"), each = 4)),
+    values = c(1:4, 4:1)
+  )
+  p <- visu_plot(d, colour = "era", type = "col", stack = TRUE, start = NA,
+                 line = data.frame(time = unique(d$time), values = 5:8),
+                 line_label = "Yhteensä")
+
+  q <- visu_restyle(p, top_first = TRUE)
+
+  expect_equal(ggplot2::layer_data(q, 1)$group, ggplot2::layer_data(p, 1)$group)
+  expect_true(all(vapply(q$layers, function(l) is.null(l$mapping$group), logical(1))))
+})

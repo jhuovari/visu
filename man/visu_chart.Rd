@@ -15,6 +15,7 @@ visu_chart(
   width = 6.28,
   linewidth = NULL,
   height = NULL,
+  top_first = FALSE,
   site_dir = NULL
 )
 }
@@ -53,6 +54,13 @@ riveille, ja lähde, joka ei mahdu piirtoalueen levyiseksi, tasataan koko
 kuvion oikeaan reunaan ja tarvittaessa jaetaan riveille. Tekstit mitataan
 samalla PNG-laitteella, jolla \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} kuvan piirtää. \code{NULL}
 jättää tekstit ennalleen.}
+
+\item{top_first}{\code{TRUE} piirtää viivakuvion sarjat käänteisessä
+järjestyksessä, jolloin selitteen ensimmäinen sarja on kuviossa
+päällimmäisenä. Värit ja selitteen järjestys eivät muutu. Koskee vain
+viivoja, joiden väri tulee sarjasta: pinottujen pylväiden ja alueiden
+järjestys on pinoamisjärjestys, eikä sitä käännetä, ja pylväiden
+päällysviiva on jo valmiiksi päällimmäisenä.}
 
 \item{site_dir}{Sivuston hakemisto.}
 }

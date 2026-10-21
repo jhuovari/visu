@@ -82,7 +82,12 @@ päivittyy itsestään.
   tekstit ovat 1.15-kertaisia ja viivat VM-määrittelyn paksuisia (1.5).
   Sivustolla viiva on ohuempi (0.8), eikä sitä muuteta. `visu_chart_png()`
   tekee tämän itse; omassa kuviossa käytä samoja asetuksia:
-  `visu_restyle(p, legend = "auto", scale = 1.15, linewidth = 1.5, height = 4.49)`.
+  `visu_restyle(p, legend = "auto", scale = 1.15, linewidth = 1.5, height = 4.49, top_first = TRUE)`.
+- **Selitteen ensimmäinen sarja on päällimmäisenä.** Viivakuviossa sarjat
+  piirretään käänteisessä järjestyksessä, joten tärkein sarja (yleensä Suomi,
+  selitteessä ensimmäisenä) ei jää muiden alle. Värit ja selitteen järjestys
+  eivät muutu. Pinottuihin pylväisiin ja alueisiin tämä ei vaikuta.
+  `visu_chart_png()` tekee tämän itse; sivustolla järjestys on toisin päin.
 - **Pitkät tekstit sovitetaan** kuvion mittoihin, kun `visu_restyle()` saa
   korkeuden (`visu_chart_png()` antaa sen aina): liian pitkä otsikko jaetaan
   riveille, ja lähde, joka leikkautuisi oikean reunan selitteen takia,

@@ -69,7 +69,7 @@ for (nimi in names(kuviot)) {
                  title = k$title, subtitle = k$subtitle, caption = lahde,
                  lang = "en", zeroline = TRUE, start = "2020-01-01")
   p <- visu_restyle(p, legend = "bottom", scale = 1.15, width = leveys,
-                    linewidth = 1.5, height = korkeus) +
+                    linewidth = 1.5, height = korkeus, top_first = TRUE) +
     # Selite koko kuvion vasemmasta reunasta eika piirtoalueen: kapeassa
     # kuviossa y-akselin levyinen tila ratkaisee, mahtuuko kolmas sarja.
     ggplot2::theme(legend.location = "plot")

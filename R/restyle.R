@@ -29,6 +29,12 @@
 #'   paksuuden (0.8). Esityksessä käytetään ggcustomin VM-teeman paksuutta
 #'   1.5. Jos paksuus on kartoitettu sarjaan, kaikki sarjat paksunevat samassa
 #'   suhteessa, jolloin niiden järjestys säilyy. Nollaviiva ei muutu.
+#' @param top_first `TRUE` piirtää viivakuvion sarjat käänteisessä
+#'   järjestyksessä, jolloin selitteen ensimmäinen sarja on kuviossa
+#'   päällimmäisenä. Värit ja selitteen järjestys eivät muutu. Koskee vain
+#'   viivoja, joiden väri tulee sarjasta: pinottujen pylväiden ja alueiden
+#'   järjestys on pinoamisjärjestys, eikä sitä käännetä, ja pylväiden
+#'   päällysviiva on jo valmiiksi päällimmäisenä.
 #' @param height Kuvion korkeus tuumina. Kun se annetaan, otsikko, alaotsikko
 #'   ja lähde sovitetaan kuvion leveyteen: liian pitkä otsikko jaetaan
 #'   riveille, ja lähde, joka ei mahdu piirtoalueen levyiseksi, tasataan koko
@@ -39,7 +45,7 @@
 #' @export
 visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
                          legend = NULL, scale = 1, width = 6.28,
-                         linewidth = NULL, height = NULL) {
+                         linewidth = NULL, height = NULL, top_first = FALSE) {
   if (!inherits(p, "ggplot")) {
     stop("`p` pitää olla ggplot-objekti, ei ", class(p)[1], ".", call. = FALSE)
   }
@@ -68,6 +74,7 @@ visu_restyle <- function(p, start = NULL, end = NULL, titles = TRUE,
     p <- p + ggplot2::theme(text = ggplot2::element_text(size = 12 * scale))
   }
   if (!is.null(linewidth)) p <- visu_restyle_linewidth(p, linewidth)
+  if (isTRUE(top_first)) p <- visu_restyle_top_first(p)
   if (!is.null(start) || !is.null(end)) p <- visu_restyle_range(p, start, end)
   # Viimeisena, koska selitteen paikka, tekstikoko ja akselin rajat vaikuttavat
   # kaikki siihen, paljonko tilaa teksteille jaa.
@@ -185,6 +192,34 @@ visu_wrap_label <- function(p, osa, tila, tarve) {
     paste(strwrap(r, width = rivi), collapse = "\n")
   }, character(1))
   p + do.call(ggplot2::labs, stats::setNames(list(paste(rivit, collapse = "\n")), osa))
+}
+
+# Selitteen ensimmainen sarja paallimmaiseksi. ggplot piirtaa viivan ryhmat
+# ryhmanumeron jarjestyksessa, ja ryhmat numeroidaan sarakkeen tasojen
+# mukaan. Kun ryhmitys annetaan erikseen kaannetyilla tasoilla, piirtojarjestys
+# kaantyy mutta vari ja selite tulevat edelleen alkuperaisesta sarakkeesta.
+# Kerros kopioidaan kuten paksuutta muutettaessa.
+visu_restyle_top_first <- function(p) {
+  sarake <- visu_mapping_col(p$mapping$colour)
+  if (is.null(sarake) || !sarake %in% names(p$data)) return(p)
+  arvot <- p$data[[sarake]]
+  # Merkkijonosarakkeen ggplot jarjestaa aakkosjarjestykseen.
+  tasot <- if (is.factor(arvot)) levels(arvot) else sort(unique(as.character(arvot)))
+  ryhma <- rlang::quo(factor(.data[[!!sarake]], levels = !!rev(tasot)))
+
+  p$layers <- lapply(p$layers, function(l) {
+    # Vain sarakkeen varin perivat viivat. Paallysviivalla on oma datansa
+    # (inherit.aes = FALSE), ja itse annettua ryhmitysta ei ohiteta.
+    if (!inherits(l$geom, "GeomLine") || !isTRUE(l$inherit.aes) ||
+        !is.null(l$mapping$group)) {
+      return(l)
+    }
+    uusi <- ggplot2::ggproto(NULL, l)
+    uusi$mapping <- utils::modifyList(as.list(l$mapping), list(group = ryhma))
+    class(uusi$mapping) <- class(ggplot2::aes())
+    uusi
+  })
+  p
 }
 
 # Viivat paksummiksi. Kerrokset ja skaalat ovat ggproto-olioita eli

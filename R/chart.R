@@ -21,7 +21,8 @@
 #' @export
 visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
                        titles = TRUE, legend = NULL, scale = 1, width = 6.28,
-                       linewidth = NULL, height = NULL, site_dir = NULL) {
+                       linewidth = NULL, height = NULL, top_first = FALSE,
+                       site_dir = NULL) {
   if (!is.character(id) || length(id) != 1L) {
     stop("`id` pitää olla yksi kuvion tunniste merkkijonona.", call. = FALSE)
   }
@@ -33,7 +34,7 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
   }
   visu_restyle(p, start = start, end = end, titles = titles,
                legend = legend, scale = scale, width = width,
-               linewidth = linewidth, height = height)
+               linewidth = linewidth, height = height, top_first = top_first)
 }
 
 #' Tallenna sivuston kuvio kuvaksi
@@ -50,15 +51,19 @@ visu_chart <- function(id, lang = "fi", start = NULL, end = NULL,
 #' @param dpi Tarkkuus. Oletus 300 riittää myös tulostukseen.
 #' @param linewidth Viivojen paksuus, oletuksena ggcustomin VM-teeman 1.5.
 #'   Sivuston kuvioissa viiva on ohuempi; katso [visu_restyle()].
+#' @param top_first Selitteen ensimmäinen sarja päällimmäiseksi, oletuksena
+#'   päällä. Sivuston kuvioissa järjestys on toisin päin; katso
+#'   [visu_restyle()].
 #' @return Tiedostopolku näkymättömänä.
 #' @export
 visu_chart_png <- function(id, file, lang = "fi", start = NULL, end = NULL,
                            titles = TRUE, legend = "auto", scale = 1.15,
                            width = 6.28, height = 4.49, dpi = 300,
-                           linewidth = 1.5, site_dir = NULL) {
+                           linewidth = 1.5, top_first = TRUE, site_dir = NULL) {
   p <- visu_chart(id, lang = lang, start = start, end = end, titles = titles,
                   legend = legend, scale = scale, width = width,
-                  linewidth = linewidth, height = height, site_dir = site_dir)
+                  linewidth = linewidth, height = height, top_first = top_first,
+                  site_dir = site_dir)
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   ggplot2::ggsave(file, p, width = width, height = height, dpi = dpi, bg = "white")
   invisible(file)

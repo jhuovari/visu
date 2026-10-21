@@ -17,6 +17,7 @@ visu_chart_png(
   height = 4.49,
   dpi = 300,
   linewidth = 1.5,
+  top_first = TRUE,
   site_dir = NULL
 )
 }
@@ -50,6 +51,10 @@ näihin mittoihin; katso \code{\link[=visu_restyle]{visu_restyle()}}.}
 
 \item{linewidth}{Viivojen paksuus, oletuksena ggcustomin VM-teeman 1.5.
 Sivuston kuvioissa viiva on ohuempi; katso \code{\link[=visu_restyle]{visu_restyle()}}.}
+
+\item{top_first}{Selitteen ensimmäinen sarja päällimmäiseksi, oletuksena
+päällä. Sivuston kuvioissa järjestys on toisin päin; katso
+\code{\link[=visu_restyle]{visu_restyle()}}.}
 
 \item{site_dir}{Sivuston hakemisto.}
 }
