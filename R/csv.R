@@ -161,8 +161,15 @@ visu_eurostat_stamp <- function(raaka) {
   }
   # Muoto on pp/kk/vv hh:mm:ss ja aika Keski-Euroopan aikaa; vuosiluku on
   # kaksinumeroinen, jonka R lukee 2000-luvulle.
+  #
+  # Vyohyke IANA-tunnuksella eika lyhenteella "CET": lyhennetta ei ole
+  # kaikissa tzdata-asennuksissa, ja tuntemattomasta vyohykkeesta R
+  # varoittaa mutta kayttaa silti UTC:ta. Mitattuna CI-ajossa 11.11.2026:
+  # kentta "04/11/26 11:00:00" kirjautui leimaksi 11:00:00Z, kun oikea on
+  # 10:00:00Z. Vika ei nay virheena vaan vaarana aikana, joka rakentaa
+  # Eurostat-sivut turhaan uudelleen.
   aika <- as.POSIXct(as.character(raaka[["LAST UPDATE"]][1]),
-                     format = "%d/%m/%y %H:%M:%S", tz = "CET")
+                     format = "%d/%m/%y %H:%M:%S", tz = "Europe/Brussels")
   if (is.na(aika)) return(NA_character_)
   format(aika, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 }

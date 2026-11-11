@@ -93,3 +93,27 @@ test_that("muoto lisataan osoitteeseen vasta haussa", {
   expect_equal(visu_eurostat_query("https://ec.europa.eu/x?a=1"),
                "https://ec.europa.eu/x?a=1&format=SDMX-CSV")
 })
+
+test_that("leima tulkitaan Keski-Euroopan aikana molempiin suuntiin", {
+  # Talviaika on UTC+1, kesaaika UTC+2. Kumpikin suunta tarkistetaan, koska
+  # sama kentta luetaan ympari vuoden.
+  expect_equal(visu_eurostat_stamp(eurostat_csv(leima = "04/11/26 11:00:00")),
+               "2026-11-04T10:00:00Z")
+  expect_equal(visu_eurostat_stamp(eurostat_csv(leima = "29/07/26 12:00:00")),
+               "2026-07-29T10:00:00Z")
+})
+
+test_that("leima ei riipu ajoympariston aikavyohykkeesta", {
+  # Mitattu CI-ajossa 11.11.2026: vyohykkeen lyhenne "CET" puuttui
+  # ajoympariston tzdatasta, jolloin R varoitti mutta kaytti UTC:ta, ja
+  # marraskuun leima kirjautui tuntia liian myohaiseksi. Vaara aika ei nay
+  # virheena vaan turhana uudelleenrakennuksena, joten vyohyke annetaan
+  # IANA-tunnuksella ja tulos on sama ajoympariston vyohykkeesta riippumatta.
+  odotettu <- "2026-11-04T10:00:00Z"
+  for (vyohyke in c("UTC", "America/New_York", "Australia/Sydney")) {
+    withr::with_envvar(c(TZ = vyohyke), {
+      expect_equal(visu_eurostat_stamp(eurostat_csv(leima = "04/11/26 11:00:00")),
+                   odotettu)
+    })
+  }
+})
