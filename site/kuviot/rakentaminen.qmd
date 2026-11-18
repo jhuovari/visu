@@ -1,0 +1,106 @@
+---
+title: "Rakentaminen, luvat ja aloitukset"
+visu:
+  table_url: "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/raku/156f.px/"
+---
+
+```{r}
+#| echo: false
+#| output: asis
+visu::visu_updated_note()
+```
+
+Rakentamisluvan saaneet ja aloitetut rakennushankkeet kerrosalan mukaan,
+liukuva 12 kuukauden summa. Luokkia on kolme: pientalot, kerrostalot ja
+talonrakentaminen pl. asunnot eli muut kuin asuinrakennukset (liike-, toimisto-,
+julkiset, teollisuus- ja varastorakennukset sekä vapaa-ajan asuinrakennukset).
+
+::: {.panel-tabset}
+
+### Luvat
+
+```{r}
+library(visu)
+
+url_rakentaminen <- "https://pxdata.stat.fi/PxWeb/api/v1/fi/StatFin/raku/156f.px/"
+
+rakentaminen <- visu_get_data(
+  url = url_rakentaminen,
+  query = list(
+    "rakennusvaihe_1_20250101" = c("1", "2"),
+    "alue_23_20260101" = "SSS",
+    "timeperiod_m" = "*",
+    "rakennus_6_20180101" = c("011", "012", "02T19"),
+    "contentscode" = "raku-kerrosalaToimenpide_lvs"
+  )
+)
+rakentaminen <- rakentaminen[rakentaminen$time >= as.Date("2005-01-01"), ]
+rakentaminen$values <- rakentaminen$values / 1000
+
+tekstit <- list(
+  fi = list(
+    luvat = "Rakentamisluvan saaneet, kerrosala, 1 000 m², 12 kk:n summa",
+    aloitukset = "Aloitetut rakennushankkeet, kerrosala, 1 000 m², 12 kk:n summa",
+    lahde = "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
+    luokat = c("011" = "Pientalot", "012" = "Kerrostalot",
+               "02T19" = "Talonrakentaminen, pl. asunnot")
+  ),
+  sv = list(
+    luvat = "Beviljade byggnadslov, våningsyta, 1 000 m², 12 mån. summa",
+    aloitukset = "Påbörjade byggprojekt, våningsyta, 1 000 m², 12 mån. summa",
+    lahde = "Källa: Statistikcentralen, bygg- och bostadsproduktion",
+    luokat = c("011" = "Småhus", "012" = "Flervåningshus",
+               "02T19" = "Husbyggande, exkl. bostäder")
+  ),
+  en = list(
+    luvat = "Building permits granted, floor area, 1,000 m², 12-month sum",
+    aloitukset = "Construction starts, floor area, 1,000 m², 12-month sum",
+    lahde = "Source: Statistics Finland, building and dwelling production",
+    luokat = c("011" = "Detached houses", "012" = "Blocks of flats",
+               "02T19" = "Building construction excl. dwellings")
+  )
+)
+
+rakennuskuvio <- function(vaihe, avain) {
+  function(kieli) {
+    t <- tekstit[[kieli]]
+    d <- rakentaminen[rakentaminen$rakennusvaihe_1_20250101 == vaihe, ]
+    d$luokka <- factor(d$rakennus_6_20180101, levels = names(t$luokat),
+                       labels = t$luokat)
+    visu_plot(d, colour = "luokka", title = t[[avain]],
+              caption = t$lahde, lang = kieli)
+  }
+}
+
+kuvio_luvat <- rakennuskuvio("1", "luvat")
+
+kuvio_luvat("fi") |> visu_interactive(caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_luvat, "rakennusluvat")
+```
+
+### Aloitukset
+
+```{r}
+kuvio_aloitukset <- rakennuskuvio("2", "aloitukset")
+
+kuvio_aloitukset("fi") |> visu_interactive(caption = tekstit$fi$lahde)
+```
+
+```{r}
+#| echo: false
+#| output: asis
+visu_downloads(kuvio_aloitukset, "rakennusaloitukset")
+```
+
+:::
+
+```{r}
+#| echo: false
+#| output: asis
+visu_metadata(rakentaminen, url_rakentaminen)
+```

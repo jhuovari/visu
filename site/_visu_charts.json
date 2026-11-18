@@ -484,6 +484,28 @@
     "png_en": "kuviot/kuvat/valuutta-usd-gbp-en.png"
   },
   {
+    "id": "rakennusaloitukset",
+    "page": "rakentaminen",
+    "title_fi": "Aloitetut rakennushankkeet, kerrosala, 1 000 m², 12 kk:n summa",
+    "title_sv": "Påbörjade byggprojekt, våningsyta, 1 000 m², 12 mån. summa",
+    "title_en": "Construction starts, floor area, 1,000 m², 12-month sum",
+    "source": "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
+    "png_fi": "kuviot/kuvat/rakennusaloitukset-fi.png",
+    "png_sv": "kuviot/kuvat/rakennusaloitukset-sv.png",
+    "png_en": "kuviot/kuvat/rakennusaloitukset-en.png"
+  },
+  {
+    "id": "rakennusluvat",
+    "page": "rakentaminen",
+    "title_fi": "Rakentamisluvan saaneet, kerrosala, 1 000 m², 12 kk:n summa",
+    "title_sv": "Beviljade byggnadslov, våningsyta, 1 000 m², 12 mån. summa",
+    "title_en": "Building permits granted, floor area, 1,000 m², 12-month sum",
+    "source": "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
+    "png_fi": "kuviot/kuvat/rakennusluvat-fi.png",
+    "png_sv": "kuviot/kuvat/rakennusluvat-sv.png",
+    "png_en": "kuviot/kuvat/rakennusluvat-en.png"
+  },
+  {
     "id": "luottamus-indikaattori",
     "page": "suhdannekuva",
     "title_fi": "Kuluttajien luottamusindikaattori, saldoluku",
