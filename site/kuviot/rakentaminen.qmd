@@ -11,9 +11,10 @@ visu::visu_updated_note()
 ```
 
 Rakentamisluvan saaneet ja aloitetut rakennushankkeet kerrosalan mukaan,
-liukuva 12 kuukauden summa. Luokkia on kolme: pientalot, kerrostalot ja
-talonrakentaminen pl. asunnot eli muut kuin asuinrakennukset (liike-, toimisto-,
-julkiset, teollisuus- ja varastorakennukset sekä vapaa-ajan asuinrakennukset).
+liukuva 12 kuukauden summa. Luokkia on kolme: asuinrakentaminen, talonrakentaminen pl. asunnot (kaikki
+rakentaminen vähennettynä asunnoilla, eli muut kuin asuinrakennukset) sekä
+kuljetus- ja tietoliikennerakennukset. Viimeinen on osa talonrakentamista pl.
+asunnot, joten sarjat eivät ole toisiaan poissulkevia.
 
 ::: {.panel-tabset}
 
@@ -30,7 +31,7 @@ rakentaminen <- visu_get_data(
     "rakennusvaihe_1_20250101" = c("1", "2"),
     "alue_23_20260101" = "SSS",
     "timeperiod_m" = "*",
-    "rakennus_6_20180101" = c("011", "012", "02T19"),
+    "rakennus_6_20180101" = c("01", "02T19", "05"),
     "contentscode" = "raku-kerrosalaToimenpide_lvs"
   )
 )
@@ -42,22 +43,25 @@ tekstit <- list(
     luvat = "Rakentamisluvan saaneet, kerrosala, 1 000 m², 12 kk:n summa",
     aloitukset = "Aloitetut rakennushankkeet, kerrosala, 1 000 m², 12 kk:n summa",
     lahde = "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
-    luokat = c("011" = "Pientalot", "012" = "Kerrostalot",
-               "02T19" = "Talonrakentaminen, pl. asunnot")
+    luokat = c("01" = "Asuinrakentaminen",
+               "02T19" = "Talonrakentaminen, pl. asunnot",
+               "05" = "Kuljetus- ja tietoliikennerakennukset")
   ),
   sv = list(
     luvat = "Beviljade byggnadslov, våningsyta, 1 000 m², 12 mån. summa",
     aloitukset = "Påbörjade byggprojekt, våningsyta, 1 000 m², 12 mån. summa",
     lahde = "Källa: Statistikcentralen, bygg- och bostadsproduktion",
-    luokat = c("011" = "Småhus", "012" = "Flervåningshus",
-               "02T19" = "Husbyggande, exkl. bostäder")
+    luokat = c("01" = "Bostadsbyggande",
+               "02T19" = "Husbyggande, exkl. bostäder",
+               "05" = "Trafik- och telekommunikationsbyggnader")
   ),
   en = list(
     luvat = "Building permits granted, floor area, 1,000 m², 12-month sum",
     aloitukset = "Construction starts, floor area, 1,000 m², 12-month sum",
     lahde = "Source: Statistics Finland, building and dwelling production",
-    luokat = c("011" = "Detached houses", "012" = "Blocks of flats",
-               "02T19" = "Building construction excl. dwellings")
+    luokat = c("01" = "Residential construction",
+               "02T19" = "Building construction excl. dwellings",
+               "05" = "Transport and communications buildings")
   )
 )
 
