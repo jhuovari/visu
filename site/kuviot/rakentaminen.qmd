@@ -11,14 +11,10 @@ visu::visu_updated_note()
 ```
 
 Rakentamisluvan saaneet ja aloitetut rakennushankkeet kerrosalan mukaan,
-liukuva 12 kuukauden summa. Luokkia on kolme: asuinrakentaminen, talonrakentaminen pl. asunnot (kaikki
+liukuva 12 kuukauden summa samassa kuviossa. Luokkia on kolme: asuinrakentaminen, talonrakentaminen pl. asunnot (kaikki
 rakentaminen vähennettynä asunnoilla, eli muut kuin asuinrakennukset) sekä
 kuljetus- ja tietoliikennerakennukset. Viimeinen on osa talonrakentamista pl.
 asunnot, joten sarjat eivät ole toisiaan poissulkevia.
-
-::: {.panel-tabset}
-
-### Luvat
 
 ```{r}
 library(visu)
@@ -40,68 +36,55 @@ rakentaminen$values <- rakentaminen$values / 1000
 
 tekstit <- list(
   fi = list(
-    luvat = "Rakentamisluvan saaneet, kerrosala, 1 000 m², 12 kk:n summa",
-    aloitukset = "Aloitetut rakennushankkeet, kerrosala, 1 000 m², 12 kk:n summa",
+    otsikko = "Rakentamisluvat ja aloitukset, kerrosala, 1 000 m², 12 kk:n summa",
+    selite = "Väri kertoo rakennusluokan, ohuempi viiva luvat ja paksumpi aloitukset",
     lahde = "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
     luokat = c("01" = "Asuinrakentaminen",
                "02T19" = "Talonrakentaminen, pl. asunnot",
-               "05" = "Kuljetus- ja tietoliikennerakennukset")
+               "05" = "Kuljetus- ja tietoliikennerakennukset"),
+    vaiheet = c("1" = "Luvat", "2" = "Aloitukset")
   ),
   sv = list(
-    luvat = "Beviljade byggnadslov, våningsyta, 1 000 m², 12 mån. summa",
-    aloitukset = "Påbörjade byggprojekt, våningsyta, 1 000 m², 12 mån. summa",
+    otsikko = "Beviljade byggnadslov och påbörjade projekt, våningsyta, 1 000 m², 12 mån. summa",
+    selite = "Färgen anger byggnadstyp, tunnare linje lov och tjockare påbörjade projekt",
     lahde = "Källa: Statistikcentralen, bygg- och bostadsproduktion",
     luokat = c("01" = "Bostadsbyggande",
                "02T19" = "Husbyggande, exkl. bostäder",
-               "05" = "Trafik- och telekommunikationsbyggnader")
+               "05" = "Trafik- och telekommunikationsbyggnader"),
+    vaiheet = c("1" = "Lov", "2" = "Påbörjade")
   ),
   en = list(
-    luvat = "Building permits granted, floor area, 1,000 m², 12-month sum",
-    aloitukset = "Construction starts, floor area, 1,000 m², 12-month sum",
+    otsikko = "Building permits and construction starts, floor area, 1,000 m², 12-month sum",
+    selite = "Colour shows building type, thinner line permits and thicker line starts",
     lahde = "Source: Statistics Finland, building and dwelling production",
     luokat = c("01" = "Residential construction",
                "02T19" = "Building construction excl. dwellings",
-               "05" = "Transport and communications buildings")
+               "05" = "Transport and communications buildings"),
+    vaiheet = c("1" = "Permits", "2" = "Starts")
   )
 )
 
-rakennuskuvio <- function(vaihe, avain) {
-  function(kieli) {
-    t <- tekstit[[kieli]]
-    d <- rakentaminen[rakentaminen$rakennusvaihe_1_20250101 == vaihe, ]
-    d$luokka <- factor(d$rakennus_6_20180101, levels = names(t$luokat),
-                       labels = t$luokat)
-    visu_plot(d, colour = "luokka", title = t[[avain]],
-              caption = t$lahde, lang = kieli)
-  }
+kuvio <- function(kieli) {
+  t <- tekstit[[kieli]]
+  d <- rakentaminen
+  d$luokka <- factor(d$rakennus_6_20180101, levels = names(t$luokat),
+                     labels = t$luokat)
+  # Sama luokka kahdessa vaiheessa: sama vari, aloitukset paksummalla viivalla.
+  d$vaihe <- factor(d$rakennusvaihe_1_20250101, levels = names(t$vaiheet),
+                    labels = t$vaiheet)
+  visu_plot(d, colour = "luokka", linewidth = "vaihe", title = t$otsikko,
+            subtitle = t$selite, caption = t$lahde, lang = kieli)
 }
 
-kuvio_luvat <- rakennuskuvio("1", "luvat")
-
-kuvio_luvat("fi") |> visu_interactive(caption = tekstit$fi$lahde)
+kuvio("fi") |>
+  visu_interactive(subtitle = tekstit$fi$selite, caption = tekstit$fi$lahde)
 ```
 
 ```{r}
 #| echo: false
 #| output: asis
-visu_downloads(kuvio_luvat, "rakennusluvat")
+visu_downloads(kuvio, "rakentaminen-luvat-aloitukset")
 ```
-
-### Aloitukset
-
-```{r}
-kuvio_aloitukset <- rakennuskuvio("2", "aloitukset")
-
-kuvio_aloitukset("fi") |> visu_interactive(caption = tekstit$fi$lahde)
-```
-
-```{r}
-#| echo: false
-#| output: asis
-visu_downloads(kuvio_aloitukset, "rakennusaloitukset")
-```
-
-:::
 
 ```{r}
 #| echo: false
