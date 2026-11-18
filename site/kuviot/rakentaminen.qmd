@@ -36,8 +36,8 @@ rakentaminen$values <- rakentaminen$values / 1000
 
 tekstit <- list(
   fi = list(
-    otsikko = "Rakentamisluvat ja aloitukset, kerrosala, 1 000 m², 12 kk:n summa",
-    selite = "Väri kertoo rakennusluokan, ohuempi viiva luvat ja paksumpi aloitukset",
+    otsikko = "Rakentamisluvat ja aloitukset",
+    selite = "Kerrosala, 1 000 m², 12 kk:n summa",
     lahde = "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
     luokat = c("01" = "Asuinrakentaminen",
                "02T19" = "Talonrakentaminen, pl. asunnot",
@@ -45,8 +45,8 @@ tekstit <- list(
     vaiheet = c("1" = "Luvat", "2" = "Aloitukset")
   ),
   sv = list(
-    otsikko = "Beviljade byggnadslov och påbörjade projekt, våningsyta, 1 000 m², 12 mån. summa",
-    selite = "Färgen anger byggnadstyp, tunnare linje lov och tjockare påbörjade projekt",
+    otsikko = "Beviljade byggnadslov och påbörjade projekt",
+    selite = "Våningsyta, 1 000 m², 12 mån. summa",
     lahde = "Källa: Statistikcentralen, bygg- och bostadsproduktion",
     luokat = c("01" = "Bostadsbyggande",
                "02T19" = "Husbyggande, exkl. bostäder",
@@ -54,8 +54,8 @@ tekstit <- list(
     vaiheet = c("1" = "Lov", "2" = "Påbörjade")
   ),
   en = list(
-    otsikko = "Building permits and construction starts, floor area, 1,000 m², 12-month sum",
-    selite = "Colour shows building type, thinner line permits and thicker line starts",
+    otsikko = "Building permits and construction starts",
+    selite = "Floor area, 1,000 m², 12-month sum",
     lahde = "Source: Statistics Finland, building and dwelling production",
     luokat = c("01" = "Residential construction",
                "02T19" = "Building construction excl. dwellings",

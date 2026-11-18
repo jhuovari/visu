@@ -486,9 +486,9 @@
   {
     "id": "rakentaminen-luvat-aloitukset",
     "page": "rakentaminen",
-    "title_fi": "Rakentamisluvat ja aloitukset, kerrosala, 1 000 m², 12 kk:n summa",
-    "title_sv": "Beviljade byggnadslov och påbörjade projekt, våningsyta, 1 000 m², 12 mån. summa",
-    "title_en": "Building permits and construction starts, floor area, 1,000 m², 12-month sum",
+    "title_fi": "Rakentamisluvat ja aloitukset",
+    "title_sv": "Beviljade byggnadslov och påbörjade projekt",
+    "title_en": "Building permits and construction starts",
     "source": "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
     "png_fi": "kuviot/kuvat/rakentaminen-luvat-aloitukset-fi.png",
     "png_sv": "kuviot/kuvat/rakentaminen-luvat-aloitukset-sv.png",
