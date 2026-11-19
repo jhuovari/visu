@@ -484,6 +484,17 @@
     "png_en": "kuviot/kuvat/valuutta-usd-gbp-en.png"
   },
   {
+    "id": "rakentaminen-luvat-aloitukset",
+    "page": "rakentaminen",
+    "title_fi": "Rakentamisluvat ja aloitukset",
+    "title_sv": "Beviljade byggnadslov och påbörjade projekt",
+    "title_en": "Building permits and construction starts",
+    "source": "Lähde: Tilastokeskus, rakennus- ja asuntotuotanto",
+    "png_fi": "kuviot/kuvat/rakentaminen-luvat-aloitukset-fi.png",
+    "png_sv": "kuviot/kuvat/rakentaminen-luvat-aloitukset-sv.png",
+    "png_en": "kuviot/kuvat/rakentaminen-luvat-aloitukset-en.png"
+  },
+  {
     "id": "luottamus-indikaattori",
     "page": "suhdannekuva",
     "title_fi": "Kuluttajien luottamusindikaattori, saldoluku",
